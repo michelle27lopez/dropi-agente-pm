@@ -18,6 +18,7 @@
 |-----------|--------|------|
 | Page Pilot — Documento de Lanzamiento | Piloto de plantilla HTML para el documento de lanzamiento (output del Workshop 3, 24-jul-2026) | [spec](page-pilot-lanzamiento/spec.md) |
 | Rearquitectura — Centro de Comando de Lanzamiento | Strategy Package / Launch Command Center del lanzamiento Tier 3 de la Rearquitectura de Dropi (12-sep-2026) | [spec](rearquitectura-lanzamiento/spec.md) |
+| Operación: MCP — juego estratégico de preparación mesa estratégica | Juego digital de 8 misiones (Tablero de Operación → escenario → decisión → consecuencia) para que la mesa estratégica del lanzamiento de MCP llegue a la sesión con contexto, datos alineados al E2E, y una primera jugada construida | [spec](MCP/spec.md) |
 
 ## Cómo se documenta un artefacto
 1. Carpeta `Lanzamientos Dropi/<slug>/` con `spec.md` como fuente de verdad interna.

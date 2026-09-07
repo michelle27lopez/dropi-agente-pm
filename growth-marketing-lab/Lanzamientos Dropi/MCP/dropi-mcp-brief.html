@@ -1,0 +1,1337 @@
+<title>Operación: MCP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0B0A08; --bg-grad:#120E09; --surface:#17140F; --surface-2:#1F1A13; --surface-3:#282019;
+    --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.16);
+    --orange:#FF5A1F; --orange-2:#FFB27A; --orange-dim:#8A3A17;
+    --text:#F6F1E7; --text-dim:#A79A87; --text-faint:#6E6455;
+    --ok:#5CC98A; --err:#E8635B;
+    --font-display:'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    --font-body:'Manrope', -apple-system, sans-serif;
+    --font-mono:'IBM Plex Mono', 'SFMono-Regular', monospace;
+    --radius:14px; --radius-sm:9px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body); -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative; min-height:100vh;}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}}
+  .grain{position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .glow{position:fixed; z-index:0; pointer-events:none; border-radius:50%; filter:blur(90px); opacity:.55;}
+  .glow--a{width:640px; height:640px; top:-220px; left:50%; transform:translateX(-50%); background:radial-gradient(circle, var(--orange) 0%, transparent 70%); animation:pulse 9s ease-in-out infinite;}
+  .glow--b{width:420px; height:420px; bottom:-180px; right:-120px; background:radial-gradient(circle, var(--orange-dim) 0%, transparent 70%); opacity:.35;}
+  @keyframes pulse{0%,100%{opacity:.45; transform:translateX(-50%) scale(1);} 50%{opacity:.65; transform:translateX(-50%) scale(1.06);}}
+  a{color:inherit;}
+
+  .topbar{position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 28px; background:rgba(11,10,8,.78); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+  .brand{display:flex; align-items:baseline; gap:8px; font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:.02em; white-space:nowrap; text-transform:uppercase;}
+  .brand small{font-family:var(--font-mono); font-size:10px; font-weight:600; color:var(--orange-2); letter-spacing:.12em; border:1px solid var(--orange-dim); background:rgba(255,90,31,.1); padding:3px 7px; border-radius:5px;}
+  .topbar__right{display:flex; align-items:center; gap:14px;}
+  .mission-progress{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:.04em; font-variant-numeric:tabular-nums;}
+  .tablero-btn{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--orange-2); background:var(--surface-2); border:1px solid var(--orange-dim); padding:7px 13px; border-radius:999px; cursor:pointer; white-space:nowrap;}
+  .tablero-btn:hover{background:var(--surface-3);}
+  .tablero-btn:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+
+  main{position:relative; z-index:2; max-width:760px; margin:0 auto; padding:56px 24px 96px;}
+  .eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange-2); display:flex; align-items:center; gap:10px; margin-bottom:18px;}
+  .eyebrow::before{content:''; width:7px; height:7px; border-radius:50%; background:var(--orange); box-shadow:0 0 10px var(--orange); flex-shrink:0;}
+  h1{font-family:var(--font-display); font-weight:900; font-size:clamp(36px, 6.5vw, 60px); line-height:.96; letter-spacing:-.01em; margin:0 0 16px; text-wrap:balance; text-transform:uppercase;}
+  h1 em{font-style:normal; color:var(--orange);}
+  .subtitle{font-size:18px; line-height:1.55; color:var(--text-dim); max-width:52ch; margin:0 0 14px;}
+  .subtitle2{font-size:14.5px; line-height:1.6; color:var(--text-faint); max-width:52ch; margin:0 0 22px;}
+  .meta-chip{display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.05em; color:var(--text-dim); background:var(--surface); border:1px solid var(--line); padding:7px 12px; border-radius:999px; margin-bottom:44px;}
+  .meta-chip b{color:var(--text); font-weight:600;}
+  .meta-chip .dot{width:4px;height:4px;border-radius:50%;background:var(--text-faint);}
+
+  .copiloto{display:flex; gap:16px; background:linear-gradient(180deg, var(--surface) 0%, var(--bg-grad) 100%); border:1px solid var(--line); border-radius:var(--radius); padding:22px; margin-bottom:18px; position:relative; overflow:hidden;}
+  .copiloto::before{content:''; position:absolute; inset:0; background:radial-gradient(420px 160px at 0% 0%, rgba(255,90,31,.10), transparent 70%); pointer-events:none;}
+  .orb{width:44px; height:44px; border-radius:50%; flex-shrink:0; background:radial-gradient(circle at 32% 28%, #FFD9B8 0%, var(--orange) 42%, #7A2A0C 100%); box-shadow:0 0 0 1px rgba(255,255,255,.1) inset, 0 0 22px rgba(255,90,31,.55); position:relative;}
+  .orb::after{content:''; position:absolute; inset:0; border-radius:50%; box-shadow:0 0 0 1px rgba(255,255,255,.06); animation:orb-breathe 3.4s ease-in-out infinite;}
+  @keyframes orb-breathe{0%,100%{box-shadow:0 0 0 0 rgba(255,90,31,.35);} 50%{box-shadow:0 0 0 8px rgba(255,90,31,0);}}
+  .copiloto__body{flex:1; min-width:0;}
+  .copiloto__name{font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--orange-2); margin-bottom:10px;}
+  .copiloto__lines{display:flex; flex-direction:column; gap:9px;}
+  .copiloto__lines p{margin:0; font-size:16px; line-height:1.5; color:var(--text); opacity:0; animation:line-in .5s ease forwards;}
+  .copiloto__lines p:nth-child(1){animation-delay:.15s;}
+  .copiloto__lines p:nth-child(2){animation-delay:.7s;}
+  .copiloto__lines p:nth-child(3){animation-delay:1.25s; color:var(--text-dim);}
+  @keyframes line-in{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){.copiloto__lines p{opacity:1; animation:none;}}
+  .copiloto--mini{padding:16px 18px; gap:12px; margin-bottom:22px;}
+  .copiloto--mini .orb{width:32px; height:32px;}
+  .copiloto--mini .copiloto__name{margin-bottom:4px; font-size:10px;}
+  .copiloto--mini .copiloto__lines p{font-size:14.5px; opacity:1; animation:none; color:var(--text);}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-bottom:22px;}
+  .card__title{font-family:var(--font-display); font-weight:800; font-size:19px; letter-spacing:.01em; text-transform:uppercase; margin:0 0 4px;}
+  .card__hint{font-size:13.5px; color:var(--text-dim); margin:0 0 18px;}
+  label.field-label{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+  input[type="text"], textarea{width:100%; background:var(--surface-2); border:1px solid var(--line-strong); color:var(--text); font-family:var(--font-body); font-size:16px; padding:13px 14px; border-radius:var(--radius-sm); margin-bottom:22px; transition:border-color .15s ease, background .15s ease;}
+  textarea{resize:vertical; min-height:64px; line-height:1.5;}
+  input[type="text"]::placeholder, textarea::placeholder{color:var(--text-faint);}
+  input[type="text"]:hover, textarea:hover{border-color:rgba(255,255,255,.26);}
+  input[type="text"]:focus, textarea:focus{outline:none; border-color:var(--orange); background:var(--surface-3); box-shadow:0 0 0 3px rgba(255,90,31,.18);}
+  input.invalid, textarea.invalid{border-color:var(--err); box-shadow:0 0 0 3px rgba(232,99,91,.15);}
+
+  .chips{display:flex; flex-wrap:wrap; gap:9px; margin-bottom:6px;}
+  .chip{font-family:var(--font-body); font-size:13.5px; font-weight:600; color:var(--text-dim); background:var(--surface-2); border:1px solid var(--line-strong); padding:9px 15px; border-radius:999px; cursor:pointer; transition:all .15s ease; user-select:none;}
+  .chip:hover{border-color:rgba(255,255,255,.3); color:var(--text);}
+  .chip:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .chip[aria-pressed="true"]{background:var(--orange); border-color:var(--orange); color:#fff; box-shadow:0 0 16px rgba(255,90,31,.35);}
+  .otro-wrap{margin-top:10px;} .otro-wrap input[type="text"]{margin-bottom:0;}
+
+  .cta-row{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:24px;}
+  button.primary{font-family:var(--font-display); font-weight:800; font-size:15.5px; letter-spacing:.02em; text-transform:uppercase; color:#fff; background:var(--orange); border:none; padding:15px 26px; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:9px; transition:transform .12s ease, box-shadow .12s ease, background .15s ease; box-shadow:0 8px 24px rgba(255,90,31,.28);}
+  button.primary:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 10px 30px rgba(255,90,31,.4);}
+  button.primary:active:not(:disabled){transform:translateY(0);}
+  button.primary:focus-visible{outline:2px solid var(--orange-2); outline-offset:3px;}
+  button.primary:disabled{background:var(--surface-3); color:var(--text-faint); box-shadow:none; cursor:not-allowed;}
+  button.secondary{font-family:var(--font-body); font-weight:700; font-size:14px; color:var(--text); background:transparent; border:1px solid var(--line-strong); padding:13px 20px; border-radius:999px; cursor:pointer; transition:border-color .15s ease, color .15s ease, background .15s ease;}
+  button.secondary:hover:not(:disabled){border-color:var(--orange); color:var(--orange-2); background:rgba(255,90,31,.06);}
+  button.secondary:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  button.secondary:disabled{opacity:.4; cursor:not-allowed;}
+  .cta-note{font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);}
+  .reset-link, .back-link{background:none; border:none; color:var(--text-faint); font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em; text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:0;}
+  .reset-link:hover, .back-link:hover{color:var(--text-dim);}
+
+  .toast{display:flex; align-items:center; gap:10px; background:var(--surface-2); border:1px solid var(--orange-dim); color:var(--text); font-size:14px; padding:12px 16px; border-radius:var(--radius-sm); margin-top:16px; opacity:0; max-height:0; overflow:hidden; transition:opacity .3s ease, max-height .3s ease, margin .3s ease;}
+  .toast.show{opacity:1; max-height:80px; margin-top:16px;}
+  .toast__dot{width:7px;height:7px;border-radius:50%;background:var(--orange); flex-shrink:0; box-shadow:0 0 8px var(--orange);}
+
+  .tag{display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; padding:4px 9px; border-radius:5px; border:1px solid; white-space:nowrap;}
+  .tag--hecho{color:#8FE0B4; border-color:rgba(92,201,138,.4); background:rgba(92,201,138,.08);}
+  .tag--validar{color:#F2C879; border-color:rgba(232,178,61,.4); background:rgba(232,178,61,.08);}
+  .tag--hipotesis{color:#B7C6FF; border-color:rgba(143,168,255,.4); background:rgba(143,168,255,.08);}
+  .tag--reco{color:var(--orange-2); border-color:var(--orange-dim); background:rgba(255,90,31,.08);}
+  .tag--oportunidad{color:#E3A8E6; border-color:rgba(200,120,205,.4); background:rgba(200,120,205,.08);}
+
+  .list-plain{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .list-plain li{font-size:14.5px; line-height:1.55; color:var(--text); padding-left:16px; position:relative;}
+  .list-plain li::before{content:'—'; position:absolute; left:0; color:var(--text-faint);}
+  .data-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; margin-top:6px;}
+  @media (max-width:640px){.data-grid{grid-template-columns:1fr;}}
+  .data-item dt{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px;}
+  .data-item dd{margin:0; font-size:14.5px; line-height:1.55; color:var(--text);}
+  .callout{border:1px solid var(--orange-dim); border-radius:var(--radius-sm); background:rgba(255,90,31,.05); padding:16px 18px; margin-top:18px;}
+  .callout__title{font-family:var(--font-display); font-weight:800; font-size:15px; text-transform:uppercase; margin:8px 0 0;}
+  .callout p.callout__body{margin:8px 0 0; font-size:14px; line-height:1.55; color:var(--text-dim);}
+  .callout p.callout__body b{color:var(--text);}
+
+  .paradigm{margin:8px 0 20px;}
+  .paradigm .antes{font-family:var(--font-mono); font-size:13px; letter-spacing:.04em; color:var(--text-faint); text-decoration:line-through; text-decoration-color:var(--text-faint); margin:0 0 10px;}
+  .paradigm .arrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin:0 0 10px;}
+  .paradigm .ahora{font-family:var(--font-display); font-weight:900; font-size:clamp(28px,5vw,44px); line-height:1.02; text-transform:uppercase; color:var(--orange); text-wrap:balance; margin:0;}
+
+  .choice-grid{display:flex; flex-direction:column; gap:10px; margin:18px 0 4px; padding:6px; border-radius:14px;}
+  .choice-card{display:flex; gap:14px; align-items:flex-start; text-align:left; width:100%; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:14px 16px; cursor:pointer; transition:all .15s ease; font-family:var(--font-body);}
+  .choice-card:hover{border-color:rgba(255,255,255,.3);}
+  .choice-card:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .choice-card__badge{flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--surface-3); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; font-size:11.5px; color:var(--text-dim);}
+  .choice-card__text{font-size:14.5px; line-height:1.5; color:var(--text); padding-top:3px;}
+  .choice-card[aria-pressed="true"]{background:rgba(255,90,31,.12); border-color:var(--orange); box-shadow:0 0 14px rgba(255,90,31,.2);}
+  .choice-card[aria-pressed="true"] .choice-card__badge{background:var(--orange); border-color:var(--orange); color:#fff;}
+  .invalid-group{outline:2px solid var(--err); outline-offset:2px;}
+
+  .segment-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0 6px; padding:6px; border-radius:14px;}
+  @media (max-width:640px){.segment-grid{grid-template-columns:repeat(2,1fr);}}
+  .segment{text-align:left; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:12px 14px; cursor:pointer; transition:all .15s ease; font-family:var(--font-body);}
+  .segment:hover{border-color:rgba(255,255,255,.3);}
+  .segment:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .segment__name{font-weight:700; font-size:13.5px; color:var(--text); margin-bottom:4px;}
+  .segment__count{font-family:var(--font-mono); font-size:12px; color:var(--text-dim); font-variant-numeric:tabular-nums;}
+  .segment[aria-pressed="true"]{background:rgba(255,90,31,.14); border-color:var(--orange); box-shadow:0 0 14px rgba(255,90,31,.25);}
+  .segment[aria-pressed="true"] .segment__count{color:var(--orange-2);}
+  .segment-total{font-family:var(--font-mono); font-size:12px; color:var(--text-faint); margin-top:10px; text-align:right;}
+  .segment-total b{color:var(--text); font-variant-numeric:tabular-nums;}
+
+  .duo-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;}
+  @media (max-width:640px){.duo-grid{grid-template-columns:1fr;}}
+  .duo-card{background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:16px; cursor:pointer; transition:all .15s ease;}
+  .duo-card:hover{border-color:rgba(255,255,255,.3);}
+  .duo-card[aria-pressed="true"]{border-color:var(--orange); background:rgba(255,90,31,.1); box-shadow:0 0 14px rgba(255,90,31,.2);}
+  .duo-card__head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px;}
+  .duo-card__title{font-family:var(--font-display); font-weight:800; font-size:15px; text-transform:uppercase;}
+  .duo-card__num{font-family:var(--font-mono); font-size:20px; font-weight:600; color:var(--orange-2); font-variant-numeric:tabular-nums;}
+  .duo-card__sub{font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); letter-spacing:.05em; text-transform:uppercase; margin-bottom:10px;}
+  .duo-card__funnel{font-size:11.5px; color:var(--text-dim); margin:0 0 14px; font-family:var(--font-mono); letter-spacing:.01em; line-height:1.6;}
+
+  .sentence{font-size:17px; line-height:2.3; color:var(--text); margin:16px 0 4px;}
+  .sentence input.inline-input{background:transparent; border:none; border-bottom:2px solid var(--orange-dim); color:var(--orange-2); font-family:var(--font-body); font-weight:700; font-size:16px; padding:2px 4px; width:auto; min-width:120px; margin:0 2px 4px; transition:border-color .15s ease;}
+  .sentence input.inline-input::placeholder{color:var(--text-faint); font-weight:500;}
+  .sentence input.inline-input:hover{border-color:var(--orange); background:transparent;}
+  .sentence input.inline-input:focus{outline:none; border-color:var(--orange); background:transparent; box-shadow:none;}
+  .sentence input.inline-input.invalid{border-color:var(--err);}
+  .spark-label{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); margin:0 0 10px;}
+
+  .ai-future{margin:8px 0 22px; padding-top:18px; border-top:1px dashed var(--line);}
+  .ai-future__label{font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); margin:0 0 10px;}
+  .ai-future__row{display:flex; flex-wrap:wrap; gap:8px;}
+  .ai-future button{font-family:var(--font-body); font-size:12.5px; font-weight:600; color:var(--text-faint); background:var(--surface-2); border:1px solid var(--line); padding:7px 12px; border-radius:999px; cursor:not-allowed; opacity:.65;}
+  .ai-future__note{font-size:11.5px; color:var(--text-faint); margin:10px 0 0;}
+
+  /* ---------- game-specific ---------- */
+  .escenario{font-size:16px; line-height:1.65; color:var(--text-dim); font-style:italic; border-left:2px solid var(--orange-dim); padding-left:16px; margin:0 0 22px;}
+  .escenario b{color:var(--text); font-style:normal;}
+
+  .badge-row{display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .badge{font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:5px;}
+  .badge--jugada{background:rgba(255,90,31,.14); color:var(--orange-2); border:1px solid var(--orange-dim);}
+  .badge--intel{background:rgba(143,168,255,.1); color:#B7C6FF; border:1px solid rgba(143,168,255,.35);}
+
+  .consequence{background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:16px 18px; margin-top:14px; opacity:0; max-height:0; overflow:hidden; transition:opacity .4s ease, max-height .5s ease;}
+  .consequence.show{opacity:1; max-height:600px;}
+  .consequence p{margin:0; font-size:14.5px; line-height:1.55; color:var(--text);}
+  .consequence p + p{margin-top:8px;}
+
+  .jugador-chip{display:inline-flex; align-items:center; gap:8px; background:var(--surface-2); border:1px solid var(--orange-dim); padding:8px 14px; border-radius:999px; font-family:var(--font-mono); font-size:12px; color:var(--orange-2); margin-bottom:18px;}
+
+  .caso-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:16px 0;}
+  @media (max-width:560px){.caso-grid{grid-template-columns:repeat(2,1fr);}}
+  .caso-piece{background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:11px 6px; text-align:center; cursor:pointer; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.02em; color:var(--text-dim); transition:all .15s ease;}
+  .caso-piece:hover{border-color:rgba(255,255,255,.3);}
+  .caso-piece:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .caso-piece[data-visited="true"]{background:rgba(255,90,31,.12); border-color:var(--orange); color:var(--orange-2);}
+  .caso-detail{min-height:70px; background:var(--surface-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px; margin-top:4px;}
+  .caso-detail__label{font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange-2); margin-bottom:6px;}
+  .caso-detail__text{font-size:14px; line-height:1.55; color:var(--text); margin:0;}
+  .caso-detail__empty{font-size:13px; color:var(--text-faint); font-style:italic;}
+  .caso-progress{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); margin-top:10px; text-align:right;}
+
+  .mission{display:none;}
+  .mission.active{display:block;}
+  .mission h2{font-family:var(--font-display); font-weight:900; font-size:clamp(28px,5vw,42px); line-height:1; letter-spacing:-.01em; text-transform:uppercase; margin:0 0 6px; text-wrap:balance;}
+  .mission .level-sub{font-size:15.5px; line-height:1.6; color:var(--text-dim); max-width:60ch; margin:0 0 22px;}
+  .mission-nav{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:28px; flex-wrap:wrap;}
+  .mission-nav__right{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .level-error{font-family:var(--font-mono); font-size:11px; color:var(--err);}
+
+  /* ---------- tablero ---------- */
+  #tablero .card{padding:22px;}
+  .pieces-panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; margin-bottom:24px;}
+  .pieces-panel__title{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--orange-2); margin:0 0 16px;}
+  .pieces-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:600px){.pieces-grid{grid-template-columns:1fr;}}
+  .piece{border-left:2px solid var(--line-strong); padding-left:12px;}
+  .piece[data-filled="true"]{border-left-color:var(--orange);}
+  .piece__label{font-family:var(--font-mono); font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint);}
+  .piece__value{font-size:13.5px; color:var(--text-faint); margin-top:4px; font-style:italic;}
+  .piece[data-filled="true"] .piece__value{color:var(--text); font-style:normal;}
+
+  .mission-list{display:flex; flex-direction:column; gap:10px; margin:0 0 8px;}
+  .mission-row{display:flex; align-items:center; gap:14px; background:var(--surface-2); border:1px solid var(--line-strong); border-radius:var(--radius-sm); padding:14px 16px; cursor:pointer; text-align:left; width:100%; font-family:var(--font-body); transition:all .15s ease;}
+  .mission-row:hover:not(:disabled){border-color:rgba(255,255,255,.3);}
+  .mission-row:disabled{cursor:not-allowed; opacity:.5;}
+  .mission-row:focus-visible{outline:2px solid var(--orange); outline-offset:2px;}
+  .mission-row__icon{flex-shrink:0; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:13px; background:var(--surface-3); border:1px solid var(--line-strong); color:var(--text-faint);}
+  .mission-row[data-state="completed"] .mission-row__icon{background:var(--orange); border-color:var(--orange); color:#fff;}
+  .mission-row[data-state="available"]{border-color:var(--orange-dim); background:linear-gradient(90deg, rgba(255,90,31,.09), var(--surface-2) 65%);}
+  .mission-row[data-state="available"] .mission-row__icon{background:transparent; border-color:var(--orange); color:var(--orange-2); box-shadow:0 0 10px rgba(255,90,31,.4);}
+  .mission-row__body{flex:1; min-width:0;}
+  .mission-row__num{font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; color:var(--text-faint); text-transform:uppercase;}
+  .mission-row__title{font-family:var(--font-display); font-weight:800; font-size:16px; text-transform:uppercase; color:var(--text); margin-top:1px; line-height:1.1;}
+  .mission-row[data-state="locked"] .mission-row__title{color:var(--text-dim);}
+  .mission-row__desc{font-size:12px; color:var(--text-dim); margin-top:3px;}
+  .mission-row__arrow{flex-shrink:0; font-family:var(--font-mono); color:var(--text-faint); font-size:16px;}
+
+  .final-summary{background:linear-gradient(180deg, var(--surface) 0%, var(--bg-grad) 100%); border:1px solid var(--orange-dim); border-radius:var(--radius); padding:26px; margin:20px 0 24px; position:relative; overflow:hidden;}
+  .final-summary::before{content:''; position:absolute; inset:0; background:radial-gradient(500px 200px at 100% 0%, rgba(255,90,31,.10), transparent 70%); pointer-events:none;}
+  .final-summary__head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; position:relative;}
+  .final-summary__title{font-family:var(--font-display); font-weight:900; font-size:19px; text-transform:uppercase; margin:0; letter-spacing:.01em;}
+  .final-summary__who{font-family:var(--font-mono); font-size:11.5px; color:var(--text-dim);}
+  .final-summary__grid{display:flex; flex-direction:column; gap:18px; position:relative;}
+  .final-summary__item dt{font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange-2); margin-bottom:5px; display:flex; align-items:center; gap:8px;}
+  .final-summary__item dd{margin:0; font-size:14.5px; line-height:1.55; color:var(--text);}
+  .final-summary__item dd.empty{color:var(--text-faint); font-style:italic;}
+  .closing-lines{margin:22px 0 6px;}
+  .closing-lines p{font-size:15px; line-height:1.6; color:var(--text-dim); margin:0 0 6px;}
+  .closing-lines p:last-child{color:var(--text); font-weight:600;}
+
+  footer.foot{max-width:760px; margin:0 auto; padding:0 24px 40px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; position:relative; z-index:2;}
+  .foot__save{display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint);}
+  .save-dot{width:6px;height:6px;border-radius:50%; background:var(--ok); flex-shrink:0;}
+</style>
+
+<div class="grain"></div>
+<div class="glow glow--a"></div>
+<div class="glow glow--b"></div>
+
+<div class="topbar">
+  <div class="brand">OPERACIÓN <small>MCP</small></div>
+  <div class="topbar__right" id="topbarRight" hidden>
+    <span class="mission-progress" id="missionProgress">Misión 0/8</span>
+    <button type="button" class="tablero-btn" id="btnTablero">◈ Tablero</button>
+  </div>
+</div>
+
+<main>
+  <!-- ============ PORTADA ============ -->
+  <section id="portada">
+    <p class="eyebrow">Mesa estratégica · Lanzamiento global</p>
+    <h1>Operación: <em>MCP</em></h1>
+    <p class="subtitle">Diseña la jugada para hacer que Dropi se adapte a ti.</p>
+    <p class="subtitle2">No vienes a aprender MCP. Vienes a diseñar cómo lo vamos a hacer ganar.</p>
+    <div class="meta-chip"><b>Alcance:</b> global <span class="dot"></span> <b>Fecha de lanzamiento:</b> por definir</div>
+
+    <section class="copiloto" aria-label="Copiloto de la operación">
+      <div class="orb" aria-hidden="true"></div>
+      <div class="copiloto__body">
+        <div class="copiloto__name">Copiloto de la operación</div>
+        <div class="copiloto__lines">
+          <p>Bienvenido a la mesa estratégica.</p>
+          <p>Esto no es el taller. Es tu operación de preparación — 8 misiones antes de sentarte a la mesa.</p>
+          <p>Cada decisión que tomes queda registrada. Al final, tienes una jugada.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">¿Quién eres en esta operación?</h2>
+      <p class="card__hint">Tu nombre y tu área quedan guardados en este dispositivo — al final podrás copiar tu jugada completa.</p>
+      <label class="field-label" for="nombre">Nombre</label>
+      <input type="text" id="nombre" placeholder="Escribe tu nombre" autocomplete="off">
+      <label class="field-label" id="area-label">Tu área</label>
+      <div class="chips" role="group" aria-labelledby="area-label">
+        <button type="button" class="chip" data-area="Producto" aria-pressed="false">Producto</button>
+        <button type="button" class="chip" data-area="Marketing" aria-pressed="false">Marketing</button>
+        <button type="button" class="chip" data-area="Comercial" aria-pressed="false">Comercial</button>
+        <button type="button" class="chip" data-area="Servicio al Cliente" aria-pressed="false">Servicio al Cliente</button>
+        <button type="button" class="chip" data-area="Tecnología" aria-pressed="false">Tecnología</button>
+        <button type="button" class="chip" data-area="Diseño" aria-pressed="false">Diseño</button>
+        <button type="button" class="chip" data-area="Otra" aria-pressed="false">Otra</button>
+      </div>
+      <div class="cta-row">
+        <button type="button" class="primary" id="entrar" disabled>Iniciar operación →</button>
+        <button type="button" class="secondary" id="descargar" disabled>Copiar lo que escribí</button>
+        <span class="cta-note">Se guarda automáticamente</span>
+      </div>
+      <div class="toast" id="toast"><span class="toast__dot"></span><span id="toast-text"></span></div>
+    </section>
+  </section>
+
+  <!-- ============ TABLERO ============ -->
+  <section id="tablero" hidden>
+    <p class="eyebrow">Centro de control</p>
+    <h1 style="font-size:clamp(30px,5vw,44px);">Tablero de <em>operación</em></h1>
+    <p class="subtitle2" style="margin-bottom:28px;">No puedes saltarte misiones. Cada una desbloquea la siguiente.</p>
+
+    <div class="pieces-panel">
+      <p class="pieces-panel__title">Estado de la operación</p>
+      <div class="pieces-grid" id="piecesGrid">
+        <div class="piece" data-filled="false" id="piece-jugador"><div class="piece__label">Jugador</div><div class="piece__value">[pendiente]</div></div>
+        <div class="piece" data-filled="false" id="piece-problema"><div class="piece__label">Problema</div><div class="piece__value">[pendiente]</div></div>
+        <div class="piece" data-filled="false" id="piece-territorio"><div class="piece__label">Territorio</div><div class="piece__value">[pendiente]</div></div>
+        <div class="piece" data-filled="false" id="piece-wow"><div class="piece__label">Momento wow</div><div class="piece__value">[pendiente]</div></div>
+        <div class="piece" data-filled="false" id="piece-mensaje"><div class="piece__label">Mensaje</div><div class="piece__value">[pendiente]</div></div>
+        <div class="piece" data-filled="false" id="piece-experimento"><div class="piece__label">Experimento</div><div class="piece__value">[pendiente]</div></div>
+      </div>
+    </div>
+
+    <div class="mission-list" id="missionList">
+      <button type="button" class="mission-row" data-mission="1"><span class="mission-row__icon">01</span><span class="mission-row__body"><span class="mission-row__num">Misión 01</span><span class="mission-row__title">Descifra el cambio</span><span class="mission-row__desc">Entiende qué está cambiando de verdad en Dropi.</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="2"><span class="mission-row__icon">02</span><span class="mission-row__body"><span class="mission-row__num">Misión 02</span><span class="mission-row__title">Descubre la razón</span><span class="mission-row__desc">Por qué esto está pasando ahora.</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="3"><span class="mission-row__icon">03</span><span class="mission-row__body"><span class="mission-row__num">Misión 03</span><span class="mission-row__title">Descubre el territorio</span><span class="mission-row__desc">Dónde se va a demostrar el valor primero.</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="4"><span class="mission-row__icon">04</span><span class="mission-row__body"><span class="mission-row__num">Misión 04</span><span class="mission-row__title">Encuentra al jugador</span><span class="mission-row__desc">No puedes elegir a todos. ¿Dónde apuestas?</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="5"><span class="mission-row__icon">05</span><span class="mission-row__body"><span class="mission-row__num">Misión 05</span><span class="mission-row__title">Arma el caso</span><span class="mission-row__desc">Conecta las piezas que sostienen la operación.</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="6"><span class="mission-row__icon">06</span><span class="mission-row__body"><span class="mission-row__num">Misión 06</span><span class="mission-row__title">Encuentra el wow</span><span class="mission-row__desc">El momento en que el usuario dice "esto me sirve".</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="7"><span class="mission-row__icon">07</span><span class="mission-row__body"><span class="mission-row__num">Misión 07</span><span class="mission-row__title">Construye la jugada</span><span class="mission-row__desc">Conecta todo lo que ya decidiste.</span></span><span class="mission-row__arrow">→</span></button>
+      <button type="button" class="mission-row" data-mission="8"><span class="mission-row__icon">08</span><span class="mission-row__body"><span class="mission-row__num">Misión 08</span><span class="mission-row__title">Ponla a prueba</span><span class="mission-row__desc">Hipótesis, control, tratamiento, métrica.</span></span><span class="mission-row__arrow">→</span></button>
+    </div>
+  </section>
+
+  <!-- ============ MISIONES ============ -->
+  <div id="missions" hidden>
+
+    <!-- MISIÓN 01 -->
+    <section class="mission" data-mission="1">
+      <p class="eyebrow">Misión 01 · Descifra el cambio</p>
+      <h2>Descifra el cambio</h2>
+      <p class="escenario">Dropi está dando un nuevo paso. Durante años, el usuario ha tenido que aprender cómo trabajar dentro de Dropi. Ahora aparece una nueva posibilidad: <b>¿y si Dropi pudiera adaptarse a la forma en que el usuario trabaja?</b></p>
+
+      <div class="card">
+        <h3 class="card__title">Desafío</h3>
+        <p class="card__hint">¿Qué crees que cambia realmente con MCP?</p>
+        <div class="choice-grid" id="choiceGrid1" role="group" aria-label="Qué cambia realmente">
+          <button type="button" class="choice-card" data-value="A" aria-pressed="false"><span class="choice-card__badge">A</span><span class="choice-card__text">Una nueva forma de hacer integraciones.</span></button>
+          <button type="button" class="choice-card" data-value="B" aria-pressed="false"><span class="choice-card__badge">B</span><span class="choice-card__text">Una herramienta de automatización.</span></button>
+          <button type="button" class="choice-card" data-value="C" aria-pressed="false"><span class="choice-card__badge">C</span><span class="choice-card__text">Una nueva capa de servicios que permite que Dropi se adapte a cómo trabaja el usuario.</span></button>
+          <button type="button" class="choice-card" data-value="D" aria-pressed="false"><span class="choice-card__badge">D</span><span class="choice-card__text">Un reemplazo del dashboard.</span></button>
+        </div>
+
+        <div class="consequence" id="cons1">
+          <div class="badge-row"><span class="badge badge--jugada">Jugada registrada</span></div>
+          <p>Cualquiera que sea tu respuesta, la clave no está en la mecánica — está en el cambio de relación. MCP no es una función más: es la puerta hacia una Dropi que se ajusta a ti.</p>
+          <div class="paradigm" style="margin-top:16px;">
+            <p class="antes">"Tú te adaptas a Dropi."</p>
+            <p class="arrow">↓ ahora</p>
+            <p class="ahora">"Dropi se adapta a ti."</p>
+          </div>
+          <div class="badge-row" style="margin-top:16px;"><span class="badge badge--intel">Inteligencia desbloqueada</span></div>
+          <p><b>MCP no reemplaza el dashboard.</b> Agrega una nueva capa de servicios para que Dropi pueda utilizarse de nuevas maneras — no es "ya no necesitas el dashboard", es "ahora tienes otra manera de trabajar con Dropi".</p>
+          <p style="margin-top:10px;">Capacidades identificadas <span class="tag tag--validar" style="margin-left:2px;">Por validar</span>: consultar operación/pedidos, crear pedidos, analizar productos/categorías, cotizar envíos, consultar Huella Digital Lite — ninguna confirmada todavía por Product/Tech.</p>
+        </div>
+      </div>
+
+      <div class="mission-nav">
+        <span></span>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-1" hidden>Elige una opción para continuar.</span>
+          <button type="button" class="primary" data-mission-btn="1">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 02 -->
+    <section class="mission" data-mission="2">
+      <p class="eyebrow">Misión 02 · Descubre la razón</p>
+      <h2>Descubre la razón</h2>
+      <p class="escenario">La industria se mueve hacia agentes e inteligencia artificial. Dropi necesita evolucionar con ella — la visión es que en los próximos 18–24 meses la plataforma avance hacia un modelo donde los usuarios utilicen los servicios de Dropi según sus propias estrategias.</p>
+
+      <div class="card">
+        <div class="badge-row"><span class="badge badge--intel">Inteligencia</span></div>
+        <h3 class="card__title">La señal que ya existe</h3>
+        <dl class="data-grid">
+          <div class="data-item"><dt>Señal de demanda sobre Tecnología</dt><dd>60–70 solicitudes mensuales de integración <span class="tag tag--hecho" style="margin-top:6px; display:inline-block;">Dato reportado en conversación con liderazgo</span></dd></div>
+        </dl>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Desafío</h3>
+        <p class="card__hint">¿Qué problema deberíamos resolver primero?</p>
+        <div class="choice-grid" id="choiceGrid2" role="group" aria-label="Qué problema resolver primero">
+          <button type="button" class="choice-card" data-value="A" aria-pressed="false"><span class="choice-card__badge">A</span><span class="choice-card__text">Reducir la carga de Tecnología.</span></button>
+          <button type="button" class="choice-card" data-value="B" aria-pressed="false"><span class="choice-card__badge">B</span><span class="choice-card__text">Facilitar que los usuarios conecten Dropi con las herramientas que ya utilizan.</span></button>
+          <button type="button" class="choice-card" data-value="C" aria-pressed="false"><span class="choice-card__badge">C</span><span class="choice-card__text">Reemplazar las integraciones tradicionales.</span></button>
+          <button type="button" class="choice-card" data-value="D" aria-pressed="false"><span class="choice-card__badge">D</span><span class="choice-card__text">Aumentar la cantidad de funcionalidades de Dropi.</span></button>
+        </div>
+
+        <div class="consequence" data-cons-for="A" id="cons2-A">
+          <div class="badge-row"><span class="badge badge--jugada">Jugada registrada</span></div>
+          <p>Estás viendo el problema desde el costo interno.</p>
+          <div class="badge-row" style="margin-top:10px;"><span class="badge badge--intel">Nueva inteligencia</span></div>
+          <p>Pero si miramos el movimiento desde el usuario, aparece una oportunidad más grande: permitirle construir nuevas formas de trabajar con Dropi.</p>
+        </div>
+        <div class="consequence" data-cons-for="B" id="cons2-B">
+          <div class="badge-row"><span class="badge badge--jugada">Jugada registrada</span></div>
+          <p>Estás viendo el problema desde el usuario — ahí es donde nace la adopción real.</p>
+        </div>
+        <div class="consequence" data-cons-for="C" id="cons2-C">
+          <div class="badge-row"><span class="badge badge--jugada">Jugada registrada</span></div>
+          <p>Interesante apuesta, pero MCP no busca eliminar lo que ya funciona.</p>
+          <div class="badge-row" style="margin-top:10px;"><span class="badge badge--intel">Nueva inteligencia</span></div>
+          <p>MCP no reemplaza — abre una forma adicional de conectar, sin depender de un desarrollo nuevo cada vez.</p>
+        </div>
+        <div class="consequence" data-cons-for="D" id="cons2-D">
+          <div class="badge-row"><span class="badge badge--jugada">Jugada registrada</span></div>
+          <p>Más funcionalidades no es lo mismo que más adopción.</p>
+          <div class="badge-row" style="margin-top:10px;"><span class="badge badge--intel">Nueva inteligencia</span></div>
+          <p>El problema no es que falten funciones — es que conectar Dropi con lo que el usuario ya usa hoy requiere depender de Tecnología cada vez.</p>
+        </div>
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack2">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-2" hidden>Elige una opción para continuar.</span>
+          <button type="button" class="primary" data-mission-btn="2">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 03 -->
+    <section class="mission" data-mission="3">
+      <p class="eyebrow">Misión 03 · Descubre el territorio</p>
+      <h2>Descubre el territorio</h2>
+      <p class="escenario">Antes de conocer cuál es el territorio ya definido, imagina que tienes que decidir dónde demostrarías primero el valor de MCP.</p>
+
+      <div class="card">
+        <h3 class="card__title">Desafío</h3>
+        <p class="card__hint">Si tuvieras que elegir un primer territorio para demostrar valor, ¿cuál sería?</p>
+        <div class="choice-grid" id="choiceGrid3" role="group" aria-label="Primer territorio">
+          <button type="button" class="choice-card" data-value="A" aria-pressed="false"><span class="choice-card__badge">A</span><span class="choice-card__text">Consultar operación y pedidos.</span></button>
+          <button type="button" class="choice-card" data-value="B" aria-pressed="false"><span class="choice-card__badge">B</span><span class="choice-card__text">Crear pedidos automáticamente.</span></button>
+          <button type="button" class="choice-card" data-value="C" aria-pressed="false"><span class="choice-card__badge">C</span><span class="choice-card__text">Analizar productos y categorías.</span></button>
+          <button type="button" class="choice-card" data-value="D" aria-pressed="false"><span class="choice-card__badge">D</span><span class="choice-card__text">Medir y segmentar clientes (Huella Digital).</span></button>
+          <button type="button" class="choice-card" data-value="E" aria-pressed="false"><span class="choice-card__badge">E</span><span class="choice-card__text">Cotizar envíos.</span></button>
+        </div>
+
+        <div class="consequence" id="cons3">
+          <div class="badge-row"><span class="badge badge--jugada">Revelación</span></div>
+          <p>El primer territorio de MCP ya está definido: <b>Huella Digital.</b></p>
+          <p style="margin-top:8px;" id="cons3-match"></p>
+          <p style="margin-top:8px;">La primera fase de MCP se enfoca en Huella Digital, permitiendo que los usuarios personalicen esta funcionalidad para medir clientes según criterios específicos — el territorio donde vamos a descubrir qué significa realmente que Dropi se adapte al usuario.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Un escenario</h3>
+        <p class="card__hint">Un usuario quiere medir a sus clientes bajo criterios propios. ¿Qué podría construir? Selecciona o combina.</p>
+        <div class="chips" id="chipGroup4" role="group" aria-label="Qué podría construir un usuario">
+          <button type="button" class="chip" data-value="Segmentaciones propias" aria-pressed="false">Segmentaciones propias</button>
+          <button type="button" class="chip" data-value="Análisis personalizados" aria-pressed="false">Análisis personalizados</button>
+          <button type="button" class="chip" data-value="Automatizaciones" aria-pressed="false">Automatizaciones</button>
+          <button type="button" class="chip" data-value="Agentes" aria-pressed="false">Agentes</button>
+          <button type="button" class="chip" data-value="Alertas" aria-pressed="false">Alertas</button>
+          <button type="button" class="chip" data-value="Decisiones" aria-pressed="false">Decisiones</button>
+          <button type="button" class="chip" data-value="Recomendaciones" aria-pressed="false">Recomendaciones</button>
+          <button type="button" class="chip" data-value="Otros" aria-pressed="false">Otros</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Más allá de lo que Dropi ya imaginó <span class="tag tag--oportunidad" style="margin-left:6px;">Oportunidad</span></h3>
+        <label class="field-label" for="huellaImaginado">Una cosa que nuestros usuarios podrían hacer con MCP y que todavía no hemos imaginado:</label>
+        <textarea id="huellaImaginado" placeholder="Sin filtro. Lo que se te ocurra." style="margin-bottom:0;"></textarea>
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack3">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-3" hidden>Elige tu apuesta de territorio, al menos una opción del escenario, y completa el campo de imaginación.</span>
+          <button type="button" class="primary" data-mission-btn="3">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 04 -->
+    <section class="mission" data-mission="4">
+      <p class="eyebrow">Misión 04 · Encuentra al jugador</p>
+      <h2>Encuentra al jugador</h2>
+      <p class="escenario">MCP aplica a tres grupos: <b>dropshippers, proveedores y marcas propias.</b> Hoy solo tenemos cuantificado el grupo de dropshippers — proveedores y marcas propias están por cuantificar. Tu operación necesita un primer foco. <b>No puedes elegir a todos.</b></p>
+
+      <div class="card">
+        <h3 class="card__title">Dropshippers cuantificados — <span id="dropshippersHeaderCount">2.946</span> usuarios</h3>
+        <p class="card__hint">Este es el grupo de dropshippers ya cuantificado — uno de los tres grupos del universo MCP. Elige uno: tu primer jugador.</p>
+        <div class="segment-grid" id="segmentGrid4" role="group" aria-label="Segmentos de dropshippers">
+          <button type="button" class="segment" data-segmento="Explorador LITE" aria-pressed="false"><div class="segment__name">Explorador LITE</div><div class="segment__count">1.519 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Explorador PLUS" aria-pressed="false"><div class="segment__name">Explorador PLUS</div><div class="segment__count">651 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Explorador MAX" aria-pressed="false"><div class="segment__name">Explorador MAX</div><div class="segment__count">339 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Master PLUS" aria-pressed="false"><div class="segment__name">Master PLUS</div><div class="segment__count">177 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Master MAX" aria-pressed="false"><div class="segment__name">Master MAX</div><div class="segment__count">147 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Experto PLUS" aria-pressed="false"><div class="segment__name">Experto PLUS</div><div class="segment__count">46 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Experto MAX" aria-pressed="false"><div class="segment__name">Experto MAX</div><div class="segment__count">42 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Sabio VIP PLUS" aria-pressed="false"><div class="segment__name">Sabio VIP PLUS</div><div class="segment__count">21 usuarios</div></button>
+          <button type="button" class="segment" data-segmento="Sabio VIP MAX" aria-pressed="false"><div class="segment__name">Sabio VIP MAX</div><div class="segment__count">4 usuarios</div></button>
+        </div>
+        <p class="segment-total">Total dropshippers cuantificados: <b id="dropshippersTotalCount">2.946</b> usuarios</p>
+        <label class="field-label" style="margin-top:16px;" for="jugadorPorQue">¿Por qué este jugador?</label>
+        <textarea id="jugadorPorQue" placeholder="En una frase." style="margin-bottom:0;"></textarea>
+
+        <div class="consequence" id="cons4">
+          <div class="badge-row"><span class="badge badge--jugada">Jugador identificado</span></div>
+          <p id="cons4-text"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">El universo completo del MCP</h3>
+        <dl class="data-grid">
+          <div class="data-item"><dt>Dropshippers</dt><dd><span id="universoDropshippers">2.946</span> usuarios cuantificados</dd></div>
+          <div class="data-item"><dt>Proveedores</dt><dd><span class="tag tag--validar">Por cuantificar</span></dd></div>
+          <div class="data-item"><dt>Marcas Propias</dt><dd><span class="tag tag--validar">Por cuantificar</span></dd></div>
+        </dl>
+        <p style="margin-top:16px; font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint);">Universo total del MCP: <b id="universoTotal" style="color:var(--text);">Por definir</b></p>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Pero no es el único universo</h3>
+        <p class="card__hint">¿A quién le estás diseñando esta operación?</p>
+        <div class="duo-grid" id="diseñandoParaGrid" role="group" aria-label="A quién diseñas la operación">
+          <div class="duo-card" data-value="Core Target" tabindex="0" role="button" aria-pressed="false">
+            <div class="duo-card__head"><span class="duo-card__title">Core Target</span><span class="duo-card__num" id="duoCoreNum">2.946</span></div>
+            <p class="duo-card__sub">Dropshippers cuantificados · objetivo: adopción</p>
+            <p class="duo-card__funnel">Awareness → Comprensión → Conexión → Primer valor → Adopción</p>
+          </div>
+          <div class="duo-card" data-value="Universo Ampliado" tabindex="0" role="button" aria-pressed="false">
+            <div class="duo-card__head"><span class="duo-card__title">Universo Ampliado</span></div>
+            <p class="duo-card__sub">Resto de usuarios activos de Dropi</p>
+            <p class="duo-card__funnel">Awareness → Curiosidad → Descubrimiento</p>
+          </div>
+        </div>
+        <p style="font-size:12.5px; color:var(--text-dim); margin:14px 0 0; line-height:1.55;">La comunicación puede llegar a ambos universos, pero con distinta profundidad — no asumas que el universo ampliado busca adopción inmediata.</p>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Cómo mediremos el éxito</h3>
+        <p class="spark-label">Acción de valor</p>
+        <ul class="list-plain">
+          <li>El usuario logra realizar la conexión del conector de IA de su preferencia. <span class="tag tag--reco" style="margin-left:4px;">Activación</span></li>
+          <li>El usuario obtiene el resultado de una consulta sobre su negocio dentro de su IA. <span class="tag tag--reco" style="margin-left:4px;">Adopción</span></li>
+        </ul>
+        <div class="callout">
+          <p class="callout__title" style="font-size:14px; margin-top:0;">Conexión ≠ adopción</p>
+          <p class="callout__body">Conectar el conector de IA es <b>activación</b>. Obtener el primer resultado de valor dentro de la IA es <b>adopción</b>.</p>
+        </div>
+        <p style="font-size:14.5px; color:var(--text-dim); margin:16px 0 6px;"><b style="color:var(--text);">MCP Adoption Rate</b> — % del universo objetivo que realiza al menos una acción exitosa con MCP.</p>
+        <p style="font-family:var(--font-mono); font-size:12px; color:var(--text-faint); margin:0 0 16px;">Denominador total: por definir al consolidar Dropshippers (<span id="adoptionDenomBase">2.946</span>) + Proveedores + Marcas Propias.</p>
+        <p class="spark-label" style="margin-top:6px;">TARS de la operación</p>
+        <dl class="data-grid" style="margin-top:0;">
+          <div class="data-item"><dt>T · Target</dt><dd>Universo objetivo del MCP — dropshippers cuantificados + proveedores y marcas propias por cuantificar.</dd></div>
+          <div class="data-item"><dt>A · Activation</dt><dd>¿Conectó el conector de IA de su preferencia?</dd></div>
+          <div class="data-item"><dt>A · Adoption</dt><dd>¿Obtuvo el resultado de una consulta exitosa dentro de su IA?</dd></div>
+          <div class="data-item"><dt>R · Retention</dt><dd>¿Volvió a utilizarlo? <span class="tag tag--validar" style="margin-left:4px;">Ventana por definir</span></dd></div>
+          <div class="data-item"><dt>S · Satisfaction</dt><dd>¿Percibe valor? <span class="tag tag--validar" style="margin-left:4px;">Metodología por definir</span></dd></div>
+        </dl>
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack4">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-4" hidden>Elige tu jugador, explica por qué, y decide para quién diseñas la operación.</span>
+          <button type="button" class="primary" data-mission-btn="4">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 05 -->
+    <section class="mission" data-mission="5">
+      <p class="eyebrow">Misión 05 · Arma el caso</p>
+      <h2>Arma el caso</h2>
+      <p class="escenario">Antes de construir tu jugada, necesitas conocer el caso completo. Toca cada pieza para revelarla.</p>
+
+      <div class="card">
+        <div class="caso-grid" id="casoGrid" role="group" aria-label="Piezas del caso MCP">
+          <button type="button" class="caso-piece" data-key="publico" data-visited="false">Público</button>
+          <button type="button" class="caso-piece" data-key="tamano" data-visited="false">Tamaño</button>
+          <button type="button" class="caso-piece" data-key="problema" data-visited="false">Problema</button>
+          <button type="button" class="caso-piece" data-key="jtbd" data-visited="false">JTBD</button>
+          <button type="button" class="caso-piece" data-key="frecuencia" data-visited="false">Frecuencia</button>
+          <button type="button" class="caso-piece" data-key="gravedad" data-visited="false">Gravedad</button>
+          <button type="button" class="caso-piece" data-key="alternativas" data-visited="false">Alternativas</button>
+          <button type="button" class="caso-piece" data-key="impacto" data-visited="false">Impacto</button>
+          <button type="button" class="caso-piece" data-key="importancia" data-visited="false">Importancia</button>
+        </div>
+        <div class="caso-detail" id="casoDetail">
+          <p class="caso-detail__empty">Toca una pieza arriba para revelarla.</p>
+        </div>
+        <p class="caso-progress" id="casoProgress">0/9 piezas reveladas</p>
+      </div>
+
+      <div class="card" id="casoArmadoCard" hidden>
+        <div class="badge-row"><span class="badge badge--jugada">Caso MCP armado</span></div>
+        <p style="font-size:14.5px; line-height:1.6; color:var(--text-dim); margin:0;">Ya tienes el terreno completo: quién es, por qué le importa, y por qué a Dropi le conviene. Ahora falta encontrar el momento que lo convence.</p>
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack5">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-5" hidden>Revela las 9 piezas del caso para continuar.</span>
+          <button type="button" class="primary" data-mission-btn="5">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 06 -->
+    <section class="mission" data-mission="6">
+      <p class="eyebrow">Misión 06 · Encuentra el wow</p>
+      <h2>Encuentra el wow</h2>
+      <p class="escenario">MCP no se adopta porque exista. Se adopta cuando el usuario experimenta valor. Tu operación necesita un momento que haga que el usuario piense: <b>esto me sirve.</b></p>
+
+      <div class="jugador-chip" id="jugadorChip6">Jugador: —</div>
+
+      <div class="card">
+        <h3 class="card__title">Desafío</h3>
+        <p class="card__hint">Elige un solo momento posible — el que más fuerte crees que puede ser.</p>
+        <div class="chips" id="wowSparks" role="group" aria-label="Momentos posibles">
+          <button type="button" class="chip" data-value="consultar el estado de sus órdenes sin abrir el panel" aria-pressed="false">Consultar órdenes sin abrir el panel</button>
+          <button type="button" class="chip" data-value="crear una orden hablándole a su asistente de IA" aria-pressed="false">Crear una orden hablándole a su asistente</button>
+          <button type="button" class="chip" data-value="saber qué categoría le está vendiendo mejor" aria-pressed="false">Analizar qué categoría vende mejor</button>
+          <button type="button" class="chip" data-value="cotizar un envío al instante" aria-pressed="false">Cotizar un envío al instante</button>
+          <button type="button" class="chip" data-value="revisar su Huella Digital Lite" aria-pressed="false">Revisar su Huella Digital Lite</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Construye el momento</h3>
+        <p class="spark-label">Usuario + situación + acción con MCP + valor = momento wow</p>
+        <p class="sentence">Hoy le resulta difícil <input type="text" class="inline-input" id="wowSituacion" placeholder="la situación">. Con MCP puede <input type="text" class="inline-input" id="wowAccion" placeholder="la acción">.</p>
+        <label class="field-label" for="wowValor">¿Por qué eso lo hace pensar "esto me sirve"?</label>
+        <textarea id="wowValor" placeholder="El valor percibido, no la funcionalidad." style="margin-bottom:0;"></textarea>
+      </div>
+
+      <div class="ai-future">
+        <p class="ai-future__label">Copiloto de IA — próximamente</p>
+        <div class="ai-future__row">
+          <button type="button" disabled title="Aún no conectado a un modelo real">PIENSA COMO EL USUARIO</button>
+          <button type="button" disabled title="Aún no conectado a un modelo real">¿QUÉ ESTOY PASANDO POR ALTO?</button>
+          <button type="button" disabled title="Aún no conectado a un modelo real">DESAFÍA MI IDEA</button>
+        </div>
+        <p class="ai-future__note">La IA no decide. La IA provoca. El equipo decide.</p>
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack6">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-6" hidden>Elige un momento y completa situación, acción y valor.</span>
+          <button type="button" class="primary" data-mission-btn="6">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 07 -->
+    <section class="mission" data-mission="7">
+      <p class="eyebrow">Misión 07 · Construye la jugada</p>
+      <h2>Construye la jugada</h2>
+      <p class="escenario">Ahora usa todo lo que ya construiste. Sin lenguaje técnico — si necesitas explicar cómo funciona MCP para que esto tenga sentido, todavía no es la jugada.</p>
+
+      <div class="jugador-chip" id="jugadorChip7">Jugador: —</div>
+
+      <div class="card">
+        <h3 class="card__title">Problema</h3>
+        <label class="field-label" for="l6Problema">¿Qué problema concreto quiero ayudarle a resolver?</label>
+        <textarea id="l6Problema" placeholder="Sé específico." style="margin-bottom:0;"></textarea>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Valor</h3>
+        <label class="field-label" for="l6Valor">¿Por qué debería importarle?</label>
+        <textarea id="l6Valor" placeholder="El resultado que le importa a él, no la funcionalidad." style="margin-bottom:0;"></textarea>
+      </div>
+
+      <div class="card">
+        <h3 class="card__title">Mensaje</h3>
+        <label class="field-label" for="l6Mensaje">¿Qué le dirías para despertar interés?</label>
+        <input type="text" id="l6Mensaje" placeholder="En una frase, así se lo dirías" style="margin-bottom:0;">
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack7">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-7" hidden>Completa problema, valor y mensaje.</span>
+          <button type="button" class="primary" data-mission-btn="7">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISIÓN 08 -->
+    <section class="mission" data-mission="8">
+      <p class="eyebrow">Misión 08 · Ponla a prueba</p>
+      <h2>Ponla a prueba</h2>
+      <p class="escenario">Toda jugada necesita una forma de probarse. No usamos ICE ni matriz de priorización aquí — eso es del taller principal.</p>
+
+      <div class="card">
+        <h3 class="card__title">Hipótesis</h3>
+        <p class="sentence">Si hacemos <input type="text" class="inline-input" id="expX" placeholder="qué"> con <input type="text" class="inline-input" id="expY" placeholder="qué usuario">, esperamos que ocurra <input type="text" class="inline-input" id="expZ" placeholder="qué resultado"> porque creemos que <input type="text" class="inline-input" id="expPorque" placeholder="la razón">.</p>
+        <dl class="data-grid" style="margin-top:16px;">
+          <div class="data-item" style="margin-bottom:0;"><label class="field-label" for="expControl">Control</label><input type="text" id="expControl" placeholder="¿qué dejamos igual?" style="margin-bottom:0;"></div>
+          <div class="data-item" style="margin-bottom:0;"><label class="field-label" for="expTratamiento">Tratamiento</label><input type="text" id="expTratamiento" placeholder="¿qué cambiamos?" style="margin-bottom:0;"></div>
+        </dl>
+        <label class="field-label" style="margin-top:16px;" for="expMetrica">Métrica — ¿qué vamos a medir?</label>
+        <input type="text" id="expMetrica" placeholder="ej. tasa de adopción del segmento, tiempo hasta primera acción" style="margin-bottom:0;">
+      </div>
+
+      <div class="mission-nav">
+        <button type="button" class="back-link" id="btnBack8">‹ Tablero</button>
+        <div class="mission-nav__right">
+          <span class="level-error" id="error-8" hidden>Completa la hipótesis, control, tratamiento y métrica.</span>
+          <button type="button" class="primary" data-mission-btn="8">Confirmar jugada →</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ FINAL ============ -->
+  <section id="final" hidden>
+    <p class="eyebrow">Operación completada</p>
+    <h1 style="font-size:clamp(30px,5vw,48px);">Operación <em>completada</em></h1>
+    <p class="subtitle2" id="finalCount" style="margin-bottom:6px;">8/8 misiones completadas</p>
+    <p class="subtitle" style="margin-bottom:28px;">Has construido tu primera jugada MCP.</p>
+
+    <button type="button" class="back-link" id="btnBackFinal" style="display:inline-block; margin-bottom:16px;">‹ Ver tablero</button>
+
+    <div class="final-summary" id="summary" aria-live="polite">
+      <div class="final-summary__head">
+        <p class="final-summary__title">Tu jugada</p>
+        <p class="final-summary__who" id="summaryWho"></p>
+      </div>
+      <dl class="final-summary__grid">
+        <div class="final-summary__item"><dt>Jugador</dt><dd id="sumJugador"></dd></div>
+        <div class="final-summary__item"><dt>Problema</dt><dd id="sumProblema"></dd></div>
+        <div class="final-summary__item"><dt>Territorio</dt><dd id="sumTerritorio"></dd></div>
+        <div class="final-summary__item"><dt>Momento wow</dt><dd id="sumWow"></dd></div>
+        <div class="final-summary__item"><dt>Mensaje</dt><dd id="sumMensaje"></dd></div>
+        <div class="final-summary__item"><dt>Experimento</dt><dd id="sumExperimento"></dd></div>
+      </dl>
+    </div>
+
+    <div class="closing-lines">
+      <p>Esto no es la estrategia final.</p>
+      <p>Es tu primera jugada.</p>
+      <p>Mañana no vienes a empezar de cero. Vienes con una jugada.</p>
+    </div>
+
+    <div class="cta-row">
+      <a href="#" id="enviarApuesta" class="primary" style="text-decoration:none;">Enviar mi jugada por correo →</a>
+      <button type="button" class="secondary" id="descargarApuesta">Copiar mi jugada</button>
+    </div>
+    <p class="cta-note" style="margin-top:12px;">"Enviar" abre tu correo con la jugada ya escrita — solo confirma el envío.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot__save" id="save-indicator" style="visibility:hidden;">
+    <span class="save-dot"></span> <span id="save-text">Progreso guardado en este dispositivo</span>
+  </div>
+  <button type="button" class="reset-link" id="reset">Reiniciar operación</button>
+</footer>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'dropiMcpOperacion_v1';
+  const ID_KEY = 'dropiMcpOperacion_participantId';
+  const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const TOTAL_MISSIONS = 8;
+
+  const SEGMENTS = [
+    {label:'Explorador LITE', count:1519}, {label:'Explorador PLUS', count:651}, {label:'Explorador MAX', count:339},
+    {label:'Master PLUS', count:177}, {label:'Master MAX', count:147},
+    {label:'Experto PLUS', count:46}, {label:'Experto MAX', count:42},
+    {label:'Sabio VIP PLUS', count:21}, {label:'Sabio VIP MAX', count:4},
+  ];
+  function segmentDisplay(label){
+    const s = SEGMENTS.find(x => x.label === label);
+    return s ? (s.label + ' — ' + s.count.toLocaleString('es') + ' usuarios') : label;
+  }
+
+  // ---------- universo del MCP: fuente de verdad E2E ----------
+  // Solo el grupo de dropshippers está cuantificado hoy. Proveedores y Marcas
+  // Propias quedan en null hasta que existan cifras reales — nunca inventar.
+  const DROPSHIPPERS_COUNT = SEGMENTS.reduce((sum, s) => sum + s.count, 0); // 2.946
+  const SUPPLIERS_COUNT = null;
+  const OWN_BRANDS_COUNT = null;
+  function totalTargetDisplay(){
+    if(SUPPLIERS_COUNT == null || OWN_BRANDS_COUNT == null) return 'Por definir';
+    return (DROPSHIPPERS_COUNT + SUPPLIERS_COUNT + OWN_BRANDS_COUNT).toLocaleString('es');
+  }
+  const dCountFmt = DROPSHIPPERS_COUNT.toLocaleString('es');
+
+  const CASO_PIECES = {
+    publico: {label:'Público objetivo', text:'Dropshippers, proveedores y marcas propias con operación ya establecida que usan IA para gestionar o analizar su negocio.'},
+    tamano: {label:'Tamaño', text: function(){
+      return 'Dropshippers cuantificados: ' + dCountFmt + '. Proveedores: por cuantificar. Marcas Propias: por cuantificar. Universo total del MCP: ' + totalTargetDisplay() + '.';
+    }},
+    problema: {label:'Problema', text:'Los dropshippers y proveedores que utilizan inteligencia artificial para la gestión operativa y de cuentas en Dropi carecen de una integración directa con la plataforma para consolidar su información. Por eso deben descargar reportes diarios o hacer reportes manuales para cruzar información en hojas de cálculo externas o desarrollos propios.'},
+    jtbd: {label:'JTBD', text:'"Cuando quiero usar IA para mejorar o automatizar mi operación, quiero poder conectar los servicios y datos de Dropi con las herramientas o agentes que utilizo, para trabajar de una forma más adaptada a mi negocio."'},
+    frecuencia: {label:'Frecuencia', text:'Diaria. La necesidad de consultar y gestionar información de la operación mediante herramientas externas o procesos manuales puede presentarse todos los días.'},
+    gravedad: {label:'Gravedad', text:'Media — no bloquea la operación, pero genera trabajo adicional y fricción para usuarios con necesidades más complejas.'},
+    alternativas: {label:'Alternativas hoy', text:'Procesos manuales, reportes, hojas de cálculo, desarrollos propios, APIs — ya se está resolviendo, solo que de forma indirecta.'},
+    impacto: {label:'Impacto en negocio', text:'Alto / estratégico — libera capacidad de Tecnología, abre nuevos casos de uso y fortalece la diferenciación de Dropi.'},
+    importancia: {label:'Importancia estratégica', text:'Alta — es un primer paso hacia Dropi como software para agentes.'},
+  };
+
+  const TEXT_FIELD_IDS = ['huellaImaginado','jugadorPorQue','wowSituacion','wowAccion','wowValor',
+    'l6Problema','l6Valor','l6Mensaje','expX','expY','expZ','expPorque','expControl','expTratamiento','expMetrica'];
+  const ARRAY_KEYS = ['huellaCombinacion'];
+
+  function defaultState(){
+    const s = {
+      nombre:'', area:'', iniciado:false,
+      view:'portada', missionActual:1, maxUnlocked:1, completed:[],
+      cambioChoice:'', razonChoice:'', territorioGuess:'',
+      jugadorSegmento:'', diseñandoPara:'', wowElegido:'',
+      casoVisto:[],
+    };
+    TEXT_FIELD_IDS.forEach(id => s[id] = '');
+    ARRAY_KEYS.forEach(k => s[k] = []);
+    return s;
+  }
+
+  function slugify(s){
+    return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  }
+
+  function readLocalState(){
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+    catch(e){ return null; }
+  }
+  function getParticipantId(){
+    try{
+      let id = localStorage.getItem(ID_KEY);
+      if(!id){
+        id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('p_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+        localStorage.setItem(ID_KEY, id);
+      }
+      return id;
+    }catch(e){ return 'p_' + Date.now(); }
+  }
+
+  const saved = readLocalState() || {};
+  let state = Object.assign(defaultState(), saved);
+  ARRAY_KEYS.concat(['completed','casoVisto']).forEach(k => { if(!Array.isArray(state[k])) state[k] = []; });
+
+  const portadaEl = document.getElementById('portada');
+  const tableroEl = document.getElementById('tablero');
+  const missionsEl = document.getElementById('missions');
+  const finalEl = document.getElementById('final');
+  const topbarRight = document.getElementById('topbarRight');
+  const missionProgress = document.getElementById('missionProgress');
+  const btnTablero = document.getElementById('btnTablero');
+
+  const nombreInput = document.getElementById('nombre');
+  const chips = Array.from(document.querySelectorAll('#portada .chip'));
+  const entrarBtn = document.getElementById('entrar');
+  const descargarBtn = document.getElementById('descargar');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toast-text');
+  const saveIndicator = document.getElementById('save-indicator');
+  const resetBtn = document.getElementById('reset');
+  let selectedArea = state.area || null;
+
+  const missionSections = Array.from(document.querySelectorAll('.mission'));
+
+  function persistLocal(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+  function schedulePersist(){ persistLocal(); }
+  function persistNow(){ persistLocal(); }
+
+  async function copyToClipboard(btn, text){
+    const original = btn.textContent;
+    try{
+      if(!navigator.clipboard || !navigator.clipboard.writeText) throw new Error('sin clipboard API');
+      await navigator.clipboard.writeText(text);
+      btn.textContent = 'Copiado ✓';
+    }catch(e){
+      btn.textContent = 'No se pudo copiar — hazlo manualmente';
+    }
+    setTimeout(() => { btn.textContent = original; }, 2200);
+  }
+
+  // ---------- portada ----------
+  function validatePortada(){
+    const ready = nombreInput.value.trim().length > 1 && selectedArea;
+    entrarBtn.disabled = !ready;
+    descargarBtn.disabled = !ready;
+  }
+  chips.forEach(chip => {
+    if(chip.dataset.area === state.area) chip.setAttribute('aria-pressed','true');
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.setAttribute('aria-pressed','false'));
+      chip.setAttribute('aria-pressed','true');
+      selectedArea = chip.dataset.area;
+      state.area = selectedArea;
+      schedulePersist();
+      validatePortada();
+    });
+  });
+  if(state.nombre) nombreInput.value = state.nombre;
+  nombreInput.addEventListener('input', () => {
+    state.nombre = nombreInput.value;
+    schedulePersist();
+    validatePortada();
+  });
+
+  function copyQuick(){
+    const nombre = nombreInput.value.trim();
+    if(!nombre || !selectedArea) return;
+    const lineas = ['OPERACIÓN: MCP', 'Registro inicial', '', 'Nombre: ' + nombre, 'Área: ' + selectedArea, 'Guardado: ' + new Date().toLocaleString('es')];
+    copyToClipboard(descargarBtn, lineas.join('\n'));
+  }
+  descargarBtn.addEventListener('click', copyQuick);
+
+  entrarBtn.addEventListener('click', () => {
+    const nombre = nombreInput.value.trim();
+    if(!nombre || !selectedArea) return;
+    state.nombre = nombre;
+    state.area = selectedArea;
+    state.iniciado = true;
+    persistNow();
+    toastText.textContent = 'Copiloto: Perfecto, ' + nombre.split(' ')[0] + '. La operación comienza.';
+    toast.classList.add('show');
+    setTimeout(() => { state.view = 'tablero'; persistLocal(); render(); }, reduceMotion() ? 0 : 700);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    try{ localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(ID_KEY); }catch(e){}
+    location.reload();
+  });
+
+  // ---------- generic text field binding ----------
+  TEXT_FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.value = state[id] || '';
+    el.addEventListener('input', () => {
+      state[id] = el.value;
+      el.classList.remove('invalid');
+      schedulePersist();
+    });
+  });
+
+  // ---------- mission 1: choice + consequence ----------
+  const choiceCards1 = Array.from(document.querySelectorAll('#choiceGrid1 .choice-card'));
+  choiceCards1.forEach(c => {
+    c.setAttribute('aria-pressed', c.dataset.value === state.cambioChoice ? 'true' : 'false');
+    c.addEventListener('click', () => {
+      choiceCards1.forEach(x => x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      state.cambioChoice = c.dataset.value;
+      schedulePersist();
+      document.getElementById('cons1').classList.add('show');
+      document.getElementById('choiceGrid1').classList.remove('invalid-group');
+    });
+  });
+  if(state.cambioChoice) document.getElementById('cons1').classList.add('show');
+
+  // ---------- mission 2: choice + branching consequence ----------
+  const choiceCards2 = Array.from(document.querySelectorAll('#choiceGrid2 .choice-card'));
+  function showCons2(value){
+    ['A','B','C','D'].forEach(v => document.getElementById('cons2-' + v).classList.toggle('show', v === value));
+  }
+  choiceCards2.forEach(c => {
+    c.setAttribute('aria-pressed', c.dataset.value === state.razonChoice ? 'true' : 'false');
+    c.addEventListener('click', () => {
+      choiceCards2.forEach(x => x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      state.razonChoice = c.dataset.value;
+      schedulePersist();
+      showCons2(c.dataset.value);
+      document.getElementById('choiceGrid2').classList.remove('invalid-group');
+    });
+  });
+  if(state.razonChoice) showCons2(state.razonChoice);
+
+  // ---------- mission 3: territorio guess + consequence + huella chips ----------
+  const choiceCards3 = Array.from(document.querySelectorAll('#choiceGrid3 .choice-card'));
+  function updateCons3Match(){
+    const el = document.getElementById('cons3-match');
+    if(!state.territorioGuess) { el.textContent = ''; return; }
+    el.textContent = (state.territorioGuess === 'D')
+      ? 'Tu apuesta coincidió — buena lectura del terreno.'
+      : 'No coincidió con tu primera apuesta, y está bien: así se prueban las hipótesis.';
+  }
+  choiceCards3.forEach(c => {
+    c.setAttribute('aria-pressed', c.dataset.value === state.territorioGuess ? 'true' : 'false');
+    c.addEventListener('click', () => {
+      choiceCards3.forEach(x => x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      state.territorioGuess = c.dataset.value;
+      schedulePersist();
+      updateCons3Match();
+      document.getElementById('cons3').classList.add('show');
+      document.getElementById('choiceGrid3').classList.remove('invalid-group');
+    });
+  });
+  if(state.territorioGuess){ document.getElementById('cons3').classList.add('show'); updateCons3Match(); }
+
+  function setupMultiChip(containerId, stateKey){
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    const btns = Array.from(container.querySelectorAll('.chip[data-value]'));
+    const arr = state[stateKey];
+    btns.forEach(b => b.setAttribute('aria-pressed', arr.indexOf(b.dataset.value) !== -1 ? 'true' : 'false'));
+    btns.forEach(b => {
+      b.addEventListener('click', () => {
+        const on = b.getAttribute('aria-pressed') === 'true';
+        b.setAttribute('aria-pressed', on ? 'false' : 'true');
+        const idx = arr.indexOf(b.dataset.value);
+        if(on && idx !== -1) arr.splice(idx, 1);
+        if(!on && idx === -1) arr.push(b.dataset.value);
+        schedulePersist();
+        container.classList.remove('invalid-group');
+      });
+    });
+  }
+  setupMultiChip('chipGroup4', 'huellaCombinacion');
+
+  // ---------- mission 4: single-select segment + duo choice ----------
+  const segmentBtns4 = Array.from(document.querySelectorAll('#segmentGrid4 .segment'));
+  function updateCons4(){
+    const el = document.getElementById('cons4-text');
+    el.textContent = state.jugadorSegmento ? segmentDisplay(state.jugadorSegmento) + (state.jugadorPorQue ? (' — ' + state.jugadorPorQue) : '') : '';
+  }
+  segmentBtns4.forEach(btn => {
+    btn.setAttribute('aria-pressed', btn.dataset.segmento === state.jugadorSegmento ? 'true' : 'false');
+    btn.addEventListener('click', () => {
+      segmentBtns4.forEach(b => b.setAttribute('aria-pressed','false'));
+      btn.setAttribute('aria-pressed','true');
+      state.jugadorSegmento = btn.dataset.segmento;
+      schedulePersist();
+      document.getElementById('cons4').classList.add('show');
+      updateCons4();
+      document.getElementById('segmentGrid4').classList.remove('invalid-group');
+    });
+  });
+  if(state.jugadorSegmento){ document.getElementById('cons4').classList.add('show'); updateCons4(); }
+  const jugadorPorQueEl = document.getElementById('jugadorPorQue');
+  if(jugadorPorQueEl) jugadorPorQueEl.addEventListener('input', updateCons4);
+
+  const duoCards = Array.from(document.querySelectorAll('#diseñandoParaGrid .duo-card'));
+  duoCards.forEach(c => {
+    c.setAttribute('aria-pressed', c.dataset.value === state.diseñandoPara ? 'true' : 'false');
+    function pick(){
+      duoCards.forEach(x => x.setAttribute('aria-pressed','false'));
+      c.setAttribute('aria-pressed','true');
+      state.diseñandoPara = c.dataset.value;
+      schedulePersist();
+    }
+    c.addEventListener('click', pick);
+    c.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pick(); } });
+  });
+
+  // ---------- mission 5: caso pieces ----------
+  const casoBtns = Array.from(document.querySelectorAll('#casoGrid .caso-piece'));
+  const casoDetail = document.getElementById('casoDetail');
+  const casoProgress = document.getElementById('casoProgress');
+  const casoArmadoCard = document.getElementById('casoArmadoCard');
+  function renderCasoProgress(){
+    casoBtns.forEach(b => b.setAttribute('data-visited', state.casoVisto.indexOf(b.dataset.key) !== -1 ? 'true' : 'false'));
+    casoProgress.textContent = state.casoVisto.length + '/9 piezas reveladas';
+    casoArmadoCard.hidden = state.casoVisto.length < 9;
+  }
+  casoBtns.forEach(b => {
+    b.addEventListener('click', () => {
+      const key = b.dataset.key;
+      const piece = CASO_PIECES[key];
+      const pieceText = typeof piece.text === 'function' ? piece.text() : piece.text;
+      casoDetail.innerHTML = '<p class="caso-detail__label">' + piece.label + '</p><p class="caso-detail__text">' + pieceText + '</p>';
+      if(state.casoVisto.indexOf(key) === -1) state.casoVisto.push(key);
+      schedulePersist();
+      renderCasoProgress();
+      document.getElementById('casoGrid').classList.remove('invalid-group');
+    });
+  });
+  renderCasoProgress();
+
+  // ---------- mission 6: wow spark chip (single) ----------
+  const wowChips = Array.from(document.querySelectorAll('#wowSparks .chip'));
+  wowChips.forEach(b => {
+    b.setAttribute('aria-pressed', b.dataset.value === state.wowElegido ? 'true' : 'false');
+    b.addEventListener('click', () => {
+      wowChips.forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      state.wowElegido = b.dataset.value;
+      document.getElementById('wowSituacion').value = b.dataset.value;
+      state.wowSituacion = b.dataset.value;
+      schedulePersist();
+      document.getElementById('wowSparks').classList.remove('invalid-group');
+    });
+  });
+
+  // ---------- validation ----------
+  function validateMission(n){
+    if(n === 1) return !!state.cambioChoice;
+    if(n === 2) return !!state.razonChoice;
+    if(n === 3) return !!state.territorioGuess && state.huellaCombinacion.length > 0 && state.huellaImaginado.trim().length > 1;
+    if(n === 4) return !!state.jugadorSegmento && state.jugadorPorQue.trim().length > 1 && !!state.diseñandoPara;
+    if(n === 5) return state.casoVisto.length >= 9;
+    if(n === 6) return !!state.wowElegido && state.wowSituacion.trim().length > 0 && state.wowAccion.trim().length > 0 && state.wowValor.trim().length > 0;
+    if(n === 7) return state.l6Problema.trim().length > 0 && state.l6Valor.trim().length > 0 && state.l6Mensaje.trim().length > 0;
+    if(n === 8) return ['expX','expY','expZ','expPorque','expControl','expTratamiento','expMetrica'].every(k => state[k].trim().length > 0);
+    return true;
+  }
+  function highlightInvalid(n){
+    document.querySelectorAll('.invalid-group').forEach(el => el.classList.remove('invalid-group'));
+    function mark(id){ const el = document.getElementById(id); if(el) el.classList.add('invalid-group'); }
+    if(n === 1 && !state.cambioChoice) mark('choiceGrid1');
+    if(n === 2 && !state.razonChoice) mark('choiceGrid2');
+    if(n === 3){
+      if(!state.territorioGuess) mark('choiceGrid3');
+      if(state.huellaCombinacion.length === 0) mark('chipGroup4');
+      const el = document.getElementById('huellaImaginado'); if(el) el.classList.toggle('invalid', !state.huellaImaginado.trim());
+    }
+    if(n === 4){
+      if(!state.jugadorSegmento) mark('segmentGrid4');
+      const el = document.getElementById('jugadorPorQue'); if(el) el.classList.toggle('invalid', !state.jugadorPorQue.trim());
+    }
+    if(n === 5 && state.casoVisto.length < 9) mark('casoGrid');
+    if(n === 6){
+      if(!state.wowElegido) mark('wowSparks');
+      ['wowSituacion','wowAccion','wowValor'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('invalid', !state[id].trim()); });
+    }
+    if(n === 7) ['l6Problema','l6Valor','l6Mensaje'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('invalid', !state[id].trim()); });
+    if(n === 8) ['expX','expY','expZ','expPorque','expControl','expTratamiento','expMetrica'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('invalid', !state[id].trim()); });
+  }
+
+  // ---------- navigation ----------
+  function render(){
+    portadaEl.hidden = state.view !== 'portada';
+    tableroEl.hidden = state.view !== 'tablero';
+    missionsEl.hidden = state.view !== 'mission';
+    finalEl.hidden = state.view !== 'final';
+    topbarRight.hidden = state.view === 'portada';
+    if(state.view === 'mission'){
+      missionSections.forEach(s => s.classList.toggle('active', Number(s.dataset.mission) === state.missionActual));
+      missionProgress.textContent = 'Misión ' + state.missionActual + '/' + TOTAL_MISSIONS;
+      renderMissionButton(state.missionActual);
+    }
+    if(state.view === 'tablero'){ renderTablero(); missionProgress.textContent = state.completed.length + '/' + TOTAL_MISSIONS + ' completadas'; }
+    if(state.view === 'final'){ renderFinal(); missionProgress.textContent = TOTAL_MISSIONS + '/' + TOTAL_MISSIONS + ' completadas'; }
+    saveIndicator.style.visibility = state.view === 'portada' ? 'hidden' : 'visible';
+    window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+  }
+
+  function goToTablero(){ state.view = 'tablero'; persistLocal(); render(); }
+  function goToMission(n){
+    n = Math.max(1, Math.min(TOTAL_MISSIONS, n));
+    if(n > state.maxUnlocked) n = state.maxUnlocked;
+    state.view = 'mission'; state.missionActual = n; persistLocal(); render();
+  }
+  function goToFinal(){ state.view = 'final'; persistLocal(); render(); }
+
+  function renderMissionButton(n){
+    const btn = document.querySelector('[data-mission-btn="' + n + '"]');
+    if(!btn) return;
+    const done = state.completed.indexOf(n) !== -1;
+    btn.textContent = done ? (n === TOTAL_MISSIONS ? 'Ver informe final →' : 'Siguiente misión →') : 'Confirmar jugada →';
+  }
+
+  function confirmMission(n){
+    if(!validateMission(n)){
+      const err = document.getElementById('error-' + n);
+      if(err) err.hidden = false;
+      highlightInvalid(n);
+      return;
+    }
+    const err = document.getElementById('error-' + n);
+    if(err) err.hidden = true;
+    const wasCompleted = state.completed.indexOf(n) !== -1;
+    if(!wasCompleted) state.completed.push(n);
+    state.maxUnlocked = Math.max(state.maxUnlocked, Math.min(n + 1, TOTAL_MISSIONS));
+    persistNow();
+    if(!wasCompleted){
+      renderMissionButton(n);
+      return;
+    }
+    if(n === TOTAL_MISSIONS) goToFinal(); else goToMission(n + 1);
+  }
+
+  document.querySelectorAll('[data-mission-btn]').forEach(btn => {
+    btn.addEventListener('click', () => confirmMission(Number(btn.dataset.missionBtn)));
+  });
+  document.querySelectorAll('.mission-row').forEach(btn => {
+    btn.addEventListener('click', () => { if(!btn.disabled) goToMission(Number(btn.dataset.mission)); });
+  });
+  btnTablero.addEventListener('click', goToTablero);
+  ['2','3','4','5','6','7','8'].forEach(n => {
+    const b = document.getElementById('btnBack' + n);
+    if(b) b.addEventListener('click', goToTablero);
+  });
+  const btnBackFinal = document.getElementById('btnBackFinal');
+  if(btnBackFinal) btnBackFinal.addEventListener('click', goToTablero);
+
+  const MISSION_META = {
+    1:{title:'Descifra el cambio', desc:'Entiende qué está cambiando de verdad en Dropi.'},
+    2:{title:'Descubre la razón', desc:'Por qué esto está pasando ahora.'},
+    3:{title:'Descubre el territorio', desc:'Dónde se va a demostrar el valor primero.'},
+    4:{title:'Encuentra al jugador', desc:'No puedes elegir a todos. ¿Dónde apuestas?'},
+    5:{title:'Arma el caso', desc:'Conecta las piezas que sostienen la operación.'},
+    6:{title:'Encuentra el wow', desc:'El momento en que el usuario dice "esto me sirve".'},
+    7:{title:'Construye la jugada', desc:'Conecta todo lo que ya decidiste.'},
+    8:{title:'Ponla a prueba', desc:'Hipótesis, control, tratamiento, métrica.'},
+  };
+
+  function renderTablero(){
+    document.querySelectorAll('.mission-row').forEach(row => {
+      const n = Number(row.dataset.mission);
+      let st;
+      if(state.completed.indexOf(n) !== -1) st = 'completed';
+      else if(n <= state.maxUnlocked) st = 'available';
+      else st = 'locked';
+      row.dataset.state = st;
+      row.disabled = n > state.maxUnlocked;
+      const icon = row.querySelector('.mission-row__icon');
+      icon.textContent = st === 'completed' ? '✓' : (st === 'locked' ? '🔒' : String(n).padStart(2,'0'));
+    });
+
+    function setPiece(id, filled, text){
+      const el = document.getElementById(id);
+      el.dataset.filled = filled ? 'true' : 'false';
+      el.querySelector('.piece__value').textContent = filled ? text : '[pendiente]';
+    }
+    setPiece('piece-jugador', !!state.jugadorSegmento, state.jugadorSegmento ? segmentDisplay(state.jugadorSegmento) : '');
+    setPiece('piece-problema', !!state.l6Problema.trim(), state.l6Problema);
+    setPiece('piece-territorio', state.casoVisto.length >= 9, 'Huella Digital');
+    setPiece('piece-wow', !!(state.wowSituacion && state.wowAccion), state.wowAccion);
+    setPiece('piece-mensaje', !!state.l6Mensaje.trim(), state.l6Mensaje);
+    setPiece('piece-experimento', !!state.expX.trim(), state.expX);
+  }
+
+  // ---------- final summary ----------
+  function assembleWow(){
+    return (state.wowSituacion && state.wowAccion) ? ('Hoy le resulta difícil ' + state.wowSituacion + '. Con MCP puede ' + state.wowAccion + '. ' + (state.wowValor || '')) : '';
+  }
+  function assembleExperimento(){
+    if(!state.expX && !state.expY && !state.expZ) return '';
+    let s = 'Hipótesis: si hacemos ' + state.expX + ' con ' + state.expY + ', esperamos que ocurra ' + state.expZ + ' porque creemos que ' + state.expPorque + '.';
+    if(state.expControl) s += ' Control: ' + state.expControl + '.';
+    if(state.expTratamiento) s += ' Tratamiento: ' + state.expTratamiento + '.';
+    if(state.expMetrica) s += ' Métrica: ' + state.expMetrica + '.';
+    return s;
+  }
+  function jugadorDisplay(){
+    if(!state.jugadorSegmento) return '';
+    return segmentDisplay(state.jugadorSegmento) + (state.jugadorPorQue ? (' — ' + state.jugadorPorQue) : '') + (state.diseñandoPara ? (' · Diseñado para: ' + state.diseñandoPara) : '');
+  }
+  function territorioDisplay(){
+    if(state.casoVisto.length < 9) return '';
+    return 'Huella Digital' + (state.huellaImaginado ? (' — ' + state.huellaImaginado) : '');
+  }
+  function setSum(id, text){
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(text){ el.textContent = text; el.classList.remove('empty'); }
+    else { el.textContent = 'Sin completar todavía.'; el.classList.add('empty'); }
+  }
+  const ORGANIZADOR_EMAIL = 'catherin.salazar@dropi.co';
+
+  function buildJugadaLines(){
+    return [
+      'OPERACIÓN: MCP — MI JUGADA', '',
+      'Participante: ' + state.nombre + ' (' + state.area + ')',
+      'Fecha: ' + new Date().toLocaleString('es'), '',
+      'JUGADOR', jugadorDisplay() || 'Sin completar', '',
+      'PROBLEMA', state.l6Problema || 'Sin completar', '',
+      'TERRITORIO', territorioDisplay() || 'Sin completar', '',
+      'MOMENTO WOW', assembleWow() || 'Sin completar', '',
+      'VALOR', state.l6Valor || 'Sin completar', '',
+      'MENSAJE', state.l6Mensaje || 'Sin completar', '',
+      'EXPERIMENTO', assembleExperimento() || 'Sin completar',
+    ];
+  }
+
+  function renderFinal(){
+    document.getElementById('summaryWho').textContent = state.nombre + ' · ' + state.area;
+    document.getElementById('finalCount').textContent = state.completed.length + '/' + TOTAL_MISSIONS + ' misiones completadas';
+    setSum('sumJugador', jugadorDisplay());
+    setSum('sumProblema', state.l6Problema);
+    setSum('sumTerritorio', territorioDisplay());
+    setSum('sumWow', assembleWow());
+    setSum('sumMensaje', state.l6Mensaje);
+    setSum('sumExperimento', assembleExperimento());
+    ['jugadorChip6','jugadorChip7'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = 'Jugador: ' + (state.jugadorSegmento ? segmentDisplay(state.jugadorSegmento) : '—');
+    });
+    const enviarLink = document.getElementById('enviarApuesta');
+    if(enviarLink){
+      const subject = 'Operación MCP — Jugada de ' + (state.nombre || 'participante');
+      const body = buildJugadaLines().join('\n');
+      enviarLink.href = 'mailto:' + ORGANIZADOR_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    }
+  }
+  renderFinal();
+
+  const descargarApuestaBtn = document.getElementById('descargarApuesta');
+  if(descargarApuestaBtn){
+    descargarApuestaBtn.addEventListener('click', () => {
+      copyToClipboard(descargarApuestaBtn, buildJugadaLines().join('\n'));
+    });
+  }
+
+  function renderUniverso(){
+    const totalTxt = totalTargetDisplay();
+    ['dropshippersHeaderCount','dropshippersTotalCount','universoDropshippers','duoCoreNum','adoptionDenomBase'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = dCountFmt;
+    });
+    const universoTotalEl = document.getElementById('universoTotal');
+    if(universoTotalEl) universoTotalEl.textContent = totalTxt;
+  }
+  renderUniverso();
+
+  render();
+})();
+</script>
