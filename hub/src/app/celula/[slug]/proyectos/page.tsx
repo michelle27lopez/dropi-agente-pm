@@ -109,6 +109,7 @@ export default function ProyectosPorCelulaPage() {
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
   const [ownCelulaId, setOwnCelulaId] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [modoEdicionForzado, setModoEdicionForzado] = useState(false);
   // Filtro de etapa del viaje de la orden (2026-08-17, Jaime) — antes vivía
   // en el grid viejo de la home de Logística, ahora vive acá. Se pide con
@@ -136,6 +137,7 @@ export default function ProyectosPorCelulaPage() {
       .then((data) => {
         setOwnCelulaId(data?.profile?.celula_id ?? null);
         setIsSuperAdmin(!!data?.profile?.is_super_admin);
+        setCelulasEditor(data?.celulasEditor ?? []);
       })
       .catch(() => {});
 
@@ -148,7 +150,10 @@ export default function ProyectosPorCelulaPage() {
     }
   }, [params.slug]);
 
-  const esCelulaPropia = !!ownCelulaId && ownCelulaId === celulaId;
+  // ownCelulaId es la célula "de verdad" del perfil; celulasEditor son
+  // permisos adicionales por proyectos transversales (055_celula_editores_
+  // transversales.sql) — no le cambian el celula_id primario a nadie.
+  const esCelulaPropia = !!celulaId && (ownCelulaId === celulaId || celulasEditor.includes(celulaId));
   const canEditar = esCelulaPropia || modoEdicionForzado;
 
   // Iniciativas del tablero de logística sin ficha en Darwin todavía — se
