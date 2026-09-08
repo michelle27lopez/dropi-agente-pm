@@ -49,6 +49,38 @@ function esPrototipoValido(url: string | null): url is string {
   return !!url && (url.startsWith("/") || url.startsWith("http"));
 }
 
+// Convención para agrupar varios artefactos bajo una sola tarjeta visual sin
+// tocar el schema: nombrar cada fila "Grupo :: Etiqueta" (ej. "MCP -
+// Lanzamiento :: Brief" y "MCP - Lanzamiento :: Workshop"). Todo lo que no
+// use " :: " se sigue mostrando exactamente igual que antes (una tarjeta,
+// un botón) — Page Pilot y Rearquitectura no se ven afectados.
+type ArtifactGroupItem = { artifact: ProjectArtifact; label: string };
+type ArtifactRenderItem =
+  | { kind: "single"; artifact: ProjectArtifact }
+  | { kind: "group"; name: string; items: ArtifactGroupItem[] };
+
+function agruparArtifacts(list: ProjectArtifact[]): ArtifactRenderItem[] {
+  const items: ArtifactRenderItem[] = [];
+  const groupIndex = new Map<string, number>();
+  list.forEach((a) => {
+    const idx = a.nombre.indexOf(" :: ");
+    if (idx === -1) {
+      items.push({ kind: "single", artifact: a });
+      return;
+    }
+    const groupName = a.nombre.slice(0, idx).trim();
+    const label = a.nombre.slice(idx + 4).trim() || a.nombre;
+    const existing = groupIndex.get(groupName);
+    if (existing !== undefined) {
+      (items[existing] as { kind: "group"; name: string; items: ArtifactGroupItem[] }).items.push({ artifact: a, label });
+    } else {
+      groupIndex.set(groupName, items.length);
+      items.push({ kind: "group", name: groupName, items: [{ artifact: a, label }] });
+    }
+  });
+  return items;
+}
+
 function estadosValidosPara(type: string | null) {
   if (type === "POC") return ESTADOS_POC;
   if (type === "Delivery Proyecto") return ESTADOS_DELIVERY;
@@ -709,6 +741,109 @@ export default function ProjectDashboardPage() {
     P: "⚡ P · Performance (Causa de Habilitación)",
   };
 
+  const artifactRenderItems = agruparArtifacts(artifacts);
+
+  // Contenido de una fila de artefacto (edición o vista) — se usa tanto para
+  // tarjetas sueltas como para cada botón dentro de una tarjeta agrupada.
+  // `label` es lo que se muestra en negrita y en el botón; si `url` viene
+  // vacío (fila sembrada como placeholder, ej. un workshop que aún no
+  // existe) se muestra un estado "Por construir" en vez de un link roto.
+  function renderArtifactRow(a: ProjectArtifact, label: string) {
+    if (editingArtifactId === a.id) {
+      return (
+        <>
+          <input
+            type="text"
+            value={editNombre}
+            onChange={(e) => setEditNombre(e.target.value)}
+            placeholder="Nombre"
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+          />
+          <input
+            type="text"
+            value={editUrl}
+            onChange={(e) => setEditUrl(e.target.value)}
+            placeholder="https://..."
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+          />
+          <textarea
+            value={editDescripcion}
+            onChange={(e) => setEditDescripcion(e.target.value)}
+            placeholder="Descripción breve (opcional)"
+            rows={2}
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+          />
+          {editError && <span style={{ fontSize: 11.5, color: "#DC2626" }}>{editError}</span>}
+          <div style={{ display: "flex", gap: 6 }}>
+            <button
+              onClick={() => handleGuardarEdicionArtifact(a.id)}
+              disabled={editSubmitting}
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: editSubmitting ? "default" : "pointer" }}
+            >
+              {editSubmitting ? "Guardando…" : "Guardar"}
+            </button>
+            <button
+              onClick={() => { setEditingArtifactId(null); setEditError(null); }}
+              style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 7, padding: "6px 10px", cursor: "pointer" }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+          <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{label}</strong>
+          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <button
+              onClick={() => handleEmpezarEdicionArtifact(a)}
+              title="Editar workshop"
+              style={{ fontSize: 12, color: "var(--dropi)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              ✎
+            </button>
+            <button
+              onClick={() => handleEliminarArtifact(a.id)}
+              title="Quitar workshop"
+              style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+        {a.descripcion && (
+          <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, lineHeight: 1.45 }}>{a.descripcion}</p>
+        )}
+        {a.url ? (
+          <a
+            href={a.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)",
+              border: "none", borderRadius: 8, padding: "7px 12px", textDecoration: "none",
+              display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
+            }}
+          >
+            Abrir {label.toLowerCase()} <span style={{ fontSize: 11 }}>➔</span>
+          </a>
+        ) : (
+          <span
+            style={{
+              fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "var(--card)",
+              border: "1px dashed var(--border)", borderRadius: 8, padding: "7px 12px",
+              display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
+            }}
+          >
+            Por construir
+          </span>
+        )}
+      </>
+    );
+  }
+
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       <HubHeader
@@ -901,88 +1036,25 @@ export default function ProjectDashboardPage() {
 
             {artifacts.length > 0 && (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12, marginBottom: showArtifactForm ? 16 : 0 }}>
-                {artifacts.map((a) => (
-                  <div key={a.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-                    {editingArtifactId === a.id ? (
-                      <>
-                        <input
-                          type="text"
-                          value={editNombre}
-                          onChange={(e) => setEditNombre(e.target.value)}
-                          placeholder="Nombre"
-                          style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
-                        />
-                        <input
-                          type="text"
-                          value={editUrl}
-                          onChange={(e) => setEditUrl(e.target.value)}
-                          placeholder="https://..."
-                          style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
-                        />
-                        <textarea
-                          value={editDescripcion}
-                          onChange={(e) => setEditDescripcion(e.target.value)}
-                          placeholder="Descripción breve (opcional)"
-                          rows={2}
-                          style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
-                        />
-                        {editError && <span style={{ fontSize: 11.5, color: "#DC2626" }}>{editError}</span>}
-                        <div style={{ display: "flex", gap: 6 }}>
-                          <button
-                            onClick={() => handleGuardarEdicionArtifact(a.id)}
-                            disabled={editSubmitting}
-                            style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: editSubmitting ? "default" : "pointer" }}
-                          >
-                            {editSubmitting ? "Guardando…" : "Guardar"}
-                          </button>
-                          <button
-                            onClick={() => { setEditingArtifactId(null); setEditError(null); }}
-                            style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 7, padding: "6px 10px", cursor: "pointer" }}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                          <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{a.nombre}</strong>
-                          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                            <button
-                              onClick={() => handleEmpezarEdicionArtifact(a)}
-                              title="Editar workshop"
-                              style={{ fontSize: 12, color: "var(--dropi)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                            >
-                              ✎
-                            </button>
-                            <button
-                              onClick={() => handleEliminarArtifact(a.id)}
-                              title="Quitar workshop"
-                              style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        </div>
-                        {a.descripcion && (
-                          <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, lineHeight: 1.45 }}>{a.descripcion}</p>
-                        )}
-                        <a
-                          href={a.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)",
-                            border: "none", borderRadius: 8, padding: "7px 12px", textDecoration: "none",
-                            display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
-                          }}
+                {artifactRenderItems.map((item) =>
+                  item.kind === "single" ? (
+                    <div key={item.artifact.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {renderArtifactRow(item.artifact, item.artifact.nombre)}
+                    </div>
+                  ) : (
+                    <div key={`group-${item.name}`} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+                      <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{item.name}</strong>
+                      {item.items.map((sub, i) => (
+                        <div
+                          key={sub.artifact.id}
+                          style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: i > 0 ? 10 : 0, borderTop: i > 0 ? "1px solid var(--border)" : "none" }}
                         >
-                          Abrir workshop <span style={{ fontSize: 11 }}>➔</span>
-                        </a>
-                      </>
-                    )}
-                  </div>
-                ))}
+                          {renderArtifactRow(sub.artifact, sub.label)}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                )}
               </div>
             )}
 
