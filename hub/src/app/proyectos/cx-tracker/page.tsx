@@ -670,9 +670,6 @@ export default function CxTrackerPage() {
 
       <main style={{ maxWidth: 1280, width: "100%", margin: "0 auto", padding: "24px 20px", flex: 1 }}>
         <div style={{ marginBottom: 20 }}>
-          <a href="/celula/experience" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}>
-            ← Volver a Célula Experience
-          </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
             <div>
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
