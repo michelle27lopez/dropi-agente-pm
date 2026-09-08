@@ -19,7 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const [{ data: miembros }, { data: proyectos }, { data: updates }, { data: roadmap }] = await Promise.all([
     supabase.from("profiles").select("id, email, nombre, is_super_admin").eq("celula_id", celula.id),
-    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id, related_delivery_id").eq("celula_owner_id", celula.id),
+    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id, related_delivery_id, prioridad, fecha_handoff, fecha_inicio_dev, fecha_entrega_qa, fecha_salida_produccion, fecha_objetivo_experimento, fecha_objetivo_decision, fechas_discovery_confirmadas").eq("celula_owner_id", celula.id),
     supabase.from("celula_updates").select("*").eq("celula_id", celula.id).order("week_date", { ascending: false }),
     supabase.from("roadmap_items").select("*").eq("celula_id", celula.id).order("target_date", { ascending: true }),
   ]);
@@ -86,22 +86,63 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
   return NextResponse.json(created, { status: 201 });
 }
 
+// Campos de objetivo/enfoque de la célula (059_darwin_celula_objetivos.sql).
+// Texto libre; string vacío se guarda como null.
+const CAMPOS_OBJETIVO = ["mision", "vision", "nsm", "foco_trimestre", "enlace_direccionamiento"] as const;
+
 export async function PATCH(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
 
-  const caller = await requireSuperAdmin();
-  if (!caller) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
-
   const { slug } = await params;
-  const body = await req.json();
 
-  if (typeof body.ve_hub_completo !== "boolean") {
-    return NextResponse.json({ error: "Falta ve_hub_completo (boolean)" }, { status: 400 });
+  const { data: celula, error: celulaError } = await supabase
+    .from("celulas")
+    .select("id, slug")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (celulaError) return NextResponse.json({ error: celulaError.message }, { status: 500 });
+  if (!celula) return NextResponse.json({ error: "Célula no encontrada" }, { status: 404 });
+
+  const body = await req.json();
+  const update: Record<string, unknown> = {};
+
+  // `ve_hub_completo` es una decisión de acceso global → solo super admin.
+  if (body.ve_hub_completo !== undefined) {
+    if (typeof body.ve_hub_completo !== "boolean") {
+      return NextResponse.json({ error: "ve_hub_completo debe ser boolean" }, { status: 400 });
+    }
+    const admin = await requireSuperAdmin();
+    if (!admin) return NextResponse.json({ error: "Solo un super admin puede cambiar ve_hub_completo" }, { status: 403 });
+    update.ve_hub_completo = body.ve_hub_completo;
+  }
+
+  // Misión / visión / NSM / foco: lo edita el lead de la célula (o super
+  // admin / editor transversal) — mismo criterio que sus proyectos.
+  const tocaObjetivo = CAMPOS_OBJETIVO.some((c) => body[c] !== undefined);
+  if (tocaObjetivo) {
+    const miembro = await requireCelulaMember(celula.id);
+    if (!miembro) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+    for (const campo of CAMPOS_OBJETIVO) {
+      if (body[campo] === undefined) continue;
+      if (body[campo] === null) {
+        update[campo] = null;
+      } else if (typeof body[campo] === "string") {
+        const v = body[campo].trim();
+        update[campo] = v === "" ? null : v;
+      } else {
+        return NextResponse.json({ error: `${campo} debe ser texto o null` }, { status: 400 });
+      }
+    }
+  }
+
+  if (Object.keys(update).length === 0) {
+    return NextResponse.json({ error: "Nada que actualizar" }, { status: 400 });
   }
 
   const { data, error } = await supabase
     .from("celulas")
-    .update({ ve_hub_completo: body.ve_hub_completo })
+    .update(update)
     .eq("slug", slug)
     .select()
     .single();
