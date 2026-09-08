@@ -634,10 +634,12 @@ function MiniAlerta({ n }: { n: number }) {
 }
 
 function CalculatorDrawer({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<"ces" | "csat" | "retencion">("ces");
+  const [tab, setTab] = useState<"ces" | "csat" | "retencion" | "adopcion">("ces");
   const [cesSuma, setCesSuma] = useState(""); const [cesTotal, setCesTotal] = useState("");
   const [csatSat, setCsatSat] = useState(""); const [csatTotal, setCsatTotal] = useState("");
   const [crrStart, setCrrStart] = useState(""); const [crrNew, setCrrNew] = useState(""); const [crrEnd, setCrrEnd] = useState("");
+  const [adopModo, setAdopModo] = useState<"producto" | "funcionalidad">("producto");
+  const [adopActivos, setAdopActivos] = useState(""); const [adopBase, setAdopBase] = useState("");
 
   const cesN = parseInt(cesTotal) || 0;
   const ces = cesN > 0 ? (parseInt(cesSuma) || 0) / cesN : null;
@@ -645,6 +647,8 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
   const csat = csatN > 0 ? ((parseInt(csatSat) || 0) / csatN) * 100 : null;
   const crrS = parseInt(crrStart) || 0;
   const crr = crrS > 0 ? ((parseInt(crrEnd) || 0) - (parseInt(crrNew) || 0)) / crrS * 100 : null;
+  const adopBaseN = parseInt(adopBase) || 0;
+  const adopcionPct = adopBaseN > 0 ? ((parseInt(adopActivos) || 0) / adopBaseN) * 100 : null;
 
   return (
     <div style={{
@@ -660,6 +664,7 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
         <button onClick={() => setTab("ces")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "ces" ? "#2563EB" : "var(--border)"}`, background: tab === "ces" ? "#EFF6FF" : "var(--card)", color: tab === "ces" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>CES</button>
         <button onClick={() => setTab("csat")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "csat" ? "#0D9488" : "var(--border)"}`, background: tab === "csat" ? "#F0FDFA" : "var(--card)", color: tab === "csat" ? "#0D9488" : "var(--muted)", cursor: "pointer" }}>CSAT</button>
         <button onClick={() => setTab("retencion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "retencion" ? "#7C3AED" : "var(--border)"}`, background: tab === "retencion" ? "#F5F3FF" : "var(--card)", color: tab === "retencion" ? "#7C3AED" : "var(--muted)", cursor: "pointer" }}>CRR</button>
+        <button onClick={() => setTab("adopcion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "adopcion" ? "#2563EB" : "var(--border)"}`, background: tab === "adopcion" ? "#EFF6FF" : "var(--card)", color: tab === "adopcion" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>Adopción</button>
       </div>
 
       {tab === "ces" ? (
@@ -692,7 +697,7 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
             );
           })()}
         </div>
-      ) : (
+      ) : tab === "retencion" ? (
         <div>
           <Field label="Clientes al inicio del periodo (S)"><TextInput value={crrStart} onChange={setCrrStart} placeholder="0" mono /></Field>
           <Field label="Clientes nuevos adquiridos (N)"><TextInput value={crrNew} onChange={setCrrNew} placeholder="0" mono /></Field>
@@ -705,12 +710,39 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
           )}
           <p style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 10, fontFamily: "monospace" }}>CRR = ((E − N) / S) × 100</p>
         </div>
+      ) : (
+        <div>
+          <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
+            <button onClick={() => setAdopModo("producto")} style={{ flex: 1, fontSize: 11.5, fontWeight: 700, padding: "6px 0", borderRadius: 8, border: `1px solid ${adopModo === "producto" ? "#2563EB" : "var(--border)"}`, background: adopModo === "producto" ? "#EFF6FF" : "var(--card)", color: adopModo === "producto" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>Producto</button>
+            <button onClick={() => setAdopModo("funcionalidad")} style={{ flex: 1, fontSize: 11.5, fontWeight: 700, padding: "6px 0", borderRadius: 8, border: `1px solid ${adopModo === "funcionalidad" ? "#2563EB" : "var(--border)"}`, background: adopModo === "funcionalidad" ? "#EFF6FF" : "var(--card)", color: adopModo === "funcionalidad" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>Funcionalidad</button>
+          </div>
+          {adopModo === "producto" ? (
+            <>
+              <Field label="Usuarios activos (DAU / WAU / MAU)"><TextInput value={adopActivos} onChange={setAdopActivos} placeholder="0" mono /></Field>
+              <Field label="Total usuarios registrados"><TextInput value={adopBase} onChange={setAdopBase} placeholder="0" mono /></Field>
+            </>
+          ) : (
+            <>
+              <Field label="Usuarios activos de la funcionalidad"><TextInput value={adopActivos} onChange={setAdopActivos} placeholder="0" mono /></Field>
+              <Field label="Usuarios activos totales (mismo periodo)"><TextInput value={adopBase} onChange={setAdopBase} placeholder="0" mono /></Field>
+            </>
+          )}
+          {adopcionPct !== null && (
+            <div style={{ marginTop: 12, background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: 10, padding: 16, textAlign: "center" }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "#2563EB" }}>{adopcionPct.toFixed(1)}%</div>
+              <div style={{ fontSize: 11, color: "#1D4ED8", marginTop: 4 }}>{adopModo === "producto" ? "Tasa de Adopción del Producto" : "Tasa de Adopción de la Funcionalidad"}</div>
+            </div>
+          )}
+          <p style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 10, fontFamily: "monospace" }}>
+            {adopModo === "producto" ? "Adopción = (Usuarios activos / Total registrados) × 100" : "Adopción = (Activos de la funcionalidad / Activos totales) × 100"}
+          </p>
+        </div>
       )}
 
       <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid var(--border)" }}>
         <p style={{ fontSize: 10.5, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
           <Info size={11} style={{ display: "inline", marginRight: 3, marginBottom: -1 }} />
-          Umbrales: CES 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0 · CSAT 🟢≥80% 🟡70–79% 🔴&lt;70%. CRR = clientes al final menos nuevos, sobre clientes al inicio. Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
+          Umbrales: CES 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0 · CSAT 🟢≥80% 🟡70–79% 🔴&lt;70%. CRR = clientes al final menos nuevos, sobre clientes al inicio. Adopción = activos sobre la base total (producto) o sobre activos totales (funcionalidad). Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
         </p>
       </div>
     </div>
