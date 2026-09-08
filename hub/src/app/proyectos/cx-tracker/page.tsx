@@ -26,10 +26,7 @@ interface MetricRow {
   fecha: string;
   objetivo: string;
   usuarios: Usuarios;
-  adopcion: string; adopcionDesc: string;
-  retencion: string; retencionDesc: string;
-  cesScore: string; cesDesc: string;
-  csatScore: string; csatDesc: string;
+  adopcion: string; retencion: string; cesScore: string; csatScore: string;
   hallazgos: string;
   dolores: string;
   bugs: BugItem[];
@@ -68,8 +65,7 @@ function emptyRow(): MetricRow {
   return {
     id: Math.random().toString(36).slice(2),
     fecha: "", objetivo: "", usuarios: emptyUsuarios(),
-    adopcion: "", adopcionDesc: "", retencion: "", retencionDesc: "",
-    cesScore: "", cesDesc: "", csatScore: "", csatDesc: "",
+    adopcion: "", retencion: "", cesScore: "", csatScore: "",
     hallazgos: "", dolores: "", bugs: [],
     linkEntrevistas: "", linkDashboard: "", proximosPasos: "",
   };
@@ -358,22 +354,10 @@ function MetricRowCard({ row, onUpdate, onDelete }: { row: MetricRow; onUpdate: 
           <Field label="Notas del segmento"><TextInput value={row.usuarios.notas} onChange={(v) => set("usuarios")({ ...row.usuarios, notas: v })} placeholder="ej. Dropshippers activos, todos los países" /></Field>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, margin: "14px 0" }}>
-            <div>
-              <MetricInput label="Adopción" value={row.adopcion} onChange={set("adopcion")} unit="%" color="#2563EB" />
-              <div style={{ marginTop: 6 }}><TextInput value={row.adopcionDesc} onChange={set("adopcionDesc")} placeholder="Descripción del dato" /></div>
-            </div>
-            <div>
-              <MetricInput label="Retención" value={row.retencion} onChange={set("retencion")} unit="%" color="#0D9488" />
-              <div style={{ marginTop: 6 }}><TextInput value={row.retencionDesc} onChange={set("retencionDesc")} placeholder="Descripción del dato" /></div>
-            </div>
-            <div>
-              <MetricInput label="CES" value={row.cesScore} onChange={set("cesScore")} unit="/ 7" color="#2563EB" />
-              <div style={{ marginTop: 6 }}><TextInput value={row.cesDesc} onChange={set("cesDesc")} placeholder="Descripción del dato" /></div>
-            </div>
-            <div>
-              <MetricInput label="CSAT" value={row.csatScore} onChange={set("csatScore")} unit="%" color="#7C3AED" />
-              <div style={{ marginTop: 6 }}><TextInput value={row.csatDesc} onChange={set("csatDesc")} placeholder="Descripción del dato" /></div>
-            </div>
+            <MetricInput label="Adopción" value={row.adopcion} onChange={set("adopcion")} unit="%" color="#2563EB" />
+            <MetricInput label="Retención" value={row.retencion} onChange={set("retencion")} unit="%" color="#0D9488" />
+            <MetricInput label="CES" value={row.cesScore} onChange={set("cesScore")} unit="/ 7" color="#2563EB" />
+            <MetricInput label="CSAT" value={row.csatScore} onChange={set("csatScore")} unit="%" color="#7C3AED" />
           </div>
 
           <Field label="Hallazgos"><TextArea value={row.hallazgos} onChange={set("hallazgos")} placeholder="¿Qué dice la data de forma objetiva?" /></Field>

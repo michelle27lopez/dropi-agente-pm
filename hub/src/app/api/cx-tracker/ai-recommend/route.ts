@@ -7,8 +7,7 @@ interface BugItem { id: string; tipo: string; desc: string; status: BugStatus }
 interface Usuarios { perfil: string; perfilOtro: string; cantidad: string; notas: string }
 interface MetricRow {
   fecha: string; objetivo: string; usuarios: Usuarios;
-  adopcion: string; adopcionDesc: string; retencion: string; retencionDesc: string;
-  cesScore: string; cesDesc: string; csatScore: string; csatDesc: string;
+  adopcion: string; retencion: string; cesScore: string; csatScore: string;
   hallazgos: string; dolores: string; bugs: BugItem[]; proximosPasos: string;
 }
 
@@ -23,10 +22,10 @@ function formatRow(row: MetricRow, phase: "m1" | "m2" | "m3", i: number): string
     lines.push(`Usuarios: ${row.usuarios.perfil || "—"}${row.usuarios.cantidad ? ` (n=${row.usuarios.cantidad})` : ""}${row.usuarios.notas ? ` — ${row.usuarios.notas}` : ""}`);
   }
   const metricas = [
-    row.adopcion && `Adopción ${row.adopcion}%${row.adopcionDesc ? ` (${row.adopcionDesc})` : ""}`,
-    row.retencion && `Retención ${row.retencion}%${row.retencionDesc ? ` (${row.retencionDesc})` : ""}`,
-    row.cesScore && `CES ${row.cesScore}/7${row.cesDesc ? ` (${row.cesDesc})` : ""}`,
-    row.csatScore && `CSAT ${row.csatScore}%${row.csatDesc ? ` (${row.csatDesc})` : ""}`,
+    row.adopcion && `Adopción ${row.adopcion}%`,
+    row.retencion && `Retención ${row.retencion}%`,
+    row.cesScore && `CES ${row.cesScore}/7`,
+    row.csatScore && `CSAT ${row.csatScore}%`,
   ].filter(Boolean);
   if (metricas.length) lines.push(`Métricas: ${metricas.join(" · ")}`);
   if (row.hallazgos) lines.push(`Hallazgos: ${row.hallazgos}`);
