@@ -1365,6 +1365,8 @@ export const weeklies: Weekly[] = [
       "Ecom Scanner: enviar la petición de data de adopción. Es lo único del plan de lanzamiento que no depende de TI, y de ahí salen el Target, la línea base y la meta — conviene que llegue antes de T0.",
       "Guías reemplazatorias: sincronizar PROD-1045 con TECH-480 (hoy PROD-1045 describe el mundo de hace siete semanas) y confirmar la cobertura de Coordinadora en producción, que estuvo rota todo el beta (DROP-26971).",
       "Servicios de bodega: resolver el acceso al repo de Michel y decidir si el POC se absorbe al monorepo o se queda aparte con su ficha en el directorio.",
+      "Expowinners (12–13 sep): merge del PR #31 y validación final del wizard de transportadoras IA antes del evento — Responsable: Michel Pino.",
+      "Servicios en Bodega: deploy a Vercel + pruebas e2e con datos reales de bodega México (Excel mayo, 124 proveedores) — Responsable: Michel Pino.",
     ],
 
     indicadores: [
@@ -1401,6 +1403,21 @@ export const weeklies: Weekly[] = [
         tono: "malo",
         estado: "export .xlsx de Chronos",
         nota: "Cada actualización del mapa depende de que alguien exporte y suba un archivo. La consulta contra la réplica ya está escrita; faltan credenciales de solo lectura.",
+      },
+      // ── Indicadores Michel Pino ─────────────────────────────────────────
+      {
+        nombre: "Fase 1 · Servicios en Bodega",
+        valor: "~90%",
+        tono: "bueno",
+        estado: "Falta deploy + e2e",
+        nota: "Plataforma funcional: 66 archivos fuente, 10 rutas activas, 5 migraciones SQL, auth con roles, design system propio y máquina de estados. Sprint de 3 semanas (19 ago → 5 sep).",
+      },
+      {
+        nombre: "Expowinners · Transportadoras IA",
+        valor: "PR listo",
+        tono: "bueno",
+        estado: "12–13 sep",
+        nota: "Wizard de 8 pantallas con tracking Supabase + PostHog. Valida demanda de selección inteligente de transportadoras. Métrica clave: % con demanda 6-7/7.",
       },
     ] as IndicadorHoy[],
 
@@ -1564,6 +1581,54 @@ export const weeklies: Weekly[] = [
             nota:
               "El POC de monetización de servicios de bodega ya tiene ficha en el tablero, y ahora además un repo propio fuera del monorepo. La invitación no llegó a ninguna cuenta autenticada, así que su código no es visible desde acá. Es exactamente el caso que el directorio existe para evitar.",
             enlace: { label: "Ver el POC", href: "/proyectos/logistica/poc-servicios-bodega" },
+          },
+        ],
+      },
+      // ── Aportes Michel Pino (w36) ──────────────────────────────────────
+      {
+        titulo: "Servicios en Bodega · ejecución Fase 1",
+        nota: "Sprint de 3 semanas (19 ago → 5 sep). Plataforma de cobros para 5 servicios de bodega no facturados.",
+        proyectos: [
+          {
+            nombre: "Fundación + UI completa + Auth RLS",
+            ticket: "PRM-1446",
+            estado: "Completado",
+            estadoTono: "verde",
+            nota:
+              "7 tablas con triggers de auditoría, 10 rutas activas (login, dashboard, importar Excel, proveedores, recepciones, cobros, periodos, tarifas), auth con RLS por rol (Admin/Logística/Facturación/Comercial). 66 archivos fuente TS/TSX.",
+          },
+          {
+            nombre: "Design system + máquina de estados",
+            ticket: "PRM-1446",
+            estado: "Completado",
+            estadoTono: "verde",
+            nota:
+              "Tokens de diseño, Inter Variable, StatusChip, CurrencyText, dark mode. Ciclo de facturación (borrador → abierto → cerrado → facturado). Descuento por volumen eliminado tras confirmación con stakeholders.",
+            impacto: "Revenue leakage: $2,9M–6,4M MXN/mes en 12 países. 4 de 5 servicios sin cobrar.",
+          },
+          {
+            nombre: "Deploy + pruebas e2e",
+            ticket: "PRM-1446",
+            estado: "Pendiente",
+            estadoTono: "ambar",
+            nota:
+              "Último 10% de Fase 1. Deploy a Vercel, pruebas con datos reales de bodega México y validación con usuarios.",
+            enlace: { label: "Ver POC Servicios en Bodega", href: "/proyectos/logistica/poc-servicios-bodega" },
+          },
+        ],
+      },
+      {
+        titulo: "Expowinners 2026 · Transportadoras con IA",
+        nota: "Validación en campo del 12–13 sep en Centro Ágora, Bogotá. Repo Gali-experiment, PR #31.",
+        proyectos: [
+          {
+            nombre: "Wizard 'Prioriza tus transportadoras con IA'",
+            ticket: "PRM-1513",
+            estado: "PR enviado · pendiente merge",
+            estadoTono: "verde",
+            nota:
+              "8 pantallas: perfil logístico, acciones ante novedades (taxonomía A01-A15), criterios de priorización, ranking IA, CES, demanda 1-7. Tracking: Supabase (expo_events) + PostHog con datos del lead.",
+            impacto: "Métrica clave: % con calificación 6-7 en '¿lo activarías en Dropi?' — dato directo para priorización ante comité de producto.",
           },
         ],
       },
