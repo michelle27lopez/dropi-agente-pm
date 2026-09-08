@@ -260,7 +260,58 @@ function DiagnosisBadge({ row }: { row: MetricRow }) {
 }
 
 // ── Tarjeta de revisión (M1/M2/M3) — acordeón ───────────────────────────
-function MetricRowCard({ row, onUpdate, onDelete }: { row: MetricRow; onUpdate: (r: MetricRow) => void; onDelete: () => void }) {
+function PreguntasSugeridas({ objetivo, proyecto }: { objetivo: string; proyecto: string }) {
+  const [loading, setLoading] = useState(false);
+  const [preguntas, setPreguntas] = useState<{ ces: string; csat: string; momento: string } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function generar() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/cx-tracker/ai-preguntas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ objetivo, proyecto }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error generando las preguntas.");
+      setPreguntas(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error desconocido.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{ marginTop: -4, marginBottom: 14 }}>
+      <button
+        onClick={generar}
+        disabled={loading || !objetivo.trim()}
+        style={{
+          display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 700,
+          color: !objetivo.trim() ? "var(--muted)" : "#7C3AED", background: "none",
+          border: `1px dashed ${!objetivo.trim() ? "var(--border)" : "#DDD6FE"}`, borderRadius: 8,
+          padding: "6px 12px", cursor: !objetivo.trim() || loading ? "default" : "pointer",
+        }}
+      >
+        <Sparkles size={13} /> {loading ? "Generando…" : preguntas ? "Regenerar preguntas CES/CSAT" : "Sugerir preguntas CES/CSAT con IA"}
+      </button>
+      {!objetivo.trim() && <p style={{ fontSize: 11, color: "var(--muted)", margin: "4px 0 0" }}>Escribe primero el objetivo de la revisión.</p>}
+      {error && <p style={{ fontSize: 11, color: "#B91C1C", margin: "6px 0 0" }}>{error}</p>}
+      {preguntas && (
+        <div style={{ marginTop: 8, background: "#F5F3FF", border: "1px solid #DDD6FE", borderRadius: 10, padding: 12 }}>
+          <div style={{ fontSize: 11.5, color: "#4C1D95", marginBottom: 4 }}><strong>CES (1–7):</strong> {preguntas.ces}</div>
+          <div style={{ fontSize: 11.5, color: "#4C1D95", marginBottom: 4 }}><strong>CSAT (1–5 ★):</strong> {preguntas.csat}</div>
+          <div style={{ fontSize: 11, color: "#6D28D9" }}><strong>Momento:</strong> {preguntas.momento}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MetricRowCard({ row, onUpdate, onDelete, projectName }: { row: MetricRow; onUpdate: (r: MetricRow) => void; onDelete: () => void; projectName: string }) {
   const [open, setOpen] = useState(false);
   const d = diagnose(row);
   const set = <K extends keyof MetricRow>(key: K) => (v: MetricRow[K]) => onUpdate({ ...row, [key]: v });
@@ -301,6 +352,7 @@ function MetricRowCard({ row, onUpdate, onDelete }: { row: MetricRow; onUpdate: 
           </div>
 
           <Field label="Objetivo de la revisión"><TextArea value={row.objetivo} onChange={set("objetivo")} placeholder="¿Qué se busca validar en esta revisión?" /></Field>
+          <PreguntasSugeridas objetivo={row.objetivo} proyecto={projectName} />
           <Field label="Notas del segmento"><TextInput value={row.usuarios.notas} onChange={(v) => set("usuarios")({ ...row.usuarios, notas: v })} placeholder="ej. Dropshippers activos, todos los países" /></Field>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, margin: "14px 0" }}>
@@ -344,7 +396,7 @@ function MetricRowCard({ row, onUpdate, onDelete }: { row: MetricRow; onUpdate: 
 }
 
 // ── Vista por fase (M1/M2/M3) ───────────────────────────────────────────
-function MTab({ rows, onChange, phase }: { rows: MetricRow[]; onChange: (rows: MetricRow[]) => void; phase: "m1" | "m2" | "m3" }) {
+function MTab({ rows, onChange, phase, projectName }: { rows: MetricRow[]; onChange: (rows: MetricRow[]) => void; phase: "m1" | "m2" | "m3"; projectName: string }) {
   const meta = PHASE_META[phase];
   return (
     <div>
@@ -366,6 +418,7 @@ function MTab({ rows, onChange, phase }: { rows: MetricRow[]; onChange: (rows: M
           row={row}
           onUpdate={(r) => onChange(rows.map((x, j) => (j === i ? r : x)))}
           onDelete={() => onChange(rows.filter((_, j) => j !== i))}
+          projectName={projectName}
         />
       ))}
     </div>
@@ -742,9 +795,9 @@ export default function CxTrackerPage() {
             </div>
 
             {tab === "resumen" && <ResumenTab key={project.id} project={project} />}
-            {tab === "m1" && <MTab rows={project.m1} onChange={(rows) => updateProject({ m1: rows })} phase="m1" />}
-            {tab === "m2" && <MTab rows={project.m2} onChange={(rows) => updateProject({ m2: rows })} phase="m2" />}
-            {tab === "m3" && <MTab rows={project.m3} onChange={(rows) => updateProject({ m3: rows })} phase="m3" />}
+            {tab === "m1" && <MTab rows={project.m1} onChange={(rows) => updateProject({ m1: rows })} phase="m1" projectName={project.name} />}
+            {tab === "m2" && <MTab rows={project.m2} onChange={(rows) => updateProject({ m2: rows })} phase="m2" projectName={project.name} />}
+            {tab === "m3" && <MTab rows={project.m3} onChange={(rows) => updateProject({ m3: rows })} phase="m3" projectName={project.name} />}
           </div>
         </div>
       </main>
