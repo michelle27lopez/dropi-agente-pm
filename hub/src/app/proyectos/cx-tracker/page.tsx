@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 import {
@@ -37,10 +37,7 @@ interface MetricRow {
 
 interface ProjectEntry {
   id: string; name: string; code: string; href: string; categoria: string;
-  phase: PhaseKey; fechaInicio: string; objetivoGeneral: string;
-  /** Substrings (case-insensitive) para reconocer el bloque de este proyecto
-   * dentro del `content` de un update semanal — ver `weeklyUpdateToRow`. */
-  updateAliases: string[];
+  phase: PhaseKey; fechaInicio: string;
   m1: MetricRow[]; m2: MetricRow[]; m3: MetricRow[];
 }
 
@@ -112,143 +109,40 @@ const STATUS_ACTIONS = [
   { estado: "Move On / Roll Back", dot: "⛔", color: "#DC2626", descripcion: "Cese de mantenimiento o eliminación de la función.", criterio: "Baja retención (<15%) y adopción crítica (<20%)." },
 ];
 
-// ── Sync con Updates — el Following se alimenta de celula_updates ─────────
-// Cada semana ya se publica un update en /celula/experience/updates con un
-// bloque de texto libre por proyecto (separados por "---"). En vez de
-// retipear ese mismo contenido a mano en el CX Tracker (como se hacía antes,
-// con el riesgo de que ambos textos diverjan), cada revisión M1 se deriva
-// directo de ese contenido — 2026-09-07, pedido de Diana.
-//
-// El formato de cada bloque no es 100% consistente entre semanas (algunas
-// traen "Fase:/Prioridad:/Estado:/Próximos pasos:" con etiqueta, otras son
-// prosa libre), así que el parseo es deliberadamente conservador: solo separa
-// como campo propio lo que puede identificar con una regla clara ("Próximos
-// pasos:" y la línea que menciona "bloque(ado/o)"); el resto queda tal cual en
-// hallazgos, sin adivinar qué es "dolor" vs "hallazgo" en prosa libre. Si un
-// update no menciona un proyecto, simplemente no genera fila esa semana —
-// nunca se fuerza ni se inventa una revisión.
-const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-
-function formatWeekDate(weekDate: string): string {
-  const [y, m, d] = weekDate.split("-").map(Number);
-  const mes = MESES[m - 1] ?? "";
-  return `${d} de ${mes.charAt(0).toUpperCase()}${mes.slice(1)}, ${y}`;
-}
-
-function splitProjectBlocks(content: string): { heading: string; body: string }[] {
-  return content
-    .split(/\n\s*-{3,}\s*\n/)
-    .map((chunk) => chunk.trim())
-    .filter(Boolean)
-    .map((chunk) => {
-      const lines = chunk.split("\n");
-      const headingIdx = lines.findIndex((l) => /^#+\s*/.test(l.trim()));
-      const headingLine = headingIdx >= 0 ? lines[headingIdx] : lines[0];
-      const heading = headingLine.replace(/^#+\s*\d*\.?\s*/, "").trim();
-      const body = lines.filter((_, i) => i !== headingIdx).join("\n").trim();
-      return { heading, body };
-    });
-}
-
-function matchProjectBlock(blocks: { heading: string; body: string }[], aliases: string[]) {
-  return blocks.find((b) => aliases.some((a) => b.heading.toLowerCase().includes(a.toLowerCase()))) ?? null;
-}
-
-function extractProximosPasos(body: string): string {
-  const line = body.split("\n").find((l) => /pr[oó]ximos pasos/i.test(l));
-  if (!line) return "";
-  const match = line.match(/pr[oó]ximos pasos[^:]*:\s*(.+)/i);
-  return (match?.[1] ?? line.replace(/^-\s*/, "")).trim();
-}
-
-function extractBloqueo(body: string): string {
-  const line = body.split("\n").find((l) => /bloque/i.test(l));
-  if (!line) return "";
-  return line.replace(/^-\s*/, "").replace(/^Estado:\s*/i, "").trim();
-}
-
-function flattenBody(body: string): string {
-  return body
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l && l !== "---" && !/pr[oó]ximos pasos/i.test(l) && !/bloque/i.test(l))
-    .map((l) => l.replace(/^-\s*/, ""))
-    .join(" · ");
-}
-
-function weeklyUpdateToRow(weekDate: string, content: string, aliases: string[], objetivo: string): MetricRow | null {
-  const match = matchProjectBlock(splitProjectBlocks(content), aliases);
-  if (!match) return null;
-  return {
-    ...emptyRow(),
-    fecha: formatWeekDate(weekDate),
-    objetivo,
-    hallazgos: flattenBody(match.body),
-    dolores: extractBloqueo(match.body),
-    proximosPasos: extractProximosPasos(match.body),
-  };
-}
-
-type CelulaUpdate = { week_date: string; content: string };
-
-/** Deriva el m1 de cada proyecto a partir de los updates semanales reales,
- * ordenados de más antiguo a más reciente (así el acordeón muestra el avance
- * cronológico). Proyectos sin match en ningún update quedan con m1 vacío. */
-function syncM1FromUpdates(projects: ProjectEntry[], updates: CelulaUpdate[]): ProjectEntry[] {
-  const sorted = [...updates].sort((a, b) => a.week_date.localeCompare(b.week_date));
-  return projects.map((p) => {
-    const rows = sorted
-      .map((u) => weeklyUpdateToRow(u.week_date, u.content, p.updateAliases, p.objetivoGeneral))
-      .filter((r): r is MetricRow => r !== null);
-    return rows.length > 0 ? { ...p, m1: rows } : p;
-  });
-}
-
 // ── Seed — proyectos de la Célula Experience ────────────────────────────────
 // Métricas de UX (adopción/retención/CES/CSAT) sin medir todavía → en blanco.
-// m1 arranca vacío: se llena en el montaje de la página con `syncM1FromUpdates`
-// a partir de los updates semanales reales de /celula/experience/updates.
+// m1/m2/m3 arrancan vacíos — cada revisión se llena a mano desde la app,
+// sin sincronizar con el contenido de Updates (2026-09-07, pedido de Diana:
+// los hallazgos de cada M ya no se alimentan de las Updates de la célula).
 const PROJECTS_SEED: ProjectEntry[] = [
   {
     id: "rearquitectura", name: "Rearquitectura", code: "DROP-25312", href: "/proyectos/rearquitectura",
     categoria: "Célula Experience", phase: "m1", fechaInicio: "2026",
-    objetivoGeneral: "Reorganizar la navegación y pantallas de Dropi por módulo, sin alterar la lógica de negocio.",
-    updateAliases: ["rearquitectura"],
     m1: [], m2: [], m3: [],
   },
   {
     id: "ordenes", name: "Órdenes", code: "EXP-002", href: "/proyectos/ordenes",
     categoria: "Célula Experience", phase: "pend", fechaInicio: "2026",
-    objetivoGeneral: "MVP Órdenes 2.0 — importación, exportación, etiquetas y optimización de creación manual de órdenes.",
-    updateAliases: ["órdenes", "ordenes"],
     m1: [], m2: [], m3: [],
   },
   {
     id: "dropi-app", name: "Dropi App — Novedades", code: "DROP-25313", href: "/proyectos/dropi-app",
     categoria: "Célula Experience", phase: "m2", fechaInicio: "2025",
-    objetivoGeneral: "Gestión de Novedades: implementación y centralización de la gestión de novedades para optimizar la operativa inicial.",
-    updateAliases: ["dropi app", "novedades"],
     m1: [], m2: [], m3: [],
   },
   {
     id: "exp-004", name: "Dashboard de Indicadores", code: "EXP-004", href: "/proyectos/exp-004",
     categoria: "Célula Experience", phase: "m2", fechaInicio: "2025",
-    objetivoGeneral: "Dashboard de indicadores centralizado para Proveedor, Marca y Marca Blanca — centro de mando al iniciar sesión.",
-    updateAliases: ["dashboard de indicadores", "indicadores"],
     m1: [], m2: [], m3: [],
   },
   {
     id: "dropi-testers", name: "Dropi Testers", code: "EXP-006", href: "/proyectos/dropi-testers",
     categoria: "Célula Experience", phase: "pend", fechaInicio: "2026",
-    objetivoGeneral: "MVP para capturar usuarios interesados en ser testers de Dropi, de cara a ExpoWinner.",
-    updateAliases: ["dropi testers"],
     m1: [], m2: [], m3: [],
   },
   {
     id: "sherlock", name: "Proyecto Sherlock", code: "EXP-005", href: "/celula/experience",
     categoria: "Célula Experience", phase: "m1", fechaInicio: "2026",
-    objetivoGeneral: "Escuchar la voz de los usuarios integrando fuentes de datos alternas al ecosistema Dropi.",
-    updateAliases: ["sherlock"],
     m1: [], m2: [], m3: [],
   },
 ];
@@ -759,21 +653,6 @@ export default function CxTrackerPage() {
   const [selectedId, setSelectedId] = useState(PROJECTS_SEED[0].id);
   const [tab, setTab] = useState<"resumen" | "m1" | "m2" | "m3">("resumen");
   const [calcOpen, setCalcOpen] = useState(false);
-  const [syncing, setSyncing] = useState(true);
-
-  // El Following se alimenta de los Updates semanales reales de la célula
-  // (celula_updates) en vez de datos retipeados a mano — se corre una sola
-  // vez al montar; ediciones manuales posteriores del usuario ya no se
-  // vuelven a pisar porque este efecto no reintenta.
-  useEffect(() => {
-    fetch("/api/celulas/experience")
-      .then((res) => res.json())
-      .then((data: { updates?: CelulaUpdate[] }) => {
-        if (data.updates) setProjects((prev) => syncM1FromUpdates(prev, data.updates!));
-      })
-      .catch(() => {})
-      .finally(() => setSyncing(false));
-  }, []);
 
   const project = projects.find((p) => p.id === selectedId)!;
 
@@ -800,9 +679,6 @@ export default function CxTrackerPage() {
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#7C3AED", background: "#F3E8FF" }}>🧬 Célula Experience</span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#1458A8", background: "#EFF6FF" }}>🚚 Following · Activo</span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#EA580C", background: "#FFEDD5" }}>EXP-007</span>
-                {syncing && (
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#6B7280", background: "#F3F4F6" }}>⏳ Sincronizando con Updates…</span>
-                )}
               </div>
               <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>Agente de Seguimiento de Métricas</h1>
             </div>
