@@ -76,7 +76,7 @@ function emptyRow(): MetricRow {
 
 // ── Motor de diagnóstico — umbrales de Metricas/PROYECTO.md ────────────────
 // CES 1–7: ≥5.5 fluido · 4.0–5.4 regular · <4.0 fricción
-// CSAT %: ≥80 bueno · 60–79 regular · <60 crítico
+// CSAT %: ≥80 bueno · 70–79 regular · <70 crítico (act. 2026-09-07, Diana)
 function diagnose(row: MetricRow): Diagnosis | null {
   const adoption = row.adopcion ? parseFloat(row.adopcion) : null;
   const retention = row.retencion ? parseFloat(row.retencion) : null;
@@ -94,11 +94,11 @@ function diagnose(row: MetricRow): Diagnosis | null {
     return { estado: "Move On / Roll Back", dot: "⛔", bg: "#FEE2E2", border: "#FCA5A5", text: "#7F1D1D", desc: "Adopción y retención críticas. Evaluar discontinuación." };
   if (adoption !== null && adoption >= 70 && (retention === null || retention >= 60) && (ces === null || ces >= 5.5) && (csat === null || csat >= 80))
     return { estado: "Nueva fase", dot: "🚀", bg: "#EDE9FE", border: "#C4B5FD", text: "#4C1D95", desc: "Feature-Product Fit logrado. Listo para escalar." };
-  if ((ces !== null && ces < 4.0) || (adoption !== null && adoption < 40) || (csat !== null && csat < 60))
+  if ((ces !== null && ces < 4.0) || (adoption !== null && adoption < 40) || (csat !== null && csat < 70))
     return {
       estado: "Ajustar flujo", dot: "🛠️", bg: "#FEF3C7", border: "#FDE68A", text: "#78350F",
       desc: ces !== null && ces < 4.0 ? `CES ${ces}/7 — alta fricción percibida.`
-        : csat !== null && csat < 60 ? `CSAT ${csat}% — satisfacción crítica.`
+        : csat !== null && csat < 70 ? `CSAT ${csat}% — satisfacción crítica.`
           : `Adopción ${adoption}% — fricción en el proceso.`,
     };
   return { estado: "Seguir midiendo", dot: "🔵", bg: "#EFF6FF", border: "#BFDBFE", text: "#1E40AF", desc: "Sin alertas críticas. Monitoreo continuo." };
@@ -107,7 +107,7 @@ function diagnose(row: MetricRow): Diagnosis | null {
 const STATUS_ACTIONS = [
   { estado: "Seguir midiendo", dot: "🔵", color: "#2563EB", descripcion: "Monitoreo constante de adopción y eficiencia técnica.", criterio: "Funcionalidad reciente que necesita validar si el target completa el evento de adopción sin bloqueos técnicos." },
   { estado: "Reportar errores técnicos", dot: "⚠️", color: "#CA8A04", descripcion: "Notificar al equipo de tecnología sobre deficiencias de rendimiento.", criterio: "Se activa ante fallos técnicos o bugs que afectan la experiencia del usuario." },
-  { estado: "Ajustar flujo", dot: "🛠️", color: "#CA8A04", descripcion: "Rediseño de UX/UI para reducir fricción y mejorar usabilidad.", criterio: "CES < 4.0/7 o CSAT < 60% son señales directas de fricción o complejidad." },
+  { estado: "Ajustar flujo", dot: "🛠️", color: "#CA8A04", descripcion: "Rediseño de UX/UI para reducir fricción y mejorar usabilidad.", criterio: "CES < 4.0/7 o CSAT < 70% son señales directas de fricción o complejidad." },
   { estado: "Nueva fase", dot: "🚀", color: "#7C3AED", descripcion: "Nuevo ciclo de desarrollo para escalar el impacto.", criterio: "Feature-Product Fit: adopción ≥70%, CES ≥5.5, CSAT ≥80%." },
   { estado: "Move On / Roll Back", dot: "⛔", color: "#DC2626", descripcion: "Cese de mantenimiento o eliminación de la función.", criterio: "Baja retención (<15%) y adopción crítica (<20%)." },
 ];
@@ -683,7 +683,7 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
           <Field label="Total de respuestas"><TextInput value={csatTotal} onChange={setCsatTotal} placeholder="0" mono /></Field>
           <MiniAlerta n={csatN} />
           {csat !== null && (() => {
-            const b = bandaColor(csat, 80, 60); const Icon = b.icon;
+            const b = bandaColor(csat, 80, 70); const Icon = b.icon;
             return (
               <div style={{ marginTop: 12, background: b.bg, border: `1px solid ${b.border}`, borderRadius: 10, padding: 16, textAlign: "center" }}>
                 <div style={{ fontSize: 28, fontWeight: 800, color: b.color }}>{Math.round(csat)}%</div>
@@ -710,7 +710,7 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
       <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid var(--border)" }}>
         <p style={{ fontSize: 10.5, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
           <Info size={11} style={{ display: "inline", marginRight: 3, marginBottom: -1 }} />
-          Umbrales: CES 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0 · CSAT 🟢≥80% 🟡60–79% 🔴&lt;60%. CRR = clientes al final menos nuevos, sobre clientes al inicio. Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
+          Umbrales: CES 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0 · CSAT 🟢≥80% 🟡70–79% 🔴&lt;70%. CRR = clientes al final menos nuevos, sobre clientes al inicio. Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
         </p>
       </div>
     </div>

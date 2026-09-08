@@ -288,8 +288,8 @@ export default function MedicionCesCsatNpsPage() {
               porQueImporta="En dropshipping no controlas el inventario ni el envío directamente. El CSAT te dice si tu proveedor está cumpliendo con la calidad y los tiempos prometidos al cliente."
               calidad={[
                 { tone: "good", label: "Bueno", range: "80% – 100%", text: "Excelente: proveedor confiable; los clientes están satisfechos con el producto y la entrega." },
-                { tone: "ok", label: "Regular", range: "60% – 79%", text: "Aceptable: hay oportunidades de mejora; evalúa tiempos de envío o calidad del empaque." },
-                { tone: "bad", label: "Malo", range: "0% – 59%", text: "Crítico: cambia de proveedor o renegocia condiciones; los clientes están decepcionados." },
+                { tone: "ok", label: "Regular", range: "70% – 79%", text: "Aceptable: hay oportunidades de mejora; evalúa tiempos de envío o calidad del empaque." },
+                { tone: "bad", label: "Malo", range: "0% – 69%", text: "Crítico: cambia de proveedor o renegocia condiciones; los clientes están decepcionados." },
               ]}
               footer="30 días después → encuesta de lealtad y recomendación"
             >
@@ -781,7 +781,7 @@ function CalculadoraCSAT() {
   const [cantidad, setCantidad] = useState(0);
   const [tarea, setTarea] = useState("");
   const score = total > 0 ? (sat / total) * 100 : null;
-  const banda = bandaPor(score, 80, 60);
+  const banda = bandaPor(score, 80, 70);
 
   return (
     <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.csat.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
