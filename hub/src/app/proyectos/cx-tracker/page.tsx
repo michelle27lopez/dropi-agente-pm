@@ -634,7 +634,7 @@ function MiniAlerta({ n }: { n: number }) {
 }
 
 function CalculatorDrawer({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<"ces" | "csat" | "retencion" | "adopcion">("ces");
+  const [tab, setTab] = useState<"ces" | "csat" | "retencion" | "adopcion">("adopcion");
   const [cesSuma, setCesSuma] = useState(""); const [cesTotal, setCesTotal] = useState("");
   const [csatSat, setCsatSat] = useState(""); const [csatTotal, setCsatTotal] = useState("");
   const [crrStart, setCrrStart] = useState(""); const [crrNew, setCrrNew] = useState(""); const [crrEnd, setCrrEnd] = useState("");
@@ -661,10 +661,10 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
         <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)" }}><X size={18} /></button>
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+        <button onClick={() => setTab("adopcion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "adopcion" ? "#2563EB" : "var(--border)"}`, background: tab === "adopcion" ? "#EFF6FF" : "var(--card)", color: tab === "adopcion" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>Adopción</button>
+        <button onClick={() => setTab("retencion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "retencion" ? "#7C3AED" : "var(--border)"}`, background: tab === "retencion" ? "#F5F3FF" : "var(--card)", color: tab === "retencion" ? "#7C3AED" : "var(--muted)", cursor: "pointer" }}>Retención</button>
         <button onClick={() => setTab("ces")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "ces" ? "#2563EB" : "var(--border)"}`, background: tab === "ces" ? "#EFF6FF" : "var(--card)", color: tab === "ces" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>CES</button>
         <button onClick={() => setTab("csat")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "csat" ? "#0D9488" : "var(--border)"}`, background: tab === "csat" ? "#F0FDFA" : "var(--card)", color: tab === "csat" ? "#0D9488" : "var(--muted)", cursor: "pointer" }}>CSAT</button>
-        <button onClick={() => setTab("retencion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "retencion" ? "#7C3AED" : "var(--border)"}`, background: tab === "retencion" ? "#F5F3FF" : "var(--card)", color: tab === "retencion" ? "#7C3AED" : "var(--muted)", cursor: "pointer" }}>CRR</button>
-        <button onClick={() => setTab("adopcion")} style={{ flex: 1, fontSize: 12.5, fontWeight: 700, padding: "7px 0", borderRadius: 8, border: `1px solid ${tab === "adopcion" ? "#2563EB" : "var(--border)"}`, background: tab === "adopcion" ? "#EFF6FF" : "var(--card)", color: tab === "adopcion" ? "#2563EB" : "var(--muted)", cursor: "pointer" }}>Adopción</button>
       </div>
 
       {tab === "ces" ? (
@@ -742,7 +742,11 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
       <div style={{ marginTop: 20, paddingTop: 14, borderTop: "1px solid var(--border)" }}>
         <p style={{ fontSize: 10.5, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
           <Info size={11} style={{ display: "inline", marginRight: 3, marginBottom: -1 }} />
-          Umbrales: CES 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0 · CSAT 🟢≥80% 🟡70–79% 🔴&lt;70%. CRR = clientes al final menos nuevos, sobre clientes al inicio. Adopción = activos sobre la base total (producto) o sobre activos totales (funcionalidad). Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
+          {tab === "adopcion" && "Adopción = activos sobre la base total (producto) o sobre activos totales (funcionalidad). Sin umbral de calificación definido todavía."}
+          {tab === "retencion" && "CRR = clientes al final menos nuevos, sobre clientes al inicio. Sin umbral de calificación definido todavía."}
+          {tab === "ces" && <>Umbral CES: 🟢≥5.5 🟡4.0–5.4 🔴&lt;4.0.</>}
+          {tab === "csat" && <>Umbral CSAT: 🟢≥80% 🟡70–79% 🔴&lt;70%.</>}
+          {" "}Calculadora completa con más contexto en <a href="/guias/medicion-ces-csat-nps" style={{ color: "var(--dropi)" }}>Guías → Métricas de CX</a>.
         </p>
       </div>
     </div>
