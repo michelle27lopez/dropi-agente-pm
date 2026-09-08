@@ -15,12 +15,30 @@ export async function GET() {
 
   const { data: proyectos, error: errorProyectos } = await supabase
     .from("projects")
-    .select("id, name, project_code, updated_at, celulas(id, nombre, slug)")
+    .select("id, name, project_code, updated_at, related_poc_id, related_delivery_id, celulas(id, nombre, slug)")
     .eq("type", "Following")
     .order("project_code", { ascending: true });
 
   if (errorProyectos) {
     return NextResponse.json({ error: errorProyectos.message }, { status: 500 });
+  }
+
+  // Laura preguntó (2026-09-08) si estos ya venían de un POC real. La
+  // respuesta honesta: `related_poc_id` casi no se usa en toda la tabla, así
+  // que en vez de exigirlo (dejaría el tablero casi vacío) se resuelve el
+  // linaje real que sí existe — POC o Delivery del que salió cada uno — y se
+  // muestra explícito para que cada célula lo evalúe caso por caso.
+  const idsLinaje = (proyectos ?? [])
+    .flatMap((p) => [p.related_poc_id, p.related_delivery_id])
+    .filter((id): id is string => !!id);
+
+  const origenPorId = new Map<string, { name: string; project_code: string | null }>();
+  if (idsLinaje.length > 0) {
+    const { data: origenes } = await supabase
+      .from("projects")
+      .select("id, name, project_code")
+      .in("id", idsLinaje);
+    for (const o of origenes ?? []) origenPorId.set(o.id, { name: o.name, project_code: o.project_code });
   }
 
   const { data: metricas, error: errorMetricas } = await supabase
@@ -43,13 +61,22 @@ export async function GET() {
 
   const metricasPorProyecto = new Map((metricas ?? []).map((m) => [m.project_id, m]));
 
-  const items = (proyectos ?? []).map((p) => ({
-    id: p.id,
-    name: p.name,
-    project_code: p.project_code,
-    celula: p.celulas,
-    metricas: metricasPorProyecto.get(p.id) ?? null,
-  }));
+  const items = (proyectos ?? []).map((p) => {
+    const origenPoc = p.related_poc_id ? origenPorId.get(p.related_poc_id) ?? null : null;
+    const origenDelivery = p.related_delivery_id ? origenPorId.get(p.related_delivery_id) ?? null : null;
+    return {
+      id: p.id,
+      name: p.name,
+      project_code: p.project_code,
+      celula: p.celulas,
+      metricas: metricasPorProyecto.get(p.id) ?? null,
+      linaje: origenPoc
+        ? { tipo: "POC" as const, ...origenPoc }
+        : origenDelivery
+          ? { tipo: "Delivery" as const, ...origenDelivery }
+          : null,
+    };
+  });
 
   return NextResponse.json({ items, migracionPendiente: tablaFalta });
 }

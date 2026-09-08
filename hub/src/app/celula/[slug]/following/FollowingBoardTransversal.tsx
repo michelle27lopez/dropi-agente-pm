@@ -19,12 +19,15 @@ type Metricas = {
   updated_at: string;
 } | null;
 
+type Linaje = { tipo: "POC" | "Delivery"; name: string; project_code: string | null } | null;
+
 type Item = {
   id: string;
   name: string;
   project_code: string | null;
   celula: { id: string; nombre: string; slug: string } | null;
   metricas: Metricas;
+  linaje: Linaje;
 };
 
 // Real, sourced de /proveedores/satisfaccion (UserPilot, corte 19-ago-2026).
@@ -83,7 +86,9 @@ export default function FollowingBoardTransversal() {
       <p style={{ fontSize: 13, color: "var(--muted)", maxWidth: 760, lineHeight: 1.6, marginBottom: 28 }}>
         Consolidado de todo lo que está en fase Following (post-lanzamiento, midiendo si funcionó) en las
         distintas células, más las dos métricas de experiencia que son de Dropi como plataforma, no de un
-        proyecto puntual.
+        proyecto puntual. El campo de POC casi no se usa en la base — por eso cada proyecto muestra su
+        linaje real tal cual existe hoy (🔗 POC, 🔗 Delivery, o sin marca si no hay rastro registrado),
+        para que cada célula lo confirme caso por caso en vez de asumirlo.
       </p>
 
       <h2 style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 14 }}>
@@ -197,6 +202,23 @@ function FilaProyecto({
           {item.name}
         </a>
         <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{item.project_code ?? "—"}</div>
+        {item.linaje ? (
+          <div
+            title={`Trazado a ${item.linaje.tipo} · ${item.linaje.project_code ?? ""} ${item.linaje.name}`}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6,
+              fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999,
+              background: item.linaje.tipo === "POC" ? "var(--dropi-light)" : "#EFF6FF",
+              color: item.linaje.tipo === "POC" ? "var(--dropi)" : "#1D4ED8",
+            }}
+          >
+            🔗 {item.linaje.tipo} · {item.linaje.project_code ?? item.linaje.name}
+          </div>
+        ) : (
+          <div style={{ fontSize: 10, color: "var(--faint, #9CA3AF)", marginTop: 6, fontStyle: "italic" }}>
+            sin linaje registrado
+          </div>
+        )}
       </div>
 
       <div>
