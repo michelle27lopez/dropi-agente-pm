@@ -6,7 +6,7 @@ type BugStatus = "proceso" | "bloqueado" | "resuelto";
 interface BugItem { id: string; tipo: string; desc: string; status: BugStatus }
 interface Usuarios { perfil: string; perfilOtro: string; cantidad: string; notas: string }
 interface MetricRow {
-  fecha: string; objetivo: string; usuarios: Usuarios;
+  fecha: string; objetivo: string; actividad: string; usuarios: Usuarios;
   adopcion: string; retencion: string; cesScore: string; csatScore: string;
   hallazgos: string; dolores: string; bugs: BugItem[]; proximosPasos: string;
 }
@@ -18,6 +18,7 @@ const PHASE_LABEL: Record<"m1" | "m2" | "m3", string> = {
 function formatRow(row: MetricRow, phase: "m1" | "m2" | "m3", i: number): string {
   const lines: string[] = [`### ${PHASE_LABEL[phase]} — revisión ${i + 1} (${row.fecha || "sin fecha"})`];
   if (row.objetivo) lines.push(`Objetivo: ${row.objetivo}`);
+  if (row.actividad) lines.push(`Actividad evaluada: ${row.actividad}`);
   if (row.usuarios?.perfil || row.usuarios?.cantidad) {
     lines.push(`Usuarios: ${row.usuarios.perfil || "—"}${row.usuarios.cantidad ? ` (n=${row.usuarios.cantidad})` : ""}${row.usuarios.notas ? ` — ${row.usuarios.notas}` : ""}`);
   }

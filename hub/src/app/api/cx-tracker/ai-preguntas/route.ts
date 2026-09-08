@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { objetivo, proyecto } = body as { objetivo: string; proyecto?: string };
+  const { objetivo, proyecto, actividad } = body as { objetivo: string; proyecto?: string; actividad?: string };
 
   if (!objetivo || !objetivo.trim()) {
     return NextResponse.json({ error: "Escribe primero el objetivo de la revisión." }, { status: 400 });
@@ -35,7 +35,7 @@ Reglas:
 - No inventes detalles del producto que no estén en el objetivo — si el objetivo es vago, la pregunta puede ser más general, pero nunca agregues funcionalidades no mencionadas.
 - Responde ÚNICAMENTE en este formato JSON, sin texto adicional ni markdown: {"ces": "...", "csat": "...", "momento": "..."}`;
 
-  const userPrompt = `Objetivo de la revisión${proyecto ? ` (proyecto: ${proyecto})` : ""}: ${objetivo}`;
+  const userPrompt = `Objetivo de la revisión${proyecto ? ` (proyecto: ${proyecto})` : ""}: ${objetivo}${actividad ? `\nActividad/tarea evaluada: ${actividad}` : ""}`;
 
   try {
     const openai = new OpenAI({ apiKey });

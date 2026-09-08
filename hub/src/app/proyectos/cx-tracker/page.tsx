@@ -25,6 +25,7 @@ interface MetricRow {
   id: string;
   fecha: string;
   objetivo: string;
+  actividad: string;
   usuarios: Usuarios;
   adopcion: string; retencion: string; cesScore: string; csatScore: string;
   hallazgos: string;
@@ -64,7 +65,7 @@ function emptyUsuarios(): Usuarios { return { perfil: "", perfilOtro: "", cantid
 function emptyRow(): MetricRow {
   return {
     id: Math.random().toString(36).slice(2),
-    fecha: "", objetivo: "", usuarios: emptyUsuarios(),
+    fecha: "", objetivo: "", actividad: "", usuarios: emptyUsuarios(),
     adopcion: "", retencion: "", cesScore: "", csatScore: "",
     hallazgos: "", dolores: "", bugs: [],
     linkEntrevistas: "", linkDashboard: "", proximosPasos: "",
@@ -156,6 +157,20 @@ function Badge({ children, color, bg }: { children: React.ReactNode; color: stri
     }}>
       {children}
     </span>
+  );
+}
+
+function SectionHeader({ n, icon, title }: { n: number; icon: string; title: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "22px 0 12px" }}>
+      <span style={{
+        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        width: 20, height: 20, borderRadius: "50%", background: "var(--dropi-light)",
+        color: "var(--dropi)", fontSize: 11, fontWeight: 800,
+      }}>{n}</span>
+      <span style={{ fontSize: 11.5, fontWeight: 800, letterSpacing: "0.04em", color: "var(--fg)", whiteSpace: "nowrap" }}>{icon} {title}</span>
+      <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+    </div>
   );
 }
 
@@ -260,7 +275,7 @@ function DiagnosisBadge({ row }: { row: MetricRow }) {
 }
 
 // ── Tarjeta de revisión (M1/M2/M3) — acordeón ───────────────────────────
-function PreguntasSugeridas({ objetivo, proyecto }: { objetivo: string; proyecto: string }) {
+function PreguntasSugeridas({ objetivo, actividad, proyecto }: { objetivo: string; actividad: string; proyecto: string }) {
   const [loading, setLoading] = useState(false);
   const [preguntas, setPreguntas] = useState<{ ces: string; csat: string; momento: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -272,7 +287,7 @@ function PreguntasSugeridas({ objetivo, proyecto }: { objetivo: string; proyecto
       const res = await fetch("/api/cx-tracker/ai-preguntas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ objetivo, proyecto }),
+        body: JSON.stringify({ objetivo, actividad, proyecto }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error generando las preguntas.");
@@ -339,8 +354,10 @@ function MetricRowCard({ row, onUpdate, onDelete, projectName }: { row: MetricRo
 
       {open && (
         <div style={{ padding: "0 16px 18px", borderTop: "1px solid var(--border)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginTop: 14 }}>
-            <Field label="Fecha de la revisión"><TextInput value={row.fecha} onChange={set("fecha")} placeholder="ej. 31 de Agosto, 2026" /></Field>
+
+          <SectionHeader n={1} icon="🎯" title="Target y Objetivo" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
+            <Field label="Fecha de seguimiento"><TextInput value={row.fecha} onChange={set("fecha")} placeholder="ej. 31 de Agosto, 2026" /></Field>
             <Field label="Perfil de usuario">
               <select value={row.usuarios.perfil} onChange={(e) => set("usuarios")({ ...row.usuarios, perfil: e.target.value })}
                 style={{ width: "100%", fontSize: 13, padding: "7px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)" }}>
@@ -350,34 +367,37 @@ function MetricRowCard({ row, onUpdate, onDelete, projectName }: { row: MetricRo
             </Field>
             <Field label="Cantidad (n)"><TextInput value={row.usuarios.cantidad} onChange={(v) => set("usuarios")({ ...row.usuarios, cantidad: v })} placeholder="ej. 6000" mono /></Field>
           </div>
-
-          <Field label="Objetivo de la revisión"><TextArea value={row.objetivo} onChange={set("objetivo")} placeholder="¿Qué se busca validar en esta revisión?" /></Field>
-          <PreguntasSugeridas objetivo={row.objetivo} proyecto={projectName} />
+          <Field label="Actividad"><TextInput value={row.actividad} onChange={set("actividad")} placeholder="Tarea o flujo evaluado" /></Field>
           <Field label="Notas del segmento"><TextInput value={row.usuarios.notas} onChange={(v) => set("usuarios")({ ...row.usuarios, notas: v })} placeholder="ej. Dropshippers activos, todos los países" /></Field>
+          <Field label="Objetivo de la revisión"><TextArea value={row.objetivo} onChange={set("objetivo")} placeholder="¿Qué se busca validar en esta revisión?" /></Field>
+          <Field label="Sugerencia de preguntas (IA)"><PreguntasSugeridas objetivo={row.objetivo} actividad={row.actividad} proyecto={projectName} /></Field>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, margin: "14px 0" }}>
+          <SectionHeader n={2} icon="📊" title="Recolección de Datos" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 14 }}>
             <MetricInput label="Adopción" value={row.adopcion} onChange={set("adopcion")} unit="%" color="#2563EB" />
             <MetricInput label="Retención" value={row.retencion} onChange={set("retencion")} unit="%" color="#0D9488" />
             <MetricInput label="CES" value={row.cesScore} onChange={set("cesScore")} unit="/ 7" color="#2563EB" />
             <MetricInput label="CSAT" value={row.csatScore} onChange={set("csatScore")} unit="%" color="#7C3AED" />
           </div>
-
           <Field label="Hallazgos"><TextArea value={row.hallazgos} onChange={set("hallazgos")} placeholder="¿Qué dice la data de forma objetiva?" /></Field>
           <Field label="Dolores / fricciones"><TextArea value={row.dolores} onChange={set("dolores")} placeholder="¿Dónde se traba la experiencia?" /></Field>
 
+          <SectionHeader n={3} icon="🐛" title="Incidencias Técnicas" />
           <Field label="Bugs">
             <BugManager bugs={row.bugs} onChange={set("bugs")} />
           </Field>
 
+          <SectionHeader n={4} icon="📎" title="Documentación y Evidencia" />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
-            <Field label="Link entrevistas"><TextInput value={row.linkEntrevistas} onChange={set("linkEntrevistas")} placeholder="https://…" /></Field>
-            <Field label="Link dashboard"><TextInput value={row.linkDashboard} onChange={set("linkDashboard")} placeholder="https://…" /></Field>
+            <Field label="Entrevistas"><TextInput value={row.linkEntrevistas} onChange={set("linkEntrevistas")} placeholder="https://…" /></Field>
+            <Field label="Dashboard"><TextInput value={row.linkDashboard} onChange={set("linkDashboard")} placeholder="https://…" /></Field>
           </div>
 
-          <Field label="Próximos pasos"><TextArea value={row.proximosPasos} onChange={set("proximosPasos")} placeholder="Acciones concretas para la siguiente revisión" rows={3} /></Field>
+          <SectionHeader n={5} icon="🚀" title="Próximos Pasos" />
+          <Field label="Acciones recomendadas"><TextArea value={row.proximosPasos} onChange={set("proximosPasos")} placeholder="Tareas, responsables y compromisos para la siguiente iteración" rows={3} /></Field>
 
           {d && (
-            <div style={{ background: d.bg, border: `1px solid ${d.border}`, borderRadius: 10, padding: "10px 14px", marginBottom: 12 }}>
+            <div style={{ background: d.bg, border: `1px solid ${d.border}`, borderRadius: 10, padding: "10px 14px", marginTop: 4, marginBottom: 12 }}>
               <strong style={{ fontSize: 12.5, color: d.text }}>{d.dot} {d.estado}</strong>
               <p style={{ fontSize: 12, color: d.text, margin: "4px 0 0" }}>{d.desc}</p>
             </div>
