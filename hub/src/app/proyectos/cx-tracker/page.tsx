@@ -559,7 +559,7 @@ function ResumenTab({ project }: { project: ProjectEntry }) {
   );
 }
 
-// ── Calculadora CES · CSAT (drawer) ─────────────────────────────────────
+// ── Calculadora de Métricas (drawer) ─────────────────────────────────────
 function bandaColor(v: number, goodMin: number, okMin: number) {
   if (v >= goodMin) return { color: "#15803D", bg: "#F0FDF4", border: "#BBF7D0", label: "Bueno", icon: CheckCircle2 };
   if (v >= okMin) return { color: "#B45309", bg: "#FFFBEB", border: "#FDE68A", label: "Regular", icon: AlertTriangle };
@@ -594,7 +594,7 @@ function CalculatorDrawer({ onClose }: { onClose: () => void }) {
       padding: 20, overflowY: "auto",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <strong style={{ fontSize: 14, color: "var(--fg)" }}>🧮 Calculadora CES · CSAT</strong>
+        <strong style={{ fontSize: 14, color: "var(--fg)" }}>🧮 Calculadora de Métricas</strong>
         <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)" }}><X size={18} /></button>
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
@@ -683,7 +683,7 @@ export default function CxTrackerPage() {
               onClick={() => setCalcOpen(true)}
               style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "9px 16px", cursor: "pointer", flexShrink: 0 }}
             >
-              <Calculator size={14} /> Calculadora CES · CSAT
+              <Calculator size={14} /> Calculadora de Métricas
             </button>
           </div>
         </div>
