@@ -54,6 +54,27 @@ const DOCS = [
 export default function DataPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const esSuppliers = params.slug === "suppliers";
+  const esExperience = params.slug === "experience";
+
+  // Experience — Agente de Seguimiento de Métricas (CX Tracker, EXP-007).
+  // Vivía en Following, se movió acá a pedido de Diana (2026-09-07).
+  if (esExperience) {
+    return (
+      <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--card)" }}>
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0,
+        }}>
+          <Breadcrumb items={[{ label: "Data" }]} />
+        </header>
+        <iframe
+          src="/proyectos/cx-tracker"
+          title="Agente de Seguimiento de Métricas"
+          style={{ flex: 1, border: "none", width: "100%" }}
+        />
+      </div>
+    );
+  }
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
