@@ -673,9 +673,12 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     doc: "completo",
     descripcion: "Leer una guía reemplazatoria en Ecom Scanner, resolverla a la guía original y conservar la trazabilidad de la devolución.",
     porQue: "Conserva la trazabilidad de la devolución cuando el carrier emite una guía nueva.",
-    proximoPaso: "Cerrar PROD-1045: medición, comunicación y evidencia de rollout.",
-    foco: "Capacidad construida y PRM en Versión Beta. Junio reportó pruebas satisfactorias; la mesa operativa del 27-jul volvió a reportar bloqueos y el 31-jul se declaró lista para ampliar. PROD-1045 sigue en backlog: faltan ticket/hotfix, medición, comunicación y evidencia de rollout global.",
-    links: [{ tipo: "jira", label: "PROD-1045 · Lanzamiento Laura", href: JIRA + "PROD-1045" }],
+    proximoPaso: "Enviar la petición a Data e instrumentar adopción, para llegar al cierre técnico con línea base lista.",
+    foco: "Estrategia de lanzamiento diligenciada y lista (formato E2E completo: población, canales, eventos, TARS y plan de 12 semanas), preparada en paralelo mientras TI cierra los pendientes de la épica TECH-480 y verifica la cobertura por transportadora. Salida planificada por fases desde T0 = confirmación de cierre técnico. Lo que Producto debe tener listo antes de T0: instrumentación, entrega de Data y el Tango de PROD-1045.",
+    links: [
+      { tipo: "jira", label: "PROD-1045 · Lanzamiento Laura", href: JIRA + "PROD-1045" },
+      { tipo: "jira", label: "TECH-480 · Épica vigente (gate del beta)", href: JIRA + "TECH-480" },
+    ],
   },
   {
     nombre: "Pruebas de entrega",
@@ -1292,208 +1295,331 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 1 – 5 sep 2026 (actual) ─────────────────────────────────────────
-  // Aporte de Michel Pino: Servicios en Bodega completó Fase 1 al ~90% en un
-  // sprint de 3 semanas (19 ago → 5 sep). Además se construyó la herramienta
-  // "Prioriza tus transportadoras con IA" para Expowinners 2026 (12–13 sep),
-  // un wizard de 8 pantallas con tracking completo que valida demanda real de
-  // selección inteligente de transportadoras. Autoconfirmación × ChateaPro sin
-  // avance — el foco estuvo en construcción.
+  // ── Semana 1 – 4 sep 2026 (actual) ──────────────────────────────────────────
+  // Semana de infraestructura y de gobierno, no de campo: lo que se movió fue la
+  // base sobre la que corre Indiana (roles, despliegue, migraciones) y la
+  // preparación del lanzamiento de guías reemplazatorias.
+  //
+  // Agosto cerró y es el primer mes comparable de verdad: mismos 10 países que
+  // julio, así que el delta ya no arrastra la duda de alcance. El consolidado
+  // (81,6% · 831.070 · 4,52M) se recalculó sumando el detalle por país, y el
+  // mismo método reproduce exacto el julio ya publicado (786.130 sobre 4.545.981
+  // = 82,7%) — por eso se publica como medido y no como declarado.
   {
     id: "2026-w36",
-    fecha: "Viernes 5 de septiembre de 2026",
-    semana: "Semana 1 – 5 sep",
+    fecha: "Viernes 4 de septiembre de 2026",
+    semana: "Semana 1 – 4 sep",
     foco:
-      "Dos entregas esta semana. Servicios en Bodega completó la Fase 1 al ~90% (10 rutas, auth con RLS, design system, máquina de estados, 66 archivos fuente en 3 semanas). Y para Expowinners 2026 (12–13 sep) se construyó 'Prioriza tus transportadoras con IA': wizard de 8 pantallas con tracking Supabase + PostHog que valida demanda real de selección inteligente de transportadoras y recoge taxonomía de novedades. PR enviado, pendiente merge.",
+      "Agosto cerró y rompió el patrón del año: la movilización cae por primera vez (82,7% → 81,6%) y el no movilizado crece 44.940 órdenes aunque el volumen bajó — en julio el crecimiento del no movilizado tenía la excusa de un denominador 9% más grande; en agosto no hay excusa. Colombia explica casi todo: cae 5,7% en volumen, pierde 1,4 pts de movilización y aporta el 67% del no movilizado. En producto, Indiana dejó de ser un prototipo en cuenta personal y pasó a proyecto desplegable —Docker, CI, 401 en las rutas de API, Next 16.3.4 y la separación de roles que estaba trabada desde la w34—, guías reemplazatorias quedó con su estrategia de lanzamiento E2E completa y destapó que la iniciativa vive hoy en TECH-480 y no en PROD-1045, y se abrió un frente nuevo de gobierno de POCs.",
 
     comparacionMensual: {
-      titulo: "Cierre agosto — en consolidación",
+      titulo: "Cierre agosto — primera caída de movilización del año",
       alcance:
-        "Consolidado de los 10 países del tablero, ponderado por volumen. Agosto aún no cierra; julio sigue siendo el último dato.",
+        "Consolidado de los 10 países del tablero, ponderado por volumen. Agosto trae los mismos 10 países que julio: es el primer delta mensual que NO arrastra la duda de cambio de alcance.",
       lectura:
-        "Tres semanas de ejecución intensa en Servicios en Bodega: de especificación (w34) a plataforma funcional con 66 archivos fuente, 10 rutas activas y máquina de estados implementada. El foco fue construcción, no cifra de movilización.",
+        "La movilización cae a 81,6% (−1,1 pts), primera caída del año después de tres meses planos y un julio al alza. Y el no movilizado sube 44.940 órdenes con el volumen bajando 0,6% — es distinto a julio: allá el problema absoluto crecía porque el denominador creció 9%; acá crece con el denominador quieto, así que es deterioro real y no efecto de escala. El foco es Colombia: pierde 1,4 pts de movilización, cae 5,7% en volumen (3,27M → 3,08M) y concentra 557.327 de las 831.070 órdenes no movilizadas (67,1%). Todos los demás países crecieron en volumen; solo Colombia se contrajo. [pendiente con Data: si la caída de volumen de Colombia es del negocio o del corte, antes de leerla como demanda perdida]",
       entregaNota:
-        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data.",
-      meses: ["Abril", "Mayo", "Junio", "Julio"],
+        "Sigue sin ser comparable hasta tener el export por cohorte de Data. En crudo, agosto se ve peor que julio en los grandes: Colombia 68,0% (venía en 73,8%) y México 41,6% (venía en 55,9%). Ese salto de 14 pts de México es demasiado grande para leerlo como caída operativa sin verificar el corte primero.",
+      meses: ["Mayo", "Junio", "Julio", "Agosto"],
       filas: [
-        { metrica: "Movilización", valores: ["81,9%", "82,3%", "82,3%", "82,7%"], delta: "+0,4 pts", tono: "alerta" },
-        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.130"], delta: "+48.265", tono: "malo" },
-        { metrica: "Órdenes", valores: ["3,86M", "4,04M", "4,17M", "4,55M"], delta: "+9,0%", tono: "bueno" },
+        { metrica: "Movilización", valores: ["82,3%", "82,3%", "82,7%", "81,6%"], delta: "−1,1 pts", tono: "malo" },
+        { metrica: "No movilizado", valores: ["716.957", "737.865", "786.130", "831.070"], delta: "+44.940", tono: "malo" },
+        { metrica: "Órdenes", valores: ["4,04M", "4,17M", "4,55M", "4,52M"], delta: "−0,6%", tono: "alerta" },
       ],
+      porPais: {
+        titulo: "Agosto por país",
+        nota:
+          "Meta de movilización 90% (KR2.1 de la CPO, movilizaciones 80→90%). La marca de la barra es esa meta: solo Guatemala (91,6%) la cruza. La entrega va en crudo, sin corregir por cohorte.",
+        metaMovilizacion: 90,
+        filas: [
+          { pais: "Colombia", participacion: "68,2% del volumen", ordenes: "3.080.429", movilizacion: 81.9, noMovilizado: "557.327", entrega: 68.0, transportadoras: 12 },
+          { pais: "Ecuador", participacion: "9,0%", ordenes: "405.689", movilizacion: 81.9, noMovilizado: "73.283", entrega: 66.1, transportadoras: 5 },
+          { pais: "Chile", participacion: "8,3%", ordenes: "374.010", movilizacion: 77.4, noMovilizado: "84.454", entrega: 68.1, transportadoras: 4 },
+          { pais: "México", participacion: "8,0%", ordenes: "362.014", movilizacion: 77.8, noMovilizado: "80.515", entrega: 41.6, transportadoras: 6 },
+          { pais: "Guatemala", participacion: "4,4%", ordenes: "196.847", movilizacion: 91.6, noMovilizado: "16.484", entrega: 73.4, transportadoras: 2 },
+          { pais: "Paraguay", participacion: "1,0%", ordenes: "46.199", movilizacion: 78.3, noMovilizado: "10.007", entrega: 69.2, transportadoras: 4 },
+          { pais: "Panamá", participacion: "0,7%", ordenes: "30.076", movilizacion: 85.2, noMovilizado: "4.452", entrega: 69.0, transportadoras: 2 },
+          { pais: "Argentina", participacion: "0,3%", ordenes: "15.197", movilizacion: 79.5, noMovilizado: "3.120", entrega: 54.9, transportadoras: 2 },
+          { pais: "Costa Rica", participacion: "0,1%", ordenes: "5.205", movilizacion: 88.4, noMovilizado: "606", entrega: 51.4, transportadoras: 2 },
+          { pais: "Perú", participacion: "0,0%", ordenes: "1.646", movilizacion: 50.1, noMovilizado: "822", entrega: 55.6, transportadoras: 3 },
+        ],
+      },
     },
 
     avanceInvestigacion: {
-      titulo: "Servicios en Bodega — sprint de 3 semanas",
+      titulo: "Investigación de oportunidades por fase",
       descripcion:
-        "De especificación a plataforma funcional en 3 semanas. Fase 1 (Almacenamiento + Recepción) al ~90%. Fase 2 (Tarifas) arrancó antes de lo planeado con UI de gestión ya construida.",
+        "'Recogido por Dropi' sigue activa. Esta semana no se movió con campo sino con la base técnica: sin roles ni despliegue propio no hay piloto que se pueda sostener con gente real adentro. Falta conectar la data a la fuente y correr el piloto con outcome medido.",
       pasos: [
-        { nombre: "Fase 1 · Almacenamiento + Recepción", detalle: "UI, auth, import Excel, dashboard, proveedores — ~90% completado", estado: "listo" },
-        { nombre: "Fase 2 · Etiquetado + Kits + Tarifas", detalle: "Gestión de tarifas con UI ya existe; etiquetado y kits pendientes — ~20%", estado: "activo" },
-        { nombre: "Fase 3 · Deuda, contratos, P&L", detalle: "Sin iniciar", estado: "siguiente" },
-        { nombre: "Fase 4 · Multi-unidad + Integraciones", detalle: "Sin iniciar", estado: "siguiente" },
+        { nombre: "Confirmación", detalle: "Oportunidades levantadas + 6 sesiones moderadas (18–25 jul), aceptación 81/100", estado: "listo" },
+        { nombre: "Generación de guía", detalle: "Proyecto en definición, no experimento listo", estado: "listo" },
+        { nombre: "Recogido por Dropi", detalle: "Indiana desplegable y con roles; falta conectar la carga a la réplica y correr el piloto", estado: "activo" },
+        { nombre: "Conectar el flujo", detalle: "WhatsApp ya conectado; falta cerrar el ciclo solicitud → acuse → resultado", estado: "siguiente" },
       ],
     },
 
     focoSiguienteSemana: [
-      "Expowinners (12–13 sep): merge del PR #31 y validación final del wizard antes del evento. Recopilar datos de demanda y novedades en campo — Responsable: Michel Pino.",
-      "Servicios en Bodega: deploy a Vercel y configuración de dominio/acceso para la célula — Responsable: Michel Pino.",
-      "Servicios en Bodega: pruebas e2e con datos reales de bodega México (Excel mayo, 124 proveedores) — Responsable: Michel Pino / Logística.",
-      "Servicios en Bodega: completar el 10% restante de Fase 1 (edge cases de importación, validaciones finales) — Responsable: Michel Pino.",
+      "Colombia, agosto: entender la caída de 1,4 pts de movilización y la contracción de 5,7% en volumen. Es el único país que se contrajo y concentra el 67% del no movilizado — sin esa lectura, el consolidado no se puede explicar en el Cell Board.",
+      "México: verificar con Data el 41,6% de entrega en crudo antes de llevarlo a negocio. Una caída de 14 pts en un mes se parece más a un corte que a la operación.",
+      "Recolecciones: conseguir un usuario de solo lectura en la réplica. La lectura directa ya está construida y probada — es el único insumo que falta para que la carga diaria deje de depender de que alguien suba un archivo — Responsable: Juan Diego.",
+      "Ecom Scanner: enviar la petición de data de adopción. Es lo único del plan de lanzamiento que no depende de TI, y de ahí salen el Target, la línea base y la meta — conviene que llegue antes de T0.",
+      "Guías reemplazatorias: sincronizar PROD-1045 con TECH-480 (hoy PROD-1045 describe el mundo de hace siete semanas) y confirmar la cobertura de Coordinadora en producción, que estuvo rota todo el beta (DROP-26971).",
+      "Servicios de bodega: resolver el acceso al repo de Michel y decidir si el POC se absorbe al monorepo o se queda aparte con su ficha en el directorio.",
+      "Expowinners (12–13 sep): merge del PR #31 y validación final del wizard de transportadoras IA antes del evento — Responsable: Michel Pino.",
+      "Servicios en Bodega: deploy a Vercel + pruebas e2e con datos reales de bodega México (Excel mayo, 124 proveedores) — Responsable: Michel Pino.",
     ],
 
     indicadores: [
-      // ── Indicadores de la célula (se repiten de w35, sin cierre nuevo) ──
       {
         nombre: "Movilización consolidada",
-        valor: "82,7%",
+        valor: "81,6%",
         meta: "90%",
-        tono: "alerta",
-        estado: "sin cierre nuevo",
-        nota: "Julio sigue siendo el último mes cerrado. Solo Guatemala (90,3%) alcanza la meta de la CPO.",
+        tono: "malo",
+        estado: "−1,1 pts",
+        trend: "down",
+        nota: "Primera caída del año. Solo Guatemala (91,6%) alcanza la meta de la CPO; Colombia cae a 81,9% y Perú a 50,1%.",
         serie: "Movilización",
       },
       {
-        nombre: "Recolección en bodegas lejanas",
-        valor: "2 días",
-        tono: "bueno",
-        estado: "antes 5 días",
-        trend: "down" as const,
-        nota: "Garzón, Cúcuta y Bucaramanga: ~10 mil órdenes/semana que tardaban 5 días en moverse ahora tardan 2. Declarado por la célula, pendiente de export.",
+        nombre: "Órdenes no movilizadas",
+        valor: "831.070",
+        tono: "malo",
+        estado: "+44.940",
+        trend: "up",
+        nota: "Crece con el volumen bajando 0,6% — en julio la excusa era el denominador; en agosto no la hay. Colombia aporta 557.327 (67,1%).",
+        serie: "No movilizado",
       },
       {
-        nombre: "Novedades de junio",
-        valor: "911.168",
-        tono: "malo",
-        estado: "17,0% se rescatan",
-        nota: "74,3% terminan devueltas. Techo conservador: +95.688 entregas/mes llevando cada motivo al P75 de su clúster.",
+        nombre: "Indiana",
+        valor: "Desplegable",
+        tono: "bueno",
+        estado: "antes: cuenta personal",
+        trend: "up",
+        nota: "Imagen Docker, CI, 401 en todas las rutas de API, Next 16.3.4 y roles con migración 012. Nueve commits entre el 3 y el 4 de septiembre.",
       },
-      // ── Indicadores de proyecto Michel Pino ─────────────────────────────
+      {
+        nombre: "Carga de recolecciones",
+        valor: "Manual",
+        tono: "malo",
+        estado: "export .xlsx de Chronos",
+        nota: "Cada actualización del mapa depende de que alguien exporte y suba un archivo. La consulta contra la réplica ya está escrita; faltan credenciales de solo lectura.",
+      },
+      // ── Indicadores Michel Pino ─────────────────────────────────────────
       {
         nombre: "Fase 1 · Servicios en Bodega",
         valor: "~90%",
         tono: "bueno",
         estado: "Falta deploy + e2e",
-        nota: "Plataforma funcional: 66 archivos fuente, 10 rutas activas, 5 migraciones SQL, auth con roles, design system propio y máquina de estados.",
-      },
-      {
-        nombre: "Revenue leakage bodega",
-        valor: "$2.9M–6.4M MXN/mes",
-        tono: "malo",
-        estado: "Plataforma construida",
-        nota: "La plataforma que cierra esta fuga ya tiene UI funcional. Falta deploy y pruebas con datos reales para empezar a capturar el valor.",
+        nota: "Plataforma funcional: 66 archivos fuente, 10 rutas activas, 5 migraciones SQL, auth con roles, design system propio y máquina de estados. Sprint de 3 semanas (19 ago → 5 sep).",
       },
       {
         nombre: "Expowinners · Transportadoras IA",
         valor: "PR listo",
         tono: "bueno",
         estado: "12–13 sep",
-        nota: "Wizard de 8 pantallas con tracking Supabase + PostHog. Valida demanda de selección inteligente de transportadoras y recoge taxonomía de novedades.",
+        nota: "Wizard de 8 pantallas con tracking Supabase + PostHog. Valida demanda de selección inteligente de transportadoras. Métrica clave: % con demanda 6-7/7.",
       },
     ] as IndicadorHoy[],
 
+    // Campos que el render de semanas históricas espera. Esta semana no trajo
+    // medición nueva de tiempo por fases: se declara así en vez de repetir
+    // cifras viejas como si fueran del corte.
     brecha: {
-      actual: 73.8, actualLabel: "73,8% crudo CO",
+      actual: 68.0, actualLabel: "68,0% crudo CO",
       meta: 70, metaLabel: "70%",
       gap: "No comparable", metaQ3: "Pendiente cohorte",
-      paisFoco: "Colombia representa 71,9% del volumen de julio.",
-      lectura: "Agosto sigue madurando; no se usa esta cifra para evaluar el KR.",
+      paisFoco: "Colombia representa 68,2% del volumen de agosto (venía en 71,9% en julio).",
+      lectura: "El crudo de Colombia cae de 73,8% a 68,0%, pero sigue sin evaluar el KR: falta el export por cohorte de Data. Lo que sí cambió es que ahora la lectura cruda queda por debajo de la meta.",
       perdidas: [],
     },
     tiempo: {
-      lectura:
-        "El foco de las últimas 3 semanas fue ejecución de Servicios en Bodega. No hubo trabajo directo sobre reducción de tiempos de tránsito esta semana.",
+      lectura: "Sin medición nueva del KPI de tiempo por fases esta semana.",
       dropi: [
-        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "Sin palanca nueva esta semana — foco en Servicios en Bodega" },
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "medición manual mientras no se retome LOG-011" },
       ],
       carrier: [
         { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
       ],
-      proximosPasos: ["Deploy de Servicios en Bodega a Vercel y pruebas e2e con datos reales."],
+      proximosPasos: [],
     },
-    hallazgos: [],
+
+    hallazgos: [
+      {
+        tono: "zona",
+        titulo: "Agosto es el primer mes comparable — y sale negativo",
+        detalle:
+          "Julio trajo 10 países donde antes se reportaban 9, así que su delta quedó contaminado por el cambio de alcance. Agosto trae los mismos 10 países que julio: es la primera comparación mensual limpia del año. El resultado es que la movilización baja 1,1 pts y el no movilizado sube 44.940 órdenes con el volumen quieto.",
+      },
+      {
+        tono: "zona",
+        titulo: "Todos los países crecieron en volumen menos Colombia",
+        detalle:
+          "Colombia cae 5,7% (3.266.371 → 3.080.429) y pierde 3,7 pts de participación. Ecuador (+15,2%), México (+14,8%), Chile (+9,3%) y Guatemala (+9,0%) crecen. El consolidado baja igual porque Colombia sigue siendo dos tercios del volumen y además perdió 1,4 pts de movilización propia.",
+        compara: {
+          etiqueta: "Movilización Colombia",
+          a: { label: "Julio", pct: 83.3 },
+          b: { label: "Agosto", pct: 81.9 },
+        },
+      },
+      {
+        tono: "carrier",
+        titulo: "Colombia pasó de 10 a 12 transportadoras activas",
+        detalle:
+          "Dos transportadoras nuevas con volumen en el mes en que la movilización del país cae 1,4 pts. No es causa demostrada —puede ser rampa de nuevas conexiones o puede no tener relación—, pero es la variable que más cambió en el país que explica el consolidado. [HIPÓTESIS a validar con el corte por transportadora]",
+      },
+    ] as Hallazgo[],
 
     secciones: [
       {
-        titulo: "Servicios en Bodega · progreso de ejecución",
-        nota: "Construcción de la plataforma de cobros — sprint de 3 semanas (19 ago → 5 sep).",
+        titulo: "Recolecciones · Indiana",
+        nota: "Semana 1–4 sep. La base técnica que faltaba para poder pilotear con gente real adentro.",
         proyectos: [
           {
-            nombre: "Fundación · modelo de datos",
-            ticket: "PRM-1446",
-            estado: "Completado · 19 ago",
+            nombre: "Roles: trabajo diario vs. quien decide por todos",
+            ticket: "PRM-1465",
+            estado: "En producción",
             estadoTono: "verde",
             nota:
-              "7 tablas, motor de cálculo, validación Excel, conexión Supabase. Base sólida con triggers de auditoría y constraints de contrato.",
+              "Migración 012: quien opera el día a día (importar la carga, contactar bodegas, armar solicitudes) queda separado de quien decide por todos (dar y quitar accesos). Antes cualquiera con sesión podía todo. Era el pendiente que venía desde la w34 — 'sembrar los accesos antes de aplicar la RLS'.",
+            enlace: { label: "Abrir Indiana", href: "https://indiana-map.vercel.app/mapa" },
           },
           {
-            nombre: "Fase 1 · UI completa",
-            ticket: "PRM-1446",
-            estado: "Completado · 21 ago",
+            nombre: "Despliegue propio: Docker, CI y 401",
+            estado: "Listo",
             estadoTono: "verde",
             nota:
-              "Login, dashboard, importar Excel, proveedores (lista + detalle), recepciones, cobros — todas las pantallas funcionales. 10 rutas activas.",
+              "Imagen Docker, CI que verifica lo que dice verificar y 401 en todas las rutas de API. Next 16.3.4 y se retiró el mapa legado. Es lo que permite sacar el proyecto de una cuenta personal sin que el traslado sea un salto al vacío.",
           },
           {
-            nombre: "Auth + Row Level Security",
-            ticket: "PRM-1446",
-            estado: "Completado · 28 ago",
+            nombre: "Migraciones sin el editor del panel",
+            estado: "Listo",
             estadoTono: "verde",
             nota:
-              "Migración de RLS por rol, proxy de autenticación, UI de acceso restringido. Cada rol (Admin, Logística, Facturación, Comercial) ve solo lo que le corresponde.",
+              "Un script aplica una migración desde el repo. El esquema deja de depender de que alguien pegue SQL a mano en la consola: lo que está versionado es lo que corre.",
           },
           {
-            nombre: "Design System propio",
-            ticket: "PRM-1446",
-            estado: "Completado · 31 ago",
-            estadoTono: "verde",
-            nota:
-              "Tokens de diseño, tipografía Inter Variable, componentes StatusChip y CurrencyText, mejoras de accesibilidad. Dark mode incluido.",
-          },
-          {
-            nombre: "Máquina de estados · reconciliación",
-            ticket: "PRM-1446",
-            estado: "Completado · 2 sep",
-            estadoTono: "verde",
-            nota:
-              "Ciclo de facturación implementado (borrador → abierto → cerrado → facturado). UI de periodos y gestión de tarifas. Descuento por volumen eliminado tras confirmación con stakeholders.",
-          },
-          {
-            nombre: "Deploy a Vercel + pruebas e2e",
-            ticket: "PRM-1446",
-            estado: "Pendiente",
+            nombre: "Conectar la carga a la base de datos",
+            estado: "Construido · falta credencial",
             estadoTono: "ambar",
             nota:
-              "Último 10% de Fase 1. Deploy a producción, pruebas con datos reales de bodega México y validación con usuarios de la célula.",
+              "Hasta ahora el mapa vivía de un export .xlsx de Chronos que alguien subía a mano. Se construyó la lectura directa contra la réplica: corre la misma consulta que se le pasó a Data, entra por el mismo camino que el archivo (así las dos fuentes no pueden dar fotos distintas), no deja pedir el día en curso porque la réplica llega con retraso, y bloquea la carga si devuelve mucho menos país del esperado. El .xlsx queda como plan B.",
+            impacto: "Falta un único insumo: un usuario de solo lectura en la réplica. Mientras tanto, la foto del mapa tiene la antigüedad del último que se acordó de subir el archivo.",
           },
         ],
       },
       {
-        titulo: "Quick wins logrados",
-        nota: "Métricas de ejecución de las 3 semanas de sprint.",
+        titulo: "Guías reemplazatorias · Ecom Scanner",
+        nota: "Se preparó el lanzamiento en paralelo mientras TI cierra los pendientes técnicos. Jira se usó solo como lectura.",
         proyectos: [
           {
-            nombre: "Masa crítica de código",
-            estado: "66 archivos TS/TSX",
+            nombre: "Estrategia de lanzamiento E2E",
+            ticket: "PROD-1045",
+            estado: "Diligenciada",
             estadoTono: "verde",
-            nota: "Plataforma con 66 archivos fuente — la base de código tiene el peso suficiente para sostener las fases siguientes sin reescrituras.",
+            nota:
+              "Formato E2E completo —población, canales, eventos, TARS y plan de 12 semanas— con fechas en T+n desde T0 = confirmación de cierre técnico, para no colgarla de una fecha que todavía no existe. Incluye un gate de graduación de 10 condiciones.",
+            enlace: { label: "Ver Guías reemplazatorias", href: "/proyectos/logistica/proyecto/guias-reemplazatorias" },
           },
           {
-            nombre: "Schema robusto",
-            estado: "5 migraciones SQL",
-            estadoTono: "verde",
-            nota: "Triggers de auditoría, constraints de contrato, seed de datos. Cada migración es idempotente y reversible.",
+            nombre: "El trabajo migró de proyecto sin que Producto se enterara",
+            ticket: "TECH-480",
+            estado: "Hallazgo",
+            estadoTono: "rojo",
+            nota:
+              "La épica TECH-480 (creada el 12-ago) es hoy el hogar real de la iniciativa y PROD-1045 no la referencia. Exige cinco condiciones antes de graduar el beta y declara fechas de pruebas y producción 'por definir'.",
+            impacto: "Cualquier plan de lanzamiento apoyado solo en PROD-1045 estaba planificando sobre un estado del mundo de hace siete semanas.",
           },
           {
-            nombre: "Simplificación de negocio",
-            estado: "Descuento volumen eliminado",
+            nombre: "Coordinadora estuvo rota todo el beta",
+            ticket: "DROP-26971",
+            estado: "Fix interino",
+            estadoTono: "rojo",
+            nota:
+              "El servicio devolvía 404 siempre por un mapeo incorrecto de la respuesta del tracking API: decodificaba vacío en silencio. El cierre reconoce que es una conexión no oficial y temporal. TECH-641 sigue bloqueado y STID-6847 abierto desde el 28-jul.",
+            impacto: "Una de las tres transportadoras del alcance no está verificada en producción.",
+          },
+          {
+            nombre: "Las cifras que usábamos no se sostenían",
+            estado: "Corregido",
+            estadoTono: "ambar",
+            nota:
+              "El '25% de los pedidos se devuelve' es 26,04% sobre movilizadas o ~21% sobre creadas: citarlo sobre 'pedidos' sobrestima ~4 pts contra nuestro propio baseline. Y el '50% no se podía escanear' no tiene ninguna fuente en el repo — queda como hipótesis y se le pide a Data.",
+          },
+          {
+            nombre: "Adopción de Ecom Scanner",
+            estado: "Plan listo",
+            estadoTono: "azul",
+            nota:
+              "La adopción se separó como su propio empuje, con banco de 7 intervenciones y su petición de data. Es lo único del plan que no depende de TI: de ahí salen el Target, la línea base y la meta.",
+          },
+        ],
+      },
+      {
+        titulo: "Gobierno de POCs",
+        nota: "Frente nuevo. Nace de un problema concreto: hay POCs vivos que nadie más ve.",
+        proyectos: [
+          {
+            nombre: "Directorio de POCs",
+            estado: "Construido",
             estadoTono: "verde",
-            nota: "Lógica de descuento por volumen eliminada tras confirmación con stakeholders — simplifica motor de cálculo y reduce superficie de error.",
+            nota:
+              "Inventario de los POCs de todas las células en una sola vista. Hasta ahora cada célula solo veía los suyos, así que nadie sabía si lo que iba a arrancar ya existía en otro lado. Los POCs sin célula asignada se agrupan aparte en vez de desaparecer en silencio.",
+            enlace: { label: "Abrir el directorio", href: "/guias/directorio-pocs" },
+          },
+          {
+            nombre: "Taller de POCs",
+            estado: "Guion listo",
+            estadoTono: "azul",
+            nota:
+              "Guion de un taller de 2 horas: dónde va un POC, qué es un PR y un merge, cuándo se necesita una migración, qué se puede tocar y qué no. Falta agendarlo.",
+            enlace: { label: "Ver el taller", href: "/guias/taller-pocs" },
+          },
+          {
+            nombre: "Servicios de bodega",
+            estado: "Repo fuera del monorepo",
+            estadoTono: "ambar",
+            nota:
+              "El POC de monetización de servicios de bodega ya tiene ficha en el tablero, y ahora además un repo propio fuera del monorepo. La invitación no llegó a ninguna cuenta autenticada, así que su código no es visible desde acá. Es exactamente el caso que el directorio existe para evitar.",
+            enlace: { label: "Ver el POC", href: "/proyectos/logistica/poc-servicios-bodega" },
+          },
+        ],
+      },
+      // ── Aportes Michel Pino (w36) ──────────────────────────────────────
+      {
+        titulo: "Servicios en Bodega · ejecución Fase 1",
+        nota: "Sprint de 3 semanas (19 ago → 5 sep). Plataforma de cobros para 5 servicios de bodega no facturados.",
+        proyectos: [
+          {
+            nombre: "Fundación + UI completa + Auth RLS",
+            ticket: "PRM-1446",
+            estado: "Completado",
+            estadoTono: "verde",
+            nota:
+              "7 tablas con triggers de auditoría, 10 rutas activas (login, dashboard, importar Excel, proveedores, recepciones, cobros, periodos, tarifas), auth con RLS por rol (Admin/Logística/Facturación/Comercial). 66 archivos fuente TS/TSX.",
+          },
+          {
+            nombre: "Design system + máquina de estados",
+            ticket: "PRM-1446",
+            estado: "Completado",
+            estadoTono: "verde",
+            nota:
+              "Tokens de diseño, Inter Variable, StatusChip, CurrencyText, dark mode. Ciclo de facturación (borrador → abierto → cerrado → facturado). Descuento por volumen eliminado tras confirmación con stakeholders.",
+            impacto: "Revenue leakage: $2,9M–6,4M MXN/mes en 12 países. 4 de 5 servicios sin cobrar.",
+          },
+          {
+            nombre: "Deploy + pruebas e2e",
+            ticket: "PRM-1446",
+            estado: "Pendiente",
+            estadoTono: "ambar",
+            nota:
+              "Último 10% de Fase 1. Deploy a Vercel, pruebas con datos reales de bodega México y validación con usuarios.",
+            enlace: { label: "Ver POC Servicios en Bodega", href: "/proyectos/logistica/poc-servicios-bodega" },
           },
         ],
       },
       {
         titulo: "Expowinners 2026 · Transportadoras con IA",
-        nota: "Herramienta de validación en campo para el evento del 12–13 sep en Centro Ágora, Bogotá.",
+        nota: "Validación en campo del 12–13 sep en Centro Ágora, Bogotá. Repo Gali-experiment, PR #31.",
         proyectos: [
           {
             nombre: "Wizard 'Prioriza tus transportadoras con IA'",
@@ -1501,44 +1627,15 @@ export const weeklies: Weekly[] = [
             estado: "PR enviado · pendiente merge",
             estadoTono: "verde",
             nota:
-              "Wizard interactivo de 8 pantallas integrado al ecosistema Expo (repo Gali-experiment, PR #31, ruta /expo/transportadoras). Recoge perfil logístico del vendedor, criterios de priorización, acciones ante novedades y genera ranking IA personalizado. Tracking completo: Supabase (expo_events) + PostHog, con nombre y teléfono del lead para cruce con Wrapped.",
-            impacto: "Valida demanda real de selección inteligente de transportadoras. Métrica clave: % con calificación 6-7 en '¿lo activarías en Dropi?' (escala 1-7).",
-          },
-          {
-            nombre: "Datos que se recopilan",
-            estado: "7 dimensiones · 9 eventos",
-            estadoTono: "verde",
-            nota:
-              "Tamaño de paquete típico, acciones ante novedades (taxonomía A01-A15), criterios de priorización (efectividad/costo/velocidad/cobertura/flexibilidad), ajustes al ranking IA, CES de facilidad de uso, demanda real 1-7, y compartir resultado. 9 eventos trackeados de carrier_tool_started a carrier_shared.",
-          },
-          {
-            nombre: "Visión de producto",
-            estado: "Doble validación",
-            estadoTono: "azul",
-            nota:
-              "Selección de transportadoras: prueba que un motor de scoring por perfil genera valor percibido — si la demanda se confirma, se integra al flujo de creación de guía. Normalización de novedades: la taxonomía A01-A15 alimenta el diseño de un sistema donde el vendedor elige qué hacer (no espera pasivamente).",
-          },
-        ],
-      },
-      {
-        titulo: "Otros frentes",
-        nota: "Estado de los demás proyectos del portafolio Michel Pino.",
-        proyectos: [
-          {
-            nombre: "POC Autoconfirmación × ChateaPro",
-            ticket: "PRM-1497",
-            estado: "Gate pendiente · sin avance",
-            estadoTono: "gris",
-            nota:
-              "Sin avance esta semana — el foco estuvo en Servicios en Bodega y Expowinners. El gate con ChateaPro (¿tolera un gate antes de su disparo?) sigue abierto.",
-            enlace: { label: "Ver POC Autoconfirmación × ChateaPro", href: "/proyectos/logistica/poc-autoconfirmacion-chateapro" },
+              "8 pantallas: perfil logístico, acciones ante novedades (taxonomía A01-A15), criterios de priorización, ranking IA, CES, demanda 1-7. Tracking: Supabase (expo_events) + PostHog con datos del lead.",
+            impacto: "Métrica clave: % con calificación 6-7 en '¿lo activarías en Dropi?' — dato directo para priorización ante comité de producto.",
           },
         ],
       },
     ] as SeccionProyectos[],
   },
 
-  // ── Semana 24 – 28 ago 2026 ────────────────────────────────────────────────
+  // ── Semana 24 – 28 ago 2026 ─────────────────────────────────────────────────
   // Semana de operación y de research, no de cifra mensual: julio sigue
   // siendo el último mes cerrado, así que la comparación se repite SIN el
   // desglose por país (regla del tipo: no se republica como dato fresco).

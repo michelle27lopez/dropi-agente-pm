@@ -9,9 +9,12 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
+import { localCellBoards } from "@/app/celula/_cell-board";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
+import ObjetivoPanel, { type Objetivo } from "./_components/ObjetivoPanel";
 import { previewUpdateContent } from "@/lib/update-preview";
+import { esProyectoVisible } from "@/lib/curated-projects";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 
 // El weekly de logística arrastra el registro completo del tablero
@@ -23,10 +26,16 @@ const SellersMetricsPanel = dynamic(() => import("./_components/SellersMetricsPa
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
+// celula_id primario ≠ dónde puede editar: un perfil también puede tener
+// permiso adicional vía `celula_editores` (proyectos transversales, ver
+// 055_celula_editores_transversales.sql) sin que le cambie su célula "de
+// verdad". `/api/me` ya devuelve esa lista aparte.
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
   ve_hub_completo: boolean;
+  mision: string | null; vision: string | null; nsm: string | null;
+  foco_trimestre: string | null; enlace_direccionamiento: string | null;
   proyectos: Proyecto[]; updates: Update[];
 };
 
@@ -85,6 +94,7 @@ export default function CelulaHomePage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -109,7 +119,10 @@ export default function CelulaHomePage() {
 
     fetch("/api/me")
       .then((res) => res.json())
-      .then((data) => setProfile(data?.profile ?? null))
+      .then((data) => {
+        setProfile(data?.profile ?? null);
+        setCelulasEditor(data?.celulasEditor ?? []);
+      })
       .catch(() => setProfile(null));
   }, [params.slug]);
 
@@ -139,9 +152,10 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
-  const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
-  const esCelulaPropia = !!profile && profile.celula_id === celula.id;
+  const visibles = celula.proyectos.filter(esProyectoVisible);
+  const proyectos = visibles.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
+  const poc = visibles.filter((p) => p.type === "POC").map(proyectoToItem);
+  const esCelulaPropia = !!profile && (profile.celula_id === celula.id || celulasEditor.includes(celula.id));
   const canCreate = esCelulaPropia || modoEdicionForzado;
 
   const pocsByParent = new Map<string, Proyecto[]>();
@@ -245,12 +259,23 @@ export default function CelulaHomePage() {
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
   // ordenado por fecha descendente.
   const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
+  // Cell Board servido desde el repo (hub/src/app/celula/_cell-board) — mismo
+  // flujo que el Weekly PM. Si una fecha ya viene como fila de la base, gana
+  // el archivo del repo.
+  const localCB = localCellBoards(celula.slug);
+  const localCBDates = new Set(localCB.map((u) => u.week_date));
   const updateEntries = [
-    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...celula.updates
+      .filter((u) => !localCBDates.has(u.week_date))
+      .map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...localCB.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
     ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
   const updates = updateEntries.map((e) => e.item);
-  const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
+  const updatesById = new Map<string, Update>([
+    ...celula.updates.map((u) => [u.id, u] as const),
+    ...localCB.map((u) => [u.id, u] as const),
+  ]);
 
   const isSellers = params.slug === "sellers";
   // El grid de tarjetas, el filtro de etapa y "sin ficha Darwin" de logística
@@ -285,6 +310,18 @@ export default function CelulaHomePage() {
               — sus métricas globales reales (antes vivían acá mismo, luego
               se movieron a Updates, ahora vuelven a casa) — abajo lo
               personal, mismos paneles que el resto de células. */}
+          <ObjetivoPanel
+            slug={celula.slug}
+            objetivo={{
+              mision: celula.mision,
+              vision: celula.vision,
+              nsm: celula.nsm,
+              foco_trimestre: celula.foco_trimestre,
+              enlace_direccionamiento: celula.enlace_direccionamiento,
+            }}
+            editable={canCreate}
+            onSaved={(next: Objetivo) => setCelula((prev) => (prev ? { ...prev, ...next } : prev))}
+          />
           <SellersMetricsPanel />
           <MiDiaShell />
 
@@ -423,29 +460,74 @@ export default function CelulaHomePage() {
               onClick={(e) => e.stopPropagation()}
               style={{
                 background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16, maxWidth: 640, width: "100%",
-                maxHeight: "80vh", overflowY: "auto", padding: "28px",
+                maxHeight: "80vh", overflowY: "auto", padding: 0,
                 boxShadow: "0 20px 60px rgba(0,0,0,0.15)", color: "#0f172a"
               }}
             >
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+              <div
+                style={{
+                  position: "sticky", top: 0, background: "#ffffff", zIndex: 1,
+                  display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16,
+                  padding: "24px 28px 16px", borderBottom: "1px solid #e2e8f0",
+                }}
+              >
+                <div>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: "0 0 8px" }}>{openUpdate.title}</h2>
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11.5, fontWeight: 700,
+                    color: "#6D28D9", background: "#F5F3FF", borderRadius: 999, padding: "3px 10px",
+                  }}>
+                    🗓️ {openUpdate.week_date}
+                  </span>
+                </div>
                 <button
                   onClick={() => setOpenUpdate(null)}
-                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "#64748b", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                  style={{
+                    flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
+                    background: "#f8fafc", border: "1px solid #e2e8f0",
+                    fontSize: 16, color: "#64748b", cursor: "pointer", lineHeight: 1,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
                   aria-label="Cerrar"
                 >
                   ×
                 </button>
               </div>
-              <p style={{ fontSize: 12, color: "#64748b", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7 }}>
-                {openUpdate.content.split("\n").map((line, i) => {
-                  const trimmed = line.trim();
-                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "16px 0" }} />;
-                  if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
-                  if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
-                  return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
-                })}
+              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7, padding: "20px 28px 28px" }}>
+                {(() => {
+                  const palette = ["#7C3AED", "#2563EB", "#DB2777", "#F77F00", "#0D9488", "#16A34A", "#475569"];
+                  let headingIdx = -1;
+                  return openUpdate.content.split("\n").map((line, i) => {
+                    const trimmed = line.trim();
+                    if (trimmed === "---") return <div key={i} style={{ height: 1, background: "#e2e8f0", margin: "20px 0" }} />;
+                    if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                    if (trimmed.startsWith("## ")) {
+                      headingIdx += 1;
+                      const color = palette[headingIdx % palette.length];
+                      return (
+                        <h3 key={i} style={{
+                          display: "flex", alignItems: "center", gap: 8,
+                          fontSize: 15, fontWeight: 800, margin: headingIdx === 0 ? "0 0 10px" : "24px 0 10px", color: "#0f172a",
+                        }}>
+                          <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                          {trimmed.slice(3)}
+                        </h3>
+                      );
+                    }
+                    if (trimmed.startsWith("- ")) {
+                      return (
+                        <div key={i} style={{ display: "flex", gap: 8, margin: "0 0 6px" }}>
+                          <span aria-hidden style={{ color: "#64748b", flexShrink: 0 }}>•</span>
+                          <span style={{ whiteSpace: "pre-wrap" }}>{trimmed.slice(2)}</span>
+                        </div>
+                      );
+                    }
+                    if (trimmed.endsWith(":") && trimmed.length > 1) {
+                      return <p key={i} style={{ margin: "10px 0 4px", fontWeight: 700 }}>{trimmed}</p>;
+                    }
+                    return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+                  });
+                })()}
               </div>
             </div>
           </div>
@@ -468,50 +550,23 @@ export default function CelulaHomePage() {
           <ModoLecturaBanner activo={modoEdicionForzado} onToggle={() => setModoEdicionForzado((v) => !v)} />
         )}
 
-        {/* "Mi día" de la célula (2026-08-17, Jaime): dos capas — arriba lo
-            de la célula (métricas globales, misión/visión), abajo lo
-            personal (mismos paneles de /app/proyectos/mi-dia, que ya
-            degradan solos a "Pendiente" para quien no tiene Jira/Calendar
-            conectado). Sellers tiene sus propias métricas (SellersMetricsPanel,
-            más abajo en su rama); acá, sin dato real, solo Misión/Visión. */}
-        <div className="midia-panel" style={{ marginBottom: 32 }}>
-          <div className="midia-panel-header">
-            <div className="midia-panel-header-left">
-              <span className="midia-panel-label">Célula</span>
-            </div>
-          </div>
-          <div style={{ padding: "0 20px 16px" }}>
-            {celula.slug === "logistica" ? (
-              /* Direccionamiento 2026 S2 de María Ossa (Confluence PD/1485471746).
-                 Se transcribe lo que YA está formalmente definido —ownership, NSM
-                 y enfoque del semestre—; la "visión de producto" de tres lentes
-                 sigue siendo una oportunidad sin validar del Product Backlog, así
-                 que no se publica como si estuviera cerrada. */
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <p style={{ fontSize: 13, color: "var(--fg)", margin: 0, lineHeight: 1.5 }}>
-                  Dueña de <strong>la orden</strong>: todo lo que le pasa una vez se crea en Dropi.
-                </p>
-                <p style={{ fontSize: 12, color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
-                  <strong>NSM</strong> · Tasa de entrega exitosa ≥ 70% (OKR 2 · KR 2.1).<br />
-                  <strong>Q3–Q4</strong> · Sostener y mejorar la tasa de entrega, y reducir el
-                  tiempo de la orden hasta la transportadora.
-                </p>
-                <a
-                  href="https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1485471746"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 11, color: "var(--muted)" }}
-                >
-                  Direccionamiento Logistic Success 2026 · S2 ↗
-                </a>
-              </div>
-            ) : (
-              <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
-                Misión / Visión — <em>Pendiente de definir</em>.
-              </p>
-            )}
-          </div>
-        </div>
+        {/* Panel "Célula": misión / visión / NSM / foco del trimestre. Dato
+            editable en `celulas` (059_darwin_celula_objetivos.sql) — lo llena
+            el lead o super admin. Antes era estático (y logística tenía su
+            texto hardcodeado, ahora migrado a la fila de la BD). Debajo, "Mi
+            día" personal (mismos paneles de /app/proyectos/mi-dia). */}
+        <ObjetivoPanel
+          slug={celula.slug}
+          objetivo={{
+            mision: celula.mision,
+            vision: celula.vision,
+            nsm: celula.nsm,
+            foco_trimestre: celula.foco_trimestre,
+            enlace_direccionamiento: celula.enlace_direccionamiento,
+          }}
+          editable={canCreate}
+          onSaved={(next: Objetivo) => setCelula((prev) => (prev ? { ...prev, ...next } : prev))}
+        />
 
         <MiDiaShell />
 
@@ -650,29 +705,74 @@ export default function CelulaHomePage() {
             onClick={(e) => e.stopPropagation()}
             style={{
               background: "var(--card)", borderRadius: 16, maxWidth: 640, width: "100%",
-              maxHeight: "80vh", overflowY: "auto", padding: "28px 28px 24px",
+              maxHeight: "80vh", overflowY: "auto", padding: 0,
               boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-              <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+            <div
+              style={{
+                position: "sticky", top: 0, background: "var(--card)", zIndex: 1,
+                display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16,
+                padding: "24px 28px 16px", borderBottom: "1px solid var(--border)",
+              }}
+            >
+              <div>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: "0 0 8px" }}>{openUpdate.title}</h2>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11.5, fontWeight: 700,
+                  color: "#6D28D9", background: "#F5F3FF", borderRadius: 999, padding: "3px 10px",
+                }}>
+                  🗓️ {openUpdate.week_date}
+                </span>
+              </div>
               <button
                 onClick={() => setOpenUpdate(null)}
-                style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                style={{
+                  flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
+                  background: "var(--bg)", border: "1px solid var(--border)",
+                  fontSize: 16, color: "var(--muted)", cursor: "pointer", lineHeight: 1,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
                 aria-label="Cerrar"
               >
                 ×
               </button>
             </div>
-            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-            <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7 }}>
-              {openUpdate.content.split("\n").map((line, i) => {
-                const trimmed = line.trim();
-                if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid var(--border)", margin: "16px 0" }} />;
-                if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
-                if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
-                return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
-              })}
+            <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7, padding: "20px 28px 28px" }}>
+              {(() => {
+                const palette = ["#7C3AED", "#2563EB", "#DB2777", "#F77F00", "#0D9488", "#16A34A", "#475569"];
+                let headingIdx = -1;
+                return openUpdate.content.split("\n").map((line, i) => {
+                  const trimmed = line.trim();
+                  if (trimmed === "---") return <div key={i} style={{ height: 1, background: "var(--border)", margin: "20px 0" }} />;
+                  if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                  if (trimmed.startsWith("## ")) {
+                    headingIdx += 1;
+                    const color = palette[headingIdx % palette.length];
+                    return (
+                      <h3 key={i} style={{
+                        display: "flex", alignItems: "center", gap: 8,
+                        fontSize: 15, fontWeight: 800, margin: headingIdx === 0 ? "0 0 10px" : "24px 0 10px", color: "var(--fg)",
+                      }}>
+                        <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                        {trimmed.slice(3)}
+                      </h3>
+                    );
+                  }
+                  if (trimmed.startsWith("- ")) {
+                    return (
+                      <div key={i} style={{ display: "flex", gap: 8, margin: "0 0 6px" }}>
+                        <span aria-hidden style={{ color: "var(--muted)", flexShrink: 0 }}>•</span>
+                        <span style={{ whiteSpace: "pre-wrap" }}>{trimmed.slice(2)}</span>
+                      </div>
+                    );
+                  }
+                  if (trimmed.endsWith(":") && trimmed.length > 1) {
+                    return <p key={i} style={{ margin: "10px 0 4px", fontWeight: 700 }}>{trimmed}</p>;
+                  }
+                  return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+                });
+              })()}
             </div>
           </div>
         </div>

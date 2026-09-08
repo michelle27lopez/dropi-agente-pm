@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import ProjectWeekly, { type ProjectUpdate } from "@/components/ProjectWeekly";
 import {
   ChevronDown, ChevronUp, FileText, Layers,
   Users, GitBranch, Map, Sparkles,
@@ -76,15 +77,29 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
   );
 }
 
+type PocChild = { id: string; name: string; project_code: string | null; estado_interno: string | null };
+
 export default function Gro006ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
+  const [pocs, setPocs] = useState<PocChild[]>([]);
+  const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
+
+  useEffect(() => {
+    fetch("/api/proyectos/gro-006")
+      .then((res) => res.json())
+      .then((data) => {
+        setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC"));
+        setUpdates(data?.updates ?? []);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="GRO-006 · Perfil de Líderes de Comunidad"
-        subtitle="Célula Growth · PM: José Pineda"
+        subtitle="José Pineda · Growth Product Manager"
         currentSlug="gro-006"
       />
 
@@ -92,9 +107,12 @@ export default function Gro006ProjectPage() {
 
         {/* ── Breadcrumb & título ── */}
         <div style={{ marginBottom: 20 }}>
-          <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}>
-            ← Volver al Hub
-          </a>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+            <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+              ← Volver al Hub
+            </a>
+            <ProjectWeekly updates={updates} />
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
@@ -111,7 +129,7 @@ export default function Gro006ProjectPage() {
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
-                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>PM / Owner</div>
+                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>Growth Product Manager</div>
                 <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>José Pineda</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
@@ -120,7 +138,7 @@ export default function Gro006ProjectPage() {
               </div>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
                 <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>Product Designer</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>Sin asignar</div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>Francisco Velandia</div>
               </div>
             </div>
           </div>
@@ -141,6 +159,28 @@ export default function Gro006ProjectPage() {
             </div>
           ))}
         </div>
+
+        {/* ── POCs de este proyecto ── */}
+        {pocs.length > 0 && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>
+              🧩 POCs de este proyecto ({pocs.length})
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {pocs.map((p) => (
+                <a
+                  key={p.id}
+                  href={p.project_code ? `/proyectos/${p.project_code.toLowerCase()}` : "#"}
+                  style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 10, padding: "12px 14px" }}
+                >
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#0E7C74" }}>{p.project_code}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", marginTop: 2 }}>{p.name}</div>
+                  <div style={{ fontSize: 11.5, color: "#94A3B8", marginTop: 3 }}>{p.estado_interno ?? "Sin definir"}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Estado narrativo ── */}
         <Callout tone="info" title="📌 Arranque del proyecto (28 ago 2026)">
@@ -233,6 +273,7 @@ export default function Gro006ProjectPage() {
                         <tr><td style={tableCellStyle}><strong>Home</strong></td><td style={tableCellStyle}>Punto de entrada a la experiencia de líder — por definir en el prototipo.</td></tr>
                         <tr><td style={tableCellStyle}><strong>Dashboard</strong></td><td style={tableCellStyle}>Comportamiento de la comunidad a nivel de dropshipping, inspirado en los dashboards que hoy arma el equipo comercial.</td></tr>
                         <tr><td style={tableCellStyle}><strong>Referidos</strong></td><td style={tableCellStyle}>Gestión y visibilidad de la red de afiliados/referidos del líder.</td></tr>
+                        <tr><td style={tableCellStyle}><strong>Wallet</strong></td><td style={tableCellStyle}>Visibilidad financiera asociada a la operación de la comunidad.</td></tr>
                         <tr><td style={tableCellStyle}><strong>Entre otros</strong></td><td style={tableCellStyle}>Alcance abierto — se termina de definir con el levantamiento de necesidades y el prototipo de baja fidelidad.</td></tr>
                       </tbody>
                     </table>
@@ -240,6 +281,14 @@ export default function Gro006ProjectPage() {
                     <h4 style={subHeadingStyle}>Toggle Dropshipper / Líder de comunidad</h4>
                     <p style={pStyle}>
                       El usuario podrá alternar, dentro de la misma cuenta, entre su vista como Dropshipper (su propia operación) y su vista como Líder de comunidad (el desempeño de su comunidad). Es la pieza de navegación central del proyecto: reconoce que ambas identidades conviven en la misma persona y las separa sin obligar a manejar dos cuentas distintas.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC — Perfil de Líder de Comunidad</h4>
+                    <p style={pStyle}>
+                      Portal donde el líder de comunidad puede ver la información de su comunidad organizada, con claridad sobre la caracterización y el desempeño de los dropshippers asociados a ella. El POC busca otorgarle al líder un perfil alterno, y mediremos si su performance presenta variación frente al de líderes que no cuentan con este tipo de vistas. Se activará una vez que la arquitectura de información y la experiencia del líder queden definidas en conjunto con el equipo comercial.
+                    </p>
+                    <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>
+                      Desde Producto y Growth planteamos que este POC puede validar si este tipo de vistas genera un impacto positivo en los indicadores de negocio de activación y generación de órdenes.
                     </p>
                   </div>
                 )}

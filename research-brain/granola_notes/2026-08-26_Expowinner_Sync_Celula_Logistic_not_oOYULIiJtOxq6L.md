@@ -1,0 +1,839 @@
+# Expowinner Sync Celula Logistic
+
+- **ID:** `not_oOYULIiJtOxq6L`
+- **Fecha:** 2026-08-26T20:30:30.867Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/3151cb84-c8b8-4db8-8385-002c3254127f)
+- **Asistentes:** Santiago Herrera Acosta, Michel Pino, Juan Bautista, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+
+# Contexto del Evento
+
+- ExpoWinner: evento de dos días con foco en dropshippers huérfanos (no activados)
+  - 40% de huérfanos, 90% sin experiencia previa en ecommerce
+- Objetivo general: validar hipótesis, recopilar data cualitativa y generar argumentos para priorizar proyectos
+- Dos puntos de contacto con usuarios:
+  - Workshop de una hora (flujo acotado, usuarios seleccionados)
+  - Navegación abierta durante los dos días vía QR y call to actions en landing
+
+# Estado Actual de la App (Célula Producto)
+
+- Proyecto recibido el viernes pasado de Jaime; Santiago y Aleja liderando ajustes esta semana
+- Tres módulos activos en la plataforma:
+  - **Gali (copiloto AI):** guía para seleccionar primer producto y completar flujo de venta
+  - **Escanea tu winner:** cámara activa, escanea producto, genera score con atributos y probabilidad de venta
+  - **Pulso:** match entre proveedor y vendedor; audiencia ideal son dropshippers con algo de experiencia
+- Foco actual: flujo completo “mi primer producto” en menos de 10 minutos (meta: 20 min con explicación)
+- Pendiente: ajuste a experiencia móvil (acceso vía QR desde celular), reemplazando scroll por TAP/swipe
+
+# Selección de Transportadoras (Michel y Juan)
+
+- Proyecto ya conceptualizado, prototipado y diseñado; pendiente de priorización para desarrollo
+- ExpoWinner como oportunidad para recopilar data cualitativa que justifique su priorización
+- Funcionalidad clave: drag and drop de transportadoras por departamento/ciudad + botón IA que recomienda orden óptimo
+- Audiencia objetivo: dropshippers con experiencia (mínimo \~20 órdenes/mes); no aplica para neonatos
+- Propuesta de experimento A/B (Santiago):
+  - Grupo A: selecciona transportadora con herramientas actuales en producción
+  - Grupo B: usa la nueva funcionalidad con recomendación IA
+  - Medir: tiempo de selección y calidad de la decisión, segmentado por volumen de órdenes
+- Visibilidad del módulo: no dejarlo en navegación abierta; activarlo solo durante el workshop
+  - Propuesta: acceso mediante código (ej. dropi2026) que se entrega solo a los asistentes seleccionados
+  - Permite flexibilidad para ampliar o restringir el grupo sin depender de filtros por API
+- Duda pendiente: experiencia en móvil vs. escritorio para este módulo (normalmente requiere pantalla grande)
+
+# Próximos Pasos
+
+- **Incluir a Juan en la reunión de alineación de mañana** (Santiago)
+
+  Preguntar a Lau si puede agregarlo; la reunión actual está enfocada en dropshippers pero falta la parte logística.
+- **Definir instrumento de medición y segmentación para selección de transportadoras**
+
+  Alinear qué hipótesis se quieren validar, cómo se activa el módulo y si la experiencia será móvil o escritorio.
+- **Ajustar flujo de Gali y estructura de la landing a experiencia móvil** (Aleja, Santiago)
+
+  Hacer Gali el módulo principal; Pulso y Escanea tu winner como submódulos; reemplazar scroll por TAP/swipe.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/6ae80c15-2570-473c-9eb9-9b9e9f0ea52d](https://notes.granola.ai/t/6ae80c15-2570-473c-9eb9-9b9e9f0ea52d)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:31] Yo:** Hola, ¿leja?
+- **[20:31] Alejandra Melo:** Hola, Santi, ¿cómo estás?
+- **[20:31] Yo:** Bienvenidos.
+- **[20:31] Alejandra Melo:** Bien, bien.
+- **[20:31] Alejandra Melo:** Como con un dolor de cabeza, está haciendo un calor también.
+- **[20:31] Yo:** We see, we see,
+- **[20:31] Yo:** Yo no, estoy buscando ahora como un advil o algo, una cosa me toca pedir.
+- **[20:31] Yo:** Y ahora que aproveche medio día para sacar a los perritos, también ahí afuera está.
+- **[20:31] Yo:** Horrible. Bueno, menos menos horrible que en el octavo, que siendo último piso siempre
+- **[20:31] Yo:** recibe como el calor del el sol del mediodía.
+- **[20:31] Alejandra Melo:** Uh-huh.
+- **[20:31] Yo:** Calentar bastante la
+- **[20:31] Juan Diego Bautista Vasquez:** Hola, ¿cómo están?, ¿qué tal?
+- **[20:31] Yo:** Aló, Andy.
+- **[20:31] Yo:** Bien, bien,
+- **[20:31] Juan Diego Bautista Vasquez:** Bien, bien, ¿todo bien?
+- **[20:31] Juan Diego Bautista Vasquez:** Hola,
+- **[20:31] Alejandra Melo:** hola, Juan. Hace rato que no te escucho.
+- **[20:31] Juan Diego Bautista Vasquez:** Bastante, dice. ¿Cómo estás, Aleja?
+- **[20:31] Juan Diego Bautista Vasquez:** Muy
+- **[20:31] Alejandra Melo:** bien, gracias a dios, todo bien.
+- **[20:32] Juan Diego Bautista Vasquez:** Listo. Espéreme, le dejo un mensajito a Pino y y ya empezamos.
+- **[20:32] Yo:** De una.
+- **[20:33] Michel David Pino Aguilar:** Hola, buenas tardes.
+- **[20:33] Alejandra Melo:** Hola, ¿Michel?
+- **[20:34] Yo:** Hola,
+- **[20:34] Juan Diego Bautista Vasquez:** Listo. Entonces, ¿quieren empezamos?
+- **[20:34] Yo:** Con
+- **[20:34] Juan Diego Bautista Vasquez:** Le citamos este espacio porque, bueno, como lo habíamos hablado
+- **[20:34] Juan Diego Bautista Vasquez:** la semana pasada, pues ya viene todo el evento de expo winner.
+- **[20:34] Juan Diego Bautista Vasquez:** Me dijo Laura y Jaime que, pues, que tú Santi, usted estaba liderando
+- **[20:34] Juan Diego Bautista Vasquez:** toda la parte del de la aplicación que se iba a presentar como con todo,
+- **[20:34] Juan Diego Bautista Vasquez:** nosotros estamos a la espera de que nos entreguen el
+- **[20:34] Juan Diego Bautista Vasquez:** servicio de selección de transportadoras y de ahí nos tocaría entrar a mirar bien
+- **[20:34] Juan Diego Bautista Vasquez:** Primero, creo que nos van a entregar uno con unos ajustes, y segundo,
+- **[20:34] Juan Diego Bautista Vasquez:** afortunadamente, va ser como con data real, entonces, creo que ese es un muy buen punto.
+- **[20:34] Juan Diego Bautista Vasquez:** Y segundo, pues nos gustaría conocer lo que ustedes tienen y con eso ver cómo lo lo
+- **[20:34] Juan Diego Bautista Vasquez:** pues, lo unificamos para ver cómo nosotros presentamos esta parte de selección transportadoras.
+- **[20:34] Yo:** Listo.
+- **[20:34] Juan Diego Bautista Vasquez:** Entonces, no sé ahí si nos mostrar un poquito,
+- **[20:34] Yo:** ¿De una?
+- **[20:34] Juan Diego Bautista Vasquez:** cómo le están trabajando todo,
+- **[20:34] Yo:** Pues, mira, entonces, nosotros les voy a compartir
+- **[20:35] Yo:** pantalla. Nosotros, el
+- **[20:35] Yo:** viernes recién recibimos, por parte de Jaime,
+- **[20:35] Yo:** le hago como un Zoom acá.
+- **[20:35] Yo:** Esto no está funcionando todo.
+- **[20:35] Yo:** Recibimos recién por parte de Jaime de Cata,
+- **[20:35] Yo:** El proyecto realmente
+- **[20:35] Yo:** el que más le ha trabajado esto es Jaime,
+- **[20:35] Yo:** solo que ya, digamos que
+- **[20:35] Yo:** como el
+- **[20:35] Yo:** el foco del evento va a estar en en dropshippers,
+- **[20:35] Yo:** pues ya se lo entregó a la célula.
+- **[20:35] Yo:** ¿Listo? Hoy
+- **[20:35] Yo:** lo que lo que nos dio Jaime fue
+- **[20:35] Yo:** a ver, esta
+- **[20:35] Yo:** hay dos caminos, yo creo que esa es la parte más importante para aclarar, de cómo se llega
+- **[20:35] Yo:** esta, llamémosle landing, ¿no?
+- **[20:35] Yo:** Uno,
+- **[20:35] Yo:** es que
+- **[20:35] Yo:** para en el registro
+- **[20:35] Yo:** entiendo que el equipo de marketing y ventas está creando una una landing
+- **[20:35] Yo:** comercial, hablémoslo así, ¿cierto?
+- **[20:35] Yo:** Dentro de eso, de esa de esa de esa landing,
+- **[20:36] Yo:** a tener
+- **[20:36] Yo:** diferentes tarjetas o call to actions para que
+- **[20:36] Yo:** explore un poco lo que va a pasar dentro de esos dos días.
+- **[20:36] Yo:** Una de ellas es
+- **[20:36] Yo:** esta parte de
+- **[20:36] Yo:** expo winners, puntualmente hablándolo
+- **[20:36] Yo:** desde producto, ¿no?
+- **[20:36] Yo:** La intención
+- **[20:36] Yo:** por ahora, y y lo como lo que hemos hablado,
+- **[20:36] Yo:** con con con Laura, con María, con Jaime.
+- **[20:36] Yo:** Es, pues, sacarle el mayor provecho al evento,
+- **[20:36] Yo:** para poder validar
+- **[20:36] Yo:** o rechazar alguna hipótesis
+- **[20:36] Yo:** firmar o rechazar hipótesis,
+- **[20:36] Yo:** tener pruebas de concepto que veamos interesantes y que eso como un
+- **[20:36] Yo:** una buena vitrina, ¿no?, para para ir a testear a ver qué pasa.
+- **[20:36] Yo:** Y cómo responde. Entonces,
+- **[20:36] Yo:** los diferentes tipos de dropshippers.
+- **[20:36] Yo:** En estrategia,
+- **[20:36] Yo:** nosotros
+- **[20:36] Yo:** estamos enfocándonos
+- **[20:36] Yo:** casi que todo en
+- **[20:36] Yo:** dropshippers.
+- **[20:36] Yo:** Huérfanos y que no se han activado.
+- **[20:37] Yo:** ¿Vale?
+- **[20:37] Yo:** Por eso lo que hay en esta plataforma,
+- **[20:37] Yo:** de hecho, vamos a hacer algunos ajustes
+- **[20:37] Yo:** porque, a ver, a a Jaime acá tal vez
+- **[20:37] Yo:** entregaron un poco un un insumo, que era el MCP de dropi,
+- **[20:37] Yo:** de forma como preliminar o que
+- **[20:37] Yo:** tiene algunas fallas, y ahí estamos ajustando cosas.
+- **[20:37] Yo:** Y un poco la la la la el reto era, bueno, ¿qué se puede hacer con esto?
+- **[20:37] Yo:** Para Expo Winners?
+- **[20:37] Yo:** ¿Sí?
+- **[20:37] Yo:** Y a lo que llegaron fue una funcionalidad que les iba a permitir generar, entonces,
+- **[20:37] Yo:** le llamaron Gali de forma interna, no es el mismo Gali como de de
+- **[20:37] Yo:** de asistencia.
+- **[20:37] Yo:** Que hay ahora para para el, sí, el el el centro de ayuda,
+- **[20:37] Yo:** Esto realmente es un
+- **[20:37] Yo:** una guía para
+- **[20:37] Yo:** para escoger productos, así se pensó originalmente.
+- **[20:37] Yo:** Nosotros con Alehaya estamos
+- **[20:37] Yo:** trabajando durante esta semana,
+- **[20:37] Yo:** en poder ya realmente hacer los ajustes necesarios,
+- **[20:37] Yo:** para no dejarlo tan abierto, o no, es es que seleccione un producto lo encuentre,
+- **[20:38] Yo:** sino que realmente haya un flujo completo
+- **[20:38] Yo:** desde el que nunca he hecho ecommerce
+- **[20:38] Yo:** porque del cuarenta por ciento que son huérfanos, el noventa por ciento nunca ha hecho ecommerce.
+- **[20:38] Yo:** O sea, es una gran parte que realmente tenemos.
+- **[20:38] Yo:** Que tratar de facilitarle las cosas para que se activen.
+- **[20:38] Yo:** ¿Cierto?
+- **[20:38] Yo:** Entonces, el foco que le estamos dando hoy
+- **[20:38] Yo:** es cómo hacemos que esta esta este flujo que se creó
+- **[20:38] Yo:** de forma muy general
+- **[20:38] Yo:** leemos énfasis en
+- **[20:38] Yo:** encontrar un producto
+- **[20:38] Yo:** y lograr comenzar a venderlo.
+- **[20:38] Yo:** ¿Ya?
+- **[20:38] Yo:** Y dentro de eso todavía no lo hacemos aplicado, porque apenas hoy estuvimos montando esa estrategia,
+- **[20:38] Yo:** De hecho, vamos a tener el punta a punta en donde
+- **[20:38] Yo:** hoy se selecciona un producto,
+- **[20:38] Yo:** digo que no sé qué vender,
+- **[20:38] Yo:** hay varias categorías, puede decir, no sé, belleza,
+- **[20:38] Yo:** Aquí me va a arrastrar en el MCP las los los
+- **[20:38] Yo:** los productos que encuentra, aquí hay errores, porque el MCP hoy está fallando.
+- **[20:38] Juan Diego Bautista Vasquez:** Pero pero pero pero espera espera, Santi, una una preguntica.
+- **[20:39] Juan Diego Bautista Vasquez:** O sea, ahí me parece bueno, pero
+- **[20:39] Juan Diego Bautista Vasquez:** lo que yo había entendido
+- **[20:39] Juan Diego Bautista Vasquez:** y y creo que me parece importante verlo, es como
+- **[20:39] Juan Diego Bautista Vasquez:** o sea, esto es para, por ejemplo, llegar tú
+- **[20:39] Juan Diego Bautista Vasquez:** y presentarlo en el como como a todo el equipo,
+- **[20:39] Juan Diego Bautista Vasquez:** o
+- **[20:39] Juan Diego Bautista Vasquez:** creo que la otra parte que ibas a decir de contacto es como para que cualquiera lo navegue,
+- **[20:39] Juan Diego Bautista Vasquez:** o o cómo cómo que estaban pensando esa parte?
+- **[20:39] Yo:** Mira, en
+- **[20:39] Yo:** Mira, el delivery, el usuario,
+- **[20:39] Juan Diego Bautista Vasquez:** Sí.
+- **[20:39] Yo:** se da a través de dos formas.
+- **[20:39] Juan Diego Bautista Vasquez:** Sí,
+- **[20:39] Yo:** O ni siquiera el punto de contacto, ¿no?, de cuándo interactúa con
+- **[20:39] Juan Diego Bautista Vasquez:** Sí, más bien.
+- **[20:39] Yo:** Uno es
+- **[20:39] Juan Diego Bautista Vasquez:** Sí.
+- **[20:39] Yo:** en el workshop
+- **[20:39] Yo:** durante una hora, esa parte yo he tratado ya de de acotar un poquito más con Jaime, pero igual ya es correcto,
+- **[20:39] Yo:** mucha data. Una va estar acotado al workshop a las personas que
+- **[20:39] Yo:** se alcancen a registrar, todavía no se, no, no está definido hasta donde se
+- **[20:39] Yo:** sé que mañana he hecho una reunión, creo que es mañana, sí,
+- **[20:39] Yo:** para alinearnos con las demás áreas.
+- **[20:40] Yo:** De
+- **[20:40] Yo:** quiénes o cómo se van a seleccionar esas personas,
+- **[20:40] Yo:** si va a haber registro abierto, si se van a escoger
+- **[20:40] Yo:** cómo se va a hacer, ¿no? Porque ya hay muchos registrados, pero todavía no sabemos
+- **[20:40] Yo:** quiénes efectivamente van a estar en el evento, por ejemplo.
+- **[20:40] Yo:** Entonces,
+- **[20:40] Yo:** una parte es el workshop, va a ser una hora, dentro de esa hora tenemos que tratar de
+- **[20:40] Yo:** alcance todo.
+- **[20:40] Yo:** O sea, este flujo completo
+- **[20:40] Yo:** es
+- **[20:40] Yo:** la la meta nuestra son diez minutos sin que se complete,
+- **[20:40] Yo:** pero mientras esté la explicación y demás, redándalo en veinte.
+- **[20:40] Yo:** Está lo del escáner, que ya les muestro.
+- **[20:40] Yo:** Para es es cómo van a ver tantos productos dentro de dentro del evento,
+- **[20:40] Yo:** lo que antojaime fue
+- **[20:40] Yo:** integrar con GPT fue que las personas activan la cámara, escanean el producto y, básicamente, se genera un score de qué tan bueno es, atributos, probabilidad de venta, el hype que tiene, el time el el el el el efecto wow, todas esas fallas. Entonces, está eso, y por otro lado, lo de pulso, son tres cosas que toca tratar de en el workshop explicarlas sacarle provecho para que las usen. Ahí todavía no estamos incluyendo logística, porque, pues, queremos alinear a ustedes como qué es lo que están trabajando. Pero adicional, durante esos dos días, como al momento de registro, va a haber
+- **[20:41] Yo:** call to actions para que se explore esta parte de expo winners,
+- **[20:41] Yo:** va a quedar como una navegación abierta, ¿no?
+- **[20:41] Yo:** Si alguien quiere empezar a montar el flujo completo de mi primer producto, crear
+- **[20:41] Yo:** todo lo que necesita, todos los recursos, todos los ángulos de venta,
+- **[20:41] Yo:** revisar tema de margen, número, la la las ganancias como tal, los
+- **[20:41] Yo:** costos asociados de cada producto, y publicarlo,
+- **[20:41] Yo:** lo va poder hacer durante los dos días, no solamente sobre el workshop,
+- **[20:41] Yo:** el workshop realmente
+- **[20:41] Yo:** que eso me gustaría que igual lo revisemos porque aún no
+- **[20:41] Yo:** Como como este esto se montó
+- **[20:41] Yo:** lo que les digo, muy hacia tratar de responder el reto,
+- **[20:42] Yo:** Apenas esta semana, con Aleja, estamos llegando a
+- **[20:42] Yo:** aterrizarlo ya a lo específico, ¿no? Entonces, es
+- **[20:42] Yo:** cuando damos por finalizado
+- **[20:42] Yo:** el flujo,
+- **[20:42] Yo:** ¿Cuáles son las métricas de éxito? Con qué data nos tenemos que ir para saber si tenemos que iterar o matar el prototipo. Entonces, todo eso se está seteando apenas ahora. Y eso nos va a llevar a, bueno, qué tipo de usuarios necesitamos. Preliminarmente, apenas lo estamos viendo, estamos enfocándonos, y y el comercializ nos dijo que nos puede pasar la top, de los registrados y asistentes al evento, quienes no han tenido ni una sola venta. A nosotros nos interesa ese público. ¿Sí? Gente absolutamente novata y que apenas está aprendiendo a hacer ecommerce. ¿Ya?, y que sea huérfanos, además.
+- **[20:42] Yo:** Pero para otros, por ejemplo, para pulso,
+- **[20:42] Yo:** para pulso no es
+- **[20:42] Yo:** tan interesante las personas que no saben nada de ecommerce. De hecho,
+- **[20:42] Yo:** para pulso lo ideal, son personas que ya hayan hecho algo de ecommerce, inclusive que se hayan encontrado
+- **[20:43] Yo:** con la con la con las
+- **[20:43] Yo:** con la situación,
+- **[20:43] Yo:** de que no encontraron el producto dentro de drope.
+- **[20:43] Yo:** ¿Sí? Porque lo que hace Pulsos ya es hacer ese match entre el el proveedor y el el vendedor.
+- **[20:43] Yo:** ¿Sí?, encontrar el producto
+- **[20:43] Yo:** para la persona que quiere hacer dropshipping.
+- **[20:43] Yo:** Entonces, es otro tipo de audiencia. Eso es lo que estamos seleccionando ahora, y con lo que
+- **[20:43] Yo:** ustedes que que que que vayan, que quieran montar dentro de expo winners,
+- **[20:43] Yo:** es también saber
+- **[20:43] Yo:** a qué tipo de usuarios les quieren llegar, porque sistemas logísticos
+- **[20:43] Yo:** seguramente tendremos que llegar hacia un hacia un tipo de usuario
+- **[20:43] Yo:** con mayor experiencia haciendo dropshipping,
+- **[20:43] Yo:** que conozca
+- **[20:43] Yo:** las funcionalidades que ya hay en temas logísticos, de transporte,
+- **[20:43] Yo:** temas de devoluciones, temas de, no sé, la trazabilidad,
+- **[20:43] Yo:** de de del envío,
+- **[20:43] Yo:** ¿ya?, solución de novedades,
+- **[20:43] Yo:** puede que se sea el usuario.
+- **[20:43] Yo:** Y la idea sería, entonces, ver cómo eso lo logramos
+- **[20:43] Yo:** reflejar en esta parte de expo winners,
+- **[20:44] Yo:** en donde por ahora son estas tres las que están
+- **[20:44] Yo:** hecho, escanea tu winner, vamos a dejarla acá, pero
+- **[20:44] Yo:** de alguna forma, se entiende, se habla con
+- **[20:44] Yo:** con este copiloto de ahí, que es Gali, realmente.
+- **[20:44] Yo:** Y en pulso también por aquí,
+- **[20:44] Yo:** O sea, al al final, de hecho, alejada tenemos que ajustarlo
+- **[20:44] Yo:** voy a trabajarles tarde a eso, de que esta sea como la principal, y estas son como dos
+- **[20:44] Yo:** no son dos submódulos de alguna forma.
+- **[20:44] Yo:** Se van a estar visibles, pero como que la principal termina siendo esta.
+- **[20:44] Yo:** Porque a partir de acá es donde se desprenden las demás.
+- **[20:44] Yo:** Y en temas logísticos, Juandi, Michel,
+- **[20:44] Yo:** ver, entonces,
+- **[20:44] Yo:** si definitivamente debería ir acá o si tenemos que hacer
+- **[20:44] Yo:** pronto, una pantalla previa,
+- **[20:44] Yo:** o una identificación que podríamos llegar a hacerla con base de datos,
+- **[20:44] Yo:** de que con el correo, aquí en el registro, yo no sé si aquí Jaime le dejó así
+- **[20:44] Yo:** Si con números de celular o correo electrónico,
+- **[20:44] Yo:** queramos hacer una búsqueda de base de datos y veamos cuántas órdenes tienen, y según eso,
+- **[20:44] Yo:** habilitarles o no habilitarles lo de transportadoras.
+- **[20:45] Yo:** O no queremos irnos a base de datos,
+- **[20:45] Yo:** que ingresen y les preguntemos si ya ha vendido o no antes en drope.
+- **[20:45] Yo:** O que o por volumen, o cuántas ventas tiene en drop
+- **[20:45] Yo:** o qué tan experto es en tema de logística, no sé, ya ustedes
+- **[20:45] Yo:** ahí ahí ahí me dirán, ¿cómo creen que es mejor que tratemos de
+- **[20:45] Yo:** de de de diferenciarlos
+- **[20:45] Yo:** o también gente que no haya vendido capaz desde su interés
+- **[20:45] Yo:** y que crean que igual es
+- **[20:45] Yo:** relevante ver cómo esa persona
+- **[20:45] Yo:** interactúa con la solución, ¿no?
+- **[20:45] Yo:** Entonces, bueno, ahí ya ustedes me dirán que
+- **[20:45] Yo:** Uno, ¿cómo van eso? No sé si lo habían visto antes, medianamente con qué era lo que se quería
+- **[20:45] Yo:** presentar en expo wheelchair. Nosotros a hoy, como lo están viendo, aunque o sea, tiene una una una interfaz demasiado web, Con Aleja, lo que estamos ya trabajando es hacerlo más, ni siquiera responsive, hacerlo más mobile, porque como eso va a ser a través de escaneado QR y la mayoría de las personas va a estar sobre celular, no es favorable para nosotros que sea una experiencia como tan web, aunque aunque lo hagamos responsive. Entonces, estamos viendo opciones de ver si lo hacemos con una interacción un poco más de TAP,
+- **[20:46] Yo:** o de swipe, como, y que no sea como un scroll
+- **[20:46] Yo:** tan repetitivo en todos los módulos.
+- **[20:46] Yo:** Eso es como lo que estamos haciendo. De lo que ustedes tienen, ¿qué cómo creen que
+- **[20:46] Yo:** que puede ser como la unión entre lo que ella está?
+- **[20:46] Yo:** ¿O o creen que es otra cosa totalmente diferente y que deberíamos tener como
+- **[20:46] Yo:** un ala completamente aparte?
+- **[20:46] Juan Diego Bautista Vasquez:** No, yo creo que
+- **[20:46] Juan Diego Bautista Vasquez:** pues, realmente no
+- **[20:46] Juan Diego Bautista Vasquez:** digamos que tenemos es el proyecto, ¿no?, o sea, el proyecto en Figma y en y en el RP
+- **[20:46] Juan Diego Bautista Vasquez:** con todo.
+- **[20:46] Yo:** Ajá.
+- **[20:46] Juan Diego Bautista Vasquez:** Queríamos verlo justamente para eso, como para ver cómo
+- **[20:46] Juan Diego Bautista Vasquez:** lo tenían y y lo tienen es más tipo juego, que me parece más chévere, claro, porque es más dinámico,
+- **[20:46] Juan Diego Bautista Vasquez:** donde la gente puede interactuar y
+- **[20:46] Juan Diego Bautista Vasquez:** y y ver más el resultado.
+- **[20:46] Yo:** Claro. Pero ¿ustedes todavía están en esa, en en en la fase, desconozco
+- **[20:47] Yo:** perdón, pero
+- **[20:47] Yo:** donde quieren validar toda la hipótesis o eso ya es un hecho y solamente quieren
+- **[20:47] Yo:** como hacer un, literalmente, un como tipo lanzamiento
+- **[20:47] Yo:** de, hey, esto es lo nuevo, porque podríamos manejar ese un poco ese ese
+- **[20:47] Yo:** ese pitch, ¿no?
+- **[20:47] Yo:** De como, bueno, esto es
+- **[20:47] Yo:** proyectico,
+- **[20:47] Yo:** pero aparte, ya venga que ahora sí la la suele logística va decir
+- **[20:47] Yo:** todo lo nuevo que ya se va a lanzar, ¿sí me entiende?
+- **[20:47] Michel David Pino Aguilar:** Pues que, o sea, lo que pasa con ese tipo de proyecto es que
+- **[20:47] Michel David Pino Aguilar:** en especial, hablo de selección transportadora.
+- **[20:47] Michel David Pino Aguilar:** Es que también la idea es que ExpoWear sea
+- **[20:47] Michel David Pino Aguilar:** una recopilación de data
+- **[20:47] Michel David Pino Aguilar:** cualitativa
+- **[20:47] Michel David Pino Aguilar:** que nos permita dar como el fundamento para que el
+- **[20:47] Yo:** Correct.
+- **[20:47] Michel David Pino Aguilar:** proyecto se priorice.
+- **[20:47] Michel David Pino Aguilar:** Porque el proyecto ya está completo.
+- **[20:47] Michel David Pino Aguilar:** En cuanto a diseño y prototipado y conceptualización, pero
+- **[20:47] Michel David Pino Aguilar:** teniendo en cuenta la actualización del área de TI, pues,
+- **[20:47] Michel David Pino Aguilar:** también toca hacer como
+- **[20:48] Michel David Pino Aguilar:** de cierta forma una justificación de
+- **[20:48] Michel David Pino Aguilar:** n proyecto, si es que va
+- **[20:48] Michel David Pino Aguilar:** a pasar, por así decirlo, la actualización que ya sí existe en en en esa área.
+- **[20:48] Michel David Pino Aguilar:** Entonces, como que esto estos espacios que
+- **[20:48] Michel David Pino Aguilar:** cuentan con comunidad, con espacios donde también se
+- **[20:48] Michel David Pino Aguilar:** a poner a la comunidad a generar dinámicas y que va a permitir recopilar data, pues,
+- **[20:48] Michel David Pino Aguilar:** sirve mucho también para apalancar esos proyectos del área que de cierta forma están
+- **[20:48] Michel David Pino Aguilar:** por así decirlo, represados,
+- **[20:48] Michel David Pino Aguilar:** pero, que ya tienen un proceso de
+- **[20:48] Michel David Pino Aguilar:** de concepto, de de prototipado y diseño previo al desarrollo que
+- **[20:48] Michel David Pino Aguilar:** pues, necesitamos poder fundamentar mucho mejor.
+- **[20:48] Michel David Pino Aguilar:** Para que se priorice y se haga realmente el lanzamiento, porque
+- **[20:48] Michel David Pino Aguilar:** digamos que dentro de un un hito que sea el lanzamiento o lo próximo, no iría.
+- **[20:48] Michel David Pino Aguilar:** Porque sería vender una expectativa de algo que ni siquiera se ha priorizado para que se desarrolle.
+- **[20:48] Yo:** Ok, listo.
+- **[20:48] Yo:** Ahí ahí les hago la pregunta un poco, como le hemos venido encaminando,
+- **[20:48] Yo:** sí, no sé si les parezca útil, pero
+- **[20:48] Yo:** o sea, nosotros partimos ya cuando, partimos el el viernes
+- **[20:49] Yo:** cuando recién entregaron esa parte, fue como
+- **[20:49] Yo:** plantearnos
+- **[20:49] Yo:** cuál es nuestro ideal, porque lo que hicimos
+- **[20:49] Yo:** entiendo ya por dónde va lo que ustedes ya han ido trabajando,
+- **[20:49] Yo:** nosotros entendimos fue
+- **[20:49] Yo:** tratamos de arrancar por cuál es la
+- **[20:49] Yo:** cuál es el problema de negocio, por eso les arranqué como con el pitch de
+- **[20:49] Yo:** por qué habíamos arrancado con la parte de huérfanos,
+- **[20:49] Yo:** que no se han activado, y ahí fue que arrancamos a trabajar la solución, ¿no?
+- **[20:49] Yo:** Yo les preguntaría como para ustedes cuál sería el resultado
+- **[20:49] Yo:** ideal de ExpoWinner,
+- **[20:49] Yo:** O sea, usted habló de puntualmente para selección de transportadoras,
+- **[20:49] Yo:** cómo esperan mover el indicador
+- **[20:49] Yo:** ¿cierto?, en tiempos de entrega y demás,
+- **[20:49] Yo:** sea, ¿cuál sería la ruta o lo...? ¿O cómo van cuál cuál es el instrumento,
+- **[20:49] Yo:** sé si me haga entender ahí. Es como, no sé,
+- **[20:49] Yo:** nosotros empezamos a hacer, ¿qué qué, todo lo que nos hemos por ejemplo, con con user
+- **[20:49] Yo:** que al final no se puede hacer por, no sé, por capacidades,
+- **[20:49] Yo:** o que en la data no existe o que la API no está expuesta. O sea, aquí vamos a tener de frente a los usuarios.
+- **[20:50] Yo:** Es de lo que ustedes ya tienen en RPP, pues seguramente ya mucho se podría
+- **[20:50] Yo:** ahí por debajo empezar a a hacer seguimiento, ¿no?, del de las interacciones.
+- **[20:50] Yo:** Sé si pruebas de usabilidad, de flujos,
+- **[20:50] Yo:** que a la mitad de los usuarios le den una opción como un AB testing, ¿no?
+- **[20:50] Yo:** Mitad de los usuarios tenemos un prototipo al prototipo BABER,
+- **[20:50] Yo:** cuál de los dos genera menos fricción.
+- **[20:50] Yo:** Esa es como la pregunta o el planteamiento que les haría,
+- **[20:50] Yo:** para sacarle provecho, o no sé si les si les si se les ha ocurrido
+- **[20:50] Yo:** otra cosa, porque como ustedes igual están en una fase
+- **[20:50] Yo:** donde entiendo, me corrigen si no,
+- **[20:50] Yo:** ya el producto
+- **[20:50] Yo:** prácticamente está pareja en off, o no sé si ya se hizo,
+- **[20:50] Yo:** toca es
+- **[20:50] Yo:** agregarle argumentos y peso de por qué eso debía más rápido.
+- **[20:50] Yo:** O por qué debía meterle más fuerza. ¿Es así?
+- **[20:50] Michel David Pino Aguilar:** Podría ir por ese lado, sí. Yo creo que
+- **[20:50] Michel David Pino Aguilar:** es también importante que
+- **[20:50] Michel David Pino Aguilar:** como que podamos validar si lo que ya está
+- **[20:51] Yo:** Hola, ¿están ahí?
+- **[20:51] Michel David Pino Aguilar:** Ah, ahí
+- **[20:51] Yo:** Hola, ¿sí qué es?
+- **[20:51] Yo:** ¿El
+- **[20:51] Michel David Pino Aguilar:** Dale. No, lo que yo estaba diciendo era que yo estaba, o sea,
+- **[20:51] Michel David Pino Aguilar:** dentro de lo que decís, puede que sea una una opción de
+- **[20:51] Michel David Pino Aguilar:** de implementarlo dentro del evento, pero lo que yo siento es que
+- **[20:51] Michel David Pino Aguilar:** más que eso, tenemos que validar
+- **[20:51] Michel David Pino Aguilar:** de lo que ya está,
+- **[20:51] Michel David Pino Aguilar:** qué es IVA y qué no va.
+- **[20:51] Michel David Pino Aguilar:** Porque digamos que hacer un epitesting con dos
+- **[20:51] Michel David Pino Aguilar:** prototipos y demás, como que sería salirnos de los estándares que ya están planteados con un trabajo que se hizo
+- **[20:51] Michel David Pino Aguilar:** el pasado, de hecho, lo hicieron otras personas,
+- **[20:51] Michel David Pino Aguilar:** Becate, Michelle, y a ella hicieron muchas pruebas de usuario y demás,
+- **[20:51] Michel David Pino Aguilar:** pero fueron pruebas muy internas.
+- **[20:51] Michel David Pino Aguilar:** ¿Qué pasa?
+- **[20:51] Michel David Pino Aguilar:** Dentro de conceptualización, nosotros un AB testing, pues, plantearlo es
+- **[20:51] Michel David Pino Aguilar:** como reconceptualizar algo que es un poco robusto y que
+- **[20:52] Michel David Pino Aguilar:** tiene una conceptualización. Creo que sí debería hacerse es
+- **[20:52] Michel David Pino Aguilar:** mirar el nivel de madurez de los usuarios
+- **[20:52] Michel David Pino Aguilar:** para poder presentarle esto, porque no, o sea,
+- **[20:52] Michel David Pino Aguilar:** a un dropshipper que no tenga ni idea
+- **[20:52] Michel David Pino Aguilar:** cómo funcionan la utilidad de los fletes,
+- **[20:52] Michel David Pino Aguilar:** cómo funciona todo el tema de las coberturas,
+- **[20:52] Michel David Pino Aguilar:** de del límite y eso, porque esa data y esa parametrización que se hace desde ahí
+- **[20:52] Michel David Pino Aguilar:** con esos datos probabilísticos del del de lo
+- **[20:52] Michel David Pino Aguilar:** de las transportadoras y lo que es mejor la operación del dropshiper, pues vamos de la mano con
+- **[20:52] Michel David Pino Aguilar:** con entender eso ya, ¿no?
+- **[20:52] Michel David Pino Aguilar:** Entonces, lo que hay que hacer es tratar
+- **[20:52] Michel David Pino Aguilar:** de segmentar los dropshippers
+- **[20:52] Michel David Pino Aguilar:** y, definitivamente, los que sean, por así decirlo, dropshippers
+- **[20:52] Michel David Pino Aguilar:** neonatos,
+- **[20:52] Michel David Pino Aguilar:** pequeñitos que no tienen nada de órdenes,
+- **[20:52] Michel David Pino Aguilar:** en ese caso, ¿para qué los vamos a poner a hacer estatus? O sea, eso es gente que ya tenga como un
+- **[20:52] Michel David Pino Aguilar:** un bagaje o al menos
+- **[20:52] Michel David Pino Aguilar:** al menos hagan una cantidad de órdenes que superen las, yo que sé, las veinte órdenes al mes.
+- **[20:53] Yo:** Sí, de acuerdo. Sí, ¿no?, y y lo
+- **[20:53] Michel David Pino Aguilar:** Por lo menos.
+- **[20:53] Yo:** les decía a evitar enseñar como una un un idea general como para para
+- **[20:53] Yo:** justamente, para ir a la conversación, porque, de acuerdo, si ya está tan adelantado, pues no vale la pena,
+- **[20:53] Yo:** devolverse.
+- **[20:53] Yo:** Y es ahí agregarle carga.
+- **[20:53] Yo:** Yo yo
+- **[20:53] Yo:** yo, de hecho, tengo tengo ahí como una una duda que
+- **[20:53] Yo:** Es bueno que ya nos empecemos alinear para que
+- **[20:53] Yo:** también al momento de hablarlo con con Jaime o con Lau, tengamos como todo
+- **[20:53] Yo:** todo más organizado, y es
+- **[20:53] Yo:** yo considero
+- **[20:53] Yo:** que
+- **[20:53] Yo:** el workshop
+- **[20:53] Yo:** debería estar más enfocado justamente en
+- **[20:53] Yo:** en esos grandes flujos, ¿no?
+- **[20:53] Yo:** Pero el yo worship, en el worship voy a tener diferentes
+- **[20:53] Yo:** tipos de usuarios, desde los que venden muy poco hasta los que venden demasiado.
+- **[20:53] Yo:** ¿Sí o qué?
+- **[20:53] Yo:** Para los que no venden,
+- **[20:53] Yo:** pues, son mis usuarios ideales para que prueben esto de copiloto AI, que
+- **[20:53] Yo:** monten su primera orden y todo.
+- **[20:53] Yo:** Los que ya venden mucho, pues, es gente que ya le tocó pasar por el
+- **[20:54] Yo:** proceso
+- **[20:54] Yo:** ¿verdad?,
+- **[20:54] Yo:** que a la larga nos pueda dar feedback de, bueno, venga, sí está mejor. Ojalá esto hubiese estado hace
+- **[20:54] Yo:** un año que yo arranqué con esto, o hubiese...
+- **[20:54] Yo:** Estado hace seis meses, ¿sí o no? O sea, para nosotros nos sirve. Pero de acuerdo con lo que dice ahí, Pino,
+- **[20:54] Yo:** ¿yo qué quiero? O sea, o sea, realmente no me va poder dar feedback alguien que
+- **[20:54] Yo:** no maneja un volumen
+- **[20:54] Yo:** relevante, por cualquiera sea el número que que se considere relevante,
+- **[20:54] Yo:** esto.
+- **[20:54] Michel David Pino Aguilar:** Mhmm.
+- **[20:54] Yo:** Ahí ahí ahí el reto estaría en cómo
+- **[20:54] Yo:** entendiendo de que esta es de NRPP,
+- **[20:54] Yo:** no sé si
+- **[20:54] Yo:** o sea, ¿cómo cómo harían
+- **[20:54] Yo:** Aquí ya un poco es más como de
+- **[20:54] Yo:** curiosidad. ¿Cómo harían para
+- **[20:54] Yo:** validar
+- **[20:54] Yo:** cuáles van a ser las hipótesis que quieren trabajar ahí, ¿no?
+- **[20:54] Yo:** De, no sé,
+- **[20:54] Yo:** de cuándo
+- **[20:54] Yo:** es que no no no conozco, aparte con la la reunión que tuve con Juantica,
+- **[20:54] Yo:** de selección de transportadores en algún momento, creo,
+- **[20:54] Yo:** No tengo más más información, más detalle.
+- **[20:55] Yo:** Pero no sé, es un un un reto resolver,
+- **[20:55] Yo:** y que, entonces,
+- **[20:55] Yo:** ver cómo cómo, si se resuelve fácil desde la forma como está el RPP,
+- **[20:55] Yo:** No sé si es una una buena idea o no, es como venga,
+- **[20:55] Yo:** todos son, y se, creo que se podría montar así, me parecería a ShareSpot bueno, todos son dropshippers y está este módulo,
+- **[20:55] Yo:** en donde les toca resolver
+- **[20:55] Yo:** por cuál transportador enviarlo.
+- **[20:55] Yo:** Por decir algo, tomar la mejor decisión posible
+- **[20:55] Yo:** ¿sí? Porque entiendo que selección de transportadoras o no, entiendo que no.
+- **[20:55] Yo:** ¿Para qué esta selección de transportadoras?
+- **[20:55] Yo:** ¿Cuál es el valor que genera?
+- **[20:55] Michel David Pino Aguilar:** Seleccione transportador, lo que permite es
+- **[20:55] Michel David Pino Aguilar:** realizar
+- **[20:55] Michel David Pino Aguilar:** una configuración de
+- **[20:55] Michel David Pino Aguilar:** las transportadoras que mejor se comportan en
+- **[20:55] Michel David Pino Aguilar:** departamentos y las ciudades de esos departamentos.
+- **[20:55] Michel David Pino Aguilar:** Con dos con dos con dos
+- **[20:56] Michel David Pino Aguilar:** constantes
+- **[20:56] Michel David Pino Aguilar:** que son que son primordiales, ¿no?, que son prioritarias. Una es
+- **[20:56] Michel David Pino Aguilar:** que existe un un espacio dentro del prototipo, que es un drag and drop de
+- **[20:56] Yo:** Sí.
+- **[20:56] Michel David Pino Aguilar:** que son globales.
+- **[20:56] Michel David Pino Aguilar:** Esas posiciones se toman
+- **[20:56] Michel David Pino Aguilar:** de manera, como se dice, global, y se ven representadas así
+- **[20:56] Michel David Pino Aguilar:** dentro de los
+- **[20:56] Michel David Pino Aguilar:** departamentos y ciudades. Ahora bien,
+- **[20:56] Michel David Pino Aguilar:** hay un botón, que es un botón de inteligencia artificial, que es un tema proveer el psico sobre
+- **[20:56] Michel David Pino Aguilar:** un cálculo que se hizo con los los señores que trabajan IA,
+- **[20:56] Michel David Pino Aguilar:** Felipe y
+- **[20:56] Michel David Pino Aguilar:** y y el señor Jaime Reynoso,
+- **[20:56] Michel David Pino Aguilar:** Y entonces la idea es que
+- **[20:56] Michel David Pino Aguilar:** dentro de un cálculo de
+- **[20:56] Michel David Pino Aguilar:** probabilidades de mejor comportamiento, la inteligencia artificial le genera
+- **[20:56] Michel David Pino Aguilar:** un orden
+- **[20:56] Michel David Pino Aguilar:** de transportadoras que se ajuste mucho mejor
+- **[20:56] Michel David Pino Aguilar:** pues, a esas locaciones, teniendo en cuenta la operación de de
+- **[20:56] Michel David Pino Aguilar:** del dropshipper.
+- **[20:56] Michel David Pino Aguilar:** ¿Qué pasa?
+- **[20:56] Michel David Pino Aguilar:** Lo principal es que ellos puedan interactuar con
+- **[20:57] Michel David Pino Aguilar:** el botón de Guía,
+- **[20:57] Michel David Pino Aguilar:** y la forma en la que
+- **[20:57] Michel David Pino Aguilar:** los acordeones de los
+- **[20:57] Michel David Pino Aguilar:** departamentos y ciudades están relacionados como que
+- **[20:57] Yo:** Usabilidad, sí.
+- **[20:57] Michel David Pino Aguilar:** sea accesible. Eso es lo primero que necesitamos validar.
+- **[20:57] Michel David Pino Aguilar:** Y, ajá, y segundo,
+- **[20:57] Michel David Pino Aguilar:** pues, como que ver la percepción de valor de la
+- **[20:57] Michel David Pino Aguilar:** ¿no? Yo creo que también en equipo localitativo puede ser algo muy abierto, como que
+- **[20:57] Yo:** Claro.
+- **[20:57] Michel David Pino Aguilar:** eso puede ayudar mucho a entender, porque es que, mira, por ejemplo, con torre de control,
+- **[20:57] Michel David Pino Aguilar:** torre de control se pensó
+- **[20:57] Michel David Pino Aguilar:** de una forma, torre logística que llamó en día,
+- **[20:57] Michel David Pino Aguilar:** logística se pensó de una forma en la que
+- **[20:57] Michel David Pino Aguilar:** iba a aportar una gran capacidad de discernimiento para las comunidades y
+- **[20:57] Michel David Pino Aguilar:** siendo un módulo que
+- **[20:57] Michel David Pino Aguilar:** que casi ni lo usaban.
+- **[20:57] Michel David Pino Aguilar:** Puede haber sido por un tema de que
+- **[20:57] Michel David Pino Aguilar:** no sabían dónde estaba,
+- **[20:57] Michel David Pino Aguilar:** o no había una forma en que desde los otros módulos
+- **[20:57] Michel David Pino Aguilar:** allá tomar una decisión antes de montar una orden,
+- **[20:57] Michel David Pino Aguilar:** o
+- **[20:57] Michel David Pino Aguilar:** que muchos usuarios tienen como
+- **[20:57] Michel David Pino Aguilar:** automatizaciones de integraciones
+- **[20:58] Michel David Pino Aguilar:** para formularios de compra y al final
+- **[20:58] Michel David Pino Aguilar:** pues hay una transportadora por default que toma eso
+- **[20:58] Michel David Pino Aguilar:** y ellos no se fijan en eso por también el nivel de madurez que puedan llegar a tener y demás.
+- **[20:58] Michel David Pino Aguilar:** Es como esas cosas.
+- **[20:58] Yo:** Sí. Porque, ¿saben qué me parecería
+- **[20:58] Yo:** pues, bacano aquí ya como
+- **[20:58] Yo:** pensando en producto en general? Y es como
+- **[20:58] Yo:** si bien no es hacer el, o sea,
+- **[20:58] Yo:** como dato, más bien, más que como el producto.
+- **[20:58] Yo:** Que igual sí pudieran tener el grupo de control
+- **[20:58] Yo:** A mí sí me parecería bacano, ¿no?
+- **[20:58] Yo:** Y es, ya tiene el prototipo de como quieren que quede
+- **[20:58] Yo:** ¿Por qué no recaudar uno
+- **[20:58] Yo:** Ponerle
+- **[20:58] Yo:** de alguna forma, el el el el el reto, y eso se, pues, también ustedes también se puede va ir
+- **[20:58] Yo:** de cómo está hoy,
+- **[20:58] Yo:** ¿verdad?
+- **[20:58] Yo:** A otros darle la
+- **[20:58] Yo:** opción de que sea con con con
+- **[20:58] Yo:** con selección de transportadoras, con la con la nueva funcionalidad que se quiere sacar,
+- **[20:58] Yo:** y ver en cuánto
+- **[20:59] Yo:** mejora la elección del usuario.
+- **[20:59] Yo:** Como creo que
+- **[20:59] Yo:** me parece a mí, es eso da da da da un buen argumento al momento de priorizarlo.
+- **[20:59] Yo:** Qué me refiero?
+- **[20:59] Yo:** No sé si si ahí me dice, ¿entender? Es como, supongamos,
+- **[20:59] Yo:** cuarenta personas,
+- **[20:59] Yo:** veinte
+- **[20:59] Yo:** que lo hagan de la forma tradicional a como está hoy,
+- **[20:59] Yo:** que seleccionen
+- **[20:59] Yo:** poner dos dos casos, tres casos, ya ahí es es es entra entra a refinar.
+- **[20:59] Yo:** Es que se me acordé de un experimento que hizo una vez y me pareció que la data fue buena, como
+- **[20:59] Yo:** entonces, a la mitad le van a dar el caso o los dos casos, los que sean,
+- **[20:59] Yo:** Tenemos que enviar el producto x
+- **[20:59] Yo:** todos venden zapatillas,
+- **[20:59] Yo:** y tienen que enviarlas a
+- **[20:59] Yo:** Pitalito Huila.
+- **[20:59] Yo:** ¿Cierto?
+- **[20:59] Yo:** Y entonces, la mitad
+- **[20:59] Yo:** con las herramientas que hoy están en producción,
+- **[20:59] Yo:** van a decir qué transportadora van a elegir con la data que hoy verían, ¿no?
+- **[20:59] Yo:** El precio aproximado, todo el cuento, ¿verdad?
+- **[20:59] Yo:** A la otra mitad,
+- **[20:59] Yo:** le entregan el mismo reto
+- **[20:59] Yo:** pero ya les dan las funcionalidades,
+- **[21:00] Yo:** es decir, ya le recomendaría a la transportadora, según entiendo,
+- **[21:00] Yo:** estaría de la IA, todo el cuento, y ver
+- **[21:00] Yo:** si realmente, aparte de que sea usable, porque ya dentro de esos veinte que escojan,
+- **[21:00] Yo:** suponiendo, en el grupo que sí va a estar
+- **[21:00] Yo:** trabajado,
+- **[21:00] Yo:** si ya ya es que que que vean si para ellos fue fácil o no, ¿no?
+- **[21:00] Yo:** Pero que vean si
+- **[21:00] Yo:** respecto a los que no se les dio la funcionalidad, realmente sí mejoró
+- **[21:00] Yo:** la elección.
+- **[21:00] Yo:** Es decir,
+- **[21:00] Yo:** tomaron la mejor elección posible sin que ustedes
+- **[21:00] Yo:** crearan herramienta.
+- **[21:00] Yo:** Creo sería relevante. Porque si al grupo que no le dieron absolutamente nada, es decir,
+- **[21:00] Yo:** lo hizo con las uñas por
+- **[21:00] Yo:** bueno,
+- **[21:00] Yo:** está dropio y sin ninguna funcionalidad adicional.
+- **[21:00] Yo:** Y seleccionan igual de bien
+- **[21:00] Yo:** ¿sí o qué? Significa que realmente más que
+- **[21:00] Yo:** de pronto en temas de usabilidad, que
+- **[21:00] Yo:** eligieron igual de bien, pero se demoraron cinco minutos más.
+- **[21:00] Yo:** O eligieron igual de bien en el mismo tiempo,
+- **[21:01] Yo:** o igual de bien en menos tiempo,
+- **[21:01] Yo:** Y podrían inclusive, si ya pueden generar cortes, decir, no, es los cuarenta, cinco venden de veinte a cien órdenes, el otro son de ciento uno a doscientas, los otros de doscientas en adelante, ver inclusive en qué en qué nivel se genera valor, porque puede que los que ya sean muy pro que vendan mil órdenes, esos se las hagan rapidito y por cuál cuál envía mejor a dónde, la tienen clarísima, porque ya lo están de memoria. Pero, de pronto, los que están iniciando, que apenas veinte órdenes, diez órdenes, que ya saben algo de que funciona, de de para qué funciona la selección de transportadores,
+- **[21:01] Yo:** genere valor
+- **[21:01] Yo:** pero que realmente
+- **[21:01] Yo:** sí les, o sea, sí les ayude, porque todavía no tienen tan presente que a Pitalito Huila funciona en estas tres, y que esta normalmente para ese tipo de productos se demora menos tiempo,
+- **[21:01] Yo:** la razón que sea.
+- **[21:01] Yo:** No sé cómo, si si si les hace sentido. Entonces, a la mitad, sí, a la mitad,
+- **[21:01] Yo:** no, pero los dos parten de la misma pregunta.
+- **[21:02] Yo:** Y y y con eso podrían decir, vea,
+- **[21:02] Yo:** según la el experimento que se hizo en en en expo winners, nos dimos cuenta
+- **[21:02] Yo:** de que con la herramienta,
+- **[21:02] Yo:** se mejora los tiempos
+- **[21:02] Yo:** puede ser que de pronto unos tiempos, pero
+- **[21:02] Yo:** tiempos. Los tiempos de de de de la selección de transportadores en un veinte por ciento,
+- **[21:02] Yo:** y aparte se mejora la efectividad
+- **[21:02] Yo:** en un cuarenta por ciento.
+- **[21:02] Yo:** Por decir algo. No sé si si eso les hace como sentido.
+- **[21:02] Yo:** O si ya lo están, lo estoy sobrecomplicando.
+- **[21:02] Michel David Pino Aguilar:** No, sí, estoy escuchando, estoy como atando caos con lo que estás diciendo también para ver qué me
+- **[21:02] Michel David Pino Aguilar:** ocurre.
+- **[21:02] Michel David Pino Aguilar:** ¿Cómo la ves, Juan Diego?
+- **[21:02] Juan Diego Bautista Vasquez:** No, es que realmente estamos fríos, Santi.
+- **[21:02] Juan Diego Bautista Vasquez:** O sea, pues, tuvimos la conversación el viernes pasado y hasta ahora la estamos
+- **[21:03] Juan Diego Bautista Vasquez:** a ver qué hacíamos.
+- **[21:03] Juan Diego Bautista Vasquez:** Entonces, es lo que estamos echando cabeza. Realmente yo sí creo que nos toca pensar bien, porque es que
+- **[21:03] Juan Diego Bautista Vasquez:** creo que una de
+- **[21:03] Juan Diego Bautista Vasquez:** como de las hipótesis que queremos atacar es hoy en día,
+- **[21:03] Juan Diego Bautista Vasquez:** digamos que
+- **[21:03] Juan Diego Bautista Vasquez:** los usuarios ya tienen una plataforma donde hacer eso.
+- **[21:03] Juan Diego Bautista Vasquez:** Ellos pueden entrar a torre logística
+- **[21:03] Juan Diego Bautista Vasquez:** y ver los datos y ver la información, que sí, que, pues, que
+- **[21:03] Juan Diego Bautista Vasquez:** como que no cuadran, hay información que como que como que rara, como
+- **[21:03] Juan Diego Bautista Vasquez:** que fletes un poquito más altos de los normales.
+- **[21:03] Juan Diego Bautista Vasquez:** Pero en teoría la tienen y lo que queremos hacer es
+- **[21:03] Juan Diego Bautista Vasquez:** como tratar de ver cómo
+- **[21:03] Juan Diego Bautista Vasquez:** si la herramienta la sacamos mañana también, cómo le generamos una excelente adopción a todos, y como qué dificultades tendrían. Pero si nos toca echarle cabeza, bien para ver cómo la trabajamos. Y una pregunta, el o sea, aquí y creo que era parte de lo que decías ahorita, la manera de rastrear o de filtrar por tipo de usuario por algo todavía no lo han pensado, ¿cierto? Esto es como lo que va a tener pero lo siguiente sería eso, como ver cómo filtras, cómo segmentas, qué le sí y qué no le muestras, ¿cierto? O quiere muestras de primeras o quiere muestras de últimas de tipo de usuario.
+- **[21:04] Yo:** O sea, como nosotros, ya está, si queremos ver es por
+- **[21:04] Yo:** niveles de usuario qué tan rápido, de pronto terminan el flujo,
+- **[21:04] Yo:** Nosotros vamos a poder cruzar porque finalmente tenemos los correos, los números,
+- **[21:04] Yo:** las dos bases de datos de todos los dropshippers. Vamos a poder saber en qué nivel están.
+- **[21:04] Yo:** Es decir, no no hacemos un prefiltrado
+- **[21:04] Yo:** no tendríamos que hacerlo porque podemos verlo posterior.
+- **[21:04] Yo:** Pero
+- **[21:04] Yo:** muy aterrizado ya el caso, por ejemplo, de pulso, en donde si
+- **[21:04] Yo:** lo ideal es que tuviéramos
+- **[21:04] Yo:** o sea, vamos a tener un un lago
+- **[21:04] Yo:** ¿cierto?
+- **[21:04] Yo:** Una gran sábana de datos, y lo que vamos a hacer luego es filtrar, bueno,
+- **[21:04] Yo:** los que usan pulso,
+- **[21:04] Yo:** realmente lo lo lo los que nos van a generar,
+- **[21:04] Yo:** algo relevante son los que al menos ya vendan, no sé, diez productos.
+- **[21:05] Yo:** En adelante.
+- **[21:05] Yo:** Ya ahí vamos poder poner foco.
+- **[21:05] Yo:** Pero por lo que el flujo empieza desde, a ver, esta
+- **[21:05] Yo:** permanentemente en el celular. Lo que yo les iba a decir, y podemos ya
+- **[21:05] Yo:** sacar otro espacio también,
+- **[21:05] Yo:** con el resto del equipo para que todos estemos en línea a veces. Me parece a mí
+- **[21:05] Yo:** que
+- **[21:05] Yo:** selección de transportadoras no debería estar acá.
+- **[21:05] Yo:** En en esta página.
+- **[21:05] Yo:** Perfectamente
+- **[21:05] Yo:** podemos es que solo se muestre al momento de arrancar el workshop.
+- **[21:05] Yo:** Y a unos usuarios.
+- **[21:05] Yo:** Porque, no sé, ¿para qué quisieran
+- **[21:05] Yo:** a no ser que solamente vaya a ser usabilidad, ¿sí? Si de pronto es
+- **[21:05] Yo:** quieren ver si sí entran al botón que pusieron en la izquierda
+- **[21:05] Yo:** abajo,
+- **[21:05] Yo:** y si desactiva, y si lo leen completo, ese es un scroll
+- **[21:05] Yo:** eso, pues sí, déjenlo ahí como, se puede dejar de forma fija.
+- **[21:05] Yo:** Pero si de pronto quieren que sea muy acotado al workshop y que solamente
+- **[21:05] Yo:** se trabajen las cuarenta personas que están bien seleccionadas
+- **[21:06] Yo:** y porque, digamos, no sé, vamos a hacer curaduría de quiénes van a estar sentados ahí,
+- **[21:06] Yo:** pues solamente expongámosle a esos a esos cuarenta.
+- **[21:06] Yo:** Porque, si no, puede generar ruido y empezar a traer data
+- **[21:06] Yo:** escuchar data de gente que esté scrolleando y chismoseando el celular a ver qué es eso y
+- **[21:06] Yo:** De nuevo, si es usabilidad, pues superbién que esté los dos días abierto y que
+- **[21:06] Yo:** ustedes recolecten tanta data como puedan,
+- **[21:06] Yo:** pero, si no, no es el caso, y y realmente
+- **[21:06] Yo:** por ejemplo, les hiciera sentido lo que les digo, como tener un grupo de control, el otro no, les ponen un reto,
+- **[21:06] Yo:** a ver quién lo acaba primero y quién lo hace más eficiente.
+- **[21:06] Yo:** Digo, pues hágalo en el workshop y solamente activémoslo para los
+- **[21:06] Yo:** ejemplo, cuarenta, cincuenta, no sé cuánta gente va a hacer,
+- **[21:06] Yo:** que va a estar ahí sentada.
+- **[21:06] Yo:** Y ustedes realmente saben con la data de las personas que la necesitan.
+- **[21:06] Yo:** Eso lo podríamos ver.
+- **[21:06] Yo:** O, si lo ponemos acá,
+- **[21:06] Yo:** para no complicarlo, pero
+- **[21:06] Yo:** para arrancar, no sé, les tienen que poner una clave que solamente va estar habilita en el workshop.
+- **[21:06] Yo:** Por ejemplo, ¿qué les vamos a dar? Va a ser
+- **[21:07] Yo:** dropee veinte veintiséis punto
+- **[21:07] Yo:** y ya, todo el mundo arranca.
+- **[21:07] Yo:** Pero que sea como muy muy selectiva esa parte para que ustedes no vayan
+- **[21:07] Yo:** Lo mismo, como todavía no se sabe cuál va ser el instrumento,
+- **[21:07] Yo:** ni todo lo que se quiere medir, una vez esté eso, pues ustedes ya
+- **[21:07] Yo:** ya dirán cómo quieren manejarlo.
+- **[21:07] Yo:** Nosotros igual, Juandi, y y
+- **[21:07] Yo:** Michelle, el viernes literal también nos lo entregaron nosotros, nosotros también estamos como que
+- **[21:07] Yo:** bien, de hecho, apenas el lunes
+- **[21:07] Yo:** Jaime me confirmó que yo también iba al evento, o sea, yo, según yo, yo no iba.
+- **[21:07] Yo:** Entonces, yo también estoy como, estamos como apenas arrancando, también planeando,
+- **[21:07] Yo:** la idea es, sí toca coordinar, no es muy rápido, de hecho, ayer tocó trabajar un rato más, pero
+- **[21:07] Yo:** pero
+- **[21:07] Yo:** yo creo que tenemos el tiempo para ajustarlo, y ustedes igual ya lo tienen prototipado, pues pues.
+- **[21:07] Yo:** Eso eso ayuda un montón.
+- **[21:07] Yo:** Sería más que ustedes monten, no sé si con herramienta externa o si lo vayan a hacer ahí,
+- **[21:08] Yo:** codeado
+- **[21:08] Yo:** para recolectar data.
+- **[21:08] Yo:** Si vayan a poner, no sé, si van a utilizar clarity o algo así, como para ver
+- **[21:08] Yo:** cómo navegan los usuarios,
+- **[21:08] Yo:** Ya es lo que es elección de ustedes hoy.
+- **[21:08] Michel David Pino Aguilar:** Sí, sí, es justamente lo que estamos analizando, o sea, la
+- **[21:08] Michel David Pino Aguilar:** primero que todas las herramientas,
+- **[21:08] Michel David Pino Aguilar:** para poder integrarlas dentro del prototipo y
+- **[21:08] Michel David Pino Aguilar:** hacer el prototipo
+- **[21:08] Michel David Pino Aguilar:** como lo más
+- **[21:08] Michel David Pino Aguilar:** posible para que, pues, también haya esa
+- **[21:08] Michel David Pino Aguilar:** como ese proceso
+- **[21:08] Michel David Pino Aguilar:** de de aprendizaje, ¿no?
+- **[21:08] Michel David Pino Aguilar:** También es un proceso de aprendizaje y de clarificar dentro de lo aprendido qué es lo útil y qué
+- **[21:08] Michel David Pino Aguilar:** definitivamente, pues,
+- **[21:08] Michel David Pino Aguilar:** hay que homologar.
+- **[21:08] Michel David Pino Aguilar:** Entonces, sí, no, hay que hay que mirar esa parte. Yo creería que
+- **[21:08] Michel David Pino Aguilar:** en lo que sí tenemos que estar bien alineados es en dónde va a aparecer
+- **[21:08] Michel David Pino Aguilar:** y por qué. O sea, digamos que
+- **[21:08] Michel David Pino Aguilar:** en esta parte de tu primera venta y herramientas de trabajo, no sé
+- **[21:08] Michel David Pino Aguilar:** si sea el lugar correcto.
+- **[21:09] Michel David Pino Aguilar:** Mi pregunta también era como que
+- **[21:09] Michel David Pino Aguilar:** o sea, en las capas, digamos, esta capa de aquí, ya cuando el usuario lleva un
+- **[21:09] Michel David Pino Aguilar:** un proceso como en en en en esta parte de gamificación,
+- **[21:09] Michel David Pino Aguilar:** ¿me puedes volver a mostrar esa parte?
+- **[21:09] Michel David Pino Aguilar:** Porque es que también podría hacer eso, o sea, si ya hay una hay un una guía de como de puntos que tiene que hacer el usuario para
+- **[21:09] Michel David Pino Aguilar:** para hacer como que un vendedor en caminos, y él los la, o sea, las capas de gamificación que hayan planteado ahí para para que hayan como esas esos distintivos entre los usuarios, Cuando el usuario ya llegue a un punto de este juego que necesite hacer como un un tracking de su proceso logístico o parametrizar algo de su proceso para ver una una emulación de esa mejora, pues ahí debería entrar eso, ¿verdad? Ahí debería ser el punto en el que debería haber un trigger que muestre la selección de transporte como para que tenga mucho más sentido.
+- **[21:09] Yo:** No, es que
+- **[21:09] Yo:** sí, de acuerdo con con que lo podríamos llevar
+- **[21:09] Yo:** por ejemplo,
+- **[21:10] Yo:** o sea, segmentar por la, podría mostrarnos la el, creo que ya
+- **[21:10] Yo:** José Pineda tiene el API de de leyendas,
+- **[21:10] Yo:** Podríamos tomarlo de ahí, ¿no?, por cada, son seis niveles.
+- **[21:10] Yo:** Que
+- **[21:10] Yo:** solamente los usuarios que estén dentro de, no sé, del nivel dos en adelante,
+- **[21:10] Yo:** se les aparezca.
+- **[21:10] Yo:** O lo que podemos hacerlo para hacerlo mucho más simple y no
+- **[21:10] Yo:** no estar ahí consumiendo ningún API ni ni nada raro,
+- **[21:10] Yo:** es que lo que podemos hacer es, en vez de este banner, que todavía no sabemos si lo vamos a mantener o no, porque es parte de lo que
+- **[21:10] Yo:** ya venía.
+- **[21:10] Yo:** Es, dejémoslo como, no sé, workshop producto,
+- **[21:10] Yo:** ¿sí?, o algo baja, puede ser aquí arriba en algún lado, igual va va va a cambiar.
+- **[21:10] Yo:** Que en workshop producto, o sea, como estás, no sé,
+- **[21:10] Yo:** estás registrado o vas a ser parte del workshop producto para dar inicio
+- **[21:10] Yo:** a la prueba,
+- **[21:10] Yo:** ingresa aquí el código, y que solo eso, solo eso,
+- **[21:10] Yo:** sea lo que le va a permitir, por ejemplo, arrancar con lo de
+- **[21:10] Yo:** de transportadoras.
+- **[21:10] Yo:** Para no, y y y eso lo que va permitir es que si alguien, no sé,
+- **[21:11] Yo:** tratando de ser como estructurados en que no todo el mundo entre,
+- **[21:11] Yo:** pero también lo suficientemente
+- **[21:11] Yo:** en que si a última hora
+- **[21:11] Yo:** no sé,
+- **[21:11] Yo:** supongamos,
+- **[21:11] Yo:** Lucho, dice, narika, pero
+- **[21:11] Yo:** deberían ver
+- **[21:11] Yo:** No sé, métanse a unos diez usuarios que no vayan, vendan nada, ver qué pasa.
+- **[21:11] Yo:** Supongamos, ¿cierto?
+- **[21:11] Yo:** Y los convencen de que lo hagan así.
+- **[21:11] Yo:** Pues lo único que tienen que hacer es dar el código a esos cinco, diez usuarios que nunca han vendido nada quedar
+- **[21:11] Yo:** arranquen.
+- **[21:11] Yo:** De alguna forma, lo lo acercan, pero es como si fuera una reunión de teams.
+- **[21:11] Yo:** De de Zoom, Solamente con el código puede arrancar, solo que ustedes ya saben a quiénes le van a dar el código. A los cuarenta gatos que tengo ahí sentados. Pero si quieren aumentarlo a cincuenta, sesenta, o coger y repartir ese código por WhatsApp, a todos los asistentes, lo pueden hacer. Entonces, a él les queda como más abierto y no no lo cerramos a que solamente en la categoría tal, tal, tal, tal. Pues, ¿cómo hacen? Como propuesta? Podríamos dejarlo como un bannercito ahí, una un cart, como de o, es más, que que solamente se active a la hora del workshop.
+- **[21:12] Yo:** Que no esté fijo.
+- **[21:12] Yo:** Y que se sea como el inicio
+- **[21:12] Yo:** del del workshop, y que eso lo incluye, puedes, no, para no hacerlo sobre el mismo si de pronto usted ya lo
+- **[21:12] Yo:** hacer sobre otro lado, sobre el mismo RPP o lo que sea,
+- **[21:12] Yo:** que eso es lo único que hay que de redimirlos.
+- **[21:12] Yo:** Y que tengan presente
+- **[21:12] Yo:** les diría así, lo de lo de la experiencia móvil, porque, pues, no sabemos realmente
+- **[21:12] Yo:** con cuántas personas vayan ir con con con un computador, ¿no?
+- **[21:12] Yo:** Que tengan presente como la experiencia
+- **[21:12] Yo:** Y si definitivamente no, pues ya es un tema que
+- **[21:12] Yo:** a que revisemos, de
+- **[21:12] Yo:** de si de si van a dar computadores allá
+- **[21:12] Yo:** que alguien entre, o sea, ¿cómo o cómo lo hacemos?, ¿me hago entender?
+- **[21:12] Yo:** De, sí, siempre, definitivamente es una experiencia que debería ser solamente por navegador en
+- **[21:12] Yo:** en computador,
+- **[21:12] Yo:** No sé, no sé, o sea, ahí sí no sé cómo haría, tocaría hablarlo con con
+- **[21:12] Yo:** con con el equipo.
+- **[21:12] Yo:** De qué se podría hacer.
+- **[21:13] Yo:** O si se va hacer un filtro
+- **[21:13] Yo:** filtrado previo que se le recuerde a los asistentes que lleven su computador para el workshop,
+- **[21:13] Yo:** No sé, a ver si estoy inventando
+- **[21:13] Yo:** como que el
+- **[21:13] Yo:** lo revisemos. Porque porque está ahí en copiloto, IA,
+- **[21:13] Yo:** escanea el winner y pulso, se puede hacer perfectamente la experiencia móvil.
+- **[21:13] Yo:** Pero, pues, yo sé que lo de transportadores, pues, normalmente, uno lo está
+- **[21:13] Yo:** en una pantalla mucho más más grande, ¿no?, más más disco, nada más
+- **[21:13] Yo:** dinámica web.
+- **[21:13] Yo:** Listo.
+- **[21:13] Michel David Pino Aguilar:** Sí, sí, claro, claro. Y
+- **[21:13] Michel David Pino Aguilar:** yo creo que también eso nos sirve como como de luz que lo
+- **[21:13] Michel David Pino Aguilar:** lo alineemos mejor.
+- **[21:13] Michel David Pino Aguilar:** ¿Qué otra cosa era que podemos como
+- **[21:13] Michel David Pino Aguilar:** estar ya en sintonía con esta mesa?
+- **[21:13] Michel David Pino Aguilar:** Yo creo que es eso.
+- **[21:13] Yo:** Déjeme, porque mañana tenemos una reunión.
+- **[21:13] Yo:** Pero no sé si ya está
+- **[21:13] Yo:** ExpoWinning esa alineación.
+- **[21:14] Yo:** Voy a preguntarle a Lau si si
+- **[21:14] Yo:** incluir a Juan de una reunión que tenemos mañana,
+- **[21:14] Yo:** sino que veo que diste es
+- **[21:14] Yo:** ¿quién es que dice Andrés Felipe Salazar?
+- **[21:14] Juan Diego Bautista Vasquez:** El de marketing.
+- **[21:14] Yo:** Bueno, está él,
+- **[21:14] Juan Diego Bautista Vasquez:** El
+- **[21:14] Yo:** Bueno, está él, está un man llamado Esteban Solano, Jaime, José, María José.
+- **[21:14] Juan Diego Bautista Vasquez:** Él es el de Dropy Academy, el de este
+- **[21:14] Yo:** Listo. Entonces,
+- **[21:14] Yo:** voy a voy a preguntarle a a Lau, que fue la que organizó,
+- **[21:14] Yo:** para incluirte, Juandi.
+- **[21:14] Yo:** Que empecemos a alinear eso.
+- **[21:14] Juan Diego Bautista Vasquez:** De una
+- **[21:14] Yo:** Porque, pues,
+- **[21:14] Yo:** está muy enfocado a sí con dropshippers, pero definitivamente falta la parte logística y
+- **[21:14] Yo:** y, pues, importante que estés
+- **[21:14] Yo:** que no hagamos ahí un teléfono roto.
+- **[21:14] Juan Diego Bautista Vasquez:** Sí, igual, listo, sí, de una.
+- **[21:14] Yo:** Hágale, hágale, todo bien.
+- **[21:14] Yo:** Listo, así, entonces.
+- **[21:14] Michel David Pino Aguilar:** De una equipo, muchas gracias, hombre, por el espacio.
+- **[21:14] Michel David Pino Aguilar:** Por las aclaraciones. Que
+- **[21:14] Yo:** Bien.
+- **[21:14] Yo:** Chao,
+- **[21:14] Juan Diego Bautista Vasquez:** estén bien. Chao.

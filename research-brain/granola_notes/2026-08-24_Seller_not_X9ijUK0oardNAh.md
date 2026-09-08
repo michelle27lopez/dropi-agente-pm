@@ -1,0 +1,2055 @@
+# Seller
+
+- **ID:** `not_X9ijUK0oardNAh`
+- **Fecha:** 2026-08-24T20:58:52.312Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/129b9a8e-71f6-4618-a054-96dd6353f410)
+- **Asistentes:** Santiago Herrera Acosta, Maria Ossa, Alejandra Melo, Jaime Guevara, Laura Contreras, Jose Pineda
+
+---
+
+## Resumen de la Reunión
+# Contexto y Punto de Partida
+
+- María abre la sesión con una reflexión estratégica antes de sus vacaciones
+- Objetivo: alinear la visión del modelo de dropshipping con las células de Seller, Supplier y Growth
+- Premisa central: el producto core de Dropi es el **pago contra entrega**, no el catálogo
+
+# El Producto Real de Dropi
+
+- Pago contra entrega como producto mínimo viable del ecosistema
+  - Sin él, Dropi no existe: \~80% de las órdenes son COD
+  - Diferenciador clave: apalancamiento financiero al dropshipper antes de que la transportadora pague
+- Creación de órdenes como motor de entrada a la infraestructura logística
+  - Dropi puede funcionar como API o app de Shopify para gestionar órdenes
+- Dropi es un **conector**, no un creador de herramientas propias
+  - Se conecta con Shopify, Meta, transportadoras, etc.
+  - No obliga a usar herramientas internas
+
+# Métricas Clave que Definen el Problema
+
+- 40% de las órdenes son de catálogo privado (back office logístico puro)
+- 80% de las órdenes son pago contra entrega
+- +90% de los registros son personas que nunca han hecho ecommerce
+- Tasa de activación con comunidad: 26% vs. sin comunidad: \~1%
+- 30% de registros vienen de comunidades; 70% son “huérfanos”
+  - Del 70% huérfano, \~95% nunca ha vendido online
+  - Potencial sin capitalizar: \~65% del total de registros
+
+# Disonancia Cognitiva: Expectativa vs. Realidad
+
+- Las personas llegan buscando “ganar dinero fácil” o emprender digitalmente
+- Dropi ofrece una plataforma logística, no formación ni setup de ventas
+- Resultado: el 95% de los registros no está calificado para el producto actual
+- El segmento que sí puede usar Dropi (quienes ya venden) ya conoce la plataforma
+- Problema de activación, no de retención
+  - Quienes superan las 100 órdenes reducen su churn un 84%
+  - Meta estratégica: llevar a cada emprendedor de 0 a 100 órdenes
+
+# Rol de los Líderes de Comunidad
+
+- Son dropshippers experimentados que monetizan enseñando (productos de e-learning)
+- Generan el 26% de activación en sus comunidades vs. 1% de huérfanos
+- Enseñan un “setup de ventas” que incluye Shopify, Meta, Dropi, Chat Center
+  - Enseñan Dropi porque Dropi les paga comisión por orden
+- Riesgo de canibalización si Dropi entra en educación directamente
+- Propuesta de José: diferenciar dos roles del líder
+  - Onboarding inicial: debería ser Dropi como plataforma
+  - Acompañamiento y dinamización de comunidad: rol del líder de comunidad
+
+# Caso Chat Center: Lección Aprendida
+
+- Chat Center nació para automatizar notificaciones logísticas y reducir devoluciones
+- Se convirtió en parte del setup estándar de todos los líderes de comunidad
+  - Gratis, integrado a Dropi, fácil de enseñar
+- Cuando se cerró la versión gratuita y se migró a Chatea Pro, los líderes dejaron de enseñarlo
+- Lección: herramientas gratuitas integradas al ecosistema generan adopción masiva
+  - Chatea Pro tiene deuda pendiente: necesita versión freemium
+
+# Reenfoque Estratégico: Emprendedor Digital
+
+- Dejar de hablar de “dropshipping” en comunicaciones externas
+  - Nuevo lenguaje: **emprendedores digitales** y **emprendimiento digital**
+  - Dropshipping es el mecanismo; la promesa es democratizar el acceso al ecommerce
+- Dropi como habilitador, no como plataforma educativa
+  - Referencia: Shopify optimizó el “setup moment” sin enseñar marketing directamente
+  - Referencia: Udemy como modelo de contenido de terceros, no propio
+- Idea explorada: que los cursos de líderes de comunidad estén dentro del ecosistema Dropi
+  - Similar a cómo Chat Center era parte del setup obligatorio
+- Idea de Santiago: usar MCP para configurar desde Dropi el setup completo (Shopify, etc.) con un prompt
+- Idea de Jaime/Comercial: catálogos “primera venta” con proveedores que bajen margen \~20% para nuevos dropshippers
+
+# Investigación Conjunta y Próximos Pasos
+
+- Investigación profunda requerida entre Seller, Supplier, Growth y Logística
+  - Entender qué buscan realmente los huérfanos al registrarse
+  - Entender qué necesitan los líderes de comunidad para activar más personas
+  - Mapear el setup completo que enseñan las comunidades
+- Acciones concretas mencionadas por María:
+  - Mapear cursos gratuitos de YouTube de las principales comunidades
+  - Comprar cursos de líderes (ej. Antonia Villa, Iván Caicedo) para estudiar el setup
+- Roadmap conjunto entre células, no por silos
+  - Posible weekly de “Unidad de Negocio Dropshipping” con todas las células involucradas
+  - Logística (Juan Diego, Michel Pino) también debe sumarse a la investigación
+- Foco compartido: **de 0 a 100 órdenes** como umbral de engagement real del emprendedor digital
+
+# Próximos Pasos
+
+- **Mapear cursos gratuitos de YouTube de comunidades de dropshipping** (Santiago, Alejandra)
+
+  Estudiar cómo enseñan el setup de ventas para entender qué necesita el emprendedor digital desde cero.
+- **Comprar y estudiar cursos de líderes de comunidad** (Santiago, Alejandra)
+
+  Candidatos mencionados: Antonia Villa e Iván Caicedo. Objetivo: entender el setup completo que enseñan.
+- **Alinear con Jaime los buckets de producto y ajuste de entregas al nuevo foco de discovery** (Santiago)
+
+  Evitar reprocesos en proyectos en curso (ej. integración Shopify) a la luz del reenfoque estratégico.
+- **Organizar el framework de 0 a 100 órdenes** (Santiago)
+
+  María mencionó que Santiago ya viene trabajando en esto; actualizarlo con el umbral de 100 órdenes como meta de engagement.
+- **Coordinar investigación conjunta con Logística**
+
+  Juan Diego y Michel Pino deben sumarse al discovery sobre el emprendedor digital y la experiencia logística.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/e05d5182-9a86-419c-9fe5-b0bee83a59e5](https://notes.granola.ai/t/e05d5182-9a86-419c-9fe5-b0bee83a59e5)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:59] Yo:** De la u.
+- **[20:59] Laura Contreras:** Hola, Santi, ¿cómo estás?
+- **[21:00] Yo:** I need to
+- **[21:00] Laura Contreras:** Bien, muy bien.
+- **[21:00] Laura Contreras:** Estar juntos, esperemos no se les olvide la red.
+- **[21:00] Yo:** Dímelo.
+- **[21:00] Laura Contreras:** Que James y Mary están juntos, que esperemos no se les olvide el arredo.
+- **[21:00] Yo:** Okay.
+- **[21:00] Laura Contreras:** Por lo que estén hablando.
+- **[21:00] Yo:** Parece que calor está haciendo nuestro top piso, dios mío.
+- **[21:00] Laura Contreras:** ¿Me entiendes?
+- **[21:00] Laura Contreras:** ¿Y y tú vives en un octavo piso y está perfecto?
+- **[21:00] Yo:** Es es el... Sí.
+- **[21:00] Yo:** Sí, pues, sí, es el último piso, entonces, como que da todo el
+- **[21:00] Laura Contreras:** La
+- **[21:00] Yo:** absorbe todo el calor del mediodía,
+- **[21:00] Yo:** y
+- **[21:00] Laura Contreras:** Claro,
+- **[21:00] Yo:** igual fresco para hacer último piso, pero
+- **[21:00] Laura Contreras:** Sí.
+- **[21:00] Yo:** pero igual.
+- **[21:00] Yo:** Pega, pega.
+- **[21:00] Laura Contreras:** Y es que hoy hizo bastante calor.
+- **[21:00] Yo:** Si,
+- **[21:00] Laura Contreras:** A ver qué dicen por acá.
+- **[21:00] Laura Contreras:** No, pues démosle unos minuticos, es que igual entramos antes.
+- **[21:01] Yo:** igual, está larga la reunión, ¿no?, es como hora y media, seguramente,
+- **[21:01] Laura Contreras:** Sí.
+- **[21:01] Yo:** ya está ya está reservada la hora y media.
+- **[21:01] Laura Contreras:** That.
+- **[21:01] Laura Contreras:** La game?
+- **[21:01] Yo:** No, que igual ya está reservada a la hora y media,
+- **[21:01] Yo:** llegando.
+- **[21:01] Yo:** Más tardecito, no pasa nada. Igual aquí voy adelantando a cosas de gallo.
+- **[21:01] Yo:** ¿Dime?
+- **[21:01] Laura Contreras:** Dale, está en
+- **[21:01] Laura Contreras:** ¿Está sencillo?
+- **[21:01] Yo:** Sí, no, realmente,
+- **[21:01] Yo:** Sí, no, realmente es más tema de
+- **[21:01] Yo:** no quiero dejar como
+- **[21:01] Yo:** cabos sueltos con el discovery, que se nos pasen cosas o
+- **[21:01] Laura Contreras:** Claro.
+- **[21:01] Laura Contreras:** Yo tenía algo que hacer respecto a eso.
+- **[21:01] Laura Contreras:** Que Juan Diego me iba a ayudar.
+- **[21:01] Yo:** Lollipop non popped
+- **[21:02] Laura Contreras:** Santi, espérame, aprovecho y voy al baño.
+- **[21:02] Laura Contreras:** Ya.
+- **[21:02] Alejandra Melo:** Hola, hola.
+- **[21:02] Alejandra Melo:** ¿Cómo les terminó, Airbnb?
+- **[21:02] Alejandra Melo:** Hola, Alejandra. ¿Cómo estás?
+- **[21:02] Alejandra Melo:** Bien, bien.
+- **[21:02] Yo:** ¿Preguntaste algo, Aleja? Perdón, antes.
+- **[21:02] Alejandra Melo:** Es como les termino
+- **[21:02] Alejandra Melo:** Como les termino de ir el sábado, ¿bien?
+- **[21:02] Yo:** Bien, bien, eso es mucho
+- **[21:02] Yo:** Estuvo genial. Vaya, la u, puedes ir tranquila.
+- **[21:02] Yo:** O ya fuiste.
+- **[21:02] Laura Contreras:** ¿Qué?
+- **[21:02] Yo:** ¿No te iba a seguir?
+- **[21:02] Laura Contreras:** Ya, ya. No.
+- **[21:02] Laura Contreras:** Me quedé chismoseando aquí con ustedes.
+- **[21:02] Yo:** Bien, nos fue superbién, nos estuvo
+- **[21:02] Yo:** genial.
+- **[21:02] Yo:** Lo máximo.
+- **[21:02] Alejandra Melo:** Ah, qué bueno.
+- **[21:02] Yo:** Nos estuvo bien.
+- **[21:03] Alejandra Melo:** Yo fijo, haga estar peaje por allá.
+- **[21:03] Alejandra Melo:** Sí me tocó volverme.
+- **[21:03] Yo:** Okay. Ay, no.
+- **[21:03] Alejandra Melo:** Muy bien,
+- **[21:03] Laura Contreras:** hijo.
+- **[21:03] Yo:** Qué vaina. Te iba a decir con tu esposo, ¿cierto?
+- **[21:03] Participante:** Y
+- **[21:03] Alejandra Melo:** Sí, quedamos los dos.
+- **[21:03] Laura Contreras:** Bueno, escribir, ahora sí.
+- **[21:04] Laura Contreras:** Que ya vienen, que ya se
+- **[21:04] Yo:** Lau, mientras llegan, tú sabes
+- **[21:04] Yo:** es que vi que James agregó un campo en Darwin que se llama integraciones.
+- **[21:04] Yo:** Tú sabes si
+- **[21:04] Yo:** uno puede
+- **[21:04] Yo:** es que te quiero integrar una herramienta, hacer una prueba y de una herramienta
+- **[21:04] Yo:** de productividad, pero no sé si necesita
+- **[21:04] Yo:** como alguna condición específica o o si esa
+- **[21:04] Yo:** si ese modelo de integraciones este es para otra cosa. O sea, ¿está para que integremos lo que queramos o igual
+- **[21:04] Yo:** integraciones que tienen que estar como
+- **[21:04] Yo:** curadas, revisadas por todos?
+- **[21:04] Laura Contreras:** Según entendí, en la última reunión que hablamos,
+- **[21:04] Laura Contreras:** había que revisar que íbamos a conectar
+- **[21:04] Laura Contreras:** porque todavía no estaba muy bien definido, sea, como que fue una idea.
+- **[21:04] Yo:** Yeah.
+- **[21:04] Laura Contreras:** Entonces, no, o sea, no creo que tenga
+- **[21:05] Laura Contreras:** que ser curado,
+- **[21:05] Laura Contreras:** creo que es más bien como aterrizarlo a ver qué tanto necesitamos conectar ahí.
+- **[21:05] Yo:** Okay.
+- **[21:05] Yo:** Listo.
+- **[21:05] Yo:** Oigan, ¿ustedes utilizan Chrome o navegador?
+- **[21:05] Yo:** En el trabajo, me refiero en la Mac.
+- **[21:05] Yo:** Y
+- **[21:05] Yo:** les tocó pedir que les instalaran el Chrome
+- **[21:05] Yo:** o lo descargaron ustedes?
+- **[21:05] Laura Contreras:** No, ¿él ya venía?
+- **[21:05] Yo:** Me tocó descargarlo porque no venía.
+- **[21:05] Yo:** No, se me ha olvidado y, la verdad, no sé nada. Cuando me acuerdo, me aparece
+- **[21:05] Yo:** decirle a la DTE, que lo dejen como de prueba de la carpeta de aplicaciones.
+- **[21:05] Yo:** Entonces, por ejemplo, no me deja compartir pantalla completa y
+- **[21:05] Laura Contreras:** ¿Lo tienes bloqueado? Para descargarse.
+- **[21:05] Laura Contreras:** Hello.
+- **[21:05] Yo:** Ya lo está descargado. Hola, Mary.
+- **[21:05] Maria Ossa:** ¿Qué más? ¿Cómo van?
+- **[21:05] Yo:** Bien, ¿y tú?
+- **[21:06] Maria Ossa:** Bien.
+- **[21:06] Laura Contreras:** Hola, hola. Ando
+- **[21:06] Alejandra Melo:** por acá
+- **[21:06] Maria Ossa:** con
+- **[21:06] Alejandra Melo:** Hola,
+- **[21:06] Maria Ossa:** hola.
+- **[21:06] Alejandra Melo:** ¿Vas? Con mi nuevo mejor
+- **[21:06] Maria Ossa:** amigo.
+- **[21:06] Yo:** So
+- **[21:06] Yo:** se me congeló la
+- **[21:06] Yo:** los veo atrás.
+- **[21:06] Yo:** ¿Qué más, como aún?
+- **[21:06] Maria Ossa:** Excelente.
+- **[21:06] Maria Ossa:** Buen día.
+- **[21:06] Jose Pineda Pitre:** Ni hau.
+- **[21:06] Yo:** Oh, sí.
+- **[21:06] Maria Ossa:** ¿Cómo están?
+- **[21:06] Yo:** Muy bien.
+- **[21:06] Maria Ossa:** My god.
+- **[21:06] Yo:** Bueno, nunca lo borrando, pero bien.
+- **[21:06] Maria Ossa:** Bueno, Timi.
+- **[21:06] Maria Ossa:** Nos reuní el día de hoy
+- **[21:06] Maria Ossa:** porque vi el dólar seriamente con ustedes.
+- **[21:06] Yo:** Contala.
+- **[21:06] Maria Ossa:** He tenido mucho tiempo para reflexionar
+- **[21:06] Maria Ossa:** y
+- **[21:07] Maria Ossa:** ahorita que voy a salir a vacaciones, pues mi idea es
+- **[21:07] Maria Ossa:** como dejarles alineadas un poco la visión de lo que va a suceder,
+- **[21:07] Maria Ossa:** el tema del dropshipping.
+- **[21:07] Maria Ossa:** Entonces, la célula de seller supplier, hoy tenemos ahí, no conectamos a a Mitchell pero sí, de pronto sí me puede conectar.
+- **[21:07] Maria Ossa:** Y la célula growth,
+- **[21:07] Maria Ossa:** son las células que directamente están en este momento relacionadas
+- **[21:07] Maria Ossa:** con el modelo de dropshipping, bueno, también la célula de logística.
+- **[21:07] Maria Ossa:** Pues, la conversación con Juan Diego va a ser en otro espacio diferente.
+- **[21:07] Maria Ossa:** Hoy quería especialmente hablar con seller y con growth,
+- **[21:07] Maria Ossa:** y con suppliers,
+- **[21:07] Maria Ossa:** porque seller y supplier son las dos células que directamente se
+- **[21:07] Maria Ossa:** relacionadas con la unidad de negocio del dropshipping.
+- **[21:07] Maria Ossa:** Entonces, vamos a empezar a separar y hablar con unidades económicas.
+- **[21:07] Maria Ossa:** Entonces, digamos que
+- **[21:07] Maria Ossa:** en en el producto que nosotros tenemos de dropshipping, ¿cierto?, nosotros tenemos varios productos,
+- **[21:08] Maria Ossa:** uno que es el producto de dropshipping, hagamos de cuenta que el producto de dropshipping es la combinación
+- **[21:08] Maria Ossa:** de
+- **[21:08] Maria Ossa:** un catálogo de productos más modelo logístico,
+- **[21:08] Maria Ossa:** ¿cierto?
+- **[21:08] Maria Ossa:** Y por eso las personas pueden hacer dropshipping con nosotros.
+- **[21:08] Maria Ossa:** Ahí vamos, ok, ¿cierto?
+- **[21:08] Maria Ossa:** Entonces, el catálogo de productos
+- **[21:08] Maria Ossa:** hoy, pues, es manejado por suppliers.
+- **[21:08] Maria Ossa:** El la célula de suppliers, pues su enfoque es
+- **[21:08] Maria Ossa:** tener los mejores productos para que los usuarios vendan.
+- **[21:08] Maria Ossa:** Hoy tenemos un dato muy importante
+- **[21:08] Maria Ossa:** yo yo esto no lo tengo escrito, sino que se los voy a tirar así para que
+- **[21:08] Maria Ossa:** un poco como que se lo lleven y y me ayuden a estructurarlo
+- **[21:08] Maria Ossa:** Y es que el cuarenta por ciento de las órdenes
+- **[21:08] Maria Ossa:** que hoy se pasan por dropping son de catálogo privado.
+- **[21:08] Maria Ossa:** ¿Qué quiere decir eso?
+- **[21:08] Maria Ossa:** Que nosotros
+- **[21:08] Maria Ossa:** somos un cuarenta por ciento pack office logístico
+- **[21:09] Maria Ossa:** para personas que ya saben hacer ecommerce,
+- **[21:09] Maria Ossa:** y somos un sesenta por
+- **[21:09] Jose Pineda Pitre:** ciento
+- **[21:09] Maria Ossa:** plataforma de ecommerce.
+- **[21:09] Maria Ossa:** Para personas
+- **[21:09] Maria Ossa:** que, perdón, plataforma de dropshipping, para personas que no tienen productos,
+- **[21:09] Maria Ossa:** y que necesitan productos para hacer dropshipping.
+- **[21:09] Maria Ossa:** ¿Eso qué quiere decir? Que si hoy yo cancelo mi catálogo de productos, pues terminaría con el cuarenta por ciento de mi facturación, en un modelo cien por ciento de plataforma logística, back office logística.
+- **[21:09] Maria Ossa:** Ese dato nos dice mucho,
+- **[21:09] Maria Ossa:** Ese dato nos dice que
+- **[21:09] Maria Ossa:** uno, las personas que entran a dropping
+- **[21:09] Maria Ossa:** en una primer versión que están haciendo dropshipping, pues obvio necesitan productos para
+- **[21:09] Maria Ossa:** y se van a activar a través de nuestro catálogo de productos. O sea, que si mi mi mi corp de producto es un producto logístico, entonces vamos a hacer un ejercicio. Este ejercicio lo hice con Laura y con James, pero esto es importantísimo.
+- **[21:10] Maria Ossa:** Si yo hoy
+- **[21:10] Maria Ossa:** se cae mi catálogo de productos
+- **[21:10] Maria Ossa:** dropping, ¿se acabas?
+- **[21:10] Maria Ossa:** Es una pregunta abierta.
+- **[21:10] Jose Pineda Pitre:** No, es una pregunta
+- **[21:10] Yo:** No te entendí, si si hoy a si hoy a, se cae,
+- **[21:10] Maria Ossa:** real.
+- **[21:10] Maria Ossa:** Vamos a hablar desde, pensemos en features.
+- **[21:10] Yo:** Ajá.
+- **[21:10] Maria Ossa:** Y les voy a hacer un ejemplo.
+- **[21:10] Maria Ossa:** O o, bueno, pensemos el ejercicio de una forma diferente.
+- **[21:10] Maria Ossa:** WhatsApp.
+- **[21:10] Maria Ossa:** ¿Cuál es el producto de WhatsApp?
+- **[21:10] Jose Pineda Pitre:** No.
+- **[21:10] Jose Pineda Pitre:** Comunicar
+- **[21:10] Yo:** Ok, ya.
+- **[21:10] Maria Ossa:** personas.
+- **[21:10] Jose Pineda Pitre:** No.
+- **[21:10] Yo:** Ok.
+- **[21:10] Jose Pineda Pitre:** Hablemos
+- **[21:10] Maria Ossa:** de WhatsApp, empresa WhatsApp.
+- **[21:10] Maria Ossa:** Ajá. ¿Cuál es el producto de WhatsApp?
+- **[21:10] Maria Ossa:** Sí.
+- **[21:10] Maria Ossa:** Es
+- **[21:10] Jose Pineda Pitre:** comunicar personas, un servicio de mensajería en tu end, Ese es el valor.
+- **[21:10] Maria Ossa:** Y ese es el problema que está solucionando, es la el problema que soluciona.
+- **[21:10] Maria Ossa:** El producto es una aplicación
+- **[21:10] Jose Pineda Pitre:** Ajá. ¿Una aplicación de qué?
+- **[21:10] Maria Ossa:** De mensajería.
+- **[21:11] Jose Pineda Pitre:** De intercambio de información ¿Qué tipo de mensajería?
+- **[21:11] Jose Pineda Pitre:** ¿Texto? Pues multimedia.
+- **[21:11] Jose Pineda Pitre:** Entonces, vamos a vamos a comparar
+- **[21:11] Maria Ossa:** WhatsApp
+- **[21:11] Maria Ossa:** con Meets,
+- **[21:11] Maria Ossa:** WhatsApp y tal vez tienen un mismo valor, ¿no?
+- **[21:11] Maria Ossa:** Ajá. Comunicación.
+- **[21:11] Maria Ossa:** Ajá. Entonces, ¿cuál sería el
+- **[21:11] Jose Pineda Pitre:** producto de
+- **[21:11] Maria Ossa:** WhatsApp y cuál sería el producto de Mix?
+- **[21:11] Maria Ossa:** El producto de WhatsApp es
+- **[21:11] Jose Pineda Pitre:** bueno, de pronto estoy respondiendo muy rápido. No, hágale, hágale, pero Pero
+- **[21:11] Maria Ossa:** el producto de WhatsApp es
+- **[21:11] Jose Pineda Pitre:** en tu bolsillo, ¿sí?, como desde tu celular, de pronto el mío
+- **[21:11] Jose Pineda Pitre:** es un poco más corporativo,
+- **[21:11] Jose Pineda Pitre:** Entonces, digamos que ese es
+- **[21:11] Jose Pineda Pitre:** como la caracterización que los podría diferenciar.
+- **[21:11] Jose Pineda Pitre:** Ok. ¿Alguien más?
+- **[21:11] Yo:** Meade se va directamente a
+- **[21:11] Yo:** a estar incluido dentro workspace, o sea, Meet está conectado a un ecosistema
+- **[21:12] Yo:** que se complementa
+- **[21:12] Yo:** o sea, que saca todo el valor cuando se conecta con otras apps.
+- **[21:12] Yo:** WhatsApp puede hacerlo,
+- **[21:12] Yo:** pero
+- **[21:12] Yo:** termina siendo, dado que no es no es no es no es tan corporativo,
+- **[21:12] Yo:** se usa mal en corporativo porque
+- **[21:12] Yo:** digamos que se expande o se fuerza a que aquel caso de uso sea para
+- **[21:12] Yo:** inclusive las empresas se comuniquen entre ellas,
+- **[21:12] Yo:** pero no está pensado para ser corporativo
+- **[21:12] Yo:** sino corporativo hablo de, justamente, no sé, manejo de equipos de trabajo y demás, ¿no?
+- **[21:12] Yo:** No no no no hacia lo que, por ejemplo, sería un Slack,
+- **[21:12] Yo:** ¿sí?, o
+- **[21:12] Yo:** Google Chat,
+- **[21:12] Yo:** Teams,
+- **[21:12] Yo:** Va más hacia
+- **[21:12] Yo:** ser directamente, sí, entre personas,
+- **[21:12] Yo:** y
+- **[21:12] Yo:** de forma privada o o o grupos, pero termina siendo, digamos,
+- **[21:12] Yo:** conversaciones casuales, día a día, ocio,
+- **[21:12] Yo:** digamos, que toca un espectro diferente al
+- **[21:12] Yo:** al que sería
+- **[21:12] Yo:** ya va a ser el corporativo.
+- **[21:12] Jose Pineda Pitre:** Claro, pero
+- **[21:12] Maria Ossa:** entonces ahí estás hablando de propuesta de valor.
+- **[21:13] Maria Ossa:** ¿Alguien más?
+- **[21:13] Alejandra Melo:** Yo veo
+- **[21:13] Maria Ossa:** es
+- **[21:13] Alejandra Melo:** Meet,
+- **[21:13] Maria Ossa:** hace
+- **[21:13] Alejandra Melo:** parte de otro, o sea, hace parte de de Google, ¿ya? Entonces, está Gmail, tiene
+- **[21:13] Alejandra Melo:** tienen muchísimas más aplicación. Entonces,
+- **[21:13] Alejandra Melo:** si ya se llega a acabar Meet, pues, iguales, siguen muchísimas
+- **[21:13] Alejandra Melo:** más aplicaciones, mientras que WhatsApp es solamente mensajería.
+- **[21:13] Alejandra Melo:** Pero entonces estás haciendo la comparada
+- **[21:13] Maria Ossa:** del ecosistema de Google, pero no me estás hablando directamente de Meets.
+- **[21:13] Maria Ossa:** Lo que me estás comparando, estás diciendo que Meets tiene una propuesta de valor que
+- **[21:13] Maria Ossa:** en un ecosistema en donde si no estuviera mix, pues puedo comunicarme con las personas desde otra
+- **[21:13] Maria Ossa:** Sí. Seguimos hablando de propuesta de valor.
+- **[21:13] Maria Ossa:** ¿Qué más?
+- **[21:13] Maria Ossa:** Estoy pensando es como
+- **[21:13] Jose Pineda Pitre:** en el tamaño de la
+- **[21:13] Jose Pineda Pitre:** Sí, como en la diferencia ahí en la infraestructura, o sea, la infraestructura de WhatsApp
+- **[21:13] Jose Pineda Pitre:** No. Listo.
+- **[21:13] Jose Pineda Pitre:** Vamos a hacer
+- **[21:14] Jose Pineda Pitre:** una siguiente
+- **[21:14] Maria Ossa:** capa del ejercicio.
+- **[21:14] Maria Ossa:** Estamos hablando de WhatsApp,
+- **[21:14] Maria Ossa:** de meets.
+- **[21:14] Maria Ossa:** Hablemos de
+- **[21:14] Maria Ossa:** features y de cosas que tiene.
+- **[21:14] Maria Ossa:** Resulta que WhatsApp tiene chat,
+- **[21:14] Maria Ossa:** ¿cierto? Ajá. Pero también tiene videollamadas.
+- **[21:14] Maria Ossa:** Ajá. Y Meet,
+- **[21:14] Maria Ossa:** tiene
+- **[21:14] Jose Pineda Pitre:** videollamada
+- **[21:14] Maria Ossa:** y tiene chat.
+- **[21:14] Maria Ossa:** Los dos tienen lo mismo.
+- **[21:14] Maria Ossa:** Ajá.
+- **[21:14] Maria Ossa:** ¿Cuál es el
+- **[21:14] Jose Pineda Pitre:** producto de WhatsApp y cuál
+- **[21:14] Maria Ossa:** es el producto de Meat?
+- **[21:14] Participante:** Bueno, otra pista.
+- **[21:14] Maria Ossa:** Miren los features que tienen.
+- **[21:14] Maria Ossa:** Pensemos en WhatsApp.
+- **[21:14] Maria Ossa:** ¿Qué cosa si tú le quitas a WhatsApp? WhatsApp ya no funciona.
+- **[21:14] Maria Ossa:** ¿Y qué cosas tú le quitas a Meets?
+- **[21:14] Maria Ossa:** Meets ya no funcionaría.
+- **[21:15] Maria Ossa:** WhatsApp está como atado a tu a
+- **[21:15] Francisco Velandia:** tu número telefónico, que es como el ID Ajá. El
+- **[21:15] Jose Pineda Pitre:** el
+- **[21:15] Francisco Velandia:** correo no,
+- **[21:15] Maria Ossa:** el
+- **[21:15] Francisco Velandia:** correo es como más genérico.
+- **[21:15] Francisco Velandia:** Puede ser.
+- **[21:15] Maria Ossa:** A ver, a ver,
+- **[21:15] Maria Ossa:** Pues les puedo dar la respuesta, pero la idea es que hagamos el ejercicio.
+- **[21:15] Yo:** Si no, que que no funciona realmente,
+- **[21:15] Yo:** que
+- **[21:15] Yo:** ¿Hablando de feature?
+- **[21:15] Participante:** Producto.
+- **[21:15] Yo:** O sea, si le quito una feature,
+- **[21:15] Yo:** no sé, que que no, contactos,
+- **[21:15] Yo:** si no tengo contacto no por acá con nadie.
+- **[21:15] Yo:** Si no puede buscar un contacto
+- **[21:15] Yo:** un un
+- **[21:15] Yo:** sí, si no puedo buscar a Alejandra, Laura en ninguno de los dos,
+- **[21:15] Yo:** va a poder funcionar.
+- **[21:15] Yo:** Si yo no puedo abrir una conversación o unirme a una conversación, pues no,
+- **[21:15] Participante:** Hablamos de conversación.
+- **[21:15] Maria Ossa:** Mire,
+- **[21:15] Maria Ossa:** en la teoría de producto, cuando hablamos
+- **[21:15] Maria Ossa:** del entendimiento,
+- **[21:15] Maria Ossa:** del producto a través de sus features,
+- **[21:15] Maria Ossa:** Nosotros siempre como products de productos digitales tenemos que entender
+- **[21:15] Maria Ossa:** realmente cuál es nuestro producto.
+- **[21:16] Maria Ossa:** Y una cosa es tu main product o tu producto
+- **[21:16] Maria Ossa:** y otra cosa son los features que acompañan ese producto.
+- **[21:16] Maria Ossa:** Entonces, vamos a WhatsApp.
+- **[21:16] Maria Ossa:** El producto de WhatsApp es el chat.
+- **[21:16] Maria Ossa:** Si tú no tienes la capacidad de chatear,
+- **[21:16] Maria Ossa:** no existe.
+- **[21:16] Maria Ossa:** Ya, inmediatamente.
+- **[21:16] Maria Ossa:** ¿Tú no puedes chatear?
+- **[21:16] Maria Ossa:** WhatsApp deja de funcionar.
+- **[21:16] Maria Ossa:** Se acabó el producto.
+- **[21:16] Maria Ossa:** Ahora vamos a meet.
+- **[21:16] Maria Ossa:** En meet,
+- **[21:16] Maria Ossa:** si el chat de Meet deja de funcionar,
+- **[21:16] Maria Ossa:** Meet deja de funcionar,
+- **[21:16] Maria Ossa:** No.
+- **[21:16] Jose Pineda Pitre:** ¿Por qué? ¿Cuál es el producto de Mix?
+- **[21:16] Maria Ossa:** ¿Sí? La videollamada.
+- **[21:16] Maria Ossa:** La
+- **[21:16] Jose Pineda Pitre:** videollamada. Ok.
+- **[21:16] Maria Ossa:** Yo aquí buscando una
+- **[21:16] Jose Pineda Pitre:** una respuesta super
+- **[21:16] Jose Pineda Pitre:** Porque el chat es un feature.
+- **[21:16] Maria Ossa:** Entonces
+- **[21:16] Maria Ossa:** tú
+- **[21:16] Maria Ossa:** el producto de Meet es una videollamada,
+- **[21:16] Maria Ossa:** Los products de Meet tienen que asegurar desde toda la ingeniería, de la
+- **[21:17] Maria Ossa:** parte tecnológica, además que la llamada sea lo más fluida posible. Es
+- **[21:17] Maria Ossa:** O sea, si si la videollamada de mí no funciona y yo hablo y llega los
+- **[21:17] Maria Ossa:** cinco segundos el audio, la la gente utilizaría Meet.
+- **[21:17] Maria Ossa:** No.
+- **[21:17] Maria Ossa:** Entonces,
+- **[21:17] Jose Pineda Pitre:** digamos que todo
+- **[21:17] Maria Ossa:** está alrededor del
+- **[21:17] Maria Ossa:** de la videollamada,
+- **[21:17] Maria Ossa:** el la la
+- **[21:17] Jose Pineda Pitre:** la voz,
+- **[21:17] Maria Ossa:** el video y demás, pero
+- **[21:17] Maria Ossa:** está alrededor del chat.
+- **[21:17] Maria Ossa:** Ahora vamos a Brophy. ¿Cuál es el producto de
+- **[21:17] Maria Ossa:** todo.
+- **[21:17] Maria Ossa:** Conectar, conectar, conectar el
+- **[21:17] Jose Pineda Pitre:** supply chain.
+- **[21:17] Jose Pineda Pitre:** ¿Conectar el supply chain?
+- **[21:17] Maria Ossa:** Al producto. Pues me refiero al
+- **[21:17] Alejandra Melo:** a los productos como tal, por eso
+- **[21:17] Alejandra Melo:** Gino, Mira porque
+- **[21:17] Yo:** creación de orden.
+- **[21:17] Maria Ossa:** Creación de órdenes, por ahí vamos. Sí. Para Aleja.
+- **[21:18] Alejandra Melo:** Métrica, el cuarenta
+- **[21:18] Maria Ossa:** por ciento de las órdenes de drop y son de productos privados. ¿Qué quiere decir? Que yo tengo mi propio producto y lo vendo. Me hice
+- **[21:18] Alejandra Melo:** alianza con un
+- **[21:18] Maria Ossa:** proveedor y perfectamente yo le puedo decir al proveedor, proveedor usé drop in para mandar los productos. Entonces, hay un sesenta por ciento de dropy que sigue siendo un cuarenta por ciento de dropy que sigue siendo muy grande, que no necesita el catálogo de productos. Ajá. Entonces,
+- **[21:18] Jose Pineda Pitre:** si es la infraestructura logística, o sea, vamos a la infraestructura logística.
+- **[21:18] Maria Ossa:** Que se activa a través de la orden.
+- **[21:18] Jose Pineda Pitre:** Exacto. Entonces,
+- **[21:18] Maria Ossa:** tenemos
+- **[21:18] Jose Pineda Pitre:** una columna vertebral que
+- **[21:18] Maria Ossa:** son las órdenes.
+- **[21:18] Maria Ossa:** Pero vamos a la infraestructura logística.
+- **[21:18] Maria Ossa:** Yo voy en drop y quito
+- **[21:18] Maria Ossa:** el pago, los envíos de pago anticipado,
+- **[21:18] Maria Ossa:** tropi deja de existir?
+- **[21:18] Maria Ossa:** No, porque existe
+- **[21:18] Maria Ossa:** el pago contra
+- **[21:18] Jose Pineda Pitre:** entrega. Ok.
+- **[21:18] Jose Pineda Pitre:** ¿Y si yo hoy quito el
+- **[21:18] Maria Ossa:** pago contra entrega de Brophy?
+- **[21:19] Maria Ossa:** ¿Dropi se puede sostener con pago anticipado?
+- **[21:19] Yo:** No.
+- **[21:19] Maria Ossa:** No.
+- **[21:19] Yo:** El
+- **[21:19] Maria Ossa:** ¿Por
+- **[21:19] Jose Pineda Pitre:** qué?
+- **[21:19] Maria Ossa:** No, no, no, no tengo esa
+- **[21:19] Yo:** por ciento de área de pago más de entrega.
+- **[21:19] Francisco Velandia:** métrica, pero si
+- **[21:19] Jose Pineda Pitre:** es
+- **[21:19] Yo:** Sinusimar, en en recaudo.
+- **[21:19] Yo:** Si no estoy mal en en ingresos,
+- **[21:19] Yo:** no me acuerdo dónde tengo el dato, pero
+- **[21:19] Yo:** el ochenta, aproximadamente el ochenta por ciento de las órdenes
+- **[21:19] Francisco Velandia:** Listo, vamos a esa métrica.
+- **[21:19] Yo:** generadas serán para pago contra entrega, ¿no?
+- **[21:19] Maria Ossa:** ¿Por qué el ochenta por ciento de las órdenes generadas en drop y es pago contra entrega?
+- **[21:19] Maria Ossa:** Porque son son Vendedores Que
+- **[21:19] Francisco Velandia:** Aún No Generan La Confianza Para Para Para Concretar Una Compra Cien
+- **[21:19] Maria Ossa:** Por Ciento
+- **[21:19] Francisco Velandia:** Anticipada. Exacto,
+- **[21:19] Jose Pineda Pitre:** Totalmente. Exacto.
+- **[21:19] Francisco Velandia:** El
+- **[21:19] Maria Ossa:** Producto De Drop Y En Una Versión Mínima Reducida Es El Pago Contra Entrega Chica. Ok. ¿Y Por Qué Voy A Decir? Porque Porque Un Dropshipper
+- **[21:20] Jose Pineda Pitre:** Puede Ir
+- **[21:20] Maria Ossa:** Donde Un Proveedor Conseguir Productos, Subir A Drop Y Los Productos, Y El Dropshiper Lo Que Necesita Es Un Método De Pago Y De Entrega Que Genere Confianza. Eso, Digamos, El Dropshipping Que Se Hace Desde China no funciona tanto.
+- **[21:20] Maria Ossa:** Porque yo tengo que pedir con pago anticipado y el producto me va a llegar en diez días. Entonces, si yo hoy quito el pago contra entrega de drop in, pues drop fee se acaba. Ok. Entonces, hablemos alrededor de
+- **[21:20] Jose Pineda Pitre:** ese producto. Por eso
+- **[21:20] Maria Ossa:** digamos que la hipótesis de
+- **[21:20] Yo:** Una ya pregunta para
+- **[21:20] Yo:** para aclarar un punto.
+- **[21:20] Yo:** Si seguíamos por la línea de que el producto es
+- **[21:20] Yo:** pago contra entrega,
+- **[21:20] Yo:** podríamos decir si
+- **[21:20] Yo:** en x tiempo, o sea, el siguiente año
+- **[21:20] Yo:** hay una regulación que suspende el dropshipping, el concepto de dropshipping
+- **[21:20] Yo:** se
+- **[21:20] Yo:** Dropi podría hacer una migración a
+- **[21:20] Yo:** no va ser dropshipping, sino que ahora
+- **[21:21] Yo:** simplemente va a migrar a pasar a solamente ser un
+- **[21:21] Yo:** a ofrecer una infraestructura, pago para pago contra entrega, es decir,
+- **[21:21] Yo:** ya cada quien se conecte como pueda y y Dropi solamente se
+- **[21:21] Yo:** encarga de entregar, recoger y y y, no sé, el caso por
+- **[21:21] Participante:** Exacto.
+- **[21:21] Maria Ossa:** Es más, mire,
+- **[21:21] Jose Pineda Pitre:** eso
+- **[21:21] Maria Ossa:** puede suceder. Y y la teoría dice eso, mire,
+- **[21:21] Maria Ossa:** dropping hace
+- **[21:21] Maria Ossa:** también
+- **[21:21] Maria Ossa:** uno porque es un sitio donde puedes organizar tus órdenes,
+- **[21:21] Maria Ossa:** entonces las primeras personas que usan Dropi son dropshippers que ya hacían dropchippy. Ni siquiera con sus productos pro, o sea, con productos de Dropi. Ellos ya sus proveedores entonces, lo que empezaron a hacer ellos fue a meter los proveedores para poder hacer dropshipping. ¿Y por qué estaba bien chévere también? Porque ellos lograron conectarse a la transportadora con un contrato de pago contra entrega. Hace cinco años tú tener un contrato de de pago con entrega, tenías que ser una persona que facturara más de quince millones de pesos mensuales para tener un contrato con una de pago contra entrega, y aparte de eso, te pagaban cada mes o cada quince días.
+- **[21:22] Maria Ossa:** Porque el producto de es un producto de pago contra entrega,
+- **[21:22] Maria Ossa:** es porque uno conecta todas las transportadoras
+- **[21:22] Maria Ossa:** dos, facilito el contrato y tres, apalanco al usuario
+- **[21:22] Maria Ossa:** con la recolección.
+- **[21:22] Maria Ossa:** Porque es que el pago contra entrega de nosotros no es el pago contra entrega de cualquier otra
+- **[21:22] Maria Ossa:** incluso de otras empresas.
+- **[21:22] Maria Ossa:** El pago de nosotros es un
+- **[21:22] Maria Ossa:** pago contra entrega de apalancamiento,
+- **[21:22] Maria Ossa:** que si la persona entrega el producto, yo
+- **[21:22] Maria Ossa:** dropi le entrego su ganancia, incluso antes de que la transportadora dé la ganancia.
+- **[21:22] Maria Ossa:** Que eso es lo que nos sucede en marcas, porque no se van los usuarios de marca al final.
+- **[21:22] Maria Ossa:** Porque tienen un ecosistema
+- **[21:22] Maria Ossa:** y porque Dropi también les facilita eso. Entonces,
+- **[21:22] Maria Ossa:** vamos al con.
+- **[21:23] Maria Ossa:** Decimos
+- **[21:23] Jose Pineda Pitre:** que en
+- **[21:23] Maria Ossa:** esencia básica
+- **[21:23] Maria Ossa:** eso es lo que somos.
+- **[21:23] Maria Ossa:** Para todo lo que hay alrededor,
+- **[21:23] Maria Ossa:** nace en función de
+- **[21:23] Maria Ossa:** sacarle mayor valor al ecosistema, que Dropi crezca y demás. Entonces, vamos
+- **[21:23] Maria Ossa:** hablar del catálogo de productos. El catálogo de productos, ¿cómo nace? Pues resulta que todos los dropshippers que vendían, que empezaron a meter
+- **[21:23] Maria Ossa:** sus proveedores y empezó a organizarse un catálogo, y resulta que como Dropi facilitaba vender, pues, los líderes de
+- **[21:23] Maria Ossa:** dijeron, vení, pues yo le enseño a mis usuarios
+- **[21:23] Maria Ossa:** a meter a través de dropping, y le hice una oportunidad muy grande
+- **[21:23] Maria Ossa:** de tener productos para que
+- **[21:23] Maria Ossa:** se uniera todo el ecosistema. Entonces, ya empezamos a hablar
+- **[21:23] Maria Ossa:** un poco de que GrowthWi es un ecosistema.
+- **[21:23] Maria Ossa:** Siguiente etapa.
+- **[21:23] Maria Ossa:** Hablamos de drópico como ecosistema. Que nos permite hacer todo esto. Pero en ningún momento todavía Tropi habla de que enseñe a vender o que enseñe un montón de cosas. Sino que, entonces, yo tengo ya varios actores, tengo los vendedores tengo los proveedores, tengo las transportadoras,
+- **[21:24] Maria Ossa:** y tengo los líderes de comunidad,
+- **[21:24] Maria Ossa:** todos conectados en un ecosistema.
+- **[21:24] Maria Ossa:** Ahora bien, vamos a esto.
+- **[21:24] Maria Ossa:** Si mi producto es el pago contra entrega,
+- **[21:24] Maria Ossa:** Listo.
+- **[21:24] Maria Ossa:** En ese pago contra entrega, yo creo toda una infraestructura, mi back office logístico,
+- **[21:24] Maria Ossa:** que me conecta los los los usuarios de las transportadoras,
+- **[21:24] Maria Ossa:** y aparte de eso conecto toda la parte del apalancamiento
+- **[21:24] Maria Ossa:** financiero, porque sabemos que es un COD con la
+- **[21:24] Maria Ossa:** financiero, creo que me diferencia incluso
+- **[21:24] Maria Ossa:** de otras plataformas como Roca, o bueno, como todas estas competidores, ¿por qué usan drop y los dropshippers en drop y porque drop y
+- **[21:24] Maria Ossa:** te apalanca.
+- **[21:24] Maria Ossa:** So, ya propuesta de valor,
+- **[21:24] Maria Ossa:** corte nuestro producto.
+- **[21:24] Maria Ossa:** Ahora,
+- **[21:24] Maria Ossa:** entonces,
+- **[21:24] Maria Ossa:** creo todo este back office,
+- **[21:25] Maria Ossa:** por fuera para tú, que crees, la orden. Entonces, mi motor para
+- **[21:25] Maria Ossa:** que entren es creación de órdenes, o sea, que es uno de los fiches principales
+- **[21:25] Maria Ossa:** Entonces, si ya llamo hoy netamente a la parte tecnológica,
+- **[21:25] Maria Ossa:** Dropi perfectamente puede ser un API
+- **[21:25] Maria Ossa:** para que las personas a través de esa API creen sus órdenes con las transportadoras.
+- **[21:25] Maria Ossa:** ¿No?
+- **[21:25] Maria Ossa:** Sí.
+- **[21:25] Maria Ossa:** Listo, ya vamos a la esencia
+- **[21:25] Jose Pineda Pitre:** superfácil.
+- **[21:25] Maria Ossa:** ¿Iván? Una aplicación de Shopify. Podría ser una aplicación de Shopify, perfecto.
+- **[21:25] Maria Ossa:** Y lo que va a suceder con el MCP es que las personas
+- **[21:25] Maria Ossa:** van a subir ahí sus órdenes,
+- **[21:25] Maria Ossa:** y vamos a hacer todo el tracking logistic.
+- **[21:25] Maria Ossa:** Entonces, teniendo en cuenta eso,
+- **[21:25] Maria Ossa:** ese producto, ¿a quién se lo venden ustedes? Ahora, imagínense que ustedes ya tienen ese producto.
+- **[21:25] Maria Ossa:** ¿Quién sería su cliente ideal?
+- **[21:25] Maria Ossa:** Para ese producto?
+- **[21:25] Maria Ossa:** Una marca.
+- **[21:25] Maria Ossa:** Una persona
+- **[21:25] Jose Pineda Pitre:** que ella vende, ¿no?
+- **[21:25] Jose Pineda Pitre:** Sí, una,
+- **[21:25] Maria Ossa:** sí, un una persona que ya tiene una
+- **[21:26] Jose Pineda Pitre:** pues sí, los usuarios que ya son los mejores
+- **[21:26] Jose Pineda Pitre:** vendedores en Droppy, los que ya tienen una marca, tienen un catálogo privado y disparan sus ventas a través, o sea, el cliente ideal es ese. El que ya tiene, el que nos utiliza dentro de su operación de negocio como el que recaudo, el que lleva y recauda la plata. Entonces, qué sucede? Si yo soy una persona que no sabe hacer ecommerce
+- **[21:26] Maria Ossa:** y llego a dropping? No, pues me estrello con una barrera de entrada
+- **[21:26] Jose Pineda Pitre:** gigante, porque tengo que saber mucho para poderle sacar provecho al producto. O o sea, sí, Tienes que pasar como por una curva de aprendizaje tal vez, Mary,
+- **[21:26] Francisco Velandia:** Claro. Entonces ahí
+- **[21:26] Francisco Velandia:** entra un actor
+- **[21:26] Maria Ossa:** muy
+- **[21:26] Francisco Velandia:** importante,
+- **[21:26] Maria Ossa:** es quiénes son las personas que más saben vender.
+- **[21:26] Maria Ossa:** Los líderes de comunidad.
+- **[21:27] Jose Pineda Pitre:** ¿Pero por qué?
+- **[21:27] Jose Pineda Pitre:** Porque ya tienen un expertise en marketing digital.
+- **[21:27] Maria Ossa:** Pero ¿quién...? O sea,
+- **[21:27] Jose Pineda Pitre:** vamos un poquito más a quiénes son los líderes de la comunidad,
+- **[21:27] Maria Ossa:** José. Démosle la oportunidad a otra persona.
+- **[21:27] Maria Ossa:** Los dropshippers. ¿Dime?
+- **[21:27] Maria Ossa:** Los
+- **[21:27] Alejandra Melo:** dropshippers.
+- **[21:27] Maria Ossa:** ¿Cómo
+- **[21:27] Alejandra Melo:** así los dropshippers?
+- **[21:27] Maria Ossa:** Sí, son los que más saben vender, pues. Claro, pero quieren
+- **[21:27] Alejandra Melo:** o sea, los líderes de comunidad, ¿qué son?
+- **[21:27] Alejandra Melo:** Son
+- **[21:27] Maria Ossa:** dropshippers que encontraron la
+- **[21:27] Maria Ossa:** de generar ventas,
+- **[21:27] Michelle Lopez Obregon:** si quieren ayudarles a otros a
+- **[21:27] Alejandra Melo:** a
+- **[21:27] Michelle Lopez Obregon:** que apliquen esa misma estrategia. Claro, entonces, los líderes de
+- **[21:27] Michelle Lopez Obregon:** ya son job keepers experimentados,
+- **[21:27] Maria Ossa:** que ya conocen el ecosistema, que ya hablan con los proveedores, con los suppliers,
+- **[21:27] Maria Ossa:** y ellos encontraron una nueva fuente de monetización, ojo,
+- **[21:27] Maria Ossa:** porque no es altruista, no es como, es que yo quiero enseñarle a las personas a vender.
+- **[21:27] Maria Ossa:** Encontraron una nueva fuente de monetización, que son los productos
+- **[21:28] Maria Ossa:** digitales.
+- **[21:28] Maria Ossa:** Como yo ya sé hacer dropshipping, sé generar un dinero, pues me creo un producto digital,
+- **[21:28] Maria Ossa:** en donde le enseño a las personas a vender.
+- **[21:28] Maria Ossa:** Entonces, ¿qué sucede?
+- **[21:28] Maria Ossa:** Cuando empiezan a hacer dropping,
+- **[21:28] Maria Ossa:** Lucho aprende dropshipper a través de estos productos digitales.
+- **[21:28] Maria Ossa:** Entonces, dicen,
+- **[21:28] Maria Ossa:** vení, yo ya te tengo una plataforma
+- **[21:28] Maria Ossa:** y les voy a contar un poco cómo cómo se expande, porque es que
+- **[21:28] Maria Ossa:** Lucho entraba a todos estos
+- **[21:28] Maria Ossa:** videollamadas de las comunidades,
+- **[21:28] Maria Ossa:** y todo mundo empezaba a decir, hey, ¿y tú cómo haces lo chico? Y sí, como lo que
+- **[21:28] Maria Ossa:** en los chats, ¿y ustedes cómo hacen tal cosa? Entonces, mucho un día, digo, no, pues yo me creé esto.
+- **[21:28] Maria Ossa:** Y todo el mundo empezó a decirle a gente, vení, ¿puedo usarla también para yo vender?
+- **[21:28] Maria Ossa:** Entonces empieza
+- **[21:28] Maria Ossa:** digamos, a masificarse dentro de las
+- **[21:28] Maria Ossa:** personas que ya saben usar
+- **[21:28] Maria Ossa:** y necesitaban apalancar su crecimiento, y
+- **[21:28] Maria Ossa:** ya ellos empiezan a decir, oiga, yo tengo contratos con las transportadoras uno de mis socios es el dueño de moda internacional.
+- **[21:29] Maria Ossa:** Moda internacional es
+- **[21:29] Maria Ossa:** fue
+- **[21:29] Maria Ossa:** la empresa de venta por catálogo que introdujo el modelo de venta por
+- **[21:29] Maria Ossa:** en Colombia y que ya tenía la relación con las transportadoras.
+- **[21:29] Maria Ossa:** Entonces, yo ya tengo los contratos con las transportadoras y tengo importación por
+- **[21:29] Maria Ossa:** en Movimiento Internacional Hace Importación, Tengo Entiendo Esto Cómo Funciona, Me Conecto Con La Tecnología, Y Empiezo A Hacer Andar Mi Negocio Y Resulta Que Todas Las Personas En Ese Momento Tenían El Mismo Programa. Empiezan A Sumarse A Drop In, Pero Ya Personas Que Saben Los Primeros Personas Que Usaron Drop In Eran Personas Que Ya Sabían Vender Y Que Ya Estaba Relacionada Con El Ecosistema Del Ecommerce. Como Ajá. O Del Comercio Tradicional. Exactamente. Sí, No,
+- **[21:29] Jose Pineda Pitre:** En Esa Época Nadie
+- **[21:29] Maria Ossa:** Entendía Aquí En Colombia qué era el dropshipping.
+- **[21:29] Maria Ossa:** Sino que parte de todo eso tú vas a hablar con los proveedores y tienes que explicarles qué es el
+- **[21:30] Maria Ossa:** porque ni siquiera saben qué es
+- **[21:30] Maria Ossa:** Entonces, ahí empieza a surgir un fenómeno nuevo, Santiago, ya te voy a dar
+- **[21:30] Maria Ossa:** la la la palabra,
+- **[21:30] Maria Ossa:** ahí empieza a surgir un fenómeno
+- **[21:30] Maria Ossa:** en donde, obvio, empiezan a entrar un montón de personas,
+- **[21:30] Maria Ossa:** empiezan a decir, porque ya tengo las tres portadoras, puedo tener un catálogo público,
+- **[21:30] Maria Ossa:** que cualquier persona pueda vender,
+- **[21:30] Maria Ossa:** pero los únicos que me están usando son las
+- **[21:30] Maria Ossa:** que ya saben hacer dropshipping,
+- **[21:30] Maria Ossa:** pero las personas que ya saben hacer dropshipping son las mismas personas que en esa época hoy se volvieron líderes de comunidad, aprendieron a vender y dijeron, voy crear mi producto digital,
+- **[21:30] Maria Ossa:** y voy a enseñar a las personas a vender
+- **[21:30] Maria Ossa:** hacer dropshipping a través de DropMe. Porque ya unió toda la cadena logística operativa para hacer el dropshipping. Lo cual permitía escalar. Antes no era así, antes tú tenías que ir a hablar con el proveedor aparte, y tenías que tener una negociación, entonces le pasabas las órdenes por WhatsApp, y el proveedor tenía que tener sus propios transportistas,
+- **[21:31] Maria Ossa:** nada se conectaba.
+- **[21:31] Maria Ossa:** Ellos lo conectaron todo para que la operación
+- **[21:31] Maria Ossa:** más base del dropshipping se pudiera hacer.
+- **[21:31] Maria Ossa:** ¿Por qué les cuento todo esto?
+- **[21:31] Maria Ossa:** Antes de eso, Santiago,
+- **[21:31] Yo:** No, no, si quieres terminar, porque
+- **[21:31] Maria Ossa:** Listo.
+- **[21:31] Yo:** pronto voy por otro lado.
+- **[21:31] Maria Ossa:** ¿Por qué les cuento todo esto?
+- **[21:31] Maria Ossa:** Porque, entonces,
+- **[21:31] Maria Ossa:** resulta
+- **[21:31] Maria Ossa:** que lo primero que nació fue la conexión con las transportadoras para la gestión de órdenes.
+- **[21:31] Maria Ossa:** Lo segundo que nace es mi catálogo de productos para que personas puedan vender.
+- **[21:31] Maria Ossa:** Y resulta que para que todo eso se movilice, pues creamos la Wallace.
+- **[21:31] Maria Ossa:** Porque con la wallet es como funciona el flujo del dinero.
+- **[21:31] Maria Ossa:** Pero
+- **[21:31] Maria Ossa:** yo hago que esto crezca?
+- **[21:31] Maria Ossa:** Pues me creo el sistema de comisión,
+- **[21:31] Maria Ossa:** Entonces, le digo a los a los a los líderes y a los dropshipers
+- **[21:31] Maria Ossa:** que ya venden, oiga, traiga personas que vendan el dropping, yo a usted le pago por orden.
+- **[21:32] Maria Ossa:** Entonces, este se volvió mi palanca principal de crecimiento. Entonces,
+- **[21:32] Maria Ossa:** los líderes de comunidad empezaron a vender cursos, cursos, cursos, cursos,
+- **[21:32] Maria Ossa:** empezaron a transformar personas que no sabían hacer ecommerce
+- **[21:32] Maria Ossa:** en personas que ya sabían hacer ecommerce,
+- **[21:32] Maria Ossa:** porque eso es lo que vende el curso.
+- **[21:32] Maria Ossa:** Va un curso de un líder de comunidad que te enseña a vender y a hacer ecommerce.
+- **[21:32] Maria Ossa:** Y en ese curso tú ves que tiene un montón de herramientas, entonces
+- **[21:32] Maria Ossa:** usa Shopee, File, usa Meta, usa Dropi,
+- **[21:32] Maria Ossa:** hablamos de un setup de ventas.
+- **[21:32] Maria Ossa:** ¿Cierto?
+- **[21:32] Maria Ossa:** Ellos enseñan un setup de ventas.
+- **[21:32] Maria Ossa:** ¿Y por qué enseñan dropping?
+- **[21:32] Maria Ossa:** Porque drop in les da comisión. ¿Por qué enseñan Shopify y qué Shopify les da comisión?
+- **[21:32] Maria Ossa:** ¿Sí? Si Shopify no les diera comisión, usarían tienda nube,
+- **[21:32] Maria Ossa:** usarían otro.
+- **[21:32] Maria Ossa:** Y además porque Shopify, ojo,
+- **[21:32] Maria Ossa:** Shopify es muy fácil de configurar a diferencia, o al o al menos en esa
+- **[21:32] Maria Ossa:** a diferencia de otras de otras plataformas para hacer landing page.
+- **[21:32] Maria Ossa:** Lo mismo Dropy. Dropy era más fácil de usar que tú hacer todo tu propio sistema. Entonces, mira que empiezan a aparecer un montón de herramientas son fáciles de usar, para poderle enseñar a alguien cómo hacer ventas digitales. Pero Tropi, al son de hoy, sigue siendo la plataforma logística con el catálogo de productos. Entonces, les voy a tirar una segunda métrica.
+- **[21:33] Maria Ossa:** El noventa y ocho por ciento de las personas
+- **[21:33] Maria Ossa:** que se registran
+- **[21:33] Maria Ossa:** en la encuesta dicen, oh, es el noventa y cinco, no sé, pero es más del noventa por ciento,
+- **[21:33] Maria Ossa:** que no saben hacer ecommerce o que no han hecho ecommerce mock.
+- **[21:33] Maria Ossa:** ¿A ustedes qué les dice eso?
+- **[21:33] Maria Ossa:** El
+- **[21:33] Maria Ossa:** noventa y ocho por ciento de las personas que se registraron noventa.
+- **[21:33] Jose Pineda Pitre:** Más del noventa por ciento de las personas que se registran como drop shippers
+- **[21:33] Maria Ossa:** dicen que nunca han hecho ecommerce.
+- **[21:33] Maria Ossa:** ¿Ustedes nomás ven ven esa métrica ¿y a ustedes qué creen? O sea, ¿qué es lo primero que piensan con esas métricas?
+- **[21:34] Maria Ossa:** Tengo que entrenar a muchas personas para que mi producto
+- **[21:34] Maria Ossa:** de ecommerce,
+- **[21:34] Jose Pineda Pitre:** que son las órdenes,
+- **[21:34] Jose Pineda Pitre:** crezca. Ajá. O sea, como que tengo un reto de alfabetizar
+- **[21:34] Jose Pineda Pitre:** digital grande.
+- **[21:34] Maria Ossa:** Esa
+- **[21:34] Jose Pineda Pitre:** es una una reacción un poco más profunda, aprovechando la oportunidad.
+- **[21:34] Jose Pineda Pitre:** Pero en una versión básica.
+- **[21:34] Maria Ossa:** Vamos aquí.
+- **[21:34] Maria Ossa:** Usted está lanzando su producto,
+- **[21:34] Maria Ossa:** ¿cierto? Y, Aleja, vamos al dropshipping. Usted les está lanzando su producto. Y le empiezan a llegar un montón de leads y digamos que su producto son mujeres,
+- **[21:34] Maria Ossa:** usted está vendiendo un producto para la pérdida del cabello y su
+- **[21:34] Maria Ossa:** nicho objetivo son mujeres de cierta edad, yo no sé qué, yo no sé qué.
+- **[21:34] Maria Ossa:** Pero a usted le empiezan a llegar el noventa por ciento de su lead son hombres y el diez por ciento son mujeres.
+- **[21:35] Maria Ossa:** ¿Usted qué dice?
+- **[21:35] Maria Ossa:** Que tengo que cambiar el ángulo de eventos hacia hombres.
+- **[21:35] Maria Ossa:** Tienes
+- **[21:35] Alejandra Melo:** un tema de calificación de leads.
+- **[21:35] Alejandra Melo:** Ajá.
+- **[21:35] Alejandra Melo:** Pero ¿ella qué hizo?
+- **[21:35] Maria Ossa:** Mira que lo primero que digo, no voy a cambiar mi pauta, sino que voy a
+- **[21:35] Alejandra Melo:** cambiar el ángulo de venta
+- **[21:35] Maria Ossa:** hacia hombres.
+- **[21:35] Maria Ossa:** Porque sabe que hay un mercado de personas
+- **[21:35] Maria Ossa:** tal vez está llegando, pero ¿cómo cambia el ángulo de venta? Entrando a estudiar, bueno,
+- **[21:35] Maria Ossa:** ¿por qué los hombres están llegando acá?
+- **[21:35] Maria Ossa:** Y eso es una de las primeras cosas que yo quiero decirles a ustedes.
+- **[21:35] Maria Ossa:** ¿Por qué el noventa por ciento de las personas que se están registrando en dropping
+- **[21:35] Maria Ossa:** sabiendo que mi producto es un producto logístico,
+- **[21:35] Maria Ossa:** Son personas que nunca he dicho ecommerce.
+- **[21:35] Maria Ossa:** Porque se vende
+- **[21:35] Maria Ossa:** fácil de ganar dinero.
+- **[21:35] Michelle Lopez Obregon:** Entonces, tengo un problema de comunicación de marketing
+- **[21:35] Michelle Lopez Obregon:** ¿Debería cambiar mi marketing?
+- **[21:35] Maria Ossa:** Pero yo veo en las redes sociales de drop
+- **[21:36] Maria Ossa:** y nunca decimos nosotros que con drop y se gana dinero.
+- **[21:36] Maria Ossa:** Ni los líderes de comunidad dicen eso.
+- **[21:36] Maria Ossa:** Los líderes de comunidad, sí.
+- **[21:36] Alejandra Melo:** O sea, sí lo dicen, pero últimamente han estado cambiando la
+- **[21:36] Alejandra Melo:** en
+- **[21:36] Maria Ossa:** cómo lo están comunicando. Antes
+- **[21:36] Alejandra Melo:** sí lo decían mucho.
+- **[21:36] Alejandra Melo:** Ahorita ya están diciendo, pues, que no es fácil, que
+- **[21:36] Alejandra Melo:** requiere su tiempo o, bueno,
+- **[21:36] Alejandra Melo:** nadie la percepción en las redes.
+- **[21:36] Alejandra Melo:** La percepción de los dropshippers que que se puede
+- **[21:36] Maria Ossa:** ganar
+- **[21:36] Francisco Velandia:** bastante
+- **[21:36] Maria Ossa:** dinero
+- **[21:36] Francisco Velandia:** en poco tiempo si se toma un, si se agarra un buen producto,
+- **[21:36] Francisco Velandia:** y, o sea, como muchas muchas variables que, se toman buenas decisiones,
+- **[21:36] Francisco Velandia:** se puede como que obtener rápido una ganancia.
+- **[21:36] Francisco Velandia:** Tal vez hay una percepción así de las personas sobre el ecommerce.
+- **[21:36] Francisco Velandia:** El drop.
+- **[21:36] Francisco Velandia:** Te lo puedo tirar, entonces, otro dato.
+- **[21:36] Francisco Velandia:** Resulta que nosotros tenemos
+- **[21:36] Francisco Velandia:** diferentes
+- **[21:36] Maria Ossa:** fuentes de personas que se registran.
+- **[21:36] Maria Ossa:** La tasa de activación de las personas
+- **[21:37] Maria Ossa:** que se registran a través de una comunidad es del veintiséis por ciento.
+- **[21:37] Maria Ossa:** Y la tasa de activación de las personas que que se registran
+- **[21:37] Maria Ossa:** sin una comunidad,
+- **[21:37] Maria Ossa:** es como del uno por ciento.
+- **[21:37] Maria Ossa:** A ustedes que les dice eso.
+- **[21:37] Maria Ossa:** ¿Cómo otra vez? ¿Sin una comunidad?
+- **[21:37] Maria Ossa:** La tasa de activación de las de las personas
+- **[21:37] Alejandra Melo:** que
+- **[21:37] Jose Pineda Pitre:** se
+- **[21:37] Alejandra Melo:** registran a través de una comunidad es del
+- **[21:37] Maria Ossa:** veintiséis por
+- **[21:37] Maria Ossa:** y la tasa de activación de las personas que se registran huérpanos, o
+- **[21:37] Maria Ossa:** que no son de una comunidad,
+- **[21:37] Maria Ossa:** es del uno por ciento. Están más capacitadas.
+- **[21:37] Maria Ossa:** Pues,
+- **[21:37] Maria Ossa:** claro, vinieron ya preparadas
+- **[21:37] Alejandra Melo:** desde
+- **[21:37] Alejandra Melo:** desde que empezaron a estudiar en YouTube y, digamos acompañamiento.
+- **[21:37] Alejandra Melo:** Un acompañamiento, exacto.
+- **[21:37] Yo:** No que no tener quien te enseñe
+- **[21:37] Yo:** si al final afecta el
+- **[21:37] Yo:** el aprovechamiento de dropping.
+- **[21:37] Yo:** O o la percepción de valor de dropping.
+- **[21:37] Yo:** Porque finalmente
+- **[21:37] Yo:** aunque sea uno o dos vídeos de un líder de comunidad,
+- **[21:38] Yo:** van a
+- **[21:38] Yo:** van a
+- **[21:38] Yo:** lograr transmitir mejor
+- **[21:38] Yo:** o facilitar ese curva de aprendizaje, sobre todo, en los primeros dos días.
+- **[21:38] Yo:** Y y algo que, aprovechando, era lo que yo iba a decir a
+- **[21:38] Yo:** unos minutos,
+- **[21:38] Yo:** yo creo que uno
+- **[21:38] Yo:** y, pues, para nadie, de pronto, es un secreto ya, pero
+- **[21:38] Yo:** hay un layer ahí como transversal
+- **[21:38] Yo:** que es el de
+- **[21:38] Yo:** que no es el negocio de dropping, pero que al final
+- **[21:38] Yo:** termina haciendo un esfuerzo, y es el de educación.
+- **[21:38] Yo:** Porque aunque se tiene academy,
+- **[21:38] Yo:** más allá de que
+- **[21:38] Yo:** al final
+- **[21:38] Yo:** academy
+- **[21:38] Yo:** va de
+- **[21:38] Yo:** de de de de
+- **[21:38] Yo:** de cubrir la parte de educación, solo que educación
+- **[21:38] Yo:** pues, no solamente termina siendo a través de cursos y y, de pronto, el material que se tiene,
+- **[21:38] Yo:** trata de tenerlo, pero al final
+- **[21:38] Yo:** si uno toma, por ejemplo, los los dropshippers que no tienen
+- **[21:39] Yo:** absolutamente nada de asociación con con líder de comunidad,
+- **[21:39] Yo:** o no saben o no saben nada de ecommerce,
+- **[21:39] Yo:** yo creo que
+- **[21:39] Yo:** desde un punto cero, igual, tampoco va a haber una motivación suficiente para que arranque
+- **[21:39] Yo:** aprender.
+- **[21:39] Yo:** Allá de querer ganar esos primeros
+- **[21:39] Yo:** esos primeros pesos enviando algo algo de de órdenes, ¿sí? Realmente, el esfuerzo que implica de un punto cero, es mucho mayor a lo que ellos van a lograr percibir.
+- **[21:39] Participante:** Entonces,
+- **[21:39] Participante:** aquí entramos a una dicotomía.
+- **[21:39] Maria Ossa:** Tengo que volverme a una plataforma educativa,
+- **[21:39] Maria Ossa:** No.
+- **[21:39] Maria Ossa:** Ah Tengo que tener programas educativos
+- **[21:39] Maria Ossa:** pero usted me está dando de una
+- **[21:39] Jose Pineda Pitre:** vez la solución.
+- **[21:39] Jose Pineda Pitre:** No me dé soluciones, José, me
+- **[21:39] Maria Ossa:** entiendes.
+- **[21:39] Maria Ossa:** Pensemos en el problema.
+- **[21:39] Jose Pineda Pitre:** Tengo
+- **[21:39] Maria Ossa:** que ser una plataforma educativa
+- **[21:39] Yo:** Yo yo yo lo partí en en en dos
+- **[21:40] Yo:** en dos.
+- **[21:40] Yo:** Y es
+- **[21:40] Yo:** me están escuchando bien? Es que siento que se congela la imagen, no sé si solo
+- **[21:40] Maria Ossa:** Sí.
+- **[21:40] Yo:** Ah, bueno.
+- **[21:40] Participante:** Sí te escuchamos bien. Pero, Santi,
+- **[21:40] Yo:** Ah, bueno, súper.
+- **[21:40] Yo:** Sí, sí.
+- **[21:40] Alejandra Melo:** antes de que vayamos a a lo que estás diciendo,
+- **[21:40] Alejandra Melo:** José,
+- **[21:40] Maria Ossa:** Pregunta.
+- **[21:40] Maria Ossa:** ¿Qué vende su segmento de usuarios, los líderes de comunidad?
+- **[21:40] Maria Ossa:** Mi
+- **[21:40] Jose Pineda Pitre:** segmento
+- **[21:40] Maria Ossa:** de usuarios vende
+- **[21:40] Maria Ossa:** sí,
+- **[21:40] Jose Pineda Pitre:** productos de e-learning,
+- **[21:40] Jose Pineda Pitre:** La educación.
+- **[21:40] Jose Pineda Pitre:** Sí. Ustedes ellos tienen ellos tienen... Sí, no, ellos como líderes de comunidad venden
+- **[21:40] Jose Pineda Pitre:** un producto de
+- **[21:40] Maria Ossa:** e-learning. Como
+- **[21:40] Jose Pineda Pitre:** dropshippers
+- **[21:40] Maria Ossa:** venden como
+- **[21:40] Jose Pineda Pitre:** dropshippers.
+- **[21:40] Jose Pineda Pitre:** Oye, pero líderes de comunidad.
+- **[21:40] Jose Pineda Pitre:** Y educación.
+- **[21:40] Jose Pineda Pitre:** Si mi principal motor
+- **[21:40] Maria Ossa:** de crecimiento, que son los líderes de comunidad, venden
+- **[21:40] Maria Ossa:** Y yo me meto en el mundo de la educación,
+- **[21:40] Maria Ossa:** Tengo un
+- **[21:41] Maria Ossa:** Tengo un un problema, ¿no?
+- **[21:41] Maria Ossa:** Tengo un problema porque me canibalizo
+- **[21:41] Maria Ossa:** la educación.
+- **[21:41] Maria Ossa:** Entonces, yo debería volverme un producto educativo
+- **[21:41] Maria Ossa:** ahora sí, Santiago.
+- **[21:41] Yo:** Sí, yo yo lo llevaría dos a
+- **[21:41] Yo:** los que ya los que ya saben vender,
+- **[21:41] Yo:** que son los que ya tienen a dropping como producto a coffees,
+- **[21:41] Yo:** dejándolos como congelados, ya traen revenue, traen ingresos, son los que, sostenidamente,
+- **[21:41] Yo:** hacen que funcione.
+- **[21:41] Yo:** Entonces, el mayor problema, estoy simplificándolo un montón, pero son los que no saben vender y que
+- **[21:41] Yo:** el uno por ciento se activa.
+- **[21:41] Yo:** ¿Cierto?
+- **[21:41] Yo:** No se activa
+- **[21:41] Yo:** yéndome un poco también a lo que los datos dicen, es también porque el
+- **[21:41] Yo:** consideran complicado, no han hecho ecomersantes, sino han hecho ecommerce
+- **[21:41] Yo:** mucho menos dropshipping,
+- **[21:41] Yo:** significa que les tengo que enseñar.
+- **[21:41] Yo:** Pero de esa parte es simplemente un grupo es
+- **[21:41] Yo:** algo que se muevan a grupos, a líderes de comunidad,
+- **[21:42] Yo:** ¿sí?
+- **[21:42] Yo:** Porque la más fácil es
+- **[21:42] Yo:** pues empujarlos, redirigirlos. Llega a mí solo, pues le asigno un
+- **[21:42] Yo:** que en un corporativo es, le lo redirijo un comercial que
+- **[21:42] Yo:** no sería un comercial que es un líder de comunidad que le enseñe,
+- **[21:42] Yo:** Yo me trago, me me omito el tragarme toda esa curva de aprendizaje que me toca darle, porque yo no
+- **[21:42] Yo:** una plataforma de de educación. Sin embargo, entonces, eso lo que hace es aumentar la dependencia hacia líderes
+- **[21:42] Yo:** de
+- **[21:42] Yo:** Si se quiere o no se quiere, eso es un la misma disyuntiva, es
+- **[21:42] Participante:** Otro problema.
+- **[21:42] Yo:** quiero o no
+- **[21:42] Yo:** Exacto.
+- **[21:42] Yo:** Siendo que no se quisiera, que antes quisiéramos eliminar esa dependencia,
+- **[21:42] Yo:** yo creo que termina, ahí es donde a donde quiere llegar es la decisión de negocio.
+- **[21:42] Yo:** O nos
+- **[21:42] Yo:** canibalizamos
+- **[21:42] Yo:** y de una manera muy
+- **[21:42] Yo:** amigable, lenta, poco
+- **[21:42] Yo:** perceptible, vamos,
+- **[21:42] Yo:** migrando hacia un
+- **[21:42] Yo:** elearning o o u ofreciéndole
+- **[21:42] Yo:** a líderes de la comunidad herramientas para que no se hagan su contenido dentro de drop y estén vendiendo cualquier cosa.
+- **[21:43] Yo:** Pero
+- **[21:43] Yo:** que no que que que no salgan esos otros canales, no no me lo redirija a YouTube, no me redirija a ningún otro canal,
+- **[21:43] Yo:** si si Drops es el que está generando el ecosistema
+- **[21:43] Yo:** usted métase aún más en dropping,
+- **[21:43] Yo:** así, por lo menos, trato de que de que el el estudiante se quede ahí.
+- **[21:43] Yo:** Por ese lado, yo, de hecho, sí le iba a decir, pues,
+- **[21:43] Yo:** capaz sí se puede ofrecer
+- **[21:43] Yo:** -learning, sí se puede ofrecer educación, solamente que no una educación
+- **[21:43] Yo:** forma independiente, como lo hace Europeo.
+- **[21:43] Yo:** Sino una
+- **[21:43] Yo:** funciona más, un Udemy, por ejemplo.
+- **[21:43] Yo:** Al final es una plataforma donde se genera contenido educativo, pero de terceros, no de Udemy en sí misma generando
+- **[21:43] Jose Pineda Pitre:** Pero
+- **[21:43] Yo:** contenido.
+- **[21:43] Yo:** Entonces,
+- **[21:43] Participante:** todavía no vayamos a la
+- **[21:43] Participante:** quiero yo quiero cambiar mi respuesta.
+- **[21:43] Maria Ossa:** Ya tenemos
+- **[21:43] Maria Ossa:** cómo no soy competencia,
+- **[21:43] Maria Ossa:** de mis
+- **[21:43] Jose Pineda Pitre:** líderes
+- **[21:43] Maria Ossa:** cómo, entonces,
+- **[21:43] Maria Ossa:** sigo con la pregunta, ¿debo ser educativo o no?, ¿cómo soluciono eso?
+- **[21:43] Maria Ossa:** Yo tengo yo yo quiero cambiar mi mi respuesta.
+- **[21:43] Maria Ossa:** Yo antes respondí e
+- **[21:44] Jose Pineda Pitre:** learning,
+- **[21:44] Maria Ossa:** y ya lo pensé
+- **[21:44] Jose Pineda Pitre:** bien, y no es e learning,
+- **[21:44] Maria Ossa:** sino
+- **[21:44] Jose Pineda Pitre:** acompañamiento.
+- **[21:44] Jose Pineda Pitre:** Es es es un acompañamiento que ellos venden
+- **[21:44] Jose Pineda Pitre:** y
+- **[21:44] Jose Pineda Pitre:** digamos, que la idea
+- **[21:44] Jose Pineda Pitre:** sí, como no sería hacer un e-learning,
+- **[21:44] Jose Pineda Pitre:** sino vender acompañar
+- **[21:44] Jose Pineda Pitre:** sino ofrecer acompañamiento por capas.
+- **[21:44] Jose Pineda Pitre:** Hay algo que yo estoy de acuerdo con Santi es,
+- **[21:44] Jose Pineda Pitre:** hay un punto en donde vamos a llegar el negocio, donde vamos a tener que tomar la decisión,
+- **[21:44] Jose Pineda Pitre:** de cuál va a ser el papel del líder de comunidad dentro de
+- **[21:44] Jose Pineda Pitre:** ecosistema. Porque un líder de comunidad
+- **[21:44] Jose Pineda Pitre:** que me acompaña en la primera fase no es
+- **[21:44] Jose Pineda Pitre:** valioso como un líder de comunidad que me sostiene la comunidad.
+- **[21:44] Jose Pineda Pitre:** ¿Sí? O sea, como que son dos instancias de acompañamiento diferente.
+- **[21:44] Jose Pineda Pitre:** El que hace el onboarding y el que me acompaña en ese momento de setting,
+- **[21:44] Jose Pineda Pitre:** digamos que debería ser Dropi como plataforma,
+- **[21:44] Jose Pineda Pitre:** y el que me enseña a convivir en ese
+- **[21:45] Jose Pineda Pitre:** donde yo tengo que generar órdenes,
+- **[21:45] Jose Pineda Pitre:** ya es el líder de comunidad, como que yo los veo de esa forma,
+- **[21:45] Jose Pineda Pitre:** buscando
+- **[21:45] Jose Pineda Pitre:** no canibalizar
+- **[21:45] Maria Ossa:** a los
+- **[21:45] Jose Pineda Pitre:** líderes de comunidad, pero tampoco haciéndoles el negocio a los líderes de comunidad
+- **[21:45] Jose Pineda Pitre:** sino exigiéndoles a ellos sobre el acompañamiento de sus comunidades.
+- **[21:45] Jose Pineda Pitre:** Ok.
+- **[21:45] Jose Pineda Pitre:** Por ahí vamos.
+- **[21:45] Jose Pineda Pitre:** Eso eso está muy interesante, José, está muy interesante lo que estás diciendo.
+- **[21:45] Maria Ossa:** Mire,
+- **[21:45] Maria Ossa:** aquí no vamos a tener la respuesta.
+- **[21:45] Maria Ossa:** Y un poco por qué lo senté el día de hoy, porque quiero que
+- **[21:45] Maria Ossa:** pensemos
+- **[21:45] Maria Ossa:** más
+- **[21:45] Maria Ossa:** en esto.
+- **[21:45] Maria Ossa:** Que les estoy hablando.
+- **[21:45] Maria Ossa:** ¿Y por qué los llamé el día de hoy?
+- **[21:45] Maria Ossa:** Porque yo creo que nos toca entrar a entender mucho más el problema.
+- **[21:45] Maria Ossa:** Uno, tenemos una disonancia cognitiva,
+- **[21:45] Maria Ossa:** fuerte,
+- **[21:45] Maria Ossa:** de lo que las personas están viendo afuera y se registran en drop be, y
+- **[21:46] Maria Ossa:** encuentran en drop.
+- **[21:46] Maria Ossa:** Ya sabemos, el noventa por ciento de las personas nunca
+- **[21:46] Maria Ossa:** pero tengo un noventa por ciento de personas que se están registrando
+- **[21:46] Maria Ossa:** y que no se van a activar nunca,
+- **[21:46] Maria Ossa:** porque no hay nada
+- **[21:46] Maria Ossa:** que vaya a resolver lo que ellos quieren.
+- **[21:46] Maria Ossa:** Y hoy no sabemos qué ellos quieren.
+- **[21:46] Maria Ossa:** Yo sé que si yo les pregunto aquí, ¿ellos qué quieren?, todos vamos a responder, de pronto, cosas muy similares,
+- **[21:46] Maria Ossa:** pero
+- **[21:46] Maria Ossa:** lo que quiero decirles es,
+- **[21:46] Maria Ossa:** tenemos que descubrir verdaderamente
+- **[21:46] Maria Ossa:** ellos qué quieren y de dónde vinieron.
+- **[21:46] Maria Ossa:** Entonces, ahí viene lo primero, vení.
+- **[21:46] Maria Ossa:** Entremos a profundizar con estas personas que se están registrando
+- **[21:46] Maria Ossa:** que dicen que nunca ha vendido, ¿por qué están entrando a drop in?
+- **[21:46] Maria Ossa:** Qué están buscando en drop? Primer punto.
+- **[21:46] Maria Ossa:** Tenemos una división, entonces, primer pago, visionancia cognitiva.
+- **[21:46] Maria Ossa:** Segundo hack, tenemos un cuarenta por ciento de personas que
+- **[21:46] Maria Ossa:** de todo lo que venden es de catálogo privado.
+- **[21:46] Maria Ossa:** O sea, que
+- **[21:46] Maria Ossa:** no necesariamente todo lo que yo estoy vendiendo aquí es dropshipping, o sea, que tengo una parte
+- **[21:47] Maria Ossa:** logística muy importante, que eso, pues, ya lo vamos a hablar con el equipo de de los
+- **[21:47] Maria Ossa:** Y por último,
+- **[21:47] Maria Ossa:** pues, porque yo sí tengo crecimiento a través de los líderes de común
+- **[21:47] Maria Ossa:** que tienen un Veintiséis Por Ciento De Activación Y Los Otros No Se Me Activan. O Sea, Ahí Ya Tenemos Otro Camino Que Es Importante, De Pronto, Entender. Porque Lo Reuní Aquí Hoy, Especialmente A Santiago,
+- **[21:47] Maria Ossa:** y a José. Esto hoy va a impactar suppliers, ahorita vamos a hablar de ellos.
+- **[21:47] Maria Ossa:** Pero la idea es
+- **[21:47] Maria Ossa:** que empecemos a hacer una investigación muy profunda,
+- **[21:47] Maria Ossa:** Primero,
+- **[21:47] Maria Ossa:** Y y más de de de ir a a la investigación, yo lo que quiero decirles a ustedes es que
+- **[21:47] Participante:** mi hipótesis hoy,
+- **[21:47] Maria Ossa:** es que
+- **[21:47] Maria Ossa:** el concepto de producto de dropping
+- **[21:47] Maria Ossa:** no ha evolucionado
+- **[21:48] Maria Ossa:** a lo que realmente las personas están pensando que es dropping.
+- **[21:48] Maria Ossa:** Nosotros ofrecemos un ecosistema
+- **[21:48] Maria Ossa:** ofrecemos un montón de herramientas para ecommerce,
+- **[21:48] Maria Ossa:** y
+- **[21:48] Maria Ossa:** al menos en la unidad de negocio de dropshipping,
+- **[21:48] Maria Ossa:** estamos hablando de que puedes hacer dropshipping con dropping.
+- **[21:48] Maria Ossa:** Primera cosa que quiero decirles, ya no vamos a hablar más de dropshipping,
+- **[21:48] Maria Ossa:** Con el equipo de marketing y comunicaciones,
+- **[21:48] Maria Ossa:** vamos a hablar de emprendedores digitales.
+- **[21:48] Maria Ossa:** De emprendimiento digital.
+- **[21:48] Maria Ossa:** Eso es algo que tenemos que empezar a cambiar.
+- **[21:48] Maria Ossa:** Que el modelo del dropshipping es un modelo que permite volverte un
+- **[21:48] Jose Pineda Pitre:** digital de
+- **[21:48] Maria Ossa:** una manera mucho más fácil, sí.
+- **[21:48] Maria Ossa:** Por eso hablamos de que Dropbox hace una democratización
+- **[21:48] Maria Ossa:** de entrada. Droppy es un es una manera o una herramienta que
+- **[21:48] Maria Ossa:** la entrada al emprendimiento digital.
+- **[21:48] Maria Ossa:** Pero sí escuchan todo lo que hablamos, ¿no? Democratizar la entrada
+- **[21:48] Maria Ossa:** al emprendimiento digital. Emprendedores digitales,
+- **[21:49] Maria Ossa:** Mi plataforma es una plataforma de back office logístico.
+- **[21:49] Maria Ossa:** Entonces, sí tenemos una adicionalización
+- **[21:49] Maria Ossa:** cognitiva bastante fuerte,
+- **[21:49] Maria Ossa:** entonces, un poco lo que yo traigo aquí hoy a la mesa es
+- **[21:49] Jose Pineda Pitre:** tenemos
+- **[21:49] Maria Ossa:** que entender cuál es realmente nuestro producto.
+- **[21:49] Maria Ossa:** Yo sé que tengo un producto muy bueno, que es el pago
+- **[21:49] Maria Ossa:** me va a permitir a mí
+- **[21:49] Maria Ossa:** hacer el envío, y me el ecosistema
+- **[21:49] Maria Ossa:** del ecommerce.
+- **[21:49] Maria Ossa:** Pero
+- **[21:49] Maria Ossa:** tengo el noventa por ciento de personas que
+- **[21:49] Maria Ossa:** están entrando con una expectativa que no saben
+- **[21:49] Maria Ossa:** y no sabemos
+- **[21:49] Maria Ossa:** realmente cuál es.
+- **[21:49] Maria Ossa:** Y lo único que yo sé es que el segmento de usuarios
+- **[21:49] Maria Ossa:** que sí puede usar dropping es muy chiquito.
+- **[21:49] Maria Ossa:** Si yo hoy voy a mirar todas las personas que ya saben hacer ecommerce,
+- **[21:49] Maria Ossa:** al menos en Colombia,
+- **[21:49] Maria Ossa:** la mayoría.
+- **[21:49] Maria Ossa:** Ya debe conocer a Dropi.
+- **[21:49] Maria Ossa:** Entonces, yo obvio sigo creciendo porque me apalanca
+- **[21:50] Maria Ossa:** y tengo un crecimiento de ex colección porque me apalanco de los
+- **[21:50] Jose Pineda Pitre:** líderes de comunidad, los
+- **[21:50] Maria Ossa:** líderes de comunidad están metiendo
+- **[21:50] Maria Ossa:** una transformación a emprendimiento digital.
+- **[21:50] Maria Ossa:** Entonces, cuando las personas entran a Dropy, no encuentran un emprendimiento digital.
+- **[21:50] Maria Ossa:** ¿Cuál es la idea?
+- **[21:50] Maria Ossa:** Uno, Santiago.
+- **[21:50] Maria Ossa:** Eso es lo que tenemos que entender y alejar.
+- **[21:50] Maria Ossa:** En seller success.
+- **[21:50] Maria Ossa:** ¿Quién es nuestro usuario real
+- **[21:50] Maria Ossa:** ¿Cierto?
+- **[21:50] Maria Ossa:** Y cómo nosotros realmente
+- **[21:50] Maria Ossa:** caracterizamos el éxito de seller y entendemos al emprendedor digital.
+- **[21:50] Maria Ossa:** Y cómo nuestra plataforma se alinea realmente a eso.
+- **[21:50] Maria Ossa:** Ahí nos tenemos que repensar cuál es nuestro producto,
+- **[21:50] Maria Ossa:** Porque nuestro producto principal, que es la logística, pues tampoco
+- **[21:50] Maria Ossa:** funciona muy bien, o sea, la experiencia de logística no es la mejor.
+- **[21:50] Maria Ossa:** Eso es algo que vamos a trabajar con el equipo de logística, con la célula de logística
+- **[21:50] Maria Ossa:** El viernes vamos a tener una reunión y vamos a hablar del enfoque de cómo realmente
+- **[21:51] Maria Ossa:** aseguramos la experiencia de logística, porque es nuestro producto principal.
+- **[21:51] Maria Ossa:** Pero
+- **[21:51] Maria Ossa:** seller success,
+- **[21:51] Maria Ossa:** es una célula estratégica de crecimiento,
+- **[21:51] Maria Ossa:** equipo
+- **[21:51] Maria Ossa:** Seller success no está aquí para solucionar el tema de la logística. Seller success está aquí para ver cómo vamos a capitalizar a todos los vendedores, uno,
+- **[21:51] Maria Ossa:** ayudándolos a crecer,
+- **[21:51] Maria Ossa:** que ya nuestra plataforma les ayuda a crecer, tenemos muchas cosas para crecer,
+- **[21:51] Maria Ossa:** Y dos,
+- **[21:51] Maria Ossa:** cómo
+- **[21:51] Maria Ossa:** capitalizamos a todas esas personas que quieren ser emprendedores digitales.
+- **[21:51] Maria Ossa:** Un emprendedor digital, habla hablemos de la segmentación, entonces,
+- **[21:51] Maria Ossa:** si el cien por ciento de las personas que se me registran
+- **[21:51] Maria Ossa:** con lo que yo tengo hoy como producto, solamente el
+- **[21:51] Maria Ossa:** por ciento está calificado, que son personas que ya venden.
+- **[21:51] Maria Ossa:** Sea, que hablo que el noventa y cinco por ciento son no calificados.
+- **[21:51] Maria Ossa:** Si yo hablo de plataforma logística,
+- **[21:52] Maria Ossa:** pero si yo hablo, entonces,
+- **[21:52] Maria Ossa:** de emprendedores o personas que
+- **[21:52] Jose Pineda Pitre:** se quieren
+- **[21:52] Maria Ossa:** volver emprendedores digitales,
+- **[21:52] Maria Ossa:** tal vez de ese noventa y cinco por ciento hayan muchas personas. Uno me
+- **[21:52] Maria Ossa:** que tengan que tengan disposición de
+- **[21:52] Maria Ossa:** poner tiempo para aprender.
+- **[21:52] Maria Ossa:** Dos, que tengan la capacidad, de pronto, de invertir un millón, dos millones de pesos,
+- **[21:52] Maria Ossa:** porque hacer dropshipping necesitas invertir.
+- **[21:52] Maria Ossa:** Y tres, que tengan la disposición y el espíritu de emprendimiento. Entonces, si yo
+- **[21:52] Maria Ossa:** miro ese ese noventa y cinco por ciento, que son miles de personas,
+- **[21:52] Maria Ossa:** tal vez hay un segmento y un grupo de personas
+- **[21:52] Maria Ossa:** que quiere volverse un emprendedor digital.
+- **[21:52] Maria Ossa:** Y que solamente lo están capitalizando los líderes de comunidad.
+- **[21:52] Maria Ossa:** Yo no le quiero competir a los líderes de comunidad, esa es mi intención.
+- **[21:52] Maria Ossa:** Pero yo sí quiero ser
+- **[21:52] Maria Ossa:** la plataforma
+- **[21:52] Maria Ossa:** que ayude a crecer a estas personas y democratice el acceso al emprendimiento digital.
+- **[21:53] Maria Ossa:** Entonces, justo estábamos aquí hablando de eso por
+- **[21:53] Maria Ossa:** con Jaime, y tal vez un poco lo que venimos pensando es,
+- **[21:53] Maria Ossa:** yo no necesito ser una plataforma e-learning,
+- **[21:53] Maria Ossa:** pero sí me puedo volver un gran habilitador.
+- **[21:53] Maria Ossa:** Y aquí les voy a contar otra historia.
+- **[21:53] Maria Ossa:** Resulta
+- **[21:53] Maria Ossa:** hoy no vamos a salir con respuestas, yo solamente quiero entregarles todas
+- **[21:53] Maria Ossa:** información.
+- **[21:53] Maria Ossa:** Resulta que yo entré a Dropi a trabajar en un proyecto que se llama chat center.
+- **[21:53] Maria Ossa:** Chat center luego se convirtió en chatea pronto, en chatea.
+- **[21:53] Maria Ossa:** Y chatea luego se convirtió en chatea pro.
+- **[21:53] Maria Ossa:** ¿Por qué más el chat center?
+- **[21:53] Maria Ossa:** Y yo creo que Aleja ha vivido, ella sabe todas estas historias.
+- **[21:53] Maria Ossa:** Ajá. Pero resulta que chat center nace
+- **[21:53] Maria Ossa:** porque tenía había un problema de devoluciones muy grande.
+- **[21:53] Maria Ossa:** Entonces, con lo ideal de comunidad nos empezamos a dar cuenta o
+- **[21:53] Maria Ossa:** empezó a dar cuenta listo.
+- **[21:53] Maria Ossa:** ¿Cómo yo disminuyo las devoluciones? A que confirmo, pero aparte de eso,
+- **[21:54] Maria Ossa:** vendiendo. Entonces, WhatsApp empieza a ser un canal de comunicación muy importante,
+- **[21:54] Maria Ossa:** y obvio está todo el envío del tracking.
+- **[21:54] Maria Ossa:** ¿Cómo le aviso a mi usuario y a mi cliente
+- **[21:54] Maria Ossa:** en en qué estado está su pedido? Todo enfocado en logística, o sea, ahí estamos
+- **[21:54] Maria Ossa:** primeras etapas de Europa y cien por ciento logístico, y si vemos
+- **[21:54] Maria Ossa:** el ochenta por ciento de las soluciones de drop y son logísticas,
+- **[21:54] Maria Ossa:** Entonces, chat center nace para automatizar
+- **[21:54] Maria Ossa:** el envío de notificaciones a las personas
+- **[21:54] Maria Ossa:** sobre en qué estado está su pedido.
+- **[21:54] Maria Ossa:** ¿Qué sucede con chat center?
+- **[21:54] Maria Ossa:** Pues mira que chat center rápidamente lo empezaron a usar las personas que más vendían.
+- **[21:54] Maria Ossa:** Líderes de comunidad.
+- **[21:54] Maria Ossa:** Y ellos lo empezaron a la ellos lo empezaron a usar
+- **[21:54] Maria Ossa:** y vieron que a través de chat center sí podían disminuir sus devoluciones y podían
+- **[21:54] Maria Ossa:** su operación.
+- **[21:54] Maria Ossa:** O sea, que ya no tenían que tener diez personas, sino menos personas,
+- **[21:54] Maria Ossa:** Importantísimo para el escalar
+- **[21:55] Maria Ossa:** Pero
+- **[21:55] Maria Ossa:** se dieron cuenta de algo muy importante también,
+- **[21:55] Maria Ossa:** y es que parte del éxito para sus estudiantes era tener un sistema
+- **[21:55] Maria Ossa:** que les permitiera a ellos escalar.
+- **[21:55] Maria Ossa:** Y ChatGPT se volvió un
+- **[21:55] Maria Ossa:** feature
+- **[21:55] Maria Ossa:** esa parte de dropping,
+- **[21:55] Maria Ossa:** chat se volvió uno de los
+- **[21:55] Maria Ossa:** setups
+- **[21:55] Maria Ossa:** de ventas
+- **[21:55] Maria Ossa:** o setups de emprendimiento digital. Parte de ese setup de
+- **[21:55] Maria Ossa:** digital más importante para
+- **[21:55] Maria Ossa:** para
+- **[21:55] Maria Ossa:** que los líderes de comunidad enseñaban.
+- **[21:55] Maria Ossa:** Aleja, me imagino que cuando entró a la
+- **[21:55] Maria Ossa:** A la ochenta. Caicedo, le enseñaron, no sé qué
+- **[21:55] Maria Ossa:** tiene que tener Shopify, tiene que aprender a usar Meta, tiene que procesar usar Dropy, tiene que aprender a usar
+- **[21:55] Maria Ossa:** porque era parte de ese setup.
+- **[21:55] Maria Ossa:** Para hacer su emprendimiento digital.
+- **[21:55] Maria Ossa:** Y todas, y sí metirré,
+- **[21:55] Maria Ossa:** vamos a buscar videos de hace cuatro años todos los cursos de los líderes de comunidad de drop y el
+- **[21:56] Maria Ossa:** dropping y enseñaban chat set.
+- **[21:56] Maria Ossa:** Absolutamente todas las personas.
+- **[21:56] Maria Ossa:** ¿Por qué?
+- **[21:56] Maria Ossa:** Porque les solucionaba un problema muy grande para ellos
+- **[21:56] Maria Ossa:** que era la confirmación de órdenes,
+- **[21:56] Maria Ossa:** y el tema de las devoluciones, que es uno de los puntos de mayor dolor,
+- **[21:56] Maria Ossa:** de
+- **[21:56] Maria Ossa:** las personas que están aprendiendo a hacer drone shipping.
+- **[21:56] Maria Ossa:** Digamos que yo supero todo, ¿no?, crear
+- **[21:56] Maria Ossa:** hacer campañas,
+- **[21:56] Maria Ossa:** mis primeras ventas,
+- **[21:56] Maria Ossa:** la mayoría de las de las
+- **[21:56] Maria Ossa:** comunidades o lo que se llamaban las comunidades al inicio eran
+- **[21:56] Maria Ossa:** también el proceso logístico.
+- **[21:56] Maria Ossa:** Entonces, tenías toda una capacitación de marketing y ventas,
+- **[21:56] Maria Ossa:** pero tenías todo un blog luego de proceso logístico de confirmación.
+- **[21:56] Maria Ossa:** ¿Sí o no, Elena?
+- **[21:56] Maria Ossa:** Sí, sí. Aunque
+- **[21:56] Maria Ossa:** al principio se usaba y luego comenzamos fue a usar Phoenix.
+- **[21:56] Maria Ossa:** Pues con
+- **[21:57] Alejandra Melo:** los de Phoenix y ellos usaban chat center.
+- **[21:57] Alejandra Melo:** Exactamente. Algo así.
+- **[21:57] Alejandra Melo:** Porque
+- **[21:57] Alejandra Melo:** o sea, ya el estudiante no necesitaba aprender
+- **[21:57] Alejandra Melo:** a cómo hacerlo, sino que Félix ya
+- **[21:57] Maria Ossa:** lo fuera a
+- **[21:57] Maria Ossa:** Pero al inicio todos los líderes de comunidad enseñaban eso.
+- **[21:57] Maria Ossa:** ¿Por qué les cuento esta historia?
+- **[21:57] Maria Ossa:** Cuando yo llego a coger chat center, yo cogí chat center en un MVP,
+- **[21:57] Maria Ossa:** los líderes de comunidad todavía no lo estaban masificando,
+- **[21:57] Maria Ossa:** y yo empecé a ver quiénes estaban usando chat, etcétera, y me di cuenta que los líderes de
+- **[21:57] Maria Ossa:** estaban usando chat center,
+- **[21:57] Maria Ossa:** y me empezaron a preguntar cosas como, vení,
+- **[21:57] Maria Ossa:** ¿cuál es la mejor forma de instalarlo?, ¿cómo funcionan?
+- **[21:57] Maria Ossa:** Me mandaron a sus equipos de sus comunidades a que yo los entrenara en chat center
+- **[21:57] Maria Ossa:** porque luego ellos iban a ser las personas que enseñaran a usar chat center, porque era
+- **[21:57] Maria Ossa:** uno gratis,
+- **[21:57] Maria Ossa:** estaba atado a dropping,
+- **[21:57] Maria Ossa:** y aparte de eso se podía hacer una comunicación.
+- **[21:57] Maria Ossa:** Rápida.
+- **[21:57] Maria Ossa:** Yo ese producto lo construí con los líderes de comunidades.
+- **[21:58] Maria Ossa:** Yo me senté con todos los líderes de comunidad y les pregunté a ellos
+- **[21:58] Maria Ossa:** bueno, ¿usted qué necesita que haga chat center? Ah, no, yo necesito
+- **[21:58] Maria Ossa:** que sea esto, esto y yo, ¿usted cómo usa?, ¿usted cómo confirma?
+- **[21:58] Maria Ossa:** Yo enseño de esta manera, yo enseño,
+- **[21:58] Maria Ossa:** y de ahí, ya que nació ChatGPT como la
+- **[21:58] Maria Ossa:** versión, y todo lo que se construyó después fue basado en las metodologías
+- **[21:58] Maria Ossa:** uno, los líderes de comunidad y dos, las mejores prácticas para el
+- **[21:58] Maria Ossa:** entendiendo ellos lo que necesitaban.
+- **[21:58] Maria Ossa:** Cuando ya nace chatea pro,
+- **[21:58] Maria Ossa:** y aquí viene la otra parte de la historia, y esto es muy importante,
+- **[21:58] Maria Ossa:** chatear pro empiezan a usarlo, pero había todo, había un segmento de usuarios
+- **[21:58] Maria Ossa:** que nunca miraron la chat de apro,
+- **[21:58] Maria Ossa:** y siempre seguían llegando personas nuevas a chat center.
+- **[21:58] Maria Ossa:** ¿Por qué seguían llegando personas nuevas a chat center? Porque los líderes de comunidad
+- **[21:58] Maria Ossa:** a pesar de que nació Chachantee a Pro, que era con AI,
+- **[21:58] Maria Ossa:** seguían enseñando ChatGapro.
+- **[21:58] Maria Ossa:** ¿Por qué?
+- **[21:58] Maria Ossa:** Si ya tengo una herramienta que tiene AI,
+- **[21:59] Maria Ossa:** ¿Qué cosa?
+- **[21:59] Maria Ossa:** ¿Por qué era gratis?
+- **[21:59] Maria Ossa:** Entonces, era un feature de un producto
+- **[21:59] Maria Ossa:** muy simple,
+- **[21:59] Maria Ossa:** de entender.
+- **[21:59] Maria Ossa:** Muy dedicado a una necesidad puntual que la suplía
+- **[21:59] Maria Ossa:** y es gratis, integrada a
+- **[21:59] Maria Ossa:** Entonces, si yo voy a enseñarle a una persona nueva
+- **[21:59] Maria Ossa:** a hacer ecommerce
+- **[21:59] Maria Ossa:** tiene que pagar como un millón de pesos en herramientas
+- **[21:59] Maria Ossa:** pues va a ser mucho más difícil que esa persona se active. Yo necesito que ese millón de pesos lo invierta en pauta,
+- **[21:59] Maria Ossa:** porque igual hay que invertir.
+- **[21:59] Maria Ossa:** Hablamos de una forma democrática de vender.
+- **[21:59] Maria Ossa:** Basado en eso,
+- **[21:59] Maria Ossa:** cuando se cierra el chat center, la versión gratuita,
+- **[21:59] Maria Ossa:** y ahorita todos tienen que usar chatea pro,
+- **[21:59] Maria Ossa:** ya nadie
+- **[21:59] Maria Ossa:** ningún líder de comunidad habla de chatea.
+- **[21:59] Maria Ossa:** Ya no lo tienen en ese setup de de de ventas
+- **[21:59] Maria Ossa:** básico obligatorio, porque iba, acá y se obligaba
+- **[22:00] Maria Ossa:** a que todo mundo usara chat center o no, alega.
+- **[22:00] Maria Ossa:** Era obligatorio.
+- **[22:00] Maria Ossa:** Sí, sí.
+- **[22:00] Maria Ossa:** Pues, cuando nosotros entramos, no.
+- **[22:00] Maria Ossa:** No era tan obligatorio.
+- **[22:00] Maria Ossa:** Porque nosotros,
+- **[22:00] Alejandra Melo:** o sea, sí lo vinimos a usar, pero también, pues,
+- **[22:00] Alejandra Melo:** lo que te dije.
+- **[22:00] Alejandra Melo:** Los de Phoenix. Luego sí pasamos como que chatea pro,
+- **[22:00] Alejandra Melo:** ve a a chat center, luego
+- **[22:00] Alejandra Melo:** ya empezamos fue con con chatea.
+- **[22:00] Alejandra Melo:** Unos como paso a paso, todo.
+- **[22:00] Alejandra Melo:** Pero sí, sí se sí se usó chat center.
+- **[22:00] Alejandra Melo:** ¿Y ChatGenter permitió
+- **[22:00] Alejandra Melo:** o sea, chat center
+- **[22:00] Alejandra Melo:** fue la herramienta que permitió, uno, escalar a las personas que ya vendían y dos, ayudar a
+- **[22:00] Maria Ossa:** activar un montón de personas que recién estaban entrando. Y fue parte fundamental de todas las mentorías de ese Obvio las herramientas, va creciendo, Pero ¿por qué les digo esto? Porque yo no me volví un enseñador como
+- **[22:01] Maria Ossa:** yo no me volví una plataforma que enseña, sino que creé herramientas
+- **[22:01] Maria Ossa:** para facilitar el proceso de hacer ecommerce.
+- **[22:01] Maria Ossa:** Y ahí es donde viene el concepto que estábamos hablando ahorita
+- **[22:01] Maria Ossa:** con Jaime, es que tal vez yo no necesito ser una plataforma de educación,
+- **[22:01] Maria Ossa:** porque yo soy un habilitado.
+- **[22:01] Maria Ossa:** Yo como dropping conecto,
+- **[22:01] Maria Ossa:** y facilito toda la operación
+- **[22:01] Maria Ossa:** hacer
+- **[22:01] Maria Ossa:** el emprendimiento digital a través de un modelo que se llama Entonces, ¿cuál es la idea con seller success?
+- **[22:01] Maria Ossa:** ¿Alejna y Santiago?
+- **[22:01] Maria Ossa:** ¿Cómo nosotros nos volvemos unos habilitadores de los vendedores al menos en la primer
+- **[22:01] Maria Ossa:** instancia,
+- **[22:01] Maria Ossa:** que son las personas que recién están llegando. Porque los que ya están, pues ya se saben
+- **[22:01] Maria Ossa:** y Rope les funciona muy bien como plataforma logística, por eso el
+- **[22:01] Maria Ossa:** por ciento de las personas venden productos privados.
+- **[22:01] Maria Ossa:** Pero yo como capitalizo el otro noventa y cinco por ciento de
+- **[22:02] Maria Ossa:** que están entrando,
+- **[22:02] Maria Ossa:** que tal vez sí tienen una intención de volverse emprendedores digitales,
+- **[22:02] Maria Ossa:** y si yo quiero crecerle a dropping, pues, necesito tener más emprendedores digitales vendiendo.
+- **[22:02] Maria Ossa:** ¿No?
+- **[22:02] Maria Ossa:** Entonces,
+- **[22:02] Maria Ossa:** ahí es donde nos vamos a enfocar en este momento y
+- **[22:02] Maria Ossa:** cómo lo hacemos?
+- **[22:02] Maria Ossa:** Yo lo que he pensado es en esto y eres
+- **[22:02] Maria Ossa:** ¿y qué pasa
+- **[22:02] Maria Ossa:** logramos que los líderes de comunidad enseñen a hacer dropshipping?
+- **[22:02] Maria Ossa:** Todo dentro de
+- **[22:02] Maria Ossa:** No sé.
+- **[22:02] Maria Ossa:** ¿Y el suyo? No, no te recordaste una idea de Lucho
+- **[22:02] Maria Ossa:** una vez nos comentó hace tanto tiempo.
+- **[22:02] Maria Ossa:** Sí, era como tener
+- **[22:02] Maria Ossa:** Dale,
+- **[22:02] Alejandra Melo:** José. ¿Tú qué fue lo que preguntaste?
+- **[22:02] Alejandra Melo:** Se me cortó.
+- **[22:02] Alejandra Melo:** ¿Y qué pasa si...?
+- **[22:02] Alejandra Melo:** Todos los videos
+- **[22:02] Jose Pineda Pitre:** de
+- **[22:02] Jose Pineda Pitre:** cómo hacer dropshipping
+- **[22:03] Maria Ossa:** del líder de comunidad, el setup completo,
+- **[22:03] Maria Ossa:** del emprendedor es
+- **[22:03] Maria Ossa:** está en drop in.
+- **[22:03] Maria Ossa:** Como chat center, ¿no?
+- **[22:03] Maria Ossa:** Chat center era gratis y era parte del setup, entonces había dos cosas de drop in, drop in
+- **[22:03] Maria Ossa:** y ChatGPT.
+- **[22:03] Maria Ossa:** ¿Y qué sucede si
+- **[22:03] Participante:** al menos esa primer versión toda está dentro de
+- **[22:03] Maria Ossa:** Y el líder y e intentamos que los líderes de que un líder de
+- **[22:03] Maria Ossa:** grabe
+- **[22:03] Maria Ossa:** todo un curso de cómo hacer
+- **[22:03] Maria Ossa:** cien por ciento con drops.
+- **[22:03] Maria Ossa:** Santiago.
+- **[22:03] Yo:** Hay hay una
+- **[22:03] Yo:** ¿Hay hay una parte que hablé con Jaime el viernes? Y dentro del provecho de Gali, una parte podía ser
+- **[22:03] Yo:** De hecho, la la el el
+- **[22:03] Yo:** ya hace unas partes semanas monté toda una una tienda de Shopify apuntada, el MCP que expone por
+- **[22:03] Yo:** por
+- **[22:03] Yo:** por GPT, por... ¿Ah, perdón? Exponé.
+- **[22:03] Yo:** Un poco la idea era ver qué qué tanto se podía jugar
+- **[22:04] Yo:** con las principales, sobre todo Shopify, que es donde trabaja esto un mayor volumen,
+- **[22:04] Yo:** y y muchas otras que sirven ya para ecommerce.
+- **[22:04] Yo:** Y que del mismo drop y se haga todo el seteo.
+- **[22:04] Yo:** Claramente, ahí habrían costos asociados, no sé, primero tiene que darse de alta
+- **[22:04] Yo:** con Claude, o que él igual se financie una parte
+- **[22:04] Yo:** pero que eso ayude a que vea un progreso y que, ah, no, ya tengo una tienda
+- **[22:04] Yo:** superbásica de plantilla, pero todo es de dropping.
+- **[22:04] Yo:** En ese primer flujo. Entonces, que al al momento en que creé el primer proyecto,
+- **[22:04] Yo:** ese se puede hacer desde Adobe, sin que tenga que ir a
+- **[22:04] Yo:** Shopify a conectar un montón de herramientas, y creo que eso cubriría
+- **[22:04] Yo:** parte
+- **[22:04] Yo:** lo que tú dices, que él le diga el líder de la comunidad,
+- **[22:04] Yo:** ya no tiene que irse a Choppys y decirle al al al al al nuevo
+- **[22:04] Yo:** emprendedor
+- **[22:04] Yo:** venga, Shopify y acá clica aquí, aquí, aquí para empezar a montar todo, sino que desde dropping ya la
+- **[22:04] Yo:** las órdenes van a ir
+- **[22:04] Yo:** hacia hacia los demás canales.
+- **[22:04] Yo:** Hacia las demás herramientas.
+- **[22:04] Participante:** Cathy,
+- **[22:04] Participante:** eso está muy bueno porque aquí no podemos olvidar estos conceptos,
+- **[22:05] Participante:** y quiero que se lo lleven.
+- **[22:05] Participante:** Uno,
+- **[22:05] Maria Ossa:** yo soy un colector.
+- **[22:05] Maria Ossa:** Dropi es un conector.
+- **[22:05] Maria Ossa:** Y eso no lo podemos olvidar.
+- **[22:05] Maria Ossa:** Entonces, yo siempre me voy a conectar con Shopify y demás, o sea, yo
+- **[22:05] Maria Ossa:** tengo una herramienta para crear landings, no voy a obligar a las personas a que usen mi herramienta.
+- **[22:05] Maria Ossa:** Porque yo soy un conector.
+- **[22:05] Maria Ossa:** Mi producto principal es el pago contra entrega.
+- **[22:05] Maria Ossa:** Y ese producto lo vamos a perfeccionar
+- **[22:05] Maria Ossa:** en la experiencia con la célula de logística.
+- **[22:05] Maria Ossa:** Pero la célula de seller es una célula de grow, nace porque es una célula estratégica para entender a los vendedores porque yo, sin vendedores,
+- **[22:05] Maria Ossa:** pues,
+- **[22:05] Maria Ossa:** no tengo a quién venderle. Y, ¿sí me entienden? Yo tengo vendedores,
+- **[22:05] Maria Ossa:** no tengo a quién venderle mi producto de pago contra entrega.
+- **[22:05] Maria Ossa:** Ustedes son
+- **[22:05] Maria Ossa:** una estrategia de crecimiento.
+- **[22:05] Maria Ossa:** Y como estrategia de crecimiento,
+- **[22:05] Maria Ossa:** es entender muy bien al vendedor, entonces,
+- **[22:06] Maria Ossa:** ustedes dos, tanto como Santiago,
+- **[22:06] Maria Ossa:** deberían ser las personas que nos enseñen a vender a todo el área de producto.
+- **[22:06] Maria Ossa:** ¿Sí?
+- **[22:06] Maria Ossa:** Entonces, ¿qué vamos a hacer?
+- **[22:06] Maria Ossa:** Uno,
+- **[22:06] Maria Ossa:** mapear todos los cursos gratis.
+- **[22:06] Maria Ossa:** Que hay en YouTube de las diferentes comunidades.
+- **[22:06] Maria Ossa:** Y entenderlos y estudiarlos y saber
+- **[22:06] Maria Ossa:** cómo
+- **[22:06] Maria Ossa:** enseñan a vender.
+- **[22:06] Maria Ossa:** Y número dos,
+- **[22:06] Maria Ossa:** vamos a pagar
+- **[22:06] Maria Ossa:** una mentoría con una de las comunidades.
+- **[22:06] Maria Ossa:** Entonces, vamos a comprar el curso de Antonia Villa, de pronto el curso de Iván Caicedo,
+- **[22:06] Maria Ossa:** íbamos a comprar varios cursos
+- **[22:06] Maria Ossa:** y ustedes tienen que aprender
+- **[22:06] Maria Ossa:** a hacer eso, porque necesitamos entender cuál es el setup,
+- **[22:06] Maria Ossa:** ¿sí? Yo yo yo tengo una hipótesis
+- **[22:06] Maria Ossa:** y es,
+- **[22:06] Maria Ossa:** ¿y qué sucede, Citi?
+- **[22:06] Maria Ossa:** Nosotros articulamos bien todo ese setup de ventas inicial?
+- **[22:06] Maria Ossa:** Ya sea con herramientas internas o externas, que es algo que hemos estado intentando con Page pilot y todo eso,
+- **[22:07] Maria Ossa:** pero eso está muy desarticulado.
+- **[22:07] Maria Ossa:** Entonces,
+- **[22:07] Maria Ossa:** equipo se le
+- **[22:07] Maria Ossa:** La misión
+- **[22:07] Maria Ossa:** en este caso, es
+- **[22:07] Maria Ossa:** entendamos al vendedor y entendamos
+- **[22:07] Maria Ossa:** cómo una persona puede empezar a vender.
+- **[22:07] Maria Ossa:** Qué necesita esa persona para vender. Y por eso también está aquí José. Porque necesitamos entender qué necesitan los líderes de comunidad, Nosotros hasta ahora no hemos ido a hablar con el líder de comunidad a preguntarle, señor líder de comunidad, ¿usted qué necesita para activar más personas? Y ellos nos van a enseñar y nos van a decir cosas y también les vamos a poder preguntar a ellos, ¿y usted cómo enseña y a partir de lo que posee con los líderes de comunidad reúna. Más seller,
+- **[22:07] Maria Ossa:** con el aprendizaje que tengamos, ahí vamos a entender realmente
+- **[22:07] Maria Ossa:** hacia dónde tiene que ir nuestro producto. ¿Por qué? Yo sé que
+- **[22:07] Maria Ossa:** quiero monetizar el pago contra entrega
+- **[22:07] Maria Ossa:** pero en la unidad del negocio de dropshipping
+- **[22:08] Maria Ossa:** yo estoy vendiendo emprendimiento digital.
+- **[22:08] Maria Ossa:** Y mi plataforma
+- **[22:08] Maria Ossa:** me habla de todo menos de emprendimiento digital.
+- **[22:08] Maria Ossa:** ¿Listo?
+- **[22:08] Maria Ossa:** ¿Aleja? Listo. Sí, es que me recordé cuando
+- **[22:08] Maria Ossa:** estábamos con la agencia de marketing digital y éramos partners
+- **[22:08] Maria Ossa:** de RD Station y de
+- **[22:08] Alejandra Melo:** Hotspot. Entonces,
+- **[22:08] Alejandra Melo:** digamos que nosotros éramos como las agencias de marketing éramos como los líderes de comunidad. Teníamos también una plataforma en RT Station y una plataforma en Hub para capacitarnos.
+- **[22:08] Alejandra Melo:** Pero las empresas nos conocían, era, pues,
+- **[22:08] Alejandra Melo:** obviamente, porque nosotros teníamos que pautar y demás,
+- **[22:08] Alejandra Melo:** pero también Hotspot tenía
+- **[22:08] Alejandra Melo:** un lugar donde promocionaba a a las agencias.
+- **[22:08] Alejandra Melo:** Y les tenía como un
+- **[22:08] Alejandra Melo:** un, ¿qué?, una insignia a cada uno. Entonces,
+- **[22:09] Alejandra Melo:** podían ir y y mirar cuál era la mejor agencia que les convenía y demás.
+- **[22:09] Alejandra Melo:** También hacíamos webinars junto con junto con RD Station, y era eso promocionando
+- **[22:09] Alejandra Melo:** la plataforma. Entonces, no sé, es era como para
+- **[22:09] Alejandra Melo:** tener ahí la relación, que es como, se me hace como
+- **[22:09] Alejandra Melo:** muy similar a cómo se podría promocionar o cómo se podría manejar ese tema.
+- **[22:09] Alejandra Melo:** Ok.
+- **[22:09] Alejandra Melo:** Muy interesante. Yo creo que eso le sirve a José para los líderes de comunidad. José,
+- **[22:09] Alejandra Melo:** Estás mute.
+- **[22:09] Maria Ossa:** Yo estaba pensando en la pregunta de
+- **[22:09] Maria Ossa:** si le decimos a los líderes de comunidad que tienen que traer sus
+- **[22:09] Maria Ossa:** cursos dentro del ecosistema,
+- **[22:09] Jose Pineda Pitre:** Creo que va a haber una situación
+- **[22:09] Jose Pineda Pitre:** como de gestión de negocio alrededor de lo que se tiene con el líder de
+- **[22:09] Jose Pineda Pitre:** comunidad,
+- **[22:09] Jose Pineda Pitre:** porque
+- **[22:10] Jose Pineda Pitre:** el papel del líder de comunidad se va a enfocar.
+- **[22:10] Jose Pineda Pitre:** No en la adquisición de los usuarios que está
+- **[22:10] Jose Pineda Pitre:** teniendo hoy, hoy yo creo que mucho de lo que nosotros adquirimos llega
+- **[22:10] Jose Pineda Pitre:** pues, mentiras, no puedo decir eso sin
+- **[22:10] Maria Ossa:** caer de
+- **[22:10] Jose Pineda Pitre:** pronto en una falacia aquí argumentativa,
+- **[22:10] Jose Pineda Pitre:** pero mucho de lo que puede estar llegando a través del líder de comunidad
+- **[22:10] Jose Pineda Pitre:** no está teniendo el potencial de conversión que se requiere,
+- **[22:10] Jose Pineda Pitre:** y necesitamos que los líderes de comunidad se enfoquen realmente
+- **[22:10] Jose Pineda Pitre:** en la dinamización de las órdenes dentro de sus comunidades.
+- **[22:10] Jose Pineda Pitre:** Claro, pero digamos que que la idea no es tanto que ellos traigan
+- **[22:10] Jose Pineda Pitre:** el curso. Mi pregunta es,
+- **[22:10] Jose Pineda Pitre:** ¿qué sucede si el curso que suben a YouTube?
+- **[22:10] Jose Pineda Pitre:** En vez de estar choppy by y un
+- **[22:10] Maria Ossa:** montón de herramientas, todo es dropping.
+- **[22:10] Maria Ossa:** No, pues ahí habría que preguntarles.
+- **[22:10] Maria Ossa:** ¿Y
+- **[22:10] Maria Ossa:** y igual esa no es la solución, o sea, yo eso
+- **[22:11] Maria Ossa:** simplemente una pregunta, a a lo que voy es que
+- **[22:11] Maria Ossa:** tenemos que entrar y profundizar para
+- **[22:11] Jose Pineda Pitre:** realmente entender
+- **[22:11] Jose Pineda Pitre:** a nivel de dropshipping, porque yo a nivel de empresa entiendo muy bien mi producto, que es el pago contra entrega.
+- **[22:11] Jose Pineda Pitre:** Y es el que me habilita el dropshipping y me habilita un montón de cosas,
+- **[22:11] Jose Pineda Pitre:** y el pago contra entrega, junto al catálogo de producto, me habilita mi
+- **[22:11] Jose Pineda Pitre:** modelo de negocio, que es el dropship.
+- **[22:11] Jose Pineda Pitre:** ¿Listo?
+- **[22:11] Jose Pineda Pitre:** Yo lo que quiero es crecer,
+- **[22:11] Jose Pineda Pitre:** quiero traer más personas que hagan, ya sé que hay gente que vende en esto, por eso tengo a los líderes de comunidad.
+- **[22:11] Jose Pineda Pitre:** Pero ¿qué me hace falta a mí?
+- **[22:11] Jose Pineda Pitre:** Para aprovechar al máximo
+- **[22:11] Jose Pineda Pitre:** todas esas personas que están llegando?
+- **[22:11] Participante:** Y los invito a que se lean el caso de Shopify.
+- **[22:11] Participante:** Shopify se dio cuenta que
+- **[22:11] Participante:** a tener un problema de activación muy grande porque
+- **[22:11] Participante:** pues, sus sus clientes son negocios. Entonces, ellos
+- **[22:11] Participante:** lo que hicieron fue facilitar al máximo el setup moment,
+- **[22:11] Participante:** para que las personas pudieran vender lo más pronto posible,
+- **[22:11] Participante:** y optimizar también mucho la conversión para
+- **[22:12] Participante:** ayudarles a las personas a garantizar a tener éxito. ¿Sí? Entonces ellos, pero ellos no capta enseñan no has visto Shopify enseñando a vender o sí?
+- **[22:12] Participante:** Han visto cursos de Choppy Pay cómo hacer marketing?
+- **[22:12] Jose Pineda Pitre:** No, ellos lo delegan a una a un influencer.
+- **[22:12] Jose Pineda Pitre:** Eso no es una actividad directa del core de Shopify. Entonces,
+- **[22:12] Jose Pineda Pitre:** ese es el reto que les traigo a ustedes a la mesa,
+- **[22:12] Jose Pineda Pitre:** como
+- **[22:12] Jose Pineda Pitre:** products.
+- **[22:12] Jose Pineda Pitre:** ¿Cómo lo vamos a hacer?
+- **[22:12] Jose Pineda Pitre:** ¿Y cuál es realmente nuestro
+- **[22:12] Maria Ossa:** producto?
+- **[22:12] Maria Ossa:** Yo ya sé que es el pago contra entrega, pero en el modelo de dropshipping
+- **[22:12] Maria Ossa:** ¿cómo lo vamos a hacer? ¿Cómo vamos
+- **[22:12] Maria Ossa:** a vender el emprendimiento digital y cómo vamos a lograr
+- **[22:12] Maria Ossa:** tener más emprendedores digitales.
+- **[22:12] Maria Ossa:** Y para eso está la cédula de seller success, y por eso también es aquí el equipo de growth, porque ustedes ya tienen unos líderes de comunidad que logran crear emprendedores digitales. Entonces, ¿cómo apalancamos a los líderes de comunidad para que creen más emprendedores pero cómo también traemos ese conocimiento de lo que ellos necesitan para volvernos habilitadores.
+- **[22:13] Maria Ossa:** Y yo creo que habilitando a la unidad de comunidad, también voy a entender que necesito
+- **[22:13] Maria Ossa:** para las personas que
+- **[22:13] Maria Ossa:** que tal vez no tienen una comunidad.
+- **[22:13] Maria Ossa:** Santiago,
+- **[22:13] Yo:** Sí.
+- **[22:13] Yo:** Bueno, tenía otra pregunta, pero con lo que
+- **[22:13] Yo:** acabas de decir, se me vino a la cabeza como
+- **[22:13] Yo:** ahora también claramente el producto es pago contra entrega,
+- **[22:13] Yo:** porque es la fuente principal de revenue, es lo que está en el core claro,
+- **[22:13] Yo:** Pero si en este proceso
+- **[22:13] Yo:** hicieron una discusión que se haga en algún momento, pero sí, en este proceso,
+- **[22:13] Yo:** justamente, descubrir qué es lo que están necesitando los nuevos emprendedores digitales.
+- **[22:13] Yo:** Llegamos a que
+- **[22:13] Yo:** por cualquier motivo, no sé, lo que necesitan es que
+- **[22:13] Yo:** desde se dispare todo y
+- **[22:13] Yo:** apunta de un prompt, se configure todas las demás herramientas a las que estamos conectados.
+- **[22:13] Yo:** Por decir cualquier cosa.
+- **[22:14] Yo:** Y eso
+- **[22:14] Yo:** también va a ser una fuente de
+- **[22:14] Yo:** ¿cierto?
+- **[22:14] Yo:** Entonces, podríamos llegar a
+- **[22:14] Yo:** a a pensar
+- **[22:14] Yo:** que
+- **[22:14] Yo:** también que un poco el el el el
+- **[22:14] Yo:** el ecosistema, sino que el ser ecosistema, pues, se puede diversificar mucho más.
+- **[22:14] Yo:** Pero que entonces el core ya no es solamente pago con retregas, sino que está
+- **[22:14] Yo:** porque esa es como en desde la parte logística, ¿cierto?
+- **[22:14] Yo:** Pero que desde el emprendedor también resulte o
+- **[22:14] Yo:** otro corp de negocio, ¿no?
+- **[22:14] Yo:** ¿Qué qué va a hacer él? No sé, el setup.
+- **[22:14] Yo:** Solamente el core va a ser el setup de emprendedores digitales, va ser
+- **[22:14] Yo:** otra vertical completa,
+- **[22:14] Yo:** llamémosle vertical, ya ya ya dentro ahí mucha mucha
+- **[22:14] Yo:** en nombres y y demás, pero
+- **[22:14] Participante:** Mhmm.
+- **[22:14] Yo:** terminé siendo también, entonces, una fuente
+- **[22:14] Yo:** no sé, supongamos que tan importante, porque ese es otro cuarenta por ciento, ¿no?
+- **[22:14] Yo:** Tan importante o casi que igual,
+- **[22:14] Yo:** que el pago contra entrega.
+- **[22:14] Maria Ossa:** Claro, eso es la medida que entendamos si podemos agregar valor
+- **[22:14] Maria Ossa:** esa manera.
+- **[22:15] Maria Ossa:** Pero hoy, cuando yo les digo, la célula del senderos es un
+- **[22:15] Maria Ossa:** célula netamente de growth y de crecimiento,
+- **[22:15] Yo:** Uh-huh.
+- **[22:15] Maria Ossa:** es porque yo estoy dispuesto a dar gratis todas esas herramientas
+- **[22:15] Yo:** Sí, lo
+- **[22:15] Maria Ossa:** simplemente para tener más emprendedores digitales que hagan órdenes.
+- **[22:15] Yo:** Sí, de acuerdo, cien por ciento listo.
+- **[22:15] Maria Ossa:** Era gratis y funcionó también.
+- **[22:15] Maria Ossa:** Y hoy
+- **[22:15] Maria Ossa:** con Chatea Pro tenemos una deuda de que ellos tienen que tener una versión premium
+- **[22:15] Maria Ossa:** para solucionar ese problema también.
+- **[22:15] Maria Ossa:** Que tienen las personas,
+- **[22:15] Maria Ossa:** porque cuando quitamos chat center y todas las personas tenían que usar
+- **[22:15] Maria Ossa:** nos dimos cuenta que fue un grave error.
+- **[22:15] Maria Ossa:** Ahora,
+- **[22:15] Maria Ossa:** ¿cómo aprendemos de eso y cómo usamos ese insight? Y puede que
+- **[22:15] Maria Ossa:** yo yo hoy me imagino
+- **[22:15] Maria Ossa:** tener un setup
+- **[22:15] Maria Ossa:** para emprendedores digitales,
+- **[22:15] Maria Ossa:** dentro de Gropi.
+- **[22:15] Maria Ossa:** Que eso me ayuda activada.
+- **[22:15] Maria Ossa:** Puede que no sea eso,
+- **[22:15] Maria Ossa:** yo por eso lo que quiero decirles a ustedes hoy,
+- **[22:15] Maria Ossa:** tenemos una disonancia cognitiva.
+- **[22:16] Maria Ossa:** Yo necesito tener más emprendedores digitales, por eso mis líderes de
+- **[22:16] Maria Ossa:** comunidades funcionan muy bien.
+- **[22:16] Maria Ossa:** Pero tengo el noventa, el
+- **[22:16] Maria Ossa:** más o menos
+- **[22:16] Maria Ossa:** del cien por ciento de los que se registran, el treinta por ciento son de comunidades y el otro setenta por
+- **[22:16] Maria Ossa:** ciento son
+- **[22:16] Maria Ossa:** huérfanos.
+- **[22:16] Maria Ossa:** Y de ese setenta por ciento,
+- **[22:16] Maria Ossa:** el noventa y cinco por ciento nunca ha hecho y compras.
+- **[22:16] Maria Ossa:** Sea, que tengo casi un sesenta y cinco por ciento de todos los que se me registran,
+- **[22:16] Maria Ossa:** de personas,
+- **[22:16] Maria Ossa:** que tal vez
+- **[22:16] Maria Ossa:** quieran ser emprendedores digitales.
+- **[22:16] Maria Ossa:** Que yo pueda volverlos a emprendedores digitales o capitalizarlos, o dándoselos a la
+- **[22:16] Maria Ossa:** desde otras etapas, no sé.
+- **[22:16] Maria Ossa:** Pero ahí es donde está mi insumo de crecimiento.
+- **[22:16] Maria Ossa:** Mientras con las verticales y otras cosas,
+- **[22:16] Maria Ossa:** las personas se escalan, porque
+- **[22:16] Maria Ossa:** una vez tu negocio arranca,
+- **[22:16] Maria Ossa:** es más fácil que te animes a estudiar, que es más fácil que busques un montón de cosas para crecer.
+- **[22:16] Maria Ossa:** Entonces, la apuesta que yo
+- **[22:16] Maria Ossa:** le estoy haciendo en este momento es
+- **[22:17] Maria Ossa:** y mi pregunta
+- **[22:17] Maria Ossa:** existencial,
+- **[22:17] Maria Ossa:** es,
+- **[22:17] Maria Ossa:** ¿cómo voy a hacer crecer mi producto?
+- **[22:17] Maria Ossa:** Y por eso la cerrera de seller success es una palanca de crecimiento.
+- **[22:17] Maria Ossa:** Sé que eso luego se va a poder monetizar,
+- **[22:17] Maria Ossa:** pero hoy
+- **[22:17] Maria Ossa:** pensemos lo más,
+- **[22:17] Maria Ossa:** como el insumo que va a traer más emprendedores digitales para que hagan más órdenes.
+- **[22:17] Yo:** Sí.
+- **[22:17] Yo:** Listo, de una, de una. Y lo otro que iba preguntar era, en en en ese orden de días y ya con
+- **[22:17] Yo:** digamos, con estos lineamientos,
+- **[22:17] Yo:** la idea, entonces, es que, por ejemplo, los buckets de producto
+- **[22:17] Yo:** claramente va a ser un discovery intensivo,
+- **[22:17] Yo:** ¿cierto?
+- **[22:17] Yo:** Las entregas cambiarían, justamente, a llegar a
+- **[22:17] Yo:** como al corte de las investigaciones.
+- **[22:17] Participante:** Esos ya lo hablan con Jaime.
+- **[22:17] Yo:** Ok.
+- **[22:17] Participante:** Yo sé que tenemos un montón de proyectos que ahorita se están ejecutando, que son
+- **[22:17] Participante:** core, como por ejemplo, lo de Shopify y todas estas cosas,
+- **[22:17] Participante:** pero creo que también hay que analizarlos en función de esto,
+- **[22:18] Participante:** pero sí hay que mirar
+- **[22:18] Participante:** un poco cómo se estaban ejecutando las cosas para hacer
+- **[22:18] Yo:** Sí, es más para, exacto, no, y no no seguir avanzando seguro en la línea, que luego pueda que nos
+- **[22:18] Yo:** sobre todo lo nuevo, ¿no?, lo que apenas estamos como tratando de idear.
+- **[22:18] Yo:** Que no haya en algún punto tener que volverse como para evitar
+- **[22:18] Yo:** reprocesos, porque según las dos integraciones, pues,
+- **[22:18] Yo:** seguirá sin inconveniente, por lo, para todo lo demás.
+- **[22:18] Participante:** Equipo
+- **[22:18] Participante:** Llévenselo.
+- **[22:18] Participante:** Y pensémoslo
+- **[22:18] Participante:** porque es que
+- **[22:18] Participante:** yo los escucho a ustedes y con todas las cosas que más
+- **[22:18] Participante:** digamos, he venido trabajando,
+- **[22:18] Participante:** para mí
+- **[22:18] Participante:** por acá hay un camino.
+- **[22:18] Participante:** Que ya hemos descubierto con los datos.
+- **[22:18] Participante:** Y les voy a decir una cosa,
+- **[22:18] Participante:** con nos hemos dado cuenta que por más
+- **[22:18] Maria Ossa:** que nosotros acortemos el take to value y todo eso, pues no no significa que las personas se activen.
+- **[22:18] Maria Ossa:** O el setup moment.
+- **[22:18] Maria Ossa:** Entonces, si a mí el noventa y cinco por
+- **[22:19] Maria Ossa:** de las personas me dicen, yo no sé vender, por más que yo haga un turqueado para
+- **[22:19] Maria Ossa:** que tú conectes Shopify,
+- **[22:19] Maria Ossa:** no te vas a activar.
+- **[22:19] Maria Ossa:** Entonces, ya encontramos ahí ese problema
+- **[22:19] Maria Ossa:** y esa es la idea de ese learns y la idea
+- **[22:19] Maria Ossa:** con growth
+- **[22:19] Maria Ossa:** es cómo potenciamos entonces a los líderes de comunidad.
+- **[22:19] Maria Ossa:** Porque ellos son los que ya están activando el veintiséis por ciento de ese fragmento que
+- **[22:19] Maria Ossa:** que es de su comunidad,
+- **[22:19] Maria Ossa:** y con ellos vamos a tener aprendizajes para ver qué hacemos con los huérfanos.
+- **[22:19] Maria Ossa:** Por eso están aquí tanto Growth
+- **[22:19] Maria Ossa:** como seller.
+- **[22:19] Maria Ossa:** ¿Listo?
+- **[22:19] Maria Ossa:** Y con suppliers,
+- **[22:19] Maria Ossa:** pues el catálogo de productos
+- **[22:19] Maria Ossa:** va a ser, o sea, terminante. No, yo iba a ser eso que de igual,
+- **[22:19] Maria Ossa:** hay beach,
+- **[22:19] Maria Ossa:** el el catálogo de productos yo creo que
+- **[22:19] Maria Ossa:** pues,
+- **[22:19] Maria Ossa:** obra con un papel ahí fundamental, porque al final
+- **[22:19] Maria Ossa:** de algún lado tenemos que hacer que el dropshipper
+- **[22:20] Maria Ossa:** tenga confianza, o el el el huermano tiene la confianza en
+- **[22:20] Maria Ossa:** meterse plata
+- **[22:20] Maria Ossa:** una inversión para, porque habíamos hablado con María que más o menos
+- **[22:20] Maria Ossa:** una persona tiene que tener en el bolsillo por ahí
+- **[22:20] Maria Ossa:** tres millones y medio, tres millones, más o menos,
+- **[22:20] Maria Ossa:** pues, de cierta manera, desde Players hay que
+- **[22:20] Maria Ossa:** darle esa tranquilidad
+- **[22:20] Maria Ossa:** para que ellos puedan meter esa palabra.
+- **[22:20] Maria Ossa:** Entonces, ¿cómo cómo mediano? No sé si mediano el catálogo o seguramente va ser como mediante
+- **[22:20] Maria Ossa:** catálogo.
+- **[22:20] Maria Ossa:** Pero mediante oportunidades, pero al final va ser desde el catálogo. Entonces,
+- **[22:20] Maria Ossa:** si a tocar
+- **[22:20] Maria Ossa:** bastante en eso.
+- **[22:20] Maria Ossa:** Y ahí hay otra cosa que quisiera que también evalúen y ese dato.
+- **[22:20] Maria Ossa:** El cuarenta por ciento de los productos que se venden en drop me son privados.
+- **[22:20] Maria Ossa:** Y en mi catálogo de producto no tengo ninguna herramienta para gestionar
+- **[22:20] Maria Ossa:** y ver cuáles son mis productos privados.
+- **[22:20] Maria Ossa:** Solamente tengo como un pincito que creo que es de privados,
+- **[22:20] Maria Ossa:** pero pero eso es un problema.
+- **[22:21] Maria Ossa:** También.
+- **[22:21] Maria Ossa:** Eso no tan tampoco tenemos como una optimización para ese tema,
+- **[22:21] Maria Ossa:** eso es algo que también les quería poner ahí para que lo pensemos.
+- **[22:21] Alejandra Melo:** ¿Y cómo
+- **[22:21] Maria Ossa:** vamos a a garantizar
+- **[22:21] Maria Ossa:** desde suppliers
+- **[22:21] Maria Ossa:** también ese impacto hacia la activación de ese huérfano.
+- **[22:21] Maria Ossa:** Porque yo tengo que tener productos adecuados para que una
+- **[22:21] Maria Ossa:** nueva venda y tenga el mayor éxito posible.
+- **[22:21] Maria Ossa:** Y cuando una persona vaya a buscar un producto, pues, recomendarle los mejores proveedores para que
+- **[22:21] Maria Ossa:** el mayor éxito posible. Entonces, hay un trabajo
+- **[22:21] Maria Ossa:** tanto de growth, seller y suppliers, por eso los cite a todos,
+- **[22:21] Maria Ossa:** porque es
+- **[22:21] Maria Ossa:** en esa articulación vamos a resolver este tema, exactamente.
+- **[22:21] Yo:** Sí, de pronto, será por otra otra conversación, si les parece, pero
+- **[22:21] Yo:** o sea, por otra llamada, porque
+- **[22:21] Yo:** este fin de semana estuve pensando en en en un poco los
+- **[22:21] Yo:** un poco los caminos que recorre el dropshipper, bueno, el
+- **[22:22] Yo:** el emprendedor digital,
+- **[22:22] Yo:** al momento de de de darse
+- **[22:22] Yo:** darse de alta, ¿no?,
+- **[22:22] Yo:** Y
+- **[22:22] Yo:** y a mí me quedó muy claro como la gobernanza que tiene cada célula,
+- **[22:22] Yo:** Sin embargo,
+- **[22:22] Yo:** creo que en los flujos y y
+- **[22:22] Yo:** dará la razón o lo
+- **[22:22] Yo:** o lo
+- **[22:22] Yo:** rechazará cuando llegamos justamente a esta investigación que estás
+- **[22:22] Yo:** pidiendo, Mary,
+- **[22:22] Yo:** pero capaz si, de pronto,
+- **[22:22] Yo:** siendo que yo soy el que tiene que
+- **[22:22] Yo:** yo hablo como yo celular, ¿cierto? La la célula tiene que encargarse que el de
+- **[22:22] Yo:** emprendedor se dé de alta, conozca, entienda,
+- **[22:22] Yo:** sea alta lo más rápido posible,
+- **[22:22] Yo:** Que el catálogo, por ejemplo, aunque depende que los suppliers
+- **[22:22] Yo:** carguen los productos, los tengan actualizados y y todo lo que hacemos aquí detrás,
+- **[22:22] Yo:** No sé si de pronto llegara a un punto en donde también podemos verlo,
+- **[22:22] Yo:** o acotarlo por vistas, ¿sí? O sea, ¿cuál es la vista que tiene el dropshipper cuando
+- **[22:22] Yo:** el vendedor cuando entra a ve el catálogo, lo explora,
+- **[22:23] Yo:** versus cuál es la vista que tiene el proveedor cuando carga los
+- **[22:23] Yo:** los tiene enlistados
+- **[22:23] Yo:** Entonces, aunque claramente hay unos puntos de contacto en donde
+- **[22:23] Yo:** catálogo por debajo de la lógica depende del supplier,
+- **[22:23] Yo:** pues esa vista o esa navegación y demás,
+- **[22:23] Yo:** creo que al que más impacto le genera
+- **[22:23] Yo:** en tema de entendimiento, de darse de alta, termina siendo al al emprendedor,
+- **[22:23] Yo:** aunque claramente si no hay un producto bien ubicado, posicionado, que sea fácil en
+- **[22:23] Yo:** encontrar, de entender,
+- **[22:23] Yo:** afecta al al supplier. Pero es un poco en en algún punto
+- **[22:23] Yo:** cómo podemos, inclusive, no sé si hilar más fino y ver
+- **[22:23] Yo:** cómo podemos extender, si es necesario,
+- **[22:23] Yo:** esa esa gobernanza de algunas pantallas
+- **[22:23] Yo:** por ejemplo, en el caso puntual diría,
+- **[22:23] Yo:** trucks para emprendedores,
+- **[22:23] Yo:** sea directamente de sellers y no, por ejemplo, de suppliers. Por ejemplo, en temas de búsqueda o en temas de
+- **[22:23] Yo:** que tú decías, de encontrar mis mis los productos privados.
+- **[22:24] Participante:** Pero ahí te la devuelvo.
+- **[22:24] Participante:** Porque yo no creo que sea un tema de gobernanza.
+- **[22:24] Participante:** Eso todos están aquí, porque es que la investigación
+- **[22:24] Participante:** tiene que ser de todos.
+- **[22:24] Participante:** No es que ese suppliers vaya a investigar una cosa totalmente diferente a esto.
+- **[22:24] Participante:** Suplayer va, vamos a unir todos
+- **[22:24] Participante:** a el mismo problema,
+- **[22:24] Participante:** y eso va a decir
+- **[22:24] Participante:** qué necesitamos. Entonces, si lo que descubrimos es que definitivamente
+- **[22:24] Participante:** el el tema de los productos es lo primordial, entonces,
+- **[22:24] Participante:** y y no va ser solo eso, van a haber muchas cosas. Entonces, ¿cuál es la idea?
+- **[22:24] Participante:** Vamos a arrancar la investigación también desde sellers y desde y desde drop shippers, pero
+- **[22:24] Participante:** ya sabemos que igual los subtalleres van a tener que ver ahí.
+- **[22:24] Participante:** Entonces, desde ahí, desde subcayer también vamos a hacer una investigación y tenemos que unir todo
+- **[22:24] Participante:** para hacer un road map
+- **[22:24] Participante:** conjunto.
+- **[22:24] Participante:** Y ese roadmap va a decir, bueno, entonces en suppliers tenemos
+- **[22:25] Participante:** hacer esto con los proveedores tenemos que hacer esto mismo con los líderes de comunidad y tenemos que hacer esto con los sellers y nos vamos a ejecutar desde las células.
+- **[22:25] Maria Ossa:** No es como que solamente en sellers lo vayamos a hacer, sino que
+- **[22:25] Maria Ossa:** este problema no se va a solucionar solamente desde
+- **[22:25] Maria Ossa:** ¿Listo?
+- **[22:25] Maria Ossa:** La idea es
+- **[22:25] Maria Ossa:** pues, que nos vamos a tener que unir con esto y, de hecho, con logística,
+- **[22:25] Maria Ossa:** porque todo esto esto esto es un gran proyecto de log shipping.
+- **[22:25] Maria Ossa:** ¿Cierto?
+- **[22:25] Maria Ossa:** Por eso desde logística vamos a tener una una parte
+- **[22:25] Maria Ossa:** desde la experiencia que tiene que tener el usuario para entender la logística.
+- **[22:25] Maria Ossa:** O sea, que Juan Diego y Michel Pino se tienen que unir también a esta investigación
+- **[22:25] Maria Ossa:** de cómo vamos a a capitalizar el tema de los emprendedores digitales.
+- **[22:25] Maria Ossa:** Y la logística va a ser también una parte. Entonces, la logística no puede estar aparte.
+- **[22:25] Maria Ossa:** Y y proveedores, todo tiene que hablar un mismo lenguaje.
+- **[22:25] Maria Ossa:** Obvio hay un reto
+- **[22:25] Maria Ossa:** interno de cómo nos vamos a
+- **[22:25] Maria Ossa:** sentar a hacerle esta investigación y cómo todas esas partes de la investigación se unen
+- **[22:26] Maria Ossa:** para generar un road map
+- **[22:26] Maria Ossa:** de cada una de las células, pero que se hable,
+- **[22:26] Maria Ossa:** Daniel mundial, dale, Jaime. Hoy gusto, pues, denme otro para
+- **[22:26] Maria Ossa:** esa misma línea,
+- **[22:26] Maria Ossa:** con Mitch, que estábamos en la reunión con comercial,
+- **[22:26] Maria Ossa:** algo que ya veníamos hablando con
+- **[22:26] Maria Ossa:** lo dijeron comercial.
+- **[22:26] Maria Ossa:** A raíz de la iteración que estamos haciendo con Pulso, y es
+- **[22:26] Maria Ossa:** que ellos
+- **[22:26] Maria Ossa:** pueden hacer con los con los suppliers
+- **[22:26] Maria Ossa:** catálogos,
+- **[22:26] Maria Ossa:** enfocados en mi primera venta.
+- **[22:26] Maria Ossa:** Entonces,
+- **[22:26] Maria Ossa:** hablan con sus con sus paretos y les dicen, y y el proveedor
+- **[22:26] Maria Ossa:** coge unos productos?
+- **[22:26] Maria Ossa:** Que sean como tipo winners, entre comillas, analizados por ellos y dicen,
+- **[22:26] Maria Ossa:** este le bajo el margen,
+- **[22:26] Maria Ossa:** un veinte por ciento para las primeras ventas de un dropshipping.
+- **[22:26] Maria Ossa:** Entonces, ahí la idea era como que pasarte eso, Santi, a ver,
+- **[22:27] Maria Ossa:** cómo empezamos, cómo se empieza a curar.
+- **[22:27] Maria Ossa:** Facilitar esa primera venta a la persona.
+- **[22:27] Maria Ossa:** Todavía está conectado comercial con el
+- **[22:27] Yo:** Super.
+- **[22:27] Maria Ossa:** Entonces, un poco también para para responder eso, lo que va a suceder es que
+- **[22:27] Maria Ossa:** obvio, cada una de las células tiene unos proyectos,
+- **[22:27] Maria Ossa:** pero
+- **[22:27] Maria Ossa:** esta reunión es para decirles
+- **[22:27] Maria Ossa:** hoy vamos a hacer foco entre todas las células,
+- **[22:27] Maria Ossa:** en al emprendedor digital.
+- **[22:27] Yo:** Entendido.
+- **[22:27] Maria Ossa:** Y todas las células que tienen que ver con dropshipping.
+- **[22:27] Maria Ossa:** Por eso está aquí growth,
+- **[22:27] Maria Ossa:** desde los líderes de comunidad.
+- **[22:27] Maria Ossa:** Está aquí suppliers, desde los dueños del producto.
+- **[22:27] Maria Ossa:** Y está aquí sellers, desde el entendimiento de los vendedores.
+- **[22:27] Maria Ossa:** Y vamos a tener la logística,
+- **[22:27] Maria Ossa:** desde el entendimiento
+- **[22:27] Maria Ossa:** cómo se tiene que operar nuestro back office holístico,
+- **[22:27] Maria Ossa:** porque nadie sabe cómo operar nuestro back office logístico.
+- **[22:28] Maria Ossa:** Y todo eso tiene que hablarse,
+- **[22:28] Maria Ossa:** ¿sí? Entonces, yo no sé si se crea en una mesa, un weekly que se llame dropshipping,
+- **[22:28] Maria Ossa:** unidad de de negocio dropshipping,
+- **[22:28] Maria Ossa:** porque igual suppliers tienen que seguir entendiendo a los suppliers, sellers a los sellers,
+- **[22:28] Maria Ossa:** growth a los leyenda, a a los líderes.
+- **[22:28] Maria Ossa:** Pero se tienen que hablar.
+- **[22:28] Maria Ossa:** Porque tienen que estar muy relacionados. O si
+- **[22:28] Maria Ossa:** player se hace algo por allá que está desarticulado por lo que necesitan los sellers, pues va a ser muy difícil
+- **[22:28] Maria Ossa:** enfocar todo el esfuerzo en el crecimiento.
+- **[22:28] Yo:** Marie, e e e e
+- **[22:28] Yo:** si aprovechamos la weekly o hol class que debería ser otro espacio?
+- **[22:28] Yo:** Habría pensado que en la weekly que estuviéramos los que justamente
+- **[22:28] Yo:** estamos muy involucrados en toda la vida en
+- **[22:28] Maria Ossa:** Ella es de Brands.
+- **[22:28] Maria Ossa:** Entonces, en brands
+- **[22:28] Maria Ossa:** va a haber un un va a haber un una una solo para esa unidad de negocio, y ahí también va a
+- **[22:28] Participante:** que entrar growth en su momento.
+- **[22:28] Maria Ossa:** Ahí también entra logística también en su momento.
+- **[22:28] Maria Ossa:** Digamos que vamos a empezar a tener macroequipos
+- **[22:29] Maria Ossa:** que están conformados con diferentes células según unidad de negocio.
+- **[22:29] Maria Ossa:** Entonces, bueno, no sé, ahí
+- **[22:29] Maria Ossa:** ya ustedes
+- **[22:29] Maria Ossa:** No no tenemos que dar una solución ahora.
+- **[22:29] Maria Ossa:** Que lo importante es eso.
+- **[22:29] Maria Ossa:** Trabajemos con esa visión.
+- **[22:29] Maria Ossa:** Mire, desde la parte de logística nos hemos metido mucho en la operación,
+- **[22:29] Maria Ossa:** y por más que sigamos trabajando en la operación, los
+- **[22:29] Maria Ossa:** los usuarios siguen quejándose de la logística.
+- **[22:29] Maria Ossa:** Y la mayoría de personas que entran
+- **[22:29] Maria Ossa:** y y cuando entramos a ver por qué se quejan muchos es porque no saben
+- **[22:29] Maria Ossa:** cómo funciona drop.
+- **[22:29] Maria Ossa:** Entonces, si yo si yo soluciono desde la logística que la gente entienda bien cómo cómo funciona la logística, pues eso también a servirme
+- **[22:29] Maria Ossa:** para activar a las personas.
+- **[22:29] Maria Ossa:** ¿Sí?
+- **[22:29] Maria Ossa:** Y en este momento, pues la mayoría de ventas la hacen personas que ya sea
+- **[22:29] Maria Ossa:** o sea, que yo no tengo un problema de retención.
+- **[22:29] Maria Ossa:** Tengo un problema gigantesco de activación.
+- **[22:30] Maria Ossa:** Y
+- **[22:30] Maria Ossa:** ya hay muchas personas al interior de Droppy, como el equipo comercial
+- **[22:30] Maria Ossa:** como los mismos líderes de comunidad. Todo todo lo que ustedes ven alrededor de Dropi está en foco
+- **[22:30] Maria Ossa:** en las personas que ya hacen dropshipping. Lo mismo leyendo las dropping.
+- **[22:30] Maria Ossa:** Leyendas dropping no está enfocado en activación.
+- **[22:30] Maria Ossa:** Ya tenemos mucha maquinaria y muchas estrategias alrededor, de eso. Ahora, todo eso está desarticulado. ¿Qué sucede si yo articulo y desde el momento uno para una persona que entras? Claro, obvio eso va en de ahí para atrás. Entonces, vamos a enfocarnos en entender esa disonancia de la expectativa de drop it versus lo que encuentro a drop it, para y cómo cómo vamos a capitalizar todos esos leads que tienen el potencial de ser emprendedores digitales. Y hay que entenderlo. Porque no no sabemos Y eso no me lo inventé yo. Esto sale de todas las conversaciones que he tenido con todos ustedes y las investigaciones que hemos
+- **[22:31] Maria Ossa:** haciendo en las células.
+- **[22:31] Maria Ossa:** Y creo que tenemos que tener apuestas grandes también como equipo.
+- **[22:31] Maria Ossa:** Todo lo que viene haciendo suppliers nos ha dicho esto, todo lo que vienen haciendo, y se le
+- **[22:31] Maria Ossa:** ha dicho esto, todas las cosas que
+- **[22:31] Maria Ossa:** entonces,
+- **[22:31] Maria Ossa:** entremos a entenderlo y miremos qué nace de ahí, ¿listo?
+- **[22:31] Maria Ossa:** No sé si alguien quiera agregar algo más.
+- **[22:31] Maria Ossa:** ¿O qué opinan también?
+- **[22:31] Yo:** José Bolero.
+- **[22:31] Maria Ossa:** No, yo estoy de acuerdo.
+- **[22:31] Yo:** Sí, respiro profundamente, no
+- **[22:31] Maria Ossa:** Dale, Santi.
+- **[22:31] Yo:** No, no, no, mi dedo risa fue
+- **[22:31] Maria Ossa:** Dale, Frank.
+- **[22:31] Yo:** Dale, Frank.
+- **[22:31] Maria Ossa:** Ajá.
+- **[22:31] Maria Ossa:** No, yo yo estoy de acuerdo con el cambio de como de
+- **[22:31] Francisco Velandia:** de nodor o cheaper con sin emprendedor digital,
+- **[22:31] Francisco Velandia:** pero ¿todos son emprendedores digitales o solo el dropshipper es el que
+- **[22:31] Francisco Velandia:** cambia de naming, y todos los demás siguen normales, siguen iguales.
+- **[22:31] Maria Ossa:** ¿Sí? Sí, porque esto es solo unidad.
+- **[22:31] Francisco Velandia:** De negocio dropshipping. La otra unidad que es marcas pues tiene un comportamiento un poco diferente. Y aquí hablamos de ya nuestra unidad, digamos, no es una unidad sola de road shipping, que Growth es una plataforma para emprendimiento
+- **[22:32] Maria Ossa:** digital y ecommerce.
+- **[22:32] Maria Ossa:** Dropi facilita hacer el ecommerce,
+- **[22:32] Maria Ossa:** y tiene una unidad
+- **[22:32] Maria Ossa:** que
+- **[22:32] Maria Ossa:** es basado en el modelo de dropshipping para que se democratice más el ecommerce.
+- **[22:32] Maria Ossa:** Ya yo no tengo que tener productos, sino que aquí ya está el producto, yo solamente tengo que invertir
+- **[22:32] Maria Ossa:** de pronto en la campaña,
+- **[22:32] Maria Ossa:** digamos que todo el proceso de ser un emprendedor digital
+- **[22:32] Maria Ossa:** se acorta con el modelo de dropshipping. Entonces, por eso hablamos de la democratización,
+- **[22:32] Maria Ossa:** del ecommerce a través del modelo de dropshipping.
+- **[22:32] Maria Ossa:** La cuestión es,
+- **[22:32] Maria Ossa:** pues el dropshipping
+- **[22:32] Maria Ossa:** trae gente que tal vez quiere volverse un emprendedor digital,
+- **[22:32] Maria Ossa:** nosotros vamos a crear emprendedores digitales o le vamos a facilitar esos emprendedores de
+- **[22:32] Maria Ossa:** digitales, ponerse emprendedores digitales.
+- **[22:32] Maria Ossa:** ¿Listo? Santiago, ¿te vas a decir algo?
+- **[22:33] Yo:** Sí, iba a decir que me parece, no, o sea, creo que estoy superalineado
+- **[22:33] Yo:** de acuerdo,
+- **[22:33] Yo:** con todo lo que con todo lo que se hablaba. Me parece que
+- **[22:33] Yo:** que
+- **[22:33] Yo:** que se va a lograr llegar a análisis mucho más profundo, que puede puede que más que estar haciendo falta, creo que el camino fue el que nos empezó a llevar hasta hasta acá, justamente con cada ya célula un poco más articulada, y demás, Y y que al final entiendo, Juan también lo que acabas de decirle a Frank,
+- **[22:33] Yo:** dropshipping es el mecanismo, pero realmente las personas no vienen buscando hacer dropshipping, vienen
+- **[22:33] Yo:** buscando es emprender digitalmente, y al final se divide, o, pues,
+- **[22:33] Yo:** si ya tienes un negocio, vas para marcas y no tienes un negocio
+- **[22:33] Yo:** y y buscas justamente una forma fácil de hacerlo,
+- **[22:33] Yo:** está la democratización, que sea a través de dropshipping.
+- **[22:33] Yo:** Entonces, creo que es una forma mucho más sencilla de verlo hacia adentro,
+- **[22:33] Yo:** y creo que eso mismo también se puede transmitir mucho más fácil
+- **[22:33] Yo:** a través de las comunicaciones, que que que tendría también por ahí vale la intención.
+- **[22:33] Yo:** Sure.
+- **[22:34] Maria Ossa:** José.
+- **[22:34] Maria Ossa:** Yo me, superalineado con lo que dijo Santi,
+- **[22:34] Jose Pineda Pitre:** yo lo que siento también es que hacia allá va también el
+- **[22:34] Jose Pineda Pitre:** modelo de gamificación de dropping,
+- **[22:34] Maria Ossa:** Lo que yo venía identificando es
+- **[22:34] Jose Pineda Pitre:** como plataforma y como sistema, si bien como todo necesita
+- **[22:34] Jose Pineda Pitre:** mejoras, mejoras de performance, x, lo que sea,
+- **[22:34] Jose Pineda Pitre:** ya funciona. Es decir, ya nosotros tenemos un producto
+- **[22:34] Jose Pineda Pitre:** que convierte
+- **[22:34] Maria Ossa:** y
+- **[22:34] Jose Pineda Pitre:** que hace que las personas
+- **[22:34] Jose Pineda Pitre:** sí,
+- **[22:34] Jose Pineda Pitre:** hagan su emprendimiento digital de manera eficiente,
+- **[22:34] Jose Pineda Pitre:** solamente que creo
+- **[22:34] Maria Ossa:** que
+- **[22:34] Jose Pineda Pitre:** nos falta
+- **[22:34] Jose Pineda Pitre:** entregarle eso masticadito al usuario
+- **[22:34] Jose Pineda Pitre:** para que el usuario entienda cómo usarlo
+- **[22:34] Jose Pineda Pitre:** a través de una estrategia
+- **[22:34] Jose Pineda Pitre:** que le permita a él escalar progresivamente en el entendimiento de lo que va
+- **[22:35] Jose Pineda Pitre:** y ahí, pues, digamos que se articula mucho con lo que
+- **[22:35] Jose Pineda Pitre:** hemos venido planteando con Fran desde la
+- **[22:35] Jose Pineda Pitre:** y también lo que me ha mencionado Aleja,
+- **[22:35] Jose Pineda Pitre:** con respecto a cómo están arquetipados los usuarios. Digamos que el
+- **[22:35] Jose Pineda Pitre:** de lo que hoy se tiene en gamificación es cien por ciento orientado a la mecánica
+- **[22:35] Jose Pineda Pitre:** del negocio, que es la generación de órdenes, pero alrededor de eso hay muchas otras
+- **[22:35] Jose Pineda Pitre:** cosas que acompañan la maduración de un emprendedor digital
+- **[22:35] Jose Pineda Pitre:** por eso Alejandra me lo, Diana, Diana Alejandra, creo
+- **[22:35] Jose Pineda Pitre:** Diana Aldana me lo decía,
+- **[22:35] Jose Pineda Pitre:** y era, no solamente podemos medir la maduración de una persona
+- **[22:35] Jose Pineda Pitre:** por el nivel de órdenes, sino también por
+- **[22:35] Jose Pineda Pitre:** cómo se, cómo interactúa con los proveedores, porque cuando ya yo tengo un catálogo digital privado, yo ya no soy un
+- **[22:35] Maria Ossa:** dropshipper
+- **[22:35] Jose Pineda Pitre:** aprendiz, sino que yo ya me di cuenta que tengo un expert por mi expertise yo debo de hacer negocios de una forma diferente. Entonces, como que siento que todo se está, sí, como aclarando en la hacia el usuario, como ah, oiga, es que usted está presando usted chiquitín, así tiene que pensar, así tiene que ser como, estos son los objetivos que tienes que tener versus esta persona que es un nivel medio, cómo interactúa con el mercado, cómo es su performance de negocio, cómo entiende la dinámica de hacer dinero con
+- **[22:36] Jose Pineda Pitre:** con una plataforma tan amplia como Dropy. Entonces,
+- **[22:36] Jose Pineda Pitre:** digamos que ahí es donde llega, yo creo que un poco la gamificación para
+- **[22:36] Jose Pineda Pitre:** articular eso en una narrativa que, además, sea
+- **[22:36] Jose Pineda Pitre:** un poco divertida, ¿sí?, como que que aquí
+- **[22:36] Jose Pineda Pitre:** pronto, esto es un más sobre las formas,
+- **[22:36] Jose Pineda Pitre:** no puede, o sea, cuando hay algo que
+- **[22:36] Jose Pineda Pitre:** Santiago me dijo una vez y es que nuestros sellers compiten con, o sea, cuando una persona está usando drop in,
+- **[22:36] Jose Pineda Pitre:** compite con muchas cosas. No solamente compite con las otras plataformas de
+- **[22:37] Jose Pineda Pitre:** hacer dropshipping, sino que compite con TikTok, compite por la atención del usuario
+- **[22:37] Jose Pineda Pitre:** en ese proceso de madurar. Entonces, como dropping,
+- **[22:37] Jose Pineda Pitre:** a través de una narrativa estructurada,
+- **[22:37] Jose Pineda Pitre:** en su sistema,
+- **[22:37] Jose Pineda Pitre:** acompaña a esa persona en su proceso de maduración, trayendo su atención a lo que
+- **[22:37] Jose Pineda Pitre:** nosotros necesitamos
+- **[22:37] Jose Pineda Pitre:** tenga la atención. Eso es como un poco lo que estoy
+- **[22:37] Jose Pineda Pitre:** súper.
+- **[22:37] Jose Pineda Pitre:** Y por eso, digamos que
+- **[22:37] Jose Pineda Pitre:** aquí va a ser muy importante
+- **[22:37] Jose Pineda Pitre:** uno, celular seller,
+- **[22:37] Jose Pineda Pitre:** volverse a seller.
+- **[22:37] Jose Pineda Pitre:** O sea, ahorita necesitamos es que cada uno entienda muy bien
+- **[22:37] Jose Pineda Pitre:** necesita cada
+- **[22:37] Maria Ossa:** uno de sus segmentos basado en el objetivo que tenemos, y es
+- **[22:37] Maria Ossa:** sellers, hacer órdenes. ¿Qué necesitan para hacer órdenes?
+- **[22:37] Maria Ossa:** Líderes de comunidad, ¿qué necesitan?
+- **[22:37] Maria Ossa:** Para que las personas de su comunidades vendan ofrezcan.
+- **[22:37] Maria Ossa:** Y suppliers
+- **[22:37] Maria Ossa:** ¿qué necesitamos nosotros de los suppliers para darle la base
+- **[22:38] Maria Ossa:** a las personas
+- **[22:38] Maria Ossa:** para poder vender en el modelo de dropshipping, y qué necesita su su supplier también para facilitar
+- **[22:38] Jose Pineda Pitre:** eso.
+- **[22:38] Maria Ossa:** Necesitamos empezar a profundizar en ese expertise de cada uno de estos pero hablándonos porque para lograr esa narrativa que habla José, tenemos que estar muy alineados. ¿Y hay algo hay algo
+- **[22:38] Maria Ossa:** hay un dato que me lo pasa, que lo menciona siempre,
+- **[22:38] Maria Ossa:** John, el de growth,
+- **[22:38] Maria Ossa:** y es,
+- **[22:38] Maria Ossa:** cuando un usuario pasa el umbral de las cien órdenes, no es
+- **[22:38] Maria Ossa:** churn se reduce un ochenta y cuatro por ciento. Es decir,
+- **[22:38] Jose Pineda Pitre:** cuando nosotros tenemos exploradores, cuando ya una persona pasa a ser
+- **[22:38] Jose Pineda Pitre:** más de cien órdenes, ya se queda en la plataforma porque ya comprobó el modelo,
+- **[22:38] Jose Pineda Pitre:** y ya aprendió
+- **[22:38] Jose Pineda Pitre:** ¿Qué
+- **[22:38] Jose Pineda Pitre:** nuestro objetivo es cómo llevamos una persona de cero a cien órdenes.
+- **[22:38] Jose Pineda Pitre:** Sí, o sea,
+- **[22:39] Jose Pineda Pitre:** sí.
+- **[22:39] Jose Pineda Pitre:** Porque si nos quedamos en la activación, la activación
+- **[22:39] Jose Pineda Pitre:** no, o sea, nos va a ayudar a arrastrar
+- **[22:39] Maria Ossa:** el
+- **[22:39] Jose Pineda Pitre:** indicador
+- **[22:39] Maria Ossa:** general de las órdenes
+- **[22:39] Maria Ossa:** pero realmente no me va a dar sostenibilidad a largo plazo.
+- **[22:39] Jose Pineda Pitre:** Que es lo que necesitamos tengan los emprendedores digitales.
+- **[22:39] Jose Pineda Pitre:** Entonces, eso es
+- **[22:39] Jose Pineda Pitre:** ahí vamos
+- **[22:39] Jose Pineda Pitre:** chicos.
+- **[22:39] Jose Pineda Pitre:** ¿Cómo creamos emprendedores digitales?
+- **[22:39] Jose Pineda Pitre:** De cero a cien órdenes. Cien órdenes va a ser
+- **[22:39] Jose Pineda Pitre:** nuestro umbral en donde ya la persona tiene su engagement,
+- **[22:39] Jose Pineda Pitre:** y de hecho, estábamos aquí hablando
+- **[22:39] Maria Ossa:** con
+- **[22:39] Maria Ossa:** con Jaime, de esto que esto yo se lo pasé también a a Santiago,
+- **[22:39] Maria Ossa:** y es
+- **[22:39] Maria Ossa:** una cosa es nuestro setup moment,
+- **[22:39] Maria Ossa:** el, ajá, moment, el moment y el engage.
+- **[22:39] Maria Ossa:** Entonces,
+- **[22:39] Maria Ossa:** ¿cómo vamos a llevar a las personas hasta acá?
+- **[22:39] Maria Ossa:** Y aquí ya tenemos un número, cien órdenes. Cien, ahí dice diez, hay que ponerle cien. Bueno, entonces tenemos que cambiarlo y tenemos que organizarlo. ¿Listo? Ahí Santiago yo sé que viene trabajando en eso.
+- **[22:40] Maria Ossa:** Organicémoslo y la meta es
+- **[22:40] Maria Ossa:** cómo llevamos las personas a sus primeras cien
+- **[22:40] Maria Ossa:** Así no. Porque, además
+- **[22:40] Jose Pineda Pitre:** Pues que eso es tu primera orden.
+- **[22:40] Maria Ossa:** Exacto, sí. Pero es que partes, ¿no?
+- **[22:40] Maria Ossa:** Es ni tan por partes, María, porque en el en en las cien órdenes,
+- **[22:40] Maria Ossa:** es cuando aparece el valor de una plataforma tan robusta
+- **[22:40] Jose Pineda Pitre:** como drop,
+- **[22:40] Maria Ossa:** es
+- **[22:40] Jose Pineda Pitre:** decir,
+- **[22:40] Maria Ossa:** allí es cuando empieza a aparecer la
+- **[22:40] Jose Pineda Pitre:** del
+- **[22:40] Maria Ossa:** negocio de un emprendedor digital.
+- **[22:40] Jose Pineda Pitre:** Oiga, ¿cómo así que es que yo tengo yo
+- **[22:40] Jose Pineda Pitre:** vendí cien órdenes en un mes sin
+- **[22:40] Jose Pineda Pitre:** un montón de parapetos alrededor. Es que en el cien
+- **[22:40] Jose Pineda Pitre:** es como donde se une el reto operativo de nosotros
+- **[22:40] Jose Pineda Pitre:** y el reto operativo
+- **[22:40] Jose Pineda Pitre:** de la persona que es dropshipper.
+- **[22:40] Jose Pineda Pitre:** O sea, es cuando ya la curva de aprendizaje de hacer ventas digitales
+- **[22:41] Jose Pineda Pitre:** Se empieza. Ana, porque ya entiendo
+- **[22:41] Jose Pineda Pitre:** empieza a converger con la curva de necesito escalar.
+- **[22:41] Jose Pineda Pitre:** Es Ahí es, ese es el punto.
+- **[22:41] Jose Pineda Pitre:** Ya sé
+- **[22:41] Maria Ossa:** vender y necesito escalar
+- **[22:41] Maria Ossa:** ahí es donde ya se genera
+- **[22:41] Maria Ossa:** el verdadero acople con drop in.
+- **[22:41] Maria Ossa:** Epa, el el el momento
+- **[22:41] Jose Pineda Pitre:** de verdad.
+- **[22:41] Jose Pineda Pitre:** Listo.
+- **[22:41] Maria Ossa:** Bueno, equipo, entonces, sentimos diez minutos más, pero era importante
+- **[22:41] Maria Ossa:** esto también tiene que hablarse con el con logística,
+- **[22:41] Maria Ossa:** Vamos a pensar
+- **[22:41] Maria Ossa:** todas estas células en
+- **[22:41] Jose Pineda Pitre:** el modelo
+- **[22:41] Jose Pineda Pitre:** y como unidad. Somos un gran equipo, que es la
+- **[22:41] Maria Ossa:** unidad económica
+- **[22:41] Maria Ossa:** del emprendedor digital como modelo de dropshipping,
+- **[22:41] Maria Ossa:** y a pesar de que seamos células independientes, tenemos que hablar porque
+- **[22:41] Maria Ossa:** es un ecosistema y todos tienen que articularse para que esa unidad funcione.
+- **[22:41] Maria Ossa:** Vamos a pensar en cómo vamos a crear emprendedores digitales
+- **[22:42] Maria Ossa:** desde cero hasta sus primeras cien órdenes,
+- **[22:42] Maria Ossa:** y eso va a implicar
+- **[22:42] Maria Ossa:** pasar por todas las etapas
+- **[22:42] Yo:** De cero a de cero a cien.
+- **[22:42] Yo:** Bueno,
+- **[22:42] Yo:** Todavía tengo tokens. Wow.

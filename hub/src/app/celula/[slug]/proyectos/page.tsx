@@ -4,12 +4,12 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { MoreVertical, Search, Trash2 } from "lucide-react";
+import { ClipboardList, MoreVertical, Search, Trash2 } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { type Item, matchesQuery } from "@/components/HomeSections";
-import { proyectoToItem } from "@/lib/curated-projects";
+import { proyectoToItem, esProyectoVisible } from "@/lib/curated-projects";
 import { ESTADOS_DISCOVERY, ESTADOS_POC, ESTADOS_DELIVERY, type Proyecto } from "@/components/ProjectCard";
 import { type Fase, faseDe, FASE_LABEL, FASE_COLOR } from "@/lib/fase";
 
@@ -39,12 +39,18 @@ function estadosValidosPara(type: string | null) {
 //
 // Preview: sigue gateada a isMiDiaOwner en el layout — no se globaliza a
 // todas las células hasta aprobación explícita.
-const FASES: { value: Fase | "todas"; label: string }[] = [
+// "historico" es un tab local a esta página, no una Fase real de
+// lib/fase.ts (que es compartido con ProjectCard/breadcrumb y no debe
+// cargar con este concepto). Un proyecto entra a Histórico por
+// `status === "Archivado"` — despriorizado, sin continuación — y por eso
+// mismo desaparece de los demás tabs (ver `porFase` más abajo).
+const FASES: { value: Fase | "todas" | "historico"; label: string }[] = [
   { value: "discovery", label: "Discovery" },
   { value: "poc", label: "POC" },
   { value: "delivery", label: "Delivery" },
   { value: "following", label: "Following" },
   { value: "todas", label: "Todos" },
+  { value: "historico", label: "Histórico" },
 ];
 
 // Varios prototipos por proyecto se guardan en `prototype_url` separados por
@@ -62,15 +68,34 @@ function parsePrototypeUrls(raw: string | null): string[] {
     .filter((u) => u.startsWith("/") || u.startsWith("http"));
 }
 
+type CelulaUpdate = { id: string; week_date: string; title: string; content: string; url: string | null; tipo: "weekly" | "cell_board" };
+
+// Mismo parser línea a línea que /celula/[slug]/updates: "## " es un
+// subtítulo, "---" es un separador, línea vacía es un respiro, y todo lo
+// demás es texto plano (la convención de los updates ya escritos usa
+// prefijos de emoji por línea en vez de bullets de markdown reales).
+function renderUpdateContent(content: string) {
+  return content.split("\n").map((line, i) => {
+    const trimmed = line.trim();
+    if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid var(--border)", margin: "16px 0" }} />;
+    if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+    if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
+    return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+  });
+}
+
 export default function ProyectosPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [fase, setFase] = useState<Fase | "todas">("todas");
+  const [fase, setFase] = useState<Fase | "todas" | "historico">("todas");
   const [loading, setLoading] = useState(true);
   const [celulaId, setCelulaId] = useState<string | null>(null);
   const [celulaNombre, setCelulaNombre] = useState<string | null>(null);
   const [proyectosReales, setProyectosReales] = useState<Proyecto[]>([]);
+  const [celulaUpdates, setCelulaUpdates] = useState<CelulaUpdate[]>([]);
+  const [openWeekly, setOpenWeekly] = useState(false);
+  const [selectedWeeklyId, setSelectedWeeklyId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Proyecto | null>(null);
   // Alta de POC / Delivery Proyecto desde la tabla (menú "⋮" de cada fila
   // Discovery) — evita entrar a la ficha solo para colgar un hijo.
@@ -84,6 +109,7 @@ export default function ProyectosPorCelulaPage() {
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
   const [ownCelulaId, setOwnCelulaId] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [modoEdicionForzado, setModoEdicionForzado] = useState(false);
   // Filtro de etapa del viaje de la orden (2026-08-17, Jaime) — antes vivía
   // en el grid viejo de la home de Logística, ahora vive acá. Se pide con
@@ -102,6 +128,7 @@ export default function ProyectosPorCelulaPage() {
         setCelulaNombre(data?.nombre ?? null);
         if (Array.isArray(data?.proyectos)) setProyectosReales(data.proyectos);
         else setProyectosReales([]);
+        setCelulaUpdates(Array.isArray(data?.updates) ? data.updates : []);
       })
       .finally(() => setLoading(false));
 
@@ -110,6 +137,7 @@ export default function ProyectosPorCelulaPage() {
       .then((data) => {
         setOwnCelulaId(data?.profile?.celula_id ?? null);
         setIsSuperAdmin(!!data?.profile?.is_super_admin);
+        setCelulasEditor(data?.celulasEditor ?? []);
       })
       .catch(() => {});
 
@@ -122,7 +150,10 @@ export default function ProyectosPorCelulaPage() {
     }
   }, [params.slug]);
 
-  const esCelulaPropia = !!ownCelulaId && ownCelulaId === celulaId;
+  // ownCelulaId es la célula "de verdad" del perfil; celulasEditor son
+  // permisos adicionales por proyectos transversales (055_celula_editores_
+  // transversales.sql) — no le cambian el celula_id primario a nadie.
+  const esCelulaPropia = !!celulaId && (ownCelulaId === celulaId || celulasEditor.includes(celulaId));
   const canEditar = esCelulaPropia || modoEdicionForzado;
 
   // Iniciativas del tablero de logística sin ficha en Darwin todavía — se
@@ -217,7 +248,12 @@ export default function ProyectosPorCelulaPage() {
     ? proyectosReales.filter((p) => p.type === "POC" && p.parent_project_id === crearTarget.parent.id)
     : [];
 
-  const porFase = (p: Proyecto) => fase === "todas" || faseDe(p.type) === fase;
+  const porFase = (p: Proyecto) => {
+    const archivado = p.status === "Archivado";
+    if (fase === "historico") return archivado;
+    if (archivado) return false; // fuera de Histórico, un proyecto archivado no aparece en ningún otro tab
+    return fase === "todas" || faseDe(p.type) === fase;
+  };
   // Fuera de logística `mapaEtapas` siempre es null, así que esto no filtra
   // nada para el resto de células.
   const pasaEtapa = (p: Proyecto) => {
@@ -228,6 +264,7 @@ export default function ProyectosPorCelulaPage() {
 
   function toRows(source: Proyecto[]) {
     return source
+      .filter(esProyectoVisible)
       .filter(porFase)
       .filter(pasaEtapa)
       .map((proyecto) => {
@@ -243,7 +280,18 @@ export default function ProyectosPorCelulaPage() {
   }
 
   const proyectos = toRows(proyectosReales.filter((p) => p.type !== "POC"));
-  const poc = toRows(proyectosReales.filter((p) => p.type === "POC"));
+
+  // Los POC se agrupan por proyecto padre — mismo orden en que aparece el
+  // padre en la tabla de arriba — en vez de quedar intercalados por fecha de
+  // creación. `sort` es estable, así que dentro de cada grupo se conserva el
+  // orden original.
+  const parentOrder = new Map<string, number>();
+  proyectos.forEach((row, i) => parentOrder.set(row.proyecto.id, i));
+  const poc = toRows(proyectosReales.filter((p) => p.type === "POC")).sort((a, b) => {
+    const ao = a.proyecto.parent_project_id ? parentOrder.get(a.proyecto.parent_project_id) ?? Infinity : Infinity;
+    const bo = b.proyecto.parent_project_id ? parentOrder.get(b.proyecto.parent_project_id) ?? Infinity : Infinity;
+    return ao - bo;
+  });
 
   const hasResults = proyectos.length + poc.length > 0;
 
@@ -258,26 +306,80 @@ export default function ProyectosPorCelulaPage() {
     childCounts.set(p.parent_project_id, entry);
   }
 
+  // Color determinístico por Discovery project que ya tiene al menos un POC
+  // — antes no había forma de saber, mirando solo la tabla de "Pruebas de
+  // concepto", a qué proyecto pertenecía cada fila. Se pinta un punto del
+  // mismo color en el proyecto padre y en cada uno de sus POC.
+  const PARENT_COLORS = ["#7C3AED", "#0E9F6E", "#DC6803", "#DB2777", "#2563EB", "#B45309", "#0891B2", "#BE123C"];
+  const parentInfoById = new Map<string, { color: string; name: string }>();
+  {
+    let colorIdx = 0;
+    for (const p of proyectosReales) {
+      if (p.type === "POC" || p.type === "Delivery Proyecto" || p.type === "Following") continue;
+      const counts = childCounts.get(p.id);
+      if (counts && counts.poc > 0) {
+        parentInfoById.set(p.id, { color: PARENT_COLORS[colorIdx % PARENT_COLORS.length], name: p.name });
+        colorIdx++;
+      }
+    }
+  }
+
+  // La columna `tipo` (migración 051_celula_updates_tipo.sql) todavía no se
+  // ha corrido en producción — mientras no exista, todo update llega sin
+  // `tipo` y el filtro estricto de abajo nunca encuentra nada. Fallback: si
+  // hay al menos un update marcado "weekly" de verdad, usar solo esos (ya
+  // migrado); si no, mostrar el más reciente de la célula sin distinguir de
+  // Cell Board. En cuanto alguien corra la migración, esto se vuelve estricto
+  // solo con los datos, sin tocar código otra vez.
+  const weeklyEtiquetados = celulaUpdates.filter((u) => u.tipo === "weekly");
+  const weeklyHistorial = (weeklyEtiquetados.length > 0 ? weeklyEtiquetados : celulaUpdates)
+    .slice()
+    .sort((a, b) => b.week_date.localeCompare(a.week_date));
+  const activeWeekly = weeklyHistorial.find((u) => u.id === selectedWeeklyId) ?? weeklyHistorial[0] ?? null;
+
+  function formatWeekDate(iso: string) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString("es-CO", { day: "numeric", month: "short", year: "numeric" });
+  }
+
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div className="gnav-page" style={{ flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
             Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
           </h1>
-          {canEditar && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <button
               type="button"
-              onClick={() => setShowCrearRaiz(true)}
+              onClick={() => {
+                setSelectedWeeklyId(null);
+                setOpenWeekly(true);
+              }}
               style={{
-                fontSize: 12, fontWeight: 700, color: "#F77F00", fontFamily: "inherit",
-                background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
-                padding: "8px 14px", cursor: "pointer",
+                display: "inline-flex", alignItems: "center", gap: 8,
+                fontSize: 13, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                padding: "9px 16px", borderRadius: 10,
+                border: "1px solid var(--dropi)", background: "var(--dropi-light)", color: "var(--dropi)",
               }}
             >
-              + Nuevo proyecto
+              <ClipboardList size={16} />
+              Weekly de Producto
             </button>
-          )}
+            {canEditar && (
+              <button
+                type="button"
+                onClick={() => setShowCrearRaiz(true)}
+                style={{
+                  fontSize: 12, fontWeight: 700, color: "#F77F00", fontFamily: "inherit",
+                  background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
+                  padding: "8px 14px", cursor: "pointer",
+                }}
+              >
+                + Nuevo proyecto
+              </button>
+            )}
+          </div>
         </div>
 
         {!esCelulaPropia && isSuperAdmin && (
@@ -372,6 +474,7 @@ export default function ProyectosPorCelulaPage() {
               onDeleteClick={setDeleteTarget}
               onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
               childCounts={childCounts}
+              parentInfoById={parentInfoById}
               canEditar={canEditar}
             />
           </div>
@@ -385,6 +488,7 @@ export default function ProyectosPorCelulaPage() {
             onDeleteClick={setDeleteTarget}
             onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
             childCounts={childCounts}
+            parentInfoById={parentInfoById}
             canEditar={canEditar}
           />
         )}
@@ -443,6 +547,83 @@ export default function ProyectosPorCelulaPage() {
         />
       )}
 
+      {openWeekly && (
+        <div
+          onClick={() => setOpenWeekly(false)}
+          style={{
+            position: "fixed", inset: 0, background: "rgba(10,22,40,0.55)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: 24, zIndex: 50,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "var(--card)", borderRadius: 16, maxWidth: 640, width: "100%",
+              maxHeight: "80vh", overflowY: "auto", padding: "28px 28px 24px",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+            }}
+          >
+            {activeWeekly ? (
+              <>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 14 }}>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: 0 }}>Weekly de Producto</h2>
+                  <button
+                    onClick={() => setOpenWeekly(false)}
+                    style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                    aria-label="Cerrar"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {weeklyHistorial.length > 1 && (
+                  <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4, marginBottom: 18 }}>
+                    {weeklyHistorial.map((u) => (
+                      <button
+                        key={u.id}
+                        onClick={() => setSelectedWeeklyId(u.id)}
+                        style={{
+                          flexShrink: 0, fontSize: 11.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                          padding: "6px 12px", borderRadius: 999, whiteSpace: "nowrap",
+                          border: `1px solid ${u.id === activeWeekly.id ? "var(--dropi)" : "var(--border)"}`,
+                          background: u.id === activeWeekly.id ? "var(--dropi-light)" : "var(--card)",
+                          color: u.id === activeWeekly.id ? "var(--dropi)" : "var(--muted)",
+                        }}
+                      >
+                        {formatWeekDate(u.week_date)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <h3 style={{ fontSize: 14.5, fontWeight: 800, color: "var(--fg)", lineHeight: 1.35, margin: "0 0 2px" }}>{activeWeekly.title}</h3>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 0, marginBottom: 18 }}>{formatWeekDate(activeWeekly.week_date)}</p>
+                <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7 }}>
+                  {renderUpdateContent(activeWeekly.content)}
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", margin: 0 }}>Weekly de Producto</h2>
+                  <button
+                    onClick={() => setOpenWeekly(false)}
+                    style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                    aria-label="Cerrar"
+                  >
+                    ×
+                  </button>
+                </div>
+                <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>
+                  Aún no hay un weekly de producto publicado para esta célula.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {showCrearRaiz && (
         <CrearRaizModal
           celulaNombre={celulaNombre}
@@ -466,6 +647,7 @@ function ProjectsTable({
   onDeleteClick,
   onCrearHijo,
   childCounts,
+  parentInfoById,
   canEditar,
 }: {
   title: string;
@@ -475,6 +657,7 @@ function ProjectsTable({
   onDeleteClick: (proyecto: Proyecto) => void;
   onCrearHijo: (parent: Proyecto, tipo: "POC" | "Delivery Proyecto") => void;
   childCounts: Map<string, { poc: number; delivery: number }>;
+  parentInfoById: Map<string, { color: string; name: string }>;
   canEditar: boolean;
 }) {
   return (
@@ -519,15 +702,29 @@ function ProjectsTable({
                     <span className="proytable-icon">{item.icon}</span>
                   </td>
                   <td>
-                    <a
-                      href={item.url}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="proytable-name"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {item.name}
-                    </a>
+                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                      {parentInfoById.has(proyecto.id) && (
+                        <span
+                          title="Este proyecto tiene POCs asociados"
+                          style={{ width: 8, height: 8, borderRadius: "50%", background: parentInfoById.get(proyecto.id)!.color, flexShrink: 0 }}
+                        />
+                      )}
+                      <a
+                        href={item.url}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        className="proytable-name"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {item.name}
+                      </a>
+                    </div>
+                    {proyecto.type === "POC" && proyecto.parent_project_id && parentInfoById.has(proyecto.parent_project_id) && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
+                        <span style={{ width: 7, height: 7, borderRadius: "50%", background: parentInfoById.get(proyecto.parent_project_id)!.color, flexShrink: 0 }} />
+                        <span style={{ fontSize: 10.5, color: "var(--muted)" }}>{parentInfoById.get(proyecto.parent_project_id)!.name}</span>
+                      </div>
+                    )}
                   </td>
                   <td>
                     <span className="proytable-code">{proyecto.project_code ?? "—"}</span>
@@ -536,6 +733,11 @@ function ProjectsTable({
                     <span className="proytable-badge" style={{ background: FASE_COLOR[fase] }}>
                       {FASE_LABEL[fase]}
                     </span>
+                    {proyecto.status === "Archivado" && (
+                      <span className="proytable-badge" style={{ background: "var(--muted)", marginLeft: 6 }}>
+                        Archivado
+                      </span>
+                    )}
                   </td>
                   <td>
                     {counts && (counts.poc > 0 || counts.delivery > 0) ? (

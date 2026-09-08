@@ -1113,3 +1113,50 @@ Paula: hacer seguimiento a TI (José) sobre la fecha de entrega de las correccio
 Juan Camilo está mapeando los tres frentes de conciliación con los equipos internos: (1) conciliación de facturación con transportadoras, (2) conciliación de cuentas bancarias (retiros, recargas, aplicativos), (3) PQRS y garantías. Va por la mitad.
 
 Juan Camilo: entregar los flujos de los 3 frentes de conciliación en 8 días y compartirlos con Catalina.
+
+
+📋 Weekly — Célula Backoffice
+📅 4 septiembre 2026 
+🧬 Foco: 🎉 Argentina lanzamiento esta semana · Guatemala activación sin TI · Sumsub flujos en construcción
+
+🇦🇷 Facturación Argentina — QA final y lanzamiento público esta semana ✅ Ajustes listos el 2 sep
+
+José confirmó que el 2 de septiembre en la tarde quedaron listos todos los ajustes comprometidos del QA. Previamente se reunió con Lina (Financiero) y Juan Camilo para alinear los requerimientos financieros — esa alineación ya está hecha. El módulo pasa a revisión de Producto (Catalina y Paula) para las pruebas finales y, si el QA es exitoso, el lanzamiento al público puede darse esta semana.
+
+Catalina + Paula: hacer QA de los ajustes finales y dar el visto bueno para el lanzamiento.
+Paula: una vez aprobado el QA, coordinar el lanzamiento público con el área de Comunicaciones.
+
+🪪 Sumsub — Flujos KYC/KYB en construcción coordinada
+
+Aclaración técnica clave: en Sumsub hay dos objetos distintos — el NIVEL (Level) y el FLUJO (Flow). Primero se construye el nivel con los pasos y campos requeridos, y luego ese nivel se llama desde el flujo. Los niveles ya creados por Jonatan para Confío Pagos son muy similares a los de Guatemala — con duplicarlos, cambiarles el nombre y agregarle el logo de Dropi, quedan listos.
+
+📌 Proceso de construcción acordado:
+Producto y Compliance exploran el dashboard y la plataforma de Sumsub para entender la lógica → se arma el flujo completo → se valida con TI → TI conecta el web SDK. El equipo técnico de Sumsub (Camilo) acompaña, igual que lo hizo Truora en su momento.
+
+Prototipo de alertas — actualización de Catalina: usuario nuevo (<20 órdenes) → bloqueado en movimientos financieros. Usuario activo (>20 órdenes) → no bloqueado pero con insistencia alta y periodo de gracia de 20-30 días. Bloqueo cross-country: si el mismo correo intenta registrarse en otro país, el sistema detecta el cruce y aplica el bloqueo en la nueva cuenta.
+
+Edición de datos post-validación: bloqueo de 6 meses para datos críticos. Los datos no sensibles (ej. correo) se editan con solo un código OTP. La edición de datos va en una épica aparte — no entra en el primer alcance del MVP. TI la incorpora al roadmap como tarea separada para no mezclarla con el desarrollo principal.
+
+Panel admin: hoy en Colombia el admin valida manualmente en el panel de cuentas. Con Sumsub ese proceso será automático — el admin solo audita. Se está diseñando el módulo para incluir gestión de datos de facturación con visibilidad de estados.
+
+Jonatan: enviar al equipo los links y la ubicación de los niveles KYC/KYB ya creados en Sumsub.
+Equipo (Jonatan, Juan Camilo, Paula, Catalina): responder esta semana las preguntas de Camilo (Sumsub) en Telegram de forma coordinada para orientar la construcción de los flujos finales.
+Catalina + Paula: terminar de ajustar el prototipo (edición de datos) y compartirlo con TI junto con el documento de criterios de aceptación actualizado.
+José + Víctor: una vez el equipo confirme el flujo definitivo en Sumsub, dar la estimación de tiempo del desarrollo del web SDK.
+
+🇬🇹 Guatemala — Activación esta semana, sin depender de TI 
+
+Los niveles de KYC y KYB para Guatemala ya están creados en Sumsub (para Confío Pagos, replicables para Dropi en minutos). Jonatan los duplica, les pone el logo de Dropi y envía el link al equipo. Paula actualiza el popup en User Pilot. Todo sin intervención de TI.
+
+Contrato 'Share' con Coloca: sigue bloqueado porque Coloca aún no ha suministrado la información del representante legal — Jonatan les volvió a escribir. Esto no bloquea el despliegue para usuarios nuevos — son procesos paralelos.
+
+Jonatan: duplicar los niveles KYC/KYB con logo de Dropi y enviar los links al equipo hoy (2 septiembre).
+Paula: gestionar la actualización del popup de User Pilot en Guatemala con el link de KYC nuevo de Dropi.
+
+🔑 Activación CAS — Argentina y Paraguay Nueva solicitud
+
+Nueva solicitud que entra al Dropi Score: activación CAS para Argentina y Paraguay. Las historias de usuario y la épica ya están gestionadas con TI para que ejecuten la activación de ambos CAS.
+
+💳 Confío Pagos — México Pequeño avance
+
+Se logró desbloquear el proceso administrativo de documentación. Confío ahora se encuentra en conversaciones con el proveedor bancario para que les rehabiliten el formulario que deben diligenciar. Sin fecha nueva definida.

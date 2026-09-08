@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import ProjectWeekly, { type ProjectUpdate } from "@/components/ProjectWeekly";
 import {
   ChevronDown, ChevronUp, FileText, Layers,
-  Users, Wrench, GitBranch, DollarSign, AlertTriangle,
+  Users, Wrench, GitBranch, DollarSign, AlertTriangle, Rocket,
 } from "lucide-react";
 
 /* ── Shared styles (mismos tokens que gro-002 / gro-004 / fin-001 / marcas) ── */
@@ -76,15 +77,29 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
   );
 }
 
+type PocChild = { id: string; name: string; project_code: string | null; estado_interno: string | null };
+
 export default function Gro001ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
+  const [pocs, setPocs] = useState<PocChild[]>([]);
+  const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
+
+  useEffect(() => {
+    fetch("/api/proyectos/gro-001")
+      .then((res) => res.json())
+      .then((data) => {
+        setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC"));
+        setUpdates(data?.updates ?? []);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="GRO-001 · CRM Líderes de Comunidad"
-        subtitle="Célula Growth · PM: José Pineda"
+        subtitle="José Pineda · Growth Product Manager"
         currentSlug="gro-001"
       />
 
@@ -92,9 +107,12 @@ export default function Gro001ProjectPage() {
 
         {/* ── Breadcrumb & título ── */}
         <div style={{ marginBottom: 20 }}>
-          <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}>
-            ← Volver al Hub
-          </a>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+            <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+              ← Volver al Hub
+            </a>
+            <ProjectWeekly updates={updates} />
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
@@ -106,7 +124,7 @@ export default function Gro001ProjectPage() {
                 🤝 CRM Líderes de Comunidad
               </h1>
               <p style={{ fontSize: 14, color: "#475569", margin: "6px 0 0 0", maxWidth: 760 }}>
-                Subcuenta de CRM (Go High Level) por cada líder de comunidad, conectada a la data transaccional de Cronos — visibilidad en tiempo real de sus estudiantes/afiliados. No arranca desde cero: ya existe propuesta técnica completa, equipo, fases y datos reales validados, construida por Growth Ops en paralelo.
+                Subcuenta de CRM (Go High Level) por cada líder de comunidad, conectada a la data transaccional de Cronos — visibilidad en tiempo real de sus estudiantes/afiliados. No arranca desde cero: ya existe propuesta técnica completa, equipo, fases y datos reales validados, construida por Growth Ops.
               </p>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -131,8 +149,6 @@ export default function Gro001ProjectPage() {
           {[
             { label: "Activación con líder vs. huérfano", value: "~23%", sub: "palanca de activación más fuerte del ecosistema — mayor ROI histórico", color: "var(--dropi)" },
             { label: "Estudiantes sin ninguna orden", value: "52.28%", sub: "validado en el extracto real (394 afiliados / 8 líderes) — coincide con la cifra de la presentación", color: "#B42318" },
-            { label: "Proyección de margen (495 líderes)", value: "$282K–$1.66M", sub: "USD/año según escenario de gasto — modelo lateral, no decidido", color: "#9F2C56" },
-            { label: "Estado tras la pausa del 27 ago", value: "2 POCs", sub: "recomendación de Growth y Producto: CRM (GHL) y Webe corren en paralelo, valida el usuario", color: "#B45309" },
           ].map((k) => (
             <div key={k.label} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 18 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase" }}>{k.label}</div>
@@ -142,9 +158,44 @@ export default function Gro001ProjectPage() {
           ))}
         </div>
 
+        {/* ── Prototipo ── */}
+        <div style={{ marginBottom: 28 }}>
+          <a href="https://crm-lideres-comunidad.vercel.app" target="_blank" rel="noreferrer" style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start", maxWidth: 400 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: "#FBEAF0", color: "#9F2C56", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Rocket size={18} />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A" }}>Presentación completa del proyecto ↗</div>
+              <div style={{ fontSize: 12, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>Problema, arquitectura, pipelines, flujos, dashboard, modelo SaaS, fases y equipo.</div>
+            </div>
+          </a>
+        </div>
+
+        {/* ── POCs de este proyecto ── */}
+        {pocs.length > 0 && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>
+              🧩 POCs de este proyecto ({pocs.length})
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {pocs.map((p) => (
+                <a
+                  key={p.id}
+                  href={p.project_code ? `/proyectos/${p.project_code.toLowerCase()}` : "#"}
+                  style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 10, padding: "12px 14px" }}
+                >
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#9F2C56" }}>{p.project_code}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", marginTop: 2 }}>{p.name}</div>
+                  <div style={{ fontSize: 11.5, color: "#94A3B8", marginTop: 3 }}>{p.estado_interno ?? "Sin definir"}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ── Alerta principal: CRM vs Webe ── */}
         <Callout tone="warning" title="🟡 CRM vs. Webe — pausa temporal y recomendación de avanzar como 2 POCs (28 ago 2026)">
-          Esta semana el equipo se reunió con <strong>Webe</strong> para entender el foco de cada proyecto y buscar complementariedad de cara al servicio del usuario. El jueves 27 de agosto llegó la indicación de pausar las actividades del CRM, para no duplicar esfuerzos con la herramienta que le ayudará al líder de comunidad a dinamizar su comunidad. El CRM ya tiene pipelines y estructura montada en Go High Level — no arranca de cero. <strong>Recomendación de Growth y Producto:</strong> seguir abordando ambos frentes como POC — Frente 1: CRM para Líderes de Comunidad (Go High Level); Frente 2: Webe como sistema de gestión de comunidad — y dejar que sea el usuario, con el uso real de ambos flujos de trabajo, quien indique cómo se complementan. Growth Ops y Producto, junto con Nicolás, ya concluyeron que son dos herramientas distintas que pueden entregarse al usuario en dos etapas diferentes del servicio. El equipo insiste en continuar el flujo de trabajo para lanzar el POC del CRM.
+          Esta semana el equipo se reunió con <strong>Webe</strong> para entender el foco de cada proyecto y buscar complementariedad de cara al servicio del usuario. El jueves 27 de agosto llegó la indicación de pausar las actividades del CRM, para no duplicar esfuerzos con la herramienta que le ayudará al líder de comunidad a dinamizar su comunidad. El CRM ya tiene pipelines y estructura montada en Go High Level — no arranca de cero. <strong>Recomendación de Growth y Producto:</strong> seguir abordando ambos frentes como POC — Frente 1: CRM para Líderes de Comunidad (Go High Level); Frente 2: Webe como sistema de gestión de comunidad — y dejar que sea el usuario, con el uso real de ambos flujos de trabajo, quien indique cómo se complementan. Growth Ops y Producto, junto con Nicolás, ya concluyeron que son dos herramientas distintas que pueden entregarse al usuario en dos etapas diferentes del servicio. <strong>Argumento de continuidad:</strong> todos los recursos para desplegar este POC ya están disponibles a riesgo cero — la licencia de Go High Level ya incluye los usuarios que se le otorgarían a los líderes, los pipelines ya están definidos, y el piloto sería controlado directamente por el equipo de Growth. El equipo insiste en continuar el flujo de trabajo para lanzar el POC del CRM.
         </Callout>
 
         {/* ════════════════════════════════════════════════════════════
@@ -229,6 +280,14 @@ export default function Gro001ProjectPage() {
                     <p style={pStyle}>
                       Propuesta técnica completa (arquitectura, 2 pipelines, 11 flujos automáticos, dashboard de 7 módulos), equipo asignado, plan de 5 fases con duraciones y entregables, y un extracto real de datos ya validado. <strong>Está más cerca de Delivery Backlog que de Discovery</strong> en términos de madurez.
                     </p>
+
+                    <h4 style={subHeadingStyle}>Definición del POC (28 ago)</h4>
+                    <p style={pStyle}>
+                      Experimento que busca validar si otorgarle una licencia de Go High Level al líder de comunidad impacta positivamente el desempeño general de su comunidad y su activación dentro del ecosistema — más usuarios activos se traduce en más órdenes. El POC se considerará exitoso si el líder de comunidad muestra adherencia a la herramienta y percibe impactos positivos dentro del marco del experimento.
+                    </p>
+                    <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>
+                      Pendiente: la selección de los líderes de comunidad para el piloto sigue en definición, así como la minuta formal del experimento.
+                    </p>
                   </div>
                 )}
 
@@ -246,7 +305,7 @@ export default function Gro001ProjectPage() {
                       <thead><tr><th style={tableHeaderStyle}>Rol</th><th style={tableHeaderStyle}>Persona</th><th style={tableHeaderStyle}>Notas</th></tr></thead>
                       <tbody>
                         <tr><td style={tableCellStyle}>Liderazgo de la propuesta técnica</td><td style={tableCellStyle}><strong>Enrique Manuel López Sánchez</strong></td><td style={tableCellStyle}>Automatización de Growth Ops</td></tr>
-                        <tr><td style={tableCellStyle}>Desarrollo / implementación técnica</td><td style={tableCellStyle}><strong>Diego Forero Garzón</strong></td><td style={tableCellStyle}>También construyó Gali, la IA de SAC sobre Intercom</td></tr>
+                        <tr><td style={tableCellStyle}>Desarrollo / implementación técnica</td><td style={tableCellStyle}><strong>Diego Forero Garzón</strong> y <strong>Juan Sebastián Maldonado</strong></td><td style={tableCellStyle}>Diego también construyó Gali, la IA de SAC sobre Intercom</td></tr>
                         <tr><td style={tableCellStyle}>Data</td><td style={tableCellStyle}><strong>John Cerón Arboleda</strong></td><td style={tableCellStyle}>Data Specialist</td></tr>
                         <tr><td style={tableCellStyle}>Sponsor</td><td style={tableCellStyle}><strong>Luis Domínguez (&quot;Lucho&quot;)</strong></td><td style={tableCellStyle}>Head of Growth</td></tr>
                         <tr><td style={tableCellStyle}>Customer Success</td><td style={tableCellStyle}><strong>Jose Hurtado</strong></td><td style={tableCellStyle}>Foco en la experiencia del líder y del estudiante</td></tr>
@@ -355,20 +414,17 @@ export default function Gro001ProjectPage() {
                     <p style={pStyle}>
                       <strong>Actualización (28 ago):</strong> tras la pausa del 27 de agosto, Growth y Producto recomiendan no elegir entre las dos herramientas todavía — correrlas como dos POC en paralelo (CRM vía Go High Level y Webe) y dejar que el uso real del usuario indique cómo se complementan en distintas etapas del servicio (ver alerta arriba). Antes del anuncio de la pausa ya estaba agendada una reunión con Laura Contreras, Gabriela y Daniel Lombo para un ejercicio de <em>service blueprint</em> — el equipo insiste en sostenerla para no frenar el flujo hacia el lanzamiento del POC de CRM.
                     </p>
+                    <p style={pStyle}>
+                      La tesis del equipo es que Webe puede nutrirse de los aprendizajes que genere este POC, y que ambas herramientas pueden convivir en distintas etapas del ciclo de servicio del líder dentro del portafolio que Dropi le expone. El equipo también es consciente de que, eventualmente, uno de los dos proyectos podría absorber al otro — si Webe termina absorbiendo las capacidades del CRM, no representa un problema; el planteamiento es llegar a ese punto con claridad sobre los pros y contras de esta herramienta, respaldada por un experimento ya constituido.
+                    </p>
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>Conexión con Leyendas Dropi: este CRM ya construye exactamente el mapa de afiliación líder–comunidad que Leyendas Dropi necesitaba desde cero para sus 3 Ligas de Líderes — confirmar antes de duplicar esa infraestructura. Mismos referentes de Data (Miguel, John Cerón) en ambos proyectos.</p>
 
                     <h3 style={{ ...sectionHeadingStyle, marginTop: 20 }}><AlertTriangle size={16} /><span>10. Riesgos y pendientes consolidados</span></h3>
                     <ul style={ulStyle}>
                       <li>🟡 Duplicidad con Webe — actividades del CRM en pausa desde el 27 de agosto; recomendación de Growth y Producto es correr ambos frentes como POC en paralelo (ver alerta arriba), pendiente de decisión formal del sponsor.</li>
-                      <li>🔴 Ownership del proyecto sin confirmar formalmente con Producto/CPO.</li>
-                      <li>🔴 Identidad de &quot;+57 316...58&quot; sin confirmar, incluso después de dos reuniones.</li>
-                      <li>🔴 Identidad de &quot;Daniel Lombo&quot; en duda — posible error de diarización del transcript.</li>
-                      <li>🟡 Confirmar si &quot;Lucho&quot; = Luis Domínguez (Head of Growth) — documentación previa lo describía como CEO.</li>
+                      <li>✅ Ownership del proyecto: Growth y Producto.</li>
                       <li>🔴 Latencia de Cronos al escalar a Marcas/Dropshippers Huérfanos — depende de conversación pendiente con Miguel (Data).</li>
                       <li>🔴 Riesgo de canibalización entre CRM y Webe, nombrado explícitamente en la reunión del 21 de agosto.</li>
-                      <li>🟡 Sobrecarga de iniciativas paralelas hacia el mismo líder — ExpoWinners, CRM, Leyendas Dropi, Webe, Academy y Escuela de Mentores corriendo al mismo tiempo.</li>
-                      <li>🔴 Ambigüedad sobre si los datos del &quot;piloto con 3 líderes&quot; son reales o mockup.</li>
-                      <li>🟡 Bloqueo operativo de Webe por habilitación de dominio, retenido por una persona (&quot;Juan&quot;) que no ha respondido.</li>
                     </ul>
                   </div>
                 )}

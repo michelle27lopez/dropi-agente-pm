@@ -1513,6 +1513,10 @@
   color: var(--gnav-muted, var(--muted));
 }
 
+.gnav-section--footer .gnav-nav-item--active {
+  color: #fff;
+}
+
 .gnav-content {
   flex: 1;
   min-width: 0;

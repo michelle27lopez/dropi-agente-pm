@@ -334,6 +334,14 @@ export default function PmfBrandPage() {
             >
               🧪 Landing + prototipo para testeo con marcas →
             </a>
+            <a
+              href="/segmentacion-madurez-marcas-01sep2026.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "inline-block", fontSize: 12, fontWeight: 700, color: "white", textDecoration: "none", opacity: 0.85 }}
+            >
+              📊 Segmentación por madurez — arquetipos, JTBD y tamaños (1-sep-2026) →
+            </a>
           </div>
         </div>
       </div>
@@ -629,9 +637,35 @@ export default function PmfBrandPage() {
           </p>
         </div>
 
+        {/* SEGMENTACIÓN POR MADUREZ */}
+        <div style={sectionLabel}>Segmentación por madurez — arquetipos, JTBD y tamaños</div>
+        <div style={{ ...card, marginBottom: 8 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+            <span style={tagChip(BLUE, BLU_BG)}>fact_marcas / dim_marcas / ltv — corte 31-ago-2026</span>
+            <span style={tagChip(AMBER, AMB_BG)}>~10 entrevistas jun–jul 2026</span>
+          </div>
+          <p style={{ fontSize: 13, lineHeight: 1.65, color: "var(--fg)", marginTop: 0 }}>
+            Los 5 niveles (Iniciando → Creciendo → Consolidando → Pre-Escalando → Escalando) reconstruidos desde la
+            data, con arquetipo, buyer persona, JTBD, señales de evolución/riesgo y oportunidades por nivel —
+            en los dos lentes (ecosistema y portafolio comercial), con su relación a la meta NSM de 600.000 órd/mes.
+            Arquetipos y JTBD reforzados con el corpus de entrevistas (generalizado, sin nombres). Hallazgo
+            transversal: ninguna marca sigue en Dropi &quot;porque entregan mejor&quot; — retiene la huella del
+            comprador, la velocidad del recaudo y las integraciones.
+          </p>
+          <a
+            href="/segmentacion-madurez-marcas-01sep2026.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "inline-block", fontSize: 12.5, fontWeight: 700, color: BLUE, textDecoration: "none" }}
+          >
+            📊 Abrir documento completo →
+          </a>
+        </div>
+
         <p style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.6, textAlign: "center", paddingBottom: 20 }}>
           Fuentes: pmf-antes-que-crecimiento-06ago2026.html (corte 03/06-ago-2026, fact_marcas/dim_marcas) ·
-          guía-clara-dropi-brands-prioridades.md (investigación 17 marcas-lead, cierre 25-ago-2026) · evolución del
+          guía-clara-dropi-brands-prioridades.md (investigación 17 marcas-lead, cierre 25-ago-2026) ·
+          segmentacion-madurez-marcas-01sep2026.html (corte 31-ago-2026, ventana may–jul) · evolución del
           núcleo (64→67→68) confirmada por Kate 21-ago-2026, pendiente recalcular volumen exacto.
         </p>
 

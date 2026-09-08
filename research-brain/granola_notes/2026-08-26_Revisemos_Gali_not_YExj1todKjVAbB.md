@@ -1,0 +1,1404 @@
+# Revisemos Gali 🤖
+
+- **ID:** `not_YExj1todKjVAbB`
+- **Fecha:** 2026-08-26T17:03:21.869Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/c2c818bf-5106-4061-b035-05b75afb0840)
+- **Asistentes:** Santiago Herrera Acosta, Maria Ossa, Diana Margarita Aldana Echeverry, Catalina Giraldo, Laura Contreras, Jaime Guevara, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+### Contexto y Problema de Negocio
+
+-   40% de dropshippers son huérfanos (sin acompañamiento)
+    -   Solo el 1% de ese 40% está activo
+    -   90% de ese 40% nunca ha hecho ecommerce ni sabe qué es
+-   Objetivo: usar Gali para activar a ese segmento de principiantes absolutos
+-   Marco del experimento: ExpoWinners, acotado a activación, no a ventas reales
+
+### Redefinición del “Aha Moment” para ExpoWinners
+
+-   El aha moment en Dropi normalmente es la entrega de la orden y el desembolso
+-   Para el experimento, se redefine como: el usuario entendió cómo funciona y publicó su primer producto
+-   Métrica clave: “time to wow”, menos de 10 minutos desde cero hasta producto publicado
+    -   Benchmark hecho con Exa (API de deep research) sobre tiempos en ecommerce
+-   Ramificación a monitorear: usuarios que se quedan atascados en el paso de “pedir muestra”
+
+### Mini-Ecommerce Dentro de Dropi
+
+-   Propuesta central: crear un Shopify mínimo nativo dentro de Dropi para principiantes
+    -   No es PagePilot (que genera mocks para exportar a Shopify externo)
+    -   No requiere que el usuario tenga cuenta en Shopify, Tiendanube, etc.
+    -   El comprador final no sabe que está dentro de Dropi
+-   Alcance para ExpoWinners: plantilla estática, sin hiperpersonalización
+    -   Máximo ~10 productos por tienda (límite por definir)
+    -   Productos, descripción y garantías se toman del catálogo de Dropi
+    -   URL propia (sin mencionar “Dropi” para preservar la magia del dropshipping)
+-   Modelo de negocio: pago contra entrega, sin pasarela de pago
+-   Ruta de salida natural: al alcanzar ~10-15 ventas, migrar a Shopify/Tiendanube con todas las capas avanzadas
+
+### Flujo de Gali Simplificado
+
+-   Simplificar lenguaje: reemplazar CPA, ROAS, etc. por términos coloquiales (“esto es lo que te queda”)
+-   Flujo propuesto paso a paso:
+    1.  Escoger producto (con opción de escanear en el evento)
+    2.  Seleccionar ángulo de venta y segmento
+    3.  Ver margen estimado (~40%, ~$500k/mes de ejemplo)
+    4.  Publicar en el mini-ecommerce dentro de Dropi
+-   Integración del escáner: escanear producto en el stand → score → opción de “iniciar flujo con Gali” o “agregar a mi ecommerce”
+    -   Prioridad: primero el flujo principal de Gali, el escáner como nice-to-have
+-   Fallback si el MCP no funciona: ofrecer los 25 productos preseleccionados de proveedores exclusivos/premium
+
+### Stack Técnico y Pendientes
+
+-   Exa + Apify: prefiltrado de tendencias generales (ej. “bienestar masculino en Colombia”) → Apify busca anuncios y productos dentro de esa categoría
+    -   Exa ya implementado en local; pruebas de contraste pendientes para hoy/mañana
+    -   MCP de Shopify no está funcionando actualmente; necesita plan B
+-   Creativos: generar imágenes con ChatGPT o Gemini Pro (licencia de Jaime/esposa)
+    -   Opción conservadora: pre-generar ~3 creativos por cada uno de los 25 productos antes del evento para evitar fallos en vivo
+-   Notificaciones: cuando alguien compre en el mini-ecommerce, enviar WhatsApp al dropshipper para que cree la orden manualmente en Dropi
+-   Seguimiento post-evento: capturar correo en ExpoWinners → mapear órdenes creadas → encuesta en UserPilot preguntando si la venta vino del prototipo
+
+### Oportunidades Adicionales Identificadas
+
+-   Líderes de comunidad: podrían dar un curso completo para principiantes sin salir de Dropi
+    -   Curso barato: “tu primera venta solo con Dropi”; curso caro: con Shopify y escala
+    -   Puede ser su gancho de ventas propio
+-   Integración con Meta/TikTok Ads: que el dropshipper pueda lanzar campañas desde Dropi directamente (conectar cuenta y arrancar)
+    -   Laura Rox identificada como principal interesada; pendiente alinear con ella
+-   AD comercial del evento puede compartir data de asistentes con cero ventas para segmentar y hacer seguimiento comparativo
+
+### Próximos Pasos
+
+-   **Compartir documento de métricas de éxito con Jaime y Alejandra** (Santiago)
+    
+    Incluye tiempos objetivo y ramificaciones del flujo; base para alinear estrategia antes del evento.
+    
+-   **Probar y contrastar integración de Exa como prefiltro de tendencias** (Santiago)
+    
+    Validar si mejora la calidad de productos sugeridos vs. solo Apify; terminar entre hoy y mañana.
+    
+-   **Pre-generar creativos para los 25 productos con Gemini Pro o ChatGPT**
+    
+    Banco de ~3 imágenes por producto para no depender del MCP en vivo durante ExpoWinners.
+    
+-   **Montar lógica de notificación por WhatsApp al dropshipper cuando se genere una compra** (Alejandra)
+    
+    Permite rastrear órdenes del prototipo y avisar al usuario que cree la orden manualmente en Dropi.
+    
+-   **Alinear con Laura Rox integración de Meta Ads en el flujo**
+    
+    Ella es la principal interesada en que el dropshipper pueda lanzar campañas directamente desde Dropi.
+    
+-   **Solicitar al AD comercial la data de asistentes con cero ventas**
+    
+    Para segmentar, hacer seguimiento post-evento y comparar contra usuarios que ya han vendido.
+    
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/7dd7ab8a-4e99-43d0-af76-c336260d5f52](https://notes.granola.ai/t/7dd7ab8a-4e99-43d0-af76-c336260d5f52)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[17:03] Catalina Giraldo Aguirre:** Estoy como paranoica.
+- **[17:03] Alejandra Melo:** Pero bueno.
+- **[17:03] Yo:** ¿Has culo temblar?
+- **[17:03] Catalina Giraldo Aguirre:** Bueno,
+- **[17:03] Alejandra Melo:** ¿Cómo?
+- **[17:03] Yo:** ¿Que volvió a temblar?
+- **[17:03] Alejandra Melo:** Apple, pues, Santander. En Santander, sí. Como si
+- **[17:03] Alejandra Melo:** cinco punto
+- **[17:03] Alejandra Melo:** cinco punto tres.
+- **[17:03] Catalina Giraldo Aguirre:** En Choco había temblado bastante, pero en
+- **[17:03] Catalina Giraldo Aguirre:** tres y cuatro.
+- **[17:03] Alejandra Melo:** Una cosa loca.
+- **[17:03] Alejandra Melo:** Con todo lo que está pasando, pues, mamá se asusta.
+- **[17:04] Alejandra Melo:** Yo ya regreso, ¿listo? Voy a estar aquí
+- **[17:04] Yo:** De una
+- **[17:04] Alejandra Melo:** pero ya regreso.
+- **[17:04] Catalina Giraldo Aguirre:** Dale, listo, Leo.
+- **[17:04] Catalina Giraldo Aguirre:** Yo le pregunté a
+- **[17:04] Catalina Giraldo Aguirre:** a a Laura, me mencionó.
+- **[17:04] Catalina Giraldo Aguirre:** Se le pitido este espacio, ella me mencionó que era para alinear un poco
+- **[17:04] Yo:** Sí.
+- **[17:04] Catalina Giraldo Aguirre:** sobre todo ahorita por Alex Y, probablemente, ahorita María, pues, no se va a poder conectar en
+- **[17:04] Catalina Giraldo Aguirre:** pues, demos una espera o, si no, pues,
+- **[17:04] Yo:** Y, de hecho, quiero quiero
+- **[17:04] Catalina Giraldo Aguirre:** no sé si puedan comentar
+- **[17:04] Catalina Giraldo Aguirre:** si llega el resto de avances o algo.
+- **[17:04] Yo:** Sí,
+- **[17:04] Yo:** de hecho, quiero quiero que Jaime se una, si te parece, o estoy aquí escribiéndole.
+- **[17:04] Catalina Giraldo Aguirre:** Dale.
+- **[17:04] Yo:** Porque
+- **[17:04] Yo:** hay unas vainas, pues, también desde PPM, que quiero alinear con él y, pues, que que fue el que entregó el para estar claros por qué. O él podemos ir adelantando algo, nos doblamos un poquito.
+- **[17:04] Yo:** Estamos viendo con Aleja,
+- **[17:05] Yo:** pues ya tratando de de ver, antes antes de la de la solución estamos haciendo como un discovery
+- **[17:05] Yo:** hacia atrás, ¿no?
+- **[17:05] Yo:** Por lo que hablamos con con
+- **[17:05] Catalina Giraldo Aguirre:** Mhmm.
+- **[17:05] Yo:** con todos, sobre, bueno, cuáles son las métricas, cuándo se da por terminar el experimento, qué se entiende
+- **[17:05] Yo:** por x y, ¿cierto? O sea, como ya todas esas ese ese nivel de detalle.
+- **[17:05] Catalina Giraldo Aguirre:** Sí.
+- **[17:05] Yo:** Antes inclusive de la funcionalidad como tal.
+- **[17:05] Yo:** Entonces,
+- **[17:05] Yo:** bueno, diciendo, ¿qué qué tenemos que hacer?
+- **[17:05] Yo:** Para que yo diga que el usuario
+- **[17:05] Yo:** que
+- **[17:05] Yo:** bueno, el el
+- **[17:05] Yo:** no sé por dónde arrancar porque ya tiene más información.
+- **[17:05] Yo:** El lunes nosotros tenemos una reunión con María, con Lau Contreras y con Jaime. ¿Cierto?
+- **[17:05] Yo:** Y se estaba llegando unas definiciones
+- **[17:05] Yo:** desde la de de sellers,
+- **[17:05] Yo:** de cuál tenía que ser la prioridad
+- **[17:05] Yo:** de de la célula.
+- **[17:05] Yo:** Esa prioridad fue b,
+- **[17:05] Yo:** de
+- **[17:05] Yo:** todos los dropshippers que tenemos,
+- **[17:05] Catalina Giraldo Aguirre:** Mhmm.
+- **[17:05] Yo:** el cuarenta por ciento son huerfans.
+- **[17:05] Yo:** ¿Sí?
+- **[17:05] Yo:** Ese cuarenta por ciento solo uno o el uno el uno por ciento es activo.
+- **[17:05] Catalina Giraldo Aguirre:** Sí.
+- **[17:06] Yo:** Y, además de que solo el nueve por ciento se activa, estos cuarenta,
+- **[17:06] Yo:** de ese cuarenta por ciento,
+- **[17:06] Yo:** el noventa por ciento del cuarenta por ciento
+- **[17:06] Yo:** casi todos, no han hecho antes dropshipping.
+- **[17:06] Yo:** Ni saben de ecommerce.
+- **[17:06] Yo:** Es decir, gente que no sabe de esto.
+- **[17:06] Yo:** Tenemos de
+- **[17:06] Yo:** es un número bastante bastante relevante.
+- **[17:06] Yo:** Estamos diciendo, bueno, ¿cómo hacemos? Ya teniendo un poco el objetivo
+- **[17:06] Yo:** desde negocio,
+- **[17:06] Yo:** desde empresa,
+- **[17:06] Yo:** ¿Qué hacemos con
+- **[17:06] Yo:** Gali Expo Winners?
+- **[17:06] Yo:** Para poder, entonces,
+- **[17:06] Yo:** pues resolver eso, ¿cierto? O sea, ya te, el problema del negocio está claro.
+- **[17:06] Yo:** Entonces, el problema de negocio
+- **[17:06] Yo:** es de que
+- **[17:06] Yo:** son muchos huérfanos, se activan pocos, y la mayoría no sabe qué está haciendo.
+- **[17:06] Yo:** O sea, llegó a dropping por
+- **[17:06] Yo:** no sé
+- **[17:06] Yo:** Realmente, porque igual la la la pauta es superorgánica.
+- **[17:06] Yo:** Realmente el el costo de adquisición es superbama.
+- **[17:07] Yo:** Sea por ads, por lo que sea.
+- **[17:07] Yo:** Estamos viendo
+- **[17:07] Yo:** qué tenemos que modificar en el flujo de Gallic for winners,
+- **[17:07] Yo:** para atender eso.
+- **[17:07] Yo:** A hoy
+- **[17:07] Yo:** me corregirá si digo algo que no es Cata, pero no hay, llamémoslo, una
+- **[17:07] Yo:** no hay una meta dibujada, ¿no?, hay una meta de lo lograste,
+- **[17:07] Yo:** sea, eso no está de alguna forma, porque hay muchos pasos y que todo termina
+- **[17:07] Yo:** cuando ya ves como los proyectos enlistados,
+- **[17:07] Yo:** y a cada proyecto te puedes meter y ver unas
+- **[17:07] Yo:** unos datos Dummy.
+- **[17:07] Yo:** ¿Correcto? Hasta ahí está Gali. ¿Es así?
+- **[17:07] Yo:** Sí, listo.
+- **[17:07] Yo:** Entonces, lo que estábamos pensando
+- **[17:07] Catalina Giraldo Aguirre:** Aquí estamos,
+- **[17:07] Catalina Giraldo Aguirre:** No, que estamos ya así.
+- **[17:07] Yo:** Sí, entonces,
+- **[17:07] Yo:** lo que estamos pensando con Aleja es
+- **[17:07] Yo:** pues venga,
+- **[17:07] Yo:** ¿qué hay que hacer para
+- **[17:07] Yo:** que
+- **[17:07] Yo:** un usuario que yo entiendo como totalmente
+- **[17:07] Yo:** pues, no no mal entienden, pero ignorante en el ecommerce que no sabe de esto,
+- **[17:08] Yo:** diga, madre, lo la logré, ya, ya entendí cómo se hace esto, obviamente,
+- **[17:08] Yo:** sabemos que es lo entendí nivel
+- **[17:08] Yo:** cero uno por ciento de avance,
+- **[17:08] Yo:** pero
+- **[17:08] Catalina Giraldo Aguirre:** Hola, a moment.
+- **[17:08] Yo:** escogió un producto
+- **[17:08] Yo:** exacto,
+- **[17:08] Yo:** Y eso que el ajá, bien definido hacia experimento, porque
+- **[17:08] Yo:** en drop y el ajá moment
+- **[17:08] Yo:** mira que
+- **[17:08] Yo:** está en la activación neta, que es cuando se entrega la orden y me desembolsa la plata.
+- **[17:08] Yo:** Pero en el experimento,
+- **[17:08] Yo:** el moment es como, ok,
+- **[17:08] Yo:** entendí cómo funciona,
+- **[17:08] Yo:** De de hecho, eso eso es
+- **[17:08] Yo:** el time to wow, creo que es la métrica que más se acerca antes que
+- **[17:08] Yo:** y es como
+- **[17:08] Yo:** ok, esto significa que yo acá
+- **[17:08] Yo:** encuentro productos,
+- **[17:08] Yo:** veo cuánta plata gano por cada uno, estoy simplificándolo un montón,
+- **[17:08] Yo:** Después, ¿cómo puedo venderlos?
+- **[17:08] Yo:** De formas variadas, que sería como todo el tema del copy, ¿cierto?, el el ángulo de venta.
+- **[17:08] Yo:** Y después ya pudo empezar a vender.
+- **[17:08] Yo:** Pero realmente ese ese último engranaje, bueno, puedo empezar a vender, ¿qué significa?
+- **[17:09] Yo:** Entonces, llegué, hoy hoy le proponía, ayer estuve
+- **[17:09] Yo:** literalmente la otra noche pensando en eso,
+- **[17:09] Yo:** ahí le proponía, le dije, como venga,
+- **[17:09] Yo:** ¿qué pasa
+- **[17:09] Yo:** si a esa gente que no sabe esta vuelta
+- **[17:09] Yo:** yo le creo
+- **[17:09] Yo:** su propia
+- **[17:09] Yo:** página.
+- **[17:09] Yo:** No landing, como lo hace Page Pilot, no,
+- **[17:09] Yo:** sea, ¿qué pasa si
+- **[17:09] Yo:** crea su propio Shopify?
+- **[17:09] Yo:** Para gente súper, súper,
+- **[17:09] Yo:** inicial,
+- **[17:09] Yo:** principiante, básico, no sé nada, ¿no?
+- **[17:09] Yo:** Hay gente que apenas está explorando,
+- **[17:09] Yo:** Acabamos de salir de la célula, de hecho,
+- **[17:09] Yo:** mostrando esa idea, creo que fue bien recibida, la ven como chévere, pero es, venga, yo le pongo todo el flujo, ¿no?, ya lo tú tú más que nadie lo conoce. Se genera el proyecto, pero yo cuando genero el proyecto, ¿cómo cómo el usuario percibe que ya está listo para salir a vender? Y es o le toca empezar a publicar estados en WhatsApp pero realmente el que le va a comprar le tocaría por WhatsApp y pedirle por WhatsApp y todo así, o le tocaría ir a Shopify y empezar a integrar, ¿sí o qué?
+- **[17:09] Catalina Giraldo Aguirre:** Mhmm.
+- **[17:10] Catalina Giraldo Aguirre:** O sea, es como
+- **[17:10] Yo:** Pero
+- **[17:10] Catalina Giraldo Aguirre:** ¿qué tal si tenemos ya las integraciones y la página lista y solamente le decimos
+- **[17:10] Catalina Giraldo Aguirre:** oye, escoge el producto, la estrategia, te copies, que igual te ayudamos.
+- **[17:10] Catalina Giraldo Aguirre:** Pero ya lo demás lo tienes ya armado, conectado o está el kit aquí.
+- **[17:10] Yo:** Ni siquiera me ni siquiera contestado.
+- **[17:10] Catalina Giraldo Aguirre:** Puedes modificar cositas y ya.
+- **[17:10] Yo:** Te te digo, o sea, no no no no pensándolo como un plugin o como
+- **[17:10] Catalina Giraldo Aguirre:** O sea, algo de doc interno que ya
+- **[17:10] Yo:** un app dentro de lo que
+- **[17:10] Catalina Giraldo Aguirre:** ahí, que la las personas lo tienen ya después.
+- **[17:10] Yo:** Haz de cuenta que sería el Shopify nativo de
+- **[17:10] Yo:** O sea, AeroP ya tiene un volumen gigante de gente que le manda tráfico y ve órdenes por Shopify.
+- **[17:10] Yo:** O sea, eso no va a cambiar, y la idea no es competirle a Shopify, esa no es nuestro, no es
+- **[17:10] Yo:** nuestro core de negocio, ¿no?
+- **[17:10] Yo:** Sino de esa gente que no no se activa porque no sabe, esto es difícil,
+- **[17:11] Yo:** entiende porque es difícil,
+- **[17:11] Yo:** pues venga, yo le genero su propia micropágina web
+- **[17:11] Yo:** para que usted, ahora sí,
+- **[17:11] Yo:** paute esa página, lleve gente que le genere tráfico.
+- **[17:11] Yo:** Y lo que le proponía a José a José Pineda, desde Growth, es, bueno,
+- **[17:11] Yo:** esto capaz no va ser escalable porque, pues,
+- **[17:11] Yo:** el la unidad de negocio no es nosotros ser un Shopify,
+- **[17:11] Catalina Giraldo Aguirre:** Mhmm.
+- **[17:11] Yo:** es drop drop drop Shopify versión Droppy, sino que es hacer dropship
+- **[17:11] Yo:** sino que es hacer dropshipping.
+- **[17:11] Yo:** Pues lo que puede pasar es que después de un volumen
+- **[17:11] Yo:** un
+- **[17:11] Yo:** diez ventas, quince ventas, o sea, ya despegó
+- **[17:11] Yo:** ¿cierto?
+- **[17:11] Yo:** Decirle, bueno, es hora de que escales
+- **[17:11] Yo:** estas son nuestras apps,
+- **[17:11] Yo:** conéctate por Shopify, Tiendanube, cualquiera de esas.
+- **[17:11] Yo:** Y ya hago que que el usuario de una forma muy muy muy
+- **[17:11] Yo:** muy suave, haga la transición hacia
+- **[17:11] Yo:** ya las fuertes, ¿no? Porque ya el usuario seguramente va a querer tener su tienda con muchas más cosas,
+- **[17:11] Yo:** todas esas capas,
+- **[17:11] Yo:** que ya tiene Shopify, pues, claramente su core de negocio es eso.
+- **[17:12] Yo:** Pasarela de pago,
+- **[17:12] Yo:** nosotros en nuestro Shopify nativo drop-y,
+- **[17:12] Yo:** no necesitamos ni siquiera una pasarela de pago, porque nuestro nuestro core de negocios pago contra entrega.
+- **[17:12] Yo:** Entonces, yo al final lo que le le estaría dando al usuario es
+- **[17:12] Yo:** allá está su lista su página web,
+- **[17:12] Yo:** con los cinco productos que usted ya escogió, con los copies que usted ya escogió, aparte, pues,
+- **[17:12] Yo:** como todo viene de dropping, dropping lo puede disponer todo tal cual como quieran.
+- **[17:12] Yo:** Ya está listo.
+- **[17:12] Yo:** Está su página web, que va a ser, supongamos,
+- **[17:12] Yo:** no sé,
+- **[17:12] Yo:** katashop punto dropi, obviamente el punto dropi va a ser
+- **[17:12] Yo:** no, de de hecho, ni siquiera decir dropi porque se pierde un poco la magia de dropshipping de que, pues, yo
+- **[17:12] Yo:** tengo un proveedor por detrás que nadie sabe quién es,
+- **[17:12] Yo:** Entonces, sería, no sé, una URL cualquiera,
+- **[17:12] Yo:** ahí es ya donde
+- **[17:12] Yo:** me meto a Meta y pauto, entonces, para que cualquier persona me pida por
+- **[17:12] Yo:** esa esa ese ecommerce que tengo construido dentro de Dropi, y las órdenes se empiezan a conectar por debajo. Sea, al final todo eso no lo podemos hacer para ExpoWiners, porque, pues, no tenemos las API de órdenes y
+- **[17:13] Yo:** todo lo que hay detrás, ¿no?
+- **[17:13] Yo:** Lo que sí podríamos hacer
+- **[17:13] Yo:** es
+- **[17:13] Yo:** hasta que el usuario
+- **[17:13] Yo:** monte su ecommerce.
+- **[17:13] Yo:** Dentro de Dropi.
+- **[17:13] Yo:** Eso debería ser
+- **[17:13] Yo:** pues, que apenas vamos a trabajar con Aleja, creería, ahí Aleja, no sé si has
+- **[17:13] Yo:** en otra cosa, pero debería ser como muy estático, muy estándar, ¿no? Pues, es gente que está iniciando, es gente que no le interesa la hiperpersonalización de su ecommerce porque apenas está arrancando, aparte para expo winners puntualmente,
+- **[17:13] Yo:** no necesitamos que pueda cambiarle la paleta y subirle gifs,
+- **[17:13] Yo:** y cosas del estilo, solo necesitamos que los productos
+- **[17:13] Yo:** cinco productos que escogió en Dropi, como dropshipping,
+- **[17:13] Yo:** se reflejen en su tienda,
+- **[17:13] Yo:** y que pueda compartir su tienda.
+- **[17:13] Yo:** Hasta ahí.
+- **[17:13] Yo:** No necesitamos hacer más.
+- **[17:13] Yo:** Y ahí yo entendería que alguien que no sabía vender
+- **[17:13] Yo:** logró
+- **[17:13] Yo:** encontrar un producto
+- **[17:13] Yo:** escoger un ángulo de venta
+- **[17:13] Yo:** un segmento,
+- **[17:13] Yo:** publicarlo en su tienda.
+- **[17:13] Yo:** Y yo digo, finalizó.
+- **[17:14] Yo:** ¿Y qué eso lo logra hacer él?
+- **[17:14] Yo:** No se ha definido los minutos, pero diría,
+- **[17:14] Yo:** diez minutos, no debería de tardar más de diez minutos en publicar su primer producto.
+- **[17:14] Yo:** Y dentro de eso hay unas ramificaciones, por ejemplo,
+- **[17:14] Yo:** lo de pedir órdenes, ¿no?, pedir muestra.
+- **[17:14] Yo:** Podríamos identificar cuántas personas
+- **[17:14] Yo:** se quedan
+- **[17:14] Yo:** o no o no terminan un flujo por pedir muestra.
+- **[17:14] Yo:** Y cuántas personas, pues, que están apenas arrancando.
+- **[17:14] Yo:** No sé cómo lo ves eso de tener como
+- **[17:14] Yo:** nuestra propia versión de Shopify para personas que están apenas arrancando, luego sí
+- **[17:14] Yo:** de a poquitos, eso no entraría en
+- **[17:14] Yo:** o sea, hasta ahí, expo winners,
+- **[17:14] Yo:** ya lo de la migración y demás, pues estaríamos viendo, pues, primero si ExpoWinners funciona. ¿Qué qué opinas de eso?
+- **[17:14] Catalina Giraldo Aguirre:** Pues, le estás preguntando, bueno, por mi parte, yo creo que está bien,
+- **[17:14] Catalina Giraldo Aguirre:** De pronto,
+- **[17:14] Catalina Giraldo Aguirre:** Sí, o sea, es para spoilers está bien,
+- **[17:15] Catalina Giraldo Aguirre:** Esta es una idea, y este que de pronto en las, pues más allá cuando esté en meta,
+- **[17:15] Catalina Giraldo Aguirre:** yo siento que a veces las personas tardan mucho tiempo hacer como las
+- **[17:15] Catalina Giraldo Aguirre:** configuraciones en Meta,
+- **[17:15] Catalina Giraldo Aguirre:** Entonces, también tener como un paquete
+- **[17:15] Catalina Giraldo Aguirre:** de, no sé, un agente que ya te configure y diga, bueno, build en Colombia, tú
+- **[17:15] Catalina Giraldo Aguirre:** ya está.
+- **[17:15] Catalina Giraldo Aguirre:** Instálalo y no sé, y que ya haga toda la configuración de Meta, y pues
+- **[17:15] Yo:** ¿Ese es de de expo universe?
+- **[17:15] Catalina Giraldo Aguirre:** lo publique.
+- **[17:15] Catalina Giraldo Aguirre:** No, no porque esto es bueno en ya sería muy largo hacer eso.
+- **[17:15] Yo:** Sí.
+- **[17:15] Catalina Giraldo Aguirre:** Pero, de pronto,
+- **[17:15] Catalina Giraldo Aguirre:** para más adelante, cuando esté iniciando.
+- **[17:15] Yo:** Sí, y y ahí tendríamos que, lo mismo, devolviéndome a
+- **[17:15] Yo:** veamos qué tan expertos son y
+- **[17:15] Yo:** qué puntos se les mostramos, porque alguien que no ha vendido inclusive por Internet a alguien que no ha hecho ecommerce,
+- **[17:15] Yo:** no tiene conocimiento absolutamente nada de qué es
+- **[17:15] Yo:** meta business ads, no sabe qué es nada de eso, entonces, toca llevarlo como muy de la mano,
+- **[17:15] Yo:** pero de acuerdo en que deberíamos ponerlo. De hecho, yo les mencionaba ahora
+- **[17:15] Yo:** hablamos ahora en la weekly,
+- **[17:15] Yo:** que
+- **[17:15] Yo:** deberíamos, o sea, algo que preguntaba o lo deja como más
+- **[17:16] Yo:** como tono reto, María,
+- **[17:16] Yo:** era
+- **[17:16] Yo:** qué tal
+- **[17:16] Yo:** si
+- **[17:16] Yo:** logramos que, por ejemplo, un líder de comunidad
+- **[17:16] Yo:** me me, pues, me hace mucho sentido que un líder de comunidad pueda dar todo un curso
+- **[17:16] Yo:** para principiantes
+- **[17:16] Yo:** desde developing, sin salirse de developing.
+- **[17:16] Yo:** Entonces,
+- **[17:16] Yo:** encuentra el producto, móntalo en tu tienda, por eso es que de ahí un poco surgió la
+- **[17:16] Yo:** idea de, bueno, pues tengamos nuestro propio Shopify dentro de Dropbox, por lo menos para que alguien arranque,
+- **[17:16] Yo:** ya luego cambia, migra, lo que quieran.
+- **[17:16] Yo:** Lo de ads, pues que las genere desde el mismo drop in,
+- **[17:16] Yo:** o con el que estamos conectado a metas
+- **[17:16] Yo:** meta ads, TikTok ads, todas las ads,
+- **[17:16] Yo:** posibles las tengamos nosotros,
+- **[17:16] Yo:** que solo sea sincronizar cuenta y arranque.
+- **[17:16] Yo:** Ya hay un montón de MCPs
+- **[17:16] Yo:** hecho,
+- **[17:16] Yo:** la tienda en Shopify estaba revisando solo que no podemos por tiempo,
+- **[17:16] Yo:** y porque requerimos un montón de permisos y y el estado de partners, que creería ya Dropi, sí lo tiene, podríamos utilizar el MCP de Shopify, que desde Dropi Se Monte La Tienda Completa, Podríamos Hacer La Migración. Solo Con El MCP. Ya Ya Las APIs Están, O Sea, Y Los MCPs Están. De Los Externos. Acá Es Que En Ese En Gali de acuerdo a los logros, y creo que ahí tenemos que meter
+- **[17:17] Yo:** Bueno, no sé si el el el Gali Global vas a seguir llevándolo tú con con con Jaime, o si Jaime también el Global me lo quiere entregar a mí,
+- **[17:17] Yo:** pero verlo con José, porque creo que
+- **[17:17] Yo:** en ese proceso
+- **[17:17] Yo:** podría tener
+- **[17:17] Yo:** como como fases, ¿no?
+- **[17:17] Yo:** Sea, fases no en el desarrollo de Gali, sino fases para el dropshipper.
+- **[17:17] Yo:** De cuándo le empiezo a mostrar opciones.
+- **[17:17] Yo:** De, o sea, para qué le muestro, no sé,
+- **[17:17] Yo:** panel o cosas más avanzadas para alguien que no ha montado ni siquiera
+- **[17:17] Yo:** primera orden, no ha vendido su primer pedido.
+- **[17:17] Yo:** Pues podríamos como verlo por ese lado.
+- **[17:17] Yo:** Aleja algo que
+- **[17:17] Yo:** no haya faltado
+- **[17:17] Yo:** no haya sido claro que creas que de lo que hablamos hoy, o si has pensado en algo más después de que hablamos.
+- **[17:18] Alejandra Melo:** Pues yo estoy hasta pensando en
+- **[17:18] Yo:** De de eso.
+- **[17:18] Alejandra Melo:** la creación de las product page desde Adobe.
+- **[17:18] Alejandra Melo:** Que, pues, al principio sean, digamos, tres
+- **[17:18] Alejandra Melo:** y que solamente se pueda, no sé,
+- **[17:18] Alejandra Melo:** solamente, ¿qué?, veinte productos por por product page,
+- **[17:18] Alejandra Melo:** y ya, si quiero escalar, pues, entonces, pasarme para Shopify.
+- **[17:18] Alejandra Melo:** Ay, yo yo yo no sé, no estoy como tan segura en ese paso.
+- **[17:18] Yo:** ¿De qué? Pero de la
+- **[17:18] Alejandra Melo:** ¿De qué te de qué
+- **[17:18] Yo:** o de que tengamos product page.
+- **[17:18] Alejandra Melo:** De que de que tengamos product page.
+- **[17:18] Alejandra Melo:** Sea, si les vamos a enseñar, pues, enseñar el molestia es de
+- **[17:18] Alejandra Melo:** desde la creación en Shopify.
+- **[17:18] Alejandra Melo:** Ya
+- **[17:18] Alejandra Melo:** pues, me dejó pensando la de ahorita con
+- **[17:18] Alejandra Melo:** José Hurtado, pero entonces,
+- **[17:18] Alejandra Melo:** él decía algo como de de que
+- **[17:18] Alejandra Melo:** Argentina están haciéndolo orgánico por WhatsApp.
+- **[17:19] Alejandra Melo:** ¿Cierto? Entonces, yo digo, bueno, y sí a estos que son
+- **[17:19] Alejandra Melo:** principiantes? Porque es una de las cosas que a veces recomiendan en los
+- **[17:19] Alejandra Melo:** grupos y eso es, comience, usted no tiene ni siquiera
+- **[17:19] Alejandra Melo:** Por ejemplo, María decía, no, que se necesitan siquiera dos millones o no me acuerdo qué tanto dinero, porque
+- **[17:19] Alejandra Melo:** también el dinero eso también implica que no puedan vender. Entonces,
+- **[17:19] Alejandra Melo:** ¿por qué no comenzamos con la parte orgánica o o no no tanto ahí, sino
+- **[17:19] Alejandra Melo:** agregar un paso que diga,
+- **[17:19] Alejandra Melo:** cómo quieres vender, orgánico o con anuncios. Obviamente,
+- **[17:19] Alejandra Melo:** los dos pasos. Entonces, no,
+- **[17:19] Yo:** Solo que con anuncios no vamos a, o sea,
+- **[17:19] Alejandra Melo:** orgánico, entonces listo, mero.
+- **[17:19] Yo:** yendo a expo winners, muy enfocado a expo winners,
+- **[17:19] Alejandra Melo:** Exacto.
+- **[17:19] Yo:** con anuncios no vamos a poder hacerlo.
+- **[17:19] Yo:** Porque no tenemos
+- **[17:19] Alejandra Melo:** Ajá. Pero, entonces,
+- **[17:19] Alejandra Melo:** nos quedamos como entonces en la creación de de páginas.
+- **[17:19] Alejandra Melo:** Vámonos a las creación de páginas. No podemos
+- **[17:19] Catalina Giraldo Aguirre:** hablar con los de chatear pro para que
+- **[17:19] Catalina Giraldo Aguirre:** no se hagan como una integración algo rápido para poder
+- **[17:20] Catalina Giraldo Aguirre:** hacer algo
+- **[17:20] Catalina Giraldo Aguirre:** pues, no sé,
+- **[17:20] Catalina Giraldo Aguirre:** de WhatsApp o o alguna venta por WhatsApp
+- **[17:20] Catalina Giraldo Aguirre:** directamente y no por página.
+- **[17:20] Catalina Giraldo Aguirre:** No nos da el tiempo?
+- **[17:20] Catalina Giraldo Aguirre:** Porque Miguel, el de chatear pro, estaba enterado del proyecto
+- **[17:20] Catalina Giraldo Aguirre:** cuando Jaime se lo compartió.
+- **[17:20] Catalina Giraldo Aguirre:** Entonces, pues él ya medio ubica qué está pasando.
+- **[17:20] Yo:** de que igual
+- **[17:20] Yo:** bueno, aventé por WhatsApp, pero podrías, dizque igual si es
+- **[17:20] Yo:** chat, si lo hacemos por chatear,
+- **[17:20] Yo:** realmente,
+- **[17:20] Alejandra Melo:** Tiene que pagar para poder manejarse tanto.
+- **[17:20] Yo:** tienes que pagar Pero, Aleja,
+- **[17:20] Yo:** sea, no sé,
+- **[17:20] Yo:** cuando cuando vemos lo de lo de tener como el el el
+- **[17:20] Catalina Giraldo Aguirre:** O sea,
+- **[17:20] Alejandra Melo:** expo winner va a quedar es hasta la creación de la página.
+- **[17:20] Alejandra Melo:** Ya. De ahí a que vendan, pues no porque no van a vender, obviamente.
+- **[17:20] Yo:** No, no, o sea, no podemos garantizar la venta.
+- **[17:20] Alejandra Melo:** Pero
+- **[17:20] Alejandra Melo:** entonces, queremos es demostrarles a ellos que van a tener un recorrido como si fuera
+- **[17:20] Alejandra Melo:** un minilíder de comunidad enseñándote,
+- **[17:20] Yo:** Sí.
+- **[17:21] Alejandra Melo:** yo lo veo así, ¿cierto?, enseñándote a hacer el paso uno, el paso dos, el paso tres. De hecho, ya me
+- **[17:21] Alejandra Melo:** descargué varios videos y los pasos son prácticamente iguales a los que hice en en los flujos.
+- **[17:21] Alejandra Melo:** Es cuestión de que el usuario
+- **[17:21] Alejandra Melo:** y decida por cuál camino
+- **[17:21] Alejandra Melo:** ir, ¿cierto? Pero todo siempre
+- **[17:21] Alejandra Melo:** llegan a la parte de
+- **[17:21] Alejandra Melo:** Yo tengo el el Internet lento, ¿cierto?
+- **[17:21] Alejandra Melo:** Llegan a la parte de de de
+- **[17:21] Alejandra Melo:** de creación de los creativos,
+- **[17:21] Alejandra Melo:** No sé si vamos a hacer los creativos también.
+- **[17:21] Alejandra Melo:** Y a la creación de la landing.
+- **[17:21] Yo:** Yo lo simplificaría
+- **[17:21] Yo:** mucho a
+- **[17:21] Yo:** tengamos
+- **[17:21] Yo:** la las plantillas
+- **[17:21] Yo:** para gente que esté iniciando y como el
+- **[17:21] Yo:** venga, ya lo escogió, lo publicó,
+- **[17:21] Catalina Giraldo Aguirre:** Hi.
+- **[17:21] Yo:** ¿Qué hubo, James?
+- **[17:21] Yo:** Ay,
+- **[17:21] Yo:** James,
+- **[17:21] Alejandra Melo:** Hola, Jaime.
+- **[17:21] Yo:** ¿me me vuelvo para...? ¿Ahí no se escuchás bien?
+- **[17:21] Jaime Guevara:** Holi.
+- **[17:22] Jaime Guevara:** Qué pena no estar.
+- **[17:22] Yo:** No te entendí.
+- **[17:22] Jaime Guevara:** No, dale, dale,
+- **[17:22] Jaime Guevara:** Dijo
+- **[17:22] Alejandra Melo:** Paila, Discúlpame.
+- **[17:22] Yo:** Sí, yo entendí, James,
+- **[17:22] Yo:** es que estamos llegando
+- **[17:22] Yo:** le estábamos compartiendo acá como lo que hemos venido reflexionando, Egale.
+- **[17:22] Yo:** Para Expo Williams, ¿listo? Entonces, contexto, delimito, todo lo hablado es hasta
+- **[17:22] Jaime Guevara:** De bueno.
+- **[17:22] Yo:** ¿sí?
+- **[17:22] Yo:** No, nada de allí globalitos.
+- **[17:22] Yo:** Entonces, para expowinners,
+- **[17:22] Yo:** devolviéndonos a lo que hablamos con María esta el el lunes,
+- **[17:22] Yo:** y lo que también hemos hablado en otros espacios es
+- **[17:22] Yo:** hagamos el match entre
+- **[17:22] Yo:** el problema de negocio y el problema del dropshipper, ¿cierto?, del emprendedor digital.
+- **[17:22] Yo:** ¿Verdad?
+- **[17:22] Yo:** El problema de dropping es
+- **[17:22] Yo:** el cuarenta por ciento huérfano, que solo tiene el uno por ciento que se
+- **[17:22] Yo:** activa y un noventa por ciento que no sabe qué es ecommerce y ¿Correcto?
+- **[17:22] Yo:** Creo que dice que sí. Bueno,
+- **[17:22] Jaime Guevara:** Sí, sí.
+- **[17:23] Yo:** entonces, listo, listo. Entonces,
+- **[17:23] Yo:** estamos viendo cómo aprovechamos a Gali, para ese flujo.
+- **[17:23] Yo:** Que Gali un poco el
+- **[17:23] Yo:** el concepto es
+- **[17:23] Yo:** la herramienta, el instrumento que permite encontrar productos, ¿verdad?
+- **[17:23] Yo:** Entonces,
+- **[17:23] Yo:** nosotros lo que estábamos con Aleja pensando es,
+- **[17:23] Yo:** uno, no teníamos, pues ya ahí tenemos unas ideas de de ya de de métricas para para para explorar Pero realmente, sabemos que no había como una meta final, ¿no?, que yo dijera, bueno, ya aquí puedo decir que Jaime terminó el experimento y fue
+- **[17:23] Yo:** satisfactorio o fue
+- **[17:23] Yo:** un fracaso.
+- **[17:23] Yo:** Porque lo que pasa es que
+- **[17:23] Yo:** terminaba, entre comillas, el proyecto, me recibí una data en un tablero,
+- **[17:23] Yo:** data Dummy,
+- **[17:23] Yo:** ¿verdad?
+- **[17:23] Yo:** Y ya. Pero realmente yo no podía exportar eso a TikTok ni hacer nada
+- **[17:23] Yo:** con el proyecto realmente, ¿correcto?
+- **[17:23] Yo:** Dime si...
+- **[17:23] Jaime Guevara:** Correcto.
+- **[17:23] Yo:** Listo, bien.
+- **[17:23] Yo:** Entonces,
+- **[17:24] Yo:** yo traje, pensando también lo que dijo María, de
+- **[17:24] Yo:** de de que trataran, de de qué pasa si en se pudiera
+- **[17:24] Yo:** un líder de comunidad pudiera dar un curso completo sin salirse de dropping, por lo menos los para los principiantes.
+- **[17:24] Yo:** Se me vino a la cabeza, hoy hoy apenas hoy lo estaba socializando con ella en la mañana,
+- **[17:24] Yo:** y ya lo compartí con la célula
+- **[17:24] Yo:** lo ven bien, pero, pues, tenemos ahí como un poco el el el
+- **[17:24] Yo:** Todavía la incertidumbre sí sí debería surgir, irnos por ese camino.
+- **[17:24] Yo:** ¿Sí?
+- **[17:24] Yo:** Que estemos todos alineados.
+- **[17:24] Yo:** Es
+- **[17:24] Yo:** ¿qué pasa
+- **[17:24] Yo:** si yo
+- **[17:24] Yo:** Y esto en un concepto que tenemos que manejar claramente un
+- **[17:24] Yo:** cuidado, pero es, ¿qué pasa si
+- **[17:24] Yo:** tiene
+- **[17:24] Yo:** una escala mucho más pequeña y para principiantes?
+- **[17:24] Yo:** Su propio Shopify.
+- **[17:24] Yo:** ¿Sí? Es decir,
+- **[17:24] Yo:** Jaime seleccionó un producto
+- **[17:24] Yo:** hace todo el flujo que ya conocemos de Gali con la con las
+- **[17:24] Yo:** simplificaciones que vayamos a hacer para usuarios menos expertos,
+- **[17:24] Yo:** y el éxito es que monte su primera tienda de ecommerce
+- **[17:25] Yo:** que no va a ser
+- **[17:25] Yo:** Shopify, yo no hacer irlo en
+- **[17:25] Yo:** hacerlo ir a ningún lado,
+- **[17:25] Yo:** va a estar dentro de drops.
+- **[17:25] Yo:** Es decir,
+- **[17:25] Yo:** el producto, una secadora,
+- **[17:25] Yo:** un secador de zapatos,
+- **[17:25] Yo:** va a ser seleccionado
+- **[17:25] Yo:** se va a entender todo el tema del CPA, todo el ROAS, todo eso se entiende de una forma, pues, más amigable para el usuario que no sabe de qué le está hablando, se selecciona un ángulo de venta, y se genera entonces la landing, pero no solamente la landing de la pieza de, entonces, el detalle del producto ya como lo hace, por ejemplo, PagePilot, sino que realmente se monta un mini ecommerce para esa persona. Muy reducido, y por eso digo mini, porque uno es por usuarios inexpertos, y dos, la idea es que sea muy controlado, claramente esto es solamente para el workshop, pero sí vemos que
+- **[17:25] Yo:** viabilidad podríamos hacerles
+- **[17:25] Yo:** no sé, solamente cinco productos, diez productos,
+- **[17:25] Yo:** y al alcanzar un máximo de órdenes, ahí es donde le pedimos, bueno, usted ya la logró, ya
+- **[17:25] Yo:** cogió un hábito, ya sabe cómo es esta vuelta,
+- **[17:26] Yo:** migrese para Shopify, para Tienda Nove, para WooCommerce, para cualquier otro que es su
+- **[17:26] Yo:** real de negocio, es eso, que ya te ofrece pasarelas de pago, cosas de PayPal,
+- **[17:26] Yo:** más que nosotros, pues no es nuestro core de negocio. Lo que estoy lo que estoy planteando es
+- **[17:26] Yo:** generemos el habilitador para que esa persona que seleccione el producto,
+- **[17:26] Yo:** que ya hizo toda la parte de ángulo de venta, toda esa toda esa cosa,
+- **[17:26] Yo:** tenga algo listo,
+- **[17:26] Yo:** para irse a Meta, para irse a TikTok, para irse a sus estados de WhatsApp,
+- **[17:26] Yo:** poner la URL y que haya gente que llegue y entre a su ecommerce, que realmente va estar dentro de dropping.
+- **[17:26] Yo:** Pero el usuario, pues, no va el usuario que va a comprar no va saber que es su dropping.
+- **[17:26] Yo:** No sé si se entendió la idea, ¿y qué opinas?
+- **[17:26] Jaime Guevara:** Me perdí un poco. O sea,
+- **[17:26] Jaime Guevara:** sería
+- **[17:26] Jaime Guevara:** Haceme un un ejemplo de una persona.
+- **[17:26] Yo:** Santiago.
+- **[17:26] Jaime Guevara:** Ajá.
+- **[17:26] Yo:** Nunca ha vendido nada.
+- **[17:26] Yo:** Santiago es alguien que no vendió nada, vio por ahí algo que se llamaba
+- **[17:27] Yo:** ¿sí? Entonces, de una forma muy orgánica entré.
+- **[17:27] Yo:** Y dentro del mismo flujo que ya tenemos en en el experimento, pues, está es
+- **[17:27] Yo:** bueno, encontrar el primer producto, ¿cierto?
+- **[17:27] Yo:** Arranco por ahí.
+- **[17:27] Yo:** No tengo ni de qué vender, ahí estoy solo resumiendo el flujo como a esta hora, ¿cierto?, en Gale. Digo que van a ser unas zapatillas a ellas.
+- **[17:27] Yo:** Listo.
+- **[17:27] Yo:** Yo ahí no sé qué va hacer con eso, yo solo me me me pidieron que escogiera el primer producto que quiero vender.
+- **[17:27] Yo:** Yo todavía no sé por dónde, no sé qué va a compartir, yo no sé nada, solamente, pues,
+- **[17:27] Yo:** la estoy dejándome llevar por la herramienta,
+- **[17:27] Yo:** ¿ven?
+- **[17:27] Yo:** Entonces, me preguntaron qué quería vender, decía, le dije que no sabía, me dieron opciones,
+- **[17:27] Yo:** a unos a unos tenis.
+- **[17:27] Yo:** Listo.
+- **[17:27] Yo:** AimEx pone, está toda la parte ya de de cifras, ¿no?
+- **[17:27] Yo:** Cuánto va a ganar, durante cuánto tiempo va a vender el producto, toda esa parte que ya ustedes conocen.
+- **[17:27] Yo:** Listo, me quedó claro que con esas zapatillas, con un margen del
+- **[17:27] Yo:** cuarenta por ciento, durante un mes voy a ganarme aproximadamente unos quinientos mil pesos.
+- **[17:28] Yo:** Listo, me gusta, quiero seguir con eso.
+- **[17:28] Yo:** ¿Cómo quiere vender ese producto?, porque hay diferentes formas de ver, desde la urgencia,
+- **[17:28] Yo:** desde la exclusividad, bueno, lo de ángulos de venta.
+- **[17:28] Yo:** ¿Sí? Hasta ahí, ¿me sigues?
+- **[17:28] Jaime Guevara:** Sí, sí, yo estoy bien, de una.
+- **[17:28] Yo:** Bien. Digo, no, exclusividad, porque esos tenéis
+- **[17:28] Yo:** son nuevos y
+- **[17:28] Yo:** aparecen en chips.
+- **[17:28] Yo:** Me voy por, entonces, esa va ser.
+- **[17:28] Yo:** Hasta ahí te pones a ver, realmente Gali lo que hace es como que, bueno, proyecto creado, muchas gracias, hay un
+- **[17:28] Yo:** un tablero de Dummy que dice publicar por TikTok ads, pero eso realmente no se activa, porque es Dummy, eso no es
+- **[17:28] Yo:** está quemado, ¿correcto?
+- **[17:28] Jaime Guevara:** Yeah. Exactly.
+- **[17:28] Yo:** Listo.
+- **[17:28] Yo:** Lo que
+- **[17:28] Yo:** propongo es, venga,
+- **[17:28] Yo:** hagamos que el usuario realmente sienta que la logró, que ya
+- **[17:28] Yo:** está listo para salir a vender.
+- **[17:28] Yo:** Que eso quedó seteado.
+- **[17:28] Yo:** ¿Qué pasa si yo le digo a mi usuario,
+- **[17:28] Yo:** a hoy qué tocaría? Si no, hasta acá,ándonos ahí, ¿qué tocaría? Que el usuario
+- **[17:28] Yo:** vaya
+- **[17:28] Yo:** suponiendo que esto estuviera en producción,
+- **[17:28] Yo:** que vaya
+- **[17:28] Yo:** se active en Shopify,
+- **[17:29] Yo:** para hacer eso, pues le va tocar
+- **[17:29] Yo:** charlar un buen rato con ChatGPT que le diga paso por paso cómo configurarse,
+- **[17:29] Yo:** unirse a una comunidad,
+- **[17:29] Yo:** ver videos, lo que sea. Pero le va a tocar salirse de Dropi y buscar, y ahí le estoy poniendo fricciones
+- **[17:29] Yo:** por todo lado, ¿correcto?
+- **[17:29] Jaime Guevara:** Ajá. Total.
+- **[17:29] Yo:** Entonces, ¿qué pasa si yo, más bien en ese flujo, cuando ya crea el proyecto, le digo, bueno,
+- **[17:29] Yo:** crea tu ecommerce o móntalo en tu ecommerce.
+- **[17:29] Yo:** Ese créalo en tu ecommerce es realmente
+- **[17:29] Yo:** pues venga,
+- **[17:29] Yo:** ahora tiene una
+- **[17:29] Yo:** ala
+- **[17:29] Yo:** que va a ser
+- **[17:29] Yo:** su vitrina comercial, es decir,
+- **[17:29] Yo:** Dropi dijo, pues, ¿sabe qué?, yo quiero mi propio Shopify.
+- **[17:29] Yo:** No para todo el mundo, solamente para esta gente que apenas está empezando a vender.
+- **[17:29] Jaime Guevara:** Ok.
+- **[17:29] Yo:** Entonces, Santiago
+- **[17:29] Jaime Guevara:** Pero ¿no no es lo mismo que page pilot? Pues, pregunta, o sea, ¿es como el mismo concepto?
+- **[17:29] Yo:** No es lo mismo en el sentido que PagePilot lo que te hace es que te genera el mock,
+- **[17:29] Jaime Guevara:** Ajá.
+- **[17:29] Yo:** uno, de forma
+- **[17:29] Yo:** pésima,
+- **[17:29] Yo:** dos, para que lo exportes a Shopify.
+- **[17:30] Yo:** Tú tienes que tener, el prerrequisito es que lo exportes a Shopify.
+- **[17:30] Jaime Guevara:** Okay.
+- **[17:30] Jaime Guevara:** Yeah. Yeah. Yeah.
+- **[17:30] Yo:** O es es más, el prerequisito es que tiendas tengas una tienda en Shopify,
+- **[17:30] Yo:** alguien que apenas está arrancando, alguien que ya me hablaste en Chino, me perdiste.
+- **[17:30] Yo:** Entonces, ¿qué tal
+- **[17:30] Yo:** que yo no te voy a pedir por ningún lado de Shopee, que yo no te hablo nada de eso? Bueno, creé su ecommerce, y su ecommerce
+- **[17:30] Yo:** es lo mínimo necesario
+- **[17:30] Yo:** el key es básico de supervivencia que usted no se me vaya.
+- **[17:30] Yo:** Entonces, ahí va a tener
+- **[17:30] Yo:** el producto, si vuelve a ser varias veces el flujo, pues va a tener cinco, diez, quince productos.
+- **[17:30] Yo:** El máximo todavía no lo hemos definido, la idea es que no sea muy grande,
+- **[17:30] Yo:** justamente porque tiene tiene que ser controladito, ¿cierto?, para los usuarios,
+- **[17:30] Yo:** Los diez productos, supongamos que ya escogió,
+- **[17:30] Yo:** con sus ángulos de venta,
+- **[17:30] Yo:** con la el margen que le quiere sacar, con todo eso,
+- **[17:30] Yo:** ¿Listos?
+- **[17:30] Yo:** Desde un panel de configuración,
+- **[17:30] Yo:** y lo que va a pasar es que Jaime Ah, bueno, yo, Santiago, lo publiqué en mis estados de WhatsApp,
+- **[17:30] Yo:** ¿cierto? Entonces, dije,
+- **[17:30] Yo:** tienda de zapatillas, premium Cali, lo que sea.
+- **[17:31] Yo:** Lo publiqué en en WhatsApp en mis estados.
+- **[17:31] Yo:** Jaime vio en mis estados,
+- **[17:31] Yo:** Jaime me tiene agregado, entra.
+- **[17:31] Yo:** ¿Qué va ver, Jaime? Lo que ve un usuario cuando entra a una tienda de
+- **[17:31] Yo:** cualquier
+- **[17:31] Yo:** random en Shopify.
+- **[17:31] Yo:** Es una tienda donde puede comprar cosas.
+- **[17:31] Jaime Guevara:** Pronto?
+- **[17:31] Yo:** ¿Correcto?
+- **[17:31] Yo:** Lo que debería pasar
+- **[17:31] Yo:** es que, oye, esta parte, pues, ya no entra dentro del workshop, pero el workshop yo ya lo logré,
+- **[17:31] Yo:** cuando alguien
+- **[17:31] Yo:** montó su ecommerce.
+- **[17:31] Yo:** Dentro de dropping.
+- **[17:31] Jaime Guevara:** K.
+- **[17:31] Jaime Guevara:** Sí, sí. No, ok, ok.
+- **[17:31] Yo:** Selecciono un producto,
+- **[17:31] Yo:** hizo todo el flujo,
+- **[17:31] Yo:** y escogió
+- **[17:31] Yo:** no perdió la motivación y decidió publicarlo.
+- **[17:31] Yo:** En su ecommerce, y lo pudo publicar fácil
+- **[17:31] Yo:** porque no le tocó salir de drop, y drop early le hizo todo por él,
+- **[17:31] Yo:** Vea, aquí está su banner, yo ya sé su nombre, aquí arribita,
+- **[17:31] Yo:** Para el workshop no tenemos que hacer que eso sea modificable, parametrizable.
+- **[17:31] Yo:** Basiquito, plantilla, ya sé cuál es el producto, sé cuál es la descripción, sé cuáles son las garantías,
+- **[17:31] Jaime Guevara:** Okay.
+- **[17:31] Yo:** el mismo catálogo de ya nos lo está dando.
+- **[17:32] Yo:** Realmente.
+- **[17:32] Yo:** Es decir, que no tendríamos que utilizar nada
+- **[17:32] Yo:** nada raro ahí para, por ejemplo,
+- **[17:32] Yo:** con, empezando con con PagePilot, nos tocaría pagar para que nos genere unas landings landings pages, que aparte, pues, igual no sirven porque no tenemos Shopify.
+- **[17:32] Yo:** Esa persona no va tener Shopify,
+- **[17:32] Yo:** lo que hacemos es simplemente cojamos las
+- **[17:32] Yo:** los archivos, el multimedia lo ponemos
+- **[17:32] Yo:** podríamos, es claramente para los productos que tengan una buena descripción ponérselas y ya.
+- **[17:32] Yo:** Ahora,
+- **[17:32] Yo:** Jaime,
+- **[17:32] Yo:** ya hablando como cómo, por qué yo creería que eso funciona,
+- **[17:32] Yo:** es porque Jaime va a entrar
+- **[17:32] Yo:** va a ver mi tienda,
+- **[17:32] Yo:** va a ver los diez productos que yo tengo,
+- **[17:32] Yo:** y va a poder comprar.
+- **[17:32] Yo:** Por eso yo digo,
+- **[17:32] Yo:** yo como Santiago, que estoy apenas aprendiendo, digo, la logré porque, pues,
+- **[17:32] Yo:** a través de un único flujo,
+- **[17:32] Yo:** pude montar un producto para vender.
+- **[17:32] Jaime Guevara:** Sí.
+- **[17:32] Yo:** ¿Sí?
+- **[17:32] Yo:** No sé, sí, con eso ya fui más claro. Ay, vale.
+- **[17:32] Jaime Guevara:** Sí, no, brutal.
+- **[17:32] Jaime Guevara:** Pero ¿y ahí cómo cómo...? O sea, en, sí, no, brutal.
+- **[17:33] Jaime Guevara:** Yo ahí le agregaría, es el
+- **[17:33] Jaime Guevara:** le tocaría hablar con Laura Roax, como para que
+- **[17:33] Jaime Guevara:** también fuera similar, como que listo,
+- **[17:33] Jaime Guevara:** de una monto a las campañas y todo en Meta o
+- **[17:33] Yo:** Si podemos,
+- **[17:33] Jaime Guevara:** o, bueno, que se haga todo eso por allá.
+- **[17:33] Yo:** Si podemos hacerlo, genial,
+- **[17:33] Jaime Guevara:** Sí, sí, sí.
+- **[17:33] Yo:** o sea,
+- **[17:33] Yo:** ese
+- **[17:33] Jaime Guevara:** Pues ella, yo acabé de salir de reunión con ella y nos pidió el espacio, sí, porque ella es la
+- **[17:33] Jaime Guevara:** como que socia de Rox y
+- **[17:33] Yo:** Claro, sí,
+- **[17:33] Jaime Guevara:** y creo que es la principal interesada en que sea
+- **[17:33] Yo:** Claro, sería muy top que, claro, yo monto el producto
+- **[17:33] Yo:** aparte que que que sí puedo que
+- **[17:33] Yo:** que pueda generar un una publicidad desde ahí mismo,
+- **[17:33] Jaime Guevara:** Total.
+- **[17:33] Yo:** O sea,
+- **[17:33] Yo:** la rompe porque aparte la calculadora podría estar conectada directamente con lo que sabe que está gastando en publicidad,
+- **[17:33] Jaime Guevara:** Exacto, sí, no, esa sería la idea.
+- **[17:33] Jaime Guevara:** Y pregunta ahí.
+- **[17:33] Jaime Guevara:** ¿Qué alcance tendría eso? O sea, ¿te lo pensaste
+- **[17:33] Jaime Guevara:** también como conectado incluso a
+- **[17:33] Jaime Guevara:** a pago o o todo es con pago contra entrega?
+- **[17:33] Yo:** Ah, bueno,
+- **[17:34] Yo:** justamente como le estamos delimitando a gente que no sabe de nada de esto.
+- **[17:34] Yo:** Y no estamos, no queremos sobrecomplicarlo,
+- **[17:34] Yo:** Uno, pues, en el workshop lo que va a pasar es que nada más la
+- **[17:34] Yo:** los asistentes van a montar el producto, ¿correcto?, él o los productos.
+- **[17:34] Yo:** Pero, pues, por debajo mientras no tengamos APIs, eso no va a vender nada, ¿verdad?
+- **[17:34] Yo:** O sea, o sea, salida del mundo exterior no tiene porque, pues, no tengo APIs
+- **[17:34] Yo:** para conectarlo a la operación alrededor.
+- **[17:34] Yo:** Ahora, para montar la la landmins es lo que preguntas el el ecommerce, no necesitamos ese un ecommerce compase a la de pago, porque, pues, es que el gordo negocio de lo que es pago contra entrega. Ahí creo que es justamente la fricción, mira que para, lo veo así, es la fricción natural que el usuario después de que empiece a ver que esto tiene sentido, entienda el modelo de dropshipping migra a Shopify sí la va ofrecer PayPal,
+- **[17:34] Jaime Guevara:** Mhmm.
+- **[17:34] Jaime Guevara:** Ok.
+- **[17:34] Yo:** PayPal, Mercado Libre,
+- **[17:34] Yo:** pasarelas de pago una y un millón, más pago contra entrega,
+- **[17:34] Yo:** ¿ya? Y ya usted aprendió, ya ya yo estoy enseñándole
+- **[17:35] Yo:** ni siquiera a caminar, estoy enseñando a gatear.
+- **[17:35] Yo:** Usted ya se defiende, usted ya se mueve punto a a punto b.
+- **[17:35] Yo:** ¿Quiere aprender a caminar? Váyase para Choquefi.
+- **[17:35] Yo:** Ya ahí usted necesita, necesita más herramientas,
+- **[17:35] Yo:** integrarse con mil cosas,
+- **[17:35] Yo:** pues,
+- **[17:35] Jaime Guevara:** Claro, ya es un poco más avanzado. No, de un, a mí no parece una chimba.
+- **[17:35] Yo:** Claro, ya está ya está basado, pero ese ese no es el punto que queremos
+- **[17:35] Jaime Guevara:** Ajá.
+- **[17:35] Yo:** hoy, creo que que
+- **[17:35] Yo:** así lo hemos
+- **[17:35] Jaime Guevara:** No, no, total.
+- **[17:35] Jaime Guevara:** Total, total.
+- **[17:35] Jaime Guevara:** De una,
+- **[17:35] Yo:** Pero ¿ves...? Porque estamos hablando justo cuando entraste con Aleja, eso que Aleja me, bueno, Aleja, de hecho, si quieres te
+- **[17:35] Yo:** si quieres terminar la idea, porque me te entiendo que no no te hace con mucho sentido que
+- **[17:35] Yo:** que tengamos esa ese creador de de de ecommerce,
+- **[17:35] Alejandra Melo:** Pues, lo estoy analizando.
+- **[17:35] Alejandra Melo:** Lo estoy analizando porque, ¿qué?
+- **[17:35] Alejandra Melo:** Pues, es como es más como algo para que se
+- **[17:36] Alejandra Melo:** activen
+- **[17:36] Alejandra Melo:** pero no es como algo consistente que yo vaya a seguir haciendo.
+- **[17:36] Alejandra Melo:** Entonces literal.
+- **[17:36] Jaime Guevara:** Igual, recuerden que estamos apuntando
+- **[17:36] Jaime Guevara:** a la activación.
+- **[17:36] Jaime Guevara:** Netamente a la activación.
+- **[17:36] Yo:** O sea, yo, esa herramienta
+- **[17:36] Yo:** ojo, lo que va pasar es que, listo, yo publiqué diez
+- **[17:36] Yo:** a ver si se lo se lo logró vender a Leo.
+- **[17:36] Yo:** Yo activé diez productos, ¿sí?, ¿ok?
+- **[17:36] Yo:** Bien, subí a la página diez productos.
+- **[17:36] Yo:** Después de que lo suba y Jaime entre y me compre,
+- **[17:36] Yo:** volvió de dropí,
+- **[17:36] Yo:** como es dropee.
+- **[17:36] Yo:** Llegó una orden, confirme la orden, ta ta
+- **[17:36] Yo:** hágale seguimiento, contáctese, confirme, esté pendiente
+- **[17:36] Yo:** de que el usuario sí esté atento a su pedido que no se lo vaya a devolver.
+- **[17:36] Yo:** Sea, vuelve de drop y drop y como es,
+- **[17:36] Yo:** ¿sí?
+- **[17:36] Yo:** Decir, que ya el sostenimiento,
+- **[17:36] Yo:** que esos usuarios que se activaron en, activación en el sentido de empezar a usar la
+- **[17:37] Yo:** plataforma y estar listos para vender
+- **[17:37] Yo:** que, de hecho, deberíamos buscarle un término a eso, ¿cierto? Es
+- **[17:37] Yo:** porque yo puedo activar un usuario hasta que monte su
+- **[17:37] Yo:** producto sin que todo haya vendido. No estoy diciendo que reemplacemos el término activación neta o bruta, porque
+- **[17:37] Yo:** definitivamente debe ser alrededor de la orden,
+- **[17:37] Yo:** pero a lo mejor lo como
+- **[17:37] Yo:** no sé, activación de venta o activación
+- **[17:37] Yo:** de algo, ¿sí?
+- **[17:37] Yo:** Después de que ya haya publicado, si Jaime, si
+- **[17:37] Yo:** Laura,
+- **[17:37] Yo:** Alejandra, y mil personas más entran
+- **[17:37] Yo:** Y todo eso se cae porque ese mal
+- **[17:37] Yo:** Santiago nunca estuvo pendiente de confirmar órdenes. Nunca llamó a confirmar si iba a estar porque le va a llegar el pedido, no hizo nada con tema de transportadoras,
+- **[17:37] Yo:** no usó dropping como sí es dropping,
+- **[17:37] Yo:** jodidos, y ahí es donde la retención se nos va a caer, porque logré
+- **[17:37] Yo:** que empezara a vender, que entiendo, ahí Jaime me corriges,
+- **[17:37] Jaime Guevara:** Mhmm.
+- **[17:37] Yo:** es el propósito de sellers,
+- **[17:37] Yo:** Ya lo empujé, efectivamente estaba
+- **[17:38] Yo:** arrancar, estaba inseguro, le di la patada y arranqué.
+- **[17:38] Yo:** O sea,
+- **[17:38] Yo:** suerte.
+- **[17:38] Yo:** Ahí adelante,
+- **[17:38] Yo:** que
+- **[17:38] Yo:** todo el proceso logístico, que es la, justamente, la célula de Juandi,
+- **[17:38] Yo:** funcione bien,
+- **[17:38] Yo:** que suppliers
+- **[17:38] Yo:** lo hagan bien y no la embarren y
+- **[17:38] Yo:** me despachen los productos, que todo lo funcione como debería funcionar,
+- **[17:38] Yo:** no entra en nosotros, nosotros solamente estamos
+- **[17:38] Yo:** que les digo, moviendo a que se anime, o sea, no no pierda el
+- **[17:38] Yo:** porque le toca conectar, entonces, a Shopify a a, pues, chateapro, a Phoenix,
+- **[17:38] Yo:** a toda esa gente.
+- **[17:38] Yo:** No se complique,
+- **[17:38] Yo:** se lo dejo facilito.
+- **[17:38] Yo:** Aquí mismo, ahí sí, lo que dice Jaime,
+- **[17:38] Yo:** si yo puedo decirle, bueno,
+- **[17:38] Yo:** empiece a poutar aquí mismo, la logramos, y si llegamos a
+- **[17:38] Yo:** que Chatea Pro genera la versión freemium,
+- **[17:38] Yo:** pues mejor.
+- **[17:38] Yo:** ¿No?
+- **[17:38] Yo:** Y ese es como el nivel
+- **[17:38] Yo:** supervasivo, el lado por el de como
+- **[17:38] Yo:** kit mínimo
+- **[17:38] Yo:** básico
+- **[17:38] Yo:** mínimo a supervivencia para que usted arranque a hacer algo,
+- **[17:39] Yo:** y no desista de vender.
+- **[17:39] Jaime Guevara:** Total.
+- **[17:39] Yo:** Es decir, que eso eso, Aleja, yo no estaría haciéndolo de acuerdo con lo que tú dices,
+- **[17:39] Yo:** yo no estoy todo el tiempo haciendo el flujo, descontando producto y montar,
+- **[17:39] Yo:** capaz sí, o sea, capaz de llegar los primeros quince, pero después de estar tan metida en el tema, porque vi que fue
+- **[17:39] Yo:** funcionó con uno, con dos, con diez, con con cuarenta ventas,
+- **[17:39] Yo:** seguramente lo que vamos a lograr, esa hipótesis tendríamos que verlo, es
+- **[17:39] Yo:** que esos usuarios, de forma muy orgánica, también van a empezar o a unirse a comunidades seguir
+- **[17:39] Yo:** gente, a meterse a talleres,
+- **[17:39] Yo:** se van a volver más, y Hydropi tiene que darle los
+- **[17:39] Yo:** las herramientas para que lo haga,
+- **[17:39] Yo:** pero se van a volver más expertos y ahí ya ahí es donde también entra
+- **[17:39] Yo:** José con todo el programa de leyendas, ¿no?
+- **[17:39] Yo:** E incentivos y todo el cuento.
+- **[17:39] Jaime Guevara:** No, creo que Aleja iba a decir algo antes, bien.
+- **[17:39] Yo:** ¿Sí, Yeimy?
+- **[17:39] Yo:** Ah, fue la
+- **[17:39] Jaime Guevara:** No,
+- **[17:39] Alejandra Melo:** no, que sí, o sea, que lo hagamos, hagámosle.
+- **[17:39] Alejandra Melo:** Hagámoslo. Listo.
+- **[17:39] Yo:** Entonces,
+- **[17:39] Jaime Guevara:** Te iba a decir, sí, ya que
+- **[17:40] Jaime Guevara:** ahorita con esta nueva iniciativa y este nuevo incentivo de del
+- **[17:40] Jaime Guevara:** del, incentivo, no, esta nueva iniciativa de insight, perdón,
+- **[17:40] Jaime Guevara:** de
+- **[17:40] Jaime Guevara:** de los líderes de comunidad,
+- **[17:40] Jaime Guevara:** Creo que
+- **[17:40] Jaime Guevara:** sería bueno,
+- **[17:40] Jaime Guevara:** si, pero, pues, cuando ya lo construyamos, porque,
+- **[17:40] Jaime Guevara:** no les tenemos que pedir permiso, pero
+- **[17:40] Jaime Guevara:** como que ver si esto, esta primera parte le sirve también su discurso de ventas, porque
+- **[17:40] Jaime Guevara:** incluso ellos pueden hacer un curso corto más barato como que
+- **[17:40] Jaime Guevara:** te enseño a utilizar, te enseño a vender,
+- **[17:40] Jaime Guevara:** solo con drop y tu primera venta.
+- **[17:40] Jaime Guevara:** Ese es un curso barato.
+- **[17:40] Jaime Guevara:** Y es para enseñarles eso. Y si ya lo hiciste y lo lograste,
+- **[17:40] Jaime Guevara:** vendo este más caro, que ya es con todo lo del Shopee y todo eso.
+- **[17:40] Yo:** Inclusive incluso podría hacer su
+- **[17:40] Yo:** pensado, no no que lo vendieran,
+- **[17:40] Yo:** pero sí lo había pensado James como, inclusive puede ser su gancho de ventas, como
+- **[17:40] Jaime Guevara:** Ajá.
+- **[17:40] Yo:** y puedes hacerlo todo
+- **[17:41] Yo:** arrancar.
+- **[17:41] Yo:** ¿No?
+- **[17:41] Yo:** Y que de ahí, bueno, ya quieres que las cuarenta órdenes como
+- **[17:41] Yo:** lo venden todos, ¿no?, cuarenta órdenes
+- **[17:41] Yo:** ¿vasen a ser cinco millones? Entonces, mi curso. O o sí, o vender en las primeras de sea, creo que esa premisa eso me quedé pensando en en cómo le lográbamos de de que todo se pudiera hacer dentro de
+- **[17:41] Jaime Guevara:** Total.
+- **[17:41] Yo:** pues me parece fuerte, porque realmente nosotros podríamos hacer
+- **[17:41] Yo:** mucho dentro de
+- **[17:41] Jaime Guevara:** Sí, no, total.
+- **[17:41] Yo:** que se vaya saltando, sin que vaya pasando de un lado a otro,
+- **[17:41] Yo:** entonces,
+- **[17:41] Yo:** por ejemplo, para hacer la el el el constructor este de páginas,
+- **[17:41] Yo:** vayámonos a que sea
+- **[17:41] Yo:** me parece a mí igual, Alex, así hay una mejor opción de hacerlo, pero
+- **[17:41] Yo:** una plantilla
+- **[17:41] Yo:** básica,
+- **[17:41] Yo:** igual,
+- **[17:41] Yo:** si vamos a gente que no sabe hacerlo, no importa si es
+- **[17:41] Yo:** pro o no es pro, o sea, podríamos dejarle claramente
+- **[17:41] Yo:** cambios, que si alguien quiere hacer un logo
+- **[17:41] Yo:** en un Canvas y cargárselo a la plataforma para que aparezca su loguito, pues, o sea, es lo mínimo, ¿no?
+- **[17:42] Yo:** Dentro del flujo de Gali, James, lo que estamos planteando es simplificarlo demasiado, o los copies
+- **[17:42] Yo:** a su mínima expresión
+- **[17:42] Yo:** y los conceptos como
+- **[17:42] Yo:** CPA, ROAS y cualquier otro que sea
+- **[17:42] Yo:** ajeno a una persona que, pues, no sabe nada de esto.
+- **[17:42] Yo:** Realmente, simplificarse la palabra es como muy coloquiales, ¿no?
+- **[17:42] Yo:** O sea, vas a ganar tanto y, o este es tu margen, o este es
+- **[17:42] Yo:** tu utilidad, esto es lo que te queda después de todos los costos. O sea, simplificarlo mucho,
+- **[17:42] Yo:** Estamos en lo de que la idea es claramente hacer el logo móvil,
+- **[17:42] Yo:** muy móvil,
+- **[17:42] Yo:** y ya están
+- **[17:42] Yo:** preliminarmente, que la idea es que las, ahora te las mando, James,
+- **[17:42] Yo:** para que me des feedback. Aléjate también, yo te comparto
+- **[17:42] Yo:** el el el el documento ICATA para que también lo veas.
+- **[17:42] Yo:** De cuáles serían la las las las métricas de éxito en principio, nos estaríamos enfocando en los tiempos,
+- **[17:43] Yo:** decir,
+- **[17:43] Yo:** que un usuario daría por exitosa
+- **[17:43] Yo:** eso ahí ya hizo un benchmark, de hecho, con Hexa, para que sepan
+- **[17:43] Yo:** Con Exa, que es la el API que les les dije ayer, CataExa es una
+- **[17:43] Yo:** un API, no sé si ya la has escuchado, para hacer deep research.
+- **[17:43] Yo:** Esto es siempre un montón para hacer competitive intelligence,
+- **[17:43] Yo:** benchmark,
+- **[17:43] Yo:** y muchas otras cosas.
+- **[17:43] Yo:** Lo que hice fue,
+- **[17:43] Yo:** utilizarla para ver
+- **[17:43] Yo:** hacer un benchmark de discovery,
+- **[17:43] Yo:** y era básicamente cómo se, en temas de ecommerce,
+- **[17:43] Yo:** cuánto deberían ser los tiempos para yo hacer experimentos.
+- **[17:43] Yo:** Llegamos a que no debería ser más de diez minutos,
+- **[17:43] Yo:** para que el usuario no se me pierda en el flujo de
+- **[17:43] Yo:** cero hasta el CTO completo, que ese CTO completo sería
+- **[17:43] Yo:** lo menos, su primer producto montado.
+- **[17:43] Yo:** Serían
+- **[17:43] Yo:** exitosos si un usuario en diez minutos logra escoger un producto y dejarlo publicado en su ecommerce.
+- **[17:43] Yo:** Eso es exitoso.
+- **[17:43] Yo:** Y ahí hay variables o ramificaciones, variantes o ramificaciones, perdón,
+- **[17:43] Yo:** que estarían de, si
+- **[17:43] Yo:** muestra y no termina el flujo, pues ahí también tenemos data de, bueno,
+- **[17:44] Yo:** vea que hay usuarios que cuando no saben nada,
+- **[17:44] Yo:** el cuarenta por ciento se nos quedó en pedir muestra, y hasta que no me llegue el producto,
+- **[17:44] Yo:** no voy a publicarlo en mi página.
+- **[17:44] Yo:** Es un ejemplo. Entonces, ahí ya empezamos a tener como las ramificaciones,
+- **[17:44] Yo:** y ya les paso como el dato, ok, ahí eso estuve haciendo el discovery, ya les paso como las
+- **[17:44] Yo:** las las métricas de éxito.
+- **[17:44] Yo:** ¿Les parece? Eso es de estrategia, ya las métricas que quieran montar Aleja, ya las podemos ver más adelante. Sobre los pasos, el paso a paso, ¿no?, sobre, no sé, los componentes, o dónde se están dando más clics y demás, pues ya las podemos revisar. Esta sería como muy desde el la estrategia de negocio. ¿Les parece o quieren añadir algo, cambiar algo?
+- **[17:44] Jaime Guevara:** De una.
+- **[17:44] Jaime Guevara:** Con Mitch te vamos a pasar
+- **[17:44] Jaime Guevara:** un unos veinticinco productos de mi primera venta. Ok. De mi primera venta, como seleccionados por proveedores. Proveedores exclusivos y proveedores premium. Con buenos descuentos como para ponerlos al inicio de la selección del producto. Pues, de pronto, para reducir también eso. Y, bueno, no sé si lo del en sí al fin no lo dejen o lo aprueben. Usarlo, o no sé si ya lo todavía no lo has iterado, ¿cierto? A ver si, porque es que ese MCP estaba
+- **[17:44] Yo:** Veinticinco preguntas de qué?
+- **[17:44] Yo:** Sí.
+- **[17:45] Yo:** Ah, que no.
+- **[17:45] Yo:** De una.
+- **[17:45] Yo:** El MCP no, porque
+- **[17:45] Yo:** Ha estado o no ha estado.
+- **[17:45] Jaime Guevara:** no estaba funcionando.
+- **[17:45] Jaime Guevara:** No ha estado funcionando.
+- **[17:45] Yo:** Sí lo anoté.
+- **[17:45] Yo:** Pero
+- **[17:45] Yo:** lo que estaba haciendo era
+- **[17:45] Yo:** con Hexa, lo que le había, le estaba la
+- **[17:45] Yo:** ha propuesto a la hija, pero todavía no no está confirmado, que con Hexa podríamos
+- **[17:45] Yo:** añadirle una capa inclusive adicional
+- **[17:45] Yo:** a a lo que ya hace, lo que monto Cata con Apify.
+- **[17:45] Yo:** Y es como, Apify directamente me
+- **[17:45] Yo:** me corre si no es así, pero Apify va directamente a hacer el scrapping
+- **[17:45] Yo:** de tendencias, ¿sí?, tendencias de producto.
+- **[17:45] Catalina Giraldo Aguirre:** Sí, de tendencias de anuncios y de productos, y lo y lo pone.
+- **[17:45] Yo:** Exacto.
+- **[17:46] Catalina Giraldo Aguirre:** Ahí se actualiza cada semana, yo les lo programé así en el Gali experiment.
+- **[17:46] Yo:** Listo.
+- **[17:46] Catalina Giraldo Aguirre:** Que se actualizara cada lunes, porque no
+- **[17:46] Catalina Giraldo Aguirre:** si me lo actualiza a cada rato, me consume ya bastantes toques.
+- **[17:46] Yo:** Sí.
+- **[17:46] Yo:** Exacto. Lo que yo había pensado, James, Cataleja,
+- **[17:46] Yo:** es con el con el con el API que tenemos de que está de Hexa,
+- **[17:46] Yo:** lo que se puede hacer es un prefiltrado
+- **[17:46] Yo:** no del producto
+- **[17:46] Yo:** sino de tendencias generales.
+- **[17:46] Yo:** Ejemplo que le ponía ayer a Aleja,
+- **[17:46] Yo:** Hexa nos podría, voy a probarlo primero antes de decir, incluyálo, llámalo porque eso, pues,
+- **[17:46] Yo:** genera carga de estar revisando que no se nos dañe esa esa esa
+- **[17:46] Yo:** integración, y entonces se nos dañe todo
+- **[17:46] Yo:** adelante. Pero lo que podría hacer Exa es
+- **[17:46] Yo:** hacer deep research de tendencias en Colombia. Ejemplo,
+- **[17:46] Yo:** bienestar y cuidado masculino.
+- **[17:46] Yo:** ¿Cierto?
+- **[17:46] Yo:** Hace un prefiltrado.
+- **[17:46] Yo:** Ya luego pasa a Apify, y Apify, dentro de ese segment, dentro de esa gran categoría,
+- **[17:46] Yo:** ya empieza a buscar
+- **[17:46] Yo:** pautas, publicidad, ventas de sus productos.
+- **[17:47] Yo:** O sea, hay otro filtro, se se empieza a hacer punta-misaje.
+- **[17:47] Yo:** Y ya lo que queda es lo que se empieza a buscar en el MCP,
+- **[17:47] Yo:** empieza a ver en catálogo.
+- **[17:47] Yo:** Eso haría que, de pronto,
+- **[17:47] Yo:** logremos dar con mejores productos
+- **[17:47] Yo:** o con cosa, o o con, por ejemplo, ni cada producto con lo podríamos
+- **[17:47] Yo:** después para el copy o el ángulo de venta,
+- **[17:47] Yo:** hacerlo más estratégico, hacerlo tan enfocado como tan tan quemado, tan ¿Cómo se diría? Tan tan cliché como ya suena en los anuncios. Los ángulos? Sino tratar de darle un enfoque un poco más de negocio y un mercado más fuerte. Pronto, a la a la herramienta. Pero todavía no he probado si eso lo mejora o lo empeora o si, o no tiene ningún efecto real.
+- **[17:47] Jaime Guevara:** Chévere. Y en cuestión de tiempos, ¿crees que nos dé para
+- **[17:47] Jaime Guevara:** al expo
+- **[17:47] Yo:** Exa ya está implementado, este, lo tengo en local.
+- **[17:47] Jaime Guevara:** Ajá.
+- **[17:47] Yo:** Realmente, no sé
+- **[17:47] Yo:** la, va va a variar, o sea, hoy pude,
+- **[17:47] Yo:** entre hoy y mañana podría terminar de implementar
+- **[17:48] Yo:** de implementar, hacer pruebas para contrastar si hay una diferencia o no,
+- **[17:48] Yo:** Pero pero, de hecho, te iba a preguntar ahora, ¿viste la
+- **[17:48] Yo:** no me está dando, devolviendo resultados reales, está como quemado.
+- **[17:48] Jaime Guevara:** No, sí, no, no sé.
+- **[17:48] Jaime Guevara:** No está funcionando, la verdad, pero
+- **[17:48] Jaime Guevara:** pues,
+- **[17:48] Jaime Guevara:** hay que tener un plan b, yo creo.
+- **[17:48] Jaime Guevara:** Porque ahí sí no tenemos jurisdicción.
+- **[17:48] Yo:** Pero el el resultado
+- **[17:48] Yo:** James, va, usted diría, no, o sea, después de que el MCP esté funcionando,
+- **[17:48] Yo:** yo puedo dejar montado ya todo
+- **[17:48] Yo:** de aquí a mañana, como una capa intermedia, hacer si algo que haga un fallback, en caso de que algo falle, se agote el el saldo en extra o lo que sea, que lo vomita, y que llegue directamente a Apify.
+- **[17:48] Yo:** Y de Apify, pues,
+- **[17:48] Yo:** la bien es que sí necesitamos es que nos garanticen que ese MCP está funcionando para no.
+- **[17:48] Jaime Guevara:** Sí, pues, en el perder los casos nos tocaba
+- **[17:48] Yo:** Porque es no,
+- **[17:48] Jaime Guevara:** ver
+- **[17:48] Jaime Guevara:** mi plan mi plan b era
+- **[17:48] Jaime Guevara:** mi plan b era
+- **[17:49] Jaime Guevara:** ofrecerle los veinticinco productos de mi primera venta,
+- **[17:49] Yo:** ¿Sí?
+- **[17:49] Jaime Guevara:** y si no está ninguno, decir que
+- **[17:49] Jaime Guevara:** simplemente
+- **[17:49] Jaime Guevara:** pues escoja, o sea, con el nombre,
+- **[17:49] Jaime Guevara:** y qué pulso y qué se cree la señora en pulso y decirle como que
+- **[17:49] Jaime Guevara:** nuestro nuestros asesores lo buscarán y te lo darán. Continúa el proceso como si exigiera.
+- **[17:49] Yo:** Ah, sí.
+- **[17:49] Yo:** Es una parte importante.
+- **[17:49] Yo:** Una parte importante, lo lo alcanzamos a charlar con la lija, y es
+- **[17:49] Yo:** donde íbamos a
+- **[17:49] Yo:** Eso ya está en el el diagrama, ¿cierto, Aleja? No lo he visto, perdóname.
+- **[17:49] Yo:** Esa parte de de de de cuándo desbordábamos a pulso.
+- **[17:49] Yo:** Creo que está.
+- **[17:49] Alejandra Melo:** Sí. Sí.
+- **[17:49] Yo:** Ahí está de que de que si no encuentra el producto, si no hay un match
+- **[17:49] Yo:** es como
+- **[17:49] Yo:** búscalo a través de pulso,
+- **[17:49] Jaime Guevara:** Uh-huh.
+- **[17:49] Yo:** No sé si es casa productos entra ahí,
+- **[17:49] Jaime Guevara:** Sí, pero por el otro lado, ¿no?
+- **[17:49] Yo:** ¿Por cuál?
+- **[17:49] Jaime Guevara:** Es como otra
+- **[17:49] Jaime Guevara:** No no desde Gali, porque
+- **[17:49] Jaime Guevara:** pues es lo mismo.
+- **[17:49] Yo:** Exacto.
+- **[17:49] Jaime Guevara:** Literal.
+- **[17:50] Yo:** Por te pregunto porque el concepto no debería entrar ahí.
+- **[17:50] Yo:** Entras como pulso.
+- **[17:50] Jaime Guevara:** Sí, sí, como pues, como una señal.
+- **[17:50] Jaime Guevara:** Lo que pasa es que lo vamos a
+- **[17:50] Jaime Guevara:** o sea, es es prácticamente lo mismo, o sea, el el casa producto llega a
+- **[17:50] Yo:** Sí encontré el match.
+- **[17:50] Jaime Guevara:** es más,
+- **[17:50] Jaime Guevara:** sí,
+- **[17:50] Yo:** Hacer emparejar proveedor con con vendedor,
+- **[17:50] Jaime Guevara:** es
+- **[17:50] Yo:** Ve, yo
+- **[17:50] Jaime Guevara:** Sí, sí, sí. Pintarle es es es eso.
+- **[17:50] Yo:** había una propuesta también
+- **[17:50] Yo:** dale
+- **[17:50] Yo:** creo si la diste tú, Alejandro, que si o yo, bueno, o llegamos al consenso al mismo tiempo.
+- **[17:50] Yo:** De de ver si lo de el de productos ganadores
+- **[17:50] Yo:** mejor lo incluíamos dentro del mismo flujo ya de Gali. Para no hacerlo como uno uno aparte, o sea,
+- **[17:50] Yo:** es como, ¿sabes qué quieres vender?, tienes, en en la opción de tienes una idea,
+- **[17:50] Yo:** de de una vez es como
+- **[17:50] Yo:** escríbela o escanea, escanearlo acá.
+- **[17:50] Yo:** ¿Cierto? Era era así, le deja, ¿cierto?
+- **[17:50] Alejandra Melo:** Sí. Buenísimo.
+- **[17:50] Jaime Guevara:** Pero sí sería chévere tener lo de los dos, porque
+- **[17:50] Jaime Guevara:** recuerden que en ExpoWinner van a haber muchos productos en las mesas.
+- **[17:51] Jaime Guevara:** Entonces, digamos que era como esa dinámica de que
+- **[17:51] Yo:** Ah, para que sea igual como un atajo.
+- **[17:51] Jaime Guevara:** Sí, como que estoy pasando por la mesa, ah, o este me gusta.
+- **[17:51] Jaime Guevara:** Le tomo la foto y que me diga,
+- **[17:51] Yo:** Pero ese ese no ese no te da
+- **[17:51] Yo:** Ah, Alija, entonces, ¿sabes qué podríamos hacer?
+- **[17:51] Yo:** Solo vemos si si
+- **[17:51] Yo:** deport no alcanza a
+- **[17:51] Yo:** se me fue un caso de
+- **[17:51] Yo:** de grano de café acá.
+- **[17:51] Yo:** El tiempo nos da, se me tapa ese punch. Si el tiempo da,
+- **[17:51] Yo:** que si se encuentra,
+- **[17:51] Yo:** o sea, si se hace por el flujo de escanear, o sea, no quitamos el flujo del escáner desde el principal,
+- **[17:51] Yo:** lo encuentra y luego es, no me acuerdo si está así,
+- **[17:51] Yo:** pero que lo busque, lo busque dentro del catálogo. ¿Eso está así, James?
+- **[17:51] Jaime Guevara:** No.
+- **[17:51] Yo:** Podríamos agregar como que búsquelo entre catálogo,
+- **[17:51] Jaime Guevara:** No, no, no, ese no lo busca dentro de Catarmo.
+- **[17:51] Jaime Guevara:** Sí, claro.
+- **[17:51] Yo:** solamente si sirve el MCP,
+- **[17:51] Yo:** Y si da match,
+- **[17:51] Yo:** unámoslo con el flujo principal de publicarlo en el comercio.
+- **[17:51] Yo:** ¿Les hace sentido o ya muy enredado?
+- **[17:52] Jaime Guevara:** Yo creo que son muchos caminos.
+- **[17:52] Jaime Guevara:** Pero está bueno.
+- **[17:52] Jaime Guevara:** O sea, al final deberíamos todo mandarlo para allá, pero, pues, igual
+- **[17:52] Jaime Guevara:** no sé, lo que se pueda hacer que nos funcione en el sitio.
+- **[17:52] Yo:** Alea, ¿crees que es muy complicado?
+- **[17:52] Alejandra Melo:** ¿Me repites otra vez cómo es?
+- **[17:52] Yo:** O sea, el flujo desde el, se
+- **[17:52] Yo:** el full scope winner, saco los tres botones, ¿no?
+- **[17:52] Alejandra Melo:** Sí.
+- **[17:52] Yo:** Está
+- **[17:52] Yo:** Gali, el escaneo y el de logística.
+- **[17:52] Yo:** Si yo
+- **[17:52] Yo:** bueno, si yo Gali, dentro de Gali,
+- **[17:52] Yo:** definitivamente sí vamos con que metamos ahí lo de escanearlo. ¿Verdad?
+- **[17:52] Alejandra Melo:** Sí.
+- **[17:52] Yo:** Bien.
+- **[17:52] Yo:** Y ahí sigo el flujo, si lo encuentras, sigo.
+- **[17:52] Yo:** Pero si yo no arranco desde Galicia, no que arranco desde el escáner,
+- **[17:52] Yo:** lo, entonces, en en el veo que en el stand hay un termo,
+- **[17:52] Yo:** sí, está el plato de perro de james que
+- **[17:52] Yo:** de del James que que nos muestra a cada rato.
+- **[17:53] Yo:** Lo escaneo.
+- **[17:53] Yo:** Ahí le da el score y todo lo que ya pone en caso de el el el
+- **[17:53] Yo:** Y si lo, pero hasta ahí muere. ¿Cierto, Jane?
+- **[17:53] Jaime Guevara:** Sí, sí.
+- **[17:53] Yo:** O sea, ese ese flujo queda ahí,
+- **[17:53] Yo:** Exacto.
+- **[17:53] Jaime Guevara:** Sí, se se queda como el scan, o sea, como que
+- **[17:53] Yo:** como que me toque, entonces, que en pantallazo, ¿qué hago con eso?
+- **[17:53] Jaime Guevara:** todos los escáner,
+- **[17:53] Jaime Guevara:** No, no, eso queda ahí, todos los escáners quedan, o sea, yo puedo escanear varios.
+- **[17:53] Jaime Guevara:** Y me quedan ahí organizados.
+- **[17:53] Yo:** Entonces, lo que pregunto, Aleja, es,
+- **[17:53] Yo:** pues, ¿qué pasa si hay algo chévere, lo escaneo,
+- **[17:53] Yo:** y, pues, de alguna forma logramos que devuelva y se una en el principal,
+- **[17:53] Yo:** como que sea como, no sé,
+- **[17:53] Yo:** iniciar, o podemos decir simplemente iniciar flujo
+- **[17:53] Yo:** iniciar flujo con Gali o o o, bueno, Gali no va ser,
+- **[17:53] Yo:** iniciar exploración o agregarlo a mi ecommerce,
+- **[17:53] Yo:** y lo que haría es que
+- **[17:53] Yo:** arranque el flujo de cuando
+- **[17:53] Yo:** pues, ya lo encontraste y empieza a hacer lo del ángulo de venta, lo de la ganancia,
+- **[17:53] Yo:** sea, retoma el flujo de galley, que es para, si vi un termo y me gustó,
+- **[17:54] Yo:** pues, dejo publicado en mi comercio.
+- **[17:54] Yo:** Pero
+- **[17:54] Alejandra Melo:** Sí, es más bien como darle la opción
+- **[17:54] Alejandra Melo:** y no que continúe todo.
+- **[17:54] Yo:** ¿Cómo es?
+- **[17:54] Alejandra Melo:** Sea, le, es como te entiendo, ¿no?, o sea, yo
+- **[17:54] Yo:** Ahora ya ahora ya me perdí.
+- **[17:54] Alejandra Melo:** escaneo el producto y todo, y me da, pues, como la info y hasta ahí, o sea,
+- **[17:54] Alejandra Melo:** tengo entendido que con escáner es como que se va a guardar todo.
+- **[17:54] Yo:** Es está hasta ahí, quedan los escánersa.
+- **[17:54] Alejandra Melo:** Bueno, está ahí, ajá, pero entonces yo voy
+- **[17:54] Jaime Guevara:** a tener
+- **[17:54] Alejandra Melo:** una opción como de
+- **[17:54] Alejandra Melo:** continuarlo, pues ya con el resto del flujo.
+- **[17:54] Yo:** Exacto, y lo que me lo desborda, es como que retoma
+- **[17:54] Alejandra Melo:** Hasta crear la landing.
+- **[17:54] Yo:** desde el flujo principal.
+- **[17:54] Yo:** Creo yo,
+- **[17:54] Yo:** pues, desde el
+- **[17:54] Yo:** código o obviamente, eso no es tan difícil, porque finalmente, si el principal
+- **[17:54] Yo:** ya tiene que va a tomar un recurso y le logra hacer más
+- **[17:54] Yo:** porque lo encuentra dentro del catálogo, pues lo que hace ya
+- **[17:54] Yo:** al al final llegan puntos donde se tocan,
+- **[17:54] Yo:** que es lo que, de hecho, estamos viendo hoy con el flujo que me mostraste.
+- **[17:54] Yo:** Que es que muchos vuelven al mismo punto.
+- **[17:55] Yo:** Pero no sé si sea
+- **[17:55] Yo:** uno
+- **[17:55] Yo:** amigable para el usuario, sea fácil de entender,
+- **[17:55] Yo:** o qué?
+- **[17:55] Alejandra Melo:** Pues hay que empezar a hacer, yo creo que ya es
+- **[17:55] Yo:** Pero, bueno,
+- **[17:55] Alejandra Melo:** Ya con esas ideas,
+- **[17:55] Alejandra Melo:** si salen más ideas, ya me vuelvo loca yo.
+- **[17:55] Alejandra Melo:** Entonces, hagamos como que primero la parte
+- **[17:55] Yo:** hagamos
+- **[17:55] Alejandra Melo:** Gali, luego y con el escaneo, ¿no?
+- **[17:55] Yo:** Sí.
+- **[17:55] Alejandra Melo:** Después, entonces, ahí sí hacemos la del escaneo.
+- **[17:55] Yo:** Sí, porque es como un nice
+- **[17:55] Alejandra Melo:** ¿Te parece?
+- **[17:55] Yo:** Sí, porque sea como un nice to have, y, si no, pues no, da igual, igual ya
+- **[17:55] Yo:** el escáner estaba funcionando bien,
+- **[17:55] Alejandra Melo:** Lo único es que te ha
+- **[17:55] Alejandra Melo:** Jaime, yo traté de de usar el de escaner y no me funcionó.
+- **[17:55] Alejandra Melo:** ¿Pero en local?
+- **[17:55] Jaime Guevara:** Sí.
+- **[17:55] Alejandra Melo:** Ah, en local no funciona.
+- **[17:55] Jaime Guevara:** Sí, pero tienes que
+- **[17:55] Jaime Guevara:** el el NV de
+- **[17:55] Jaime Guevara:** en en el NV el el API de
+- **[17:56] Jaime Guevara:** el token de
+- **[17:56] Jaime Guevara:** de ChatGPT? Ya te la mando.
+- **[17:56] Jaime Guevara:** Ah, ok.
+- **[17:56] Alejandra Melo:** De pronto
+- **[17:56] Jaime Guevara:** no tienes el
+- **[17:56] Jaime Guevara:** el token. Oye, una
+- **[17:56] Alejandra Melo:** pregunta, si yo, por ejemplo,
+- **[17:56] Alejandra Melo:** llego y y
+- **[17:56] Alejandra Melo:** y voy a integrar ChatGPT,
+- **[17:56] Alejandra Melo:** ¿se puede generar algo que me...? O sea,
+- **[17:56] Alejandra Melo:** a lo último, cuando dice creativos y demás,
+- **[17:56] Alejandra Melo:** yo
+- **[17:56] Jaime Guevara:** le puedo
+- **[17:56] Alejandra Melo:** dar clic como en generar y que me genere siquiera, no sé, unos
+- **[17:56] Alejandra Melo:** unas tres imágenes,
+- **[17:56] Alejandra Melo:** Sí se
+- **[17:56] Catalina Giraldo Aguirre:** puede.
+- **[17:56] Catalina Giraldo Aguirre:** ¿Sí? Y ahí
+- **[17:56] Jaime Guevara:** te
+- **[17:56] Catalina Giraldo Aguirre:** recomiendo que de pronto sea de mirar si son imágenes.
+- **[17:56] Catalina Giraldo Aguirre:** Sí. Ah, no, repete también el
+- **[17:56] Alejandra Melo:** story, pero
+- **[17:56] Catalina Giraldo Aguirre:** pero no se puede.
+- **[17:56] Alejandra Melo:** De hecho
+- **[17:56] Jaime Guevara:** Pero
+- **[17:56] Alejandra Melo:** no me voy a
+- **[17:56] Jaime Guevara:** gastar dos tokens.
+- **[17:56] Yo:** Eso le decía decir que, o o con el consumo que lleves a los trae.
+- **[17:56] Alejandra Melo:** ¿Me puedes decir que hay un
+- **[17:56] Catalina Giraldo Aguirre:** haya haya un límite hasta lo gratis?
+- **[17:56] Catalina Giraldo Aguirre:** Que si no, pues, baila.
+- **[17:56] Catalina Giraldo Aguirre:** Y no No, lo
+- **[17:57] Alejandra Melo:** digo para que Santiago luego no vaya a ser
+- **[17:57] Yo:** What
+- **[17:57] Alejandra Melo:** ya mostrando y luego no, nos quedamos sin
+- **[17:57] Yo:** Igual eso eso está asociado a la cuenta de nómina de Jaime, entonces, no pasa nada.
+- **[17:57] Jaime Guevara:** Literal.
+- **[17:57] Yo:** Que a los a los, esta, estos dos, o los ahorros familiares de Jaime, no perdona.
+- **[17:57] Jaime Guevara:** No
+- **[17:57] Alejandra Melo:** pasa nada.
+- **[17:57] Jaime Guevara:** Sí. Sí, no, pues inténtalo, pero me
+- **[17:57] Jaime Guevara:** si se te acaba, me dices, pues igual,
+- **[17:57] Jaime Guevara:** no consume mucho, la verdad, pero no sé, en imágenes me imagino que sí ya le va a pegar mucho O sea, lo que es lo otro, lo que ya está haciendo, no consume casi nada. Sí. Pero ya con imágenes de pronto sí.
+- **[17:57] Yo:** Porque, venga, porque si si no lo podemos optimizar,
+- **[17:57] Yo:** a
+- **[17:57] Yo:** lo podríamos optimizar a que si tenés los veinticinco los veinticinco productos,
+- **[17:57] Yo:** hagámosle todos los creativos antes, y tengamos, es un banco de imágenes, unos tres creativos producto, no nos arriesguemos al MCP porque capaz sí se cae en pleno evento,
+- **[17:57] Alejandra Melo:** Mhmm.
+- **[17:57] Yo:** y nos vamos solamente con esos veinticinco.
+- **[17:57] Participante:** Ok,
+- **[17:58] Jaime Guevara:** Ya, no, pues, perdón, era mi hija que está acá.
+- **[17:58] Alejandra Melo:** Fue risa.
+- **[17:58] Yo:** Y lo, igual los veinticinco los
+- **[17:58] Yo:** tienen que estar asociados a, o sea, no lo hacemos por API, o sea, montamos los veinticinco Si quieren, pues, yo tengo la licencia de
+- **[17:58] Yo:** de, ¿de qué?, de Gemini Pro,
+- **[17:58] Yo:** lo hacemos por ahí o
+- **[17:58] Yo:** también creo que mi esposa tiene la de ChatGPT, pues lo hacemos por la, o sea, por la cuenta, por la por la
+- **[17:58] Alejandra Melo:** O con Gemini, que es Gemini, no.
+- **[17:58] Yo:** y
+- **[17:58] Alejandra Melo:** Va a generar, tiene un poco ¿con Gemini?
+- **[17:58] Catalina Giraldo Aguirre:** Pues Gemini, pro, te saluda a la empresa.
+- **[17:58] Alejandra Melo:** Entonces,
+- **[17:58] Catalina Giraldo Aguirre:** ¿es sí?
+- **[17:58] Catalina Giraldo Aguirre:** Mire, vamos a ver cómo generan
+- **[17:58] Alejandra Melo:** las imágenes Gemini, no es que me gustan mucho,
+- **[17:58] Alejandra Melo:** pero, pues, ahí las miramos como un buen prompt.
+- **[17:58] Alejandra Melo:** Y la otra es, como como yo no estoy muy
+- **[17:58] Alejandra Melo:** familiarizado todavía, no no estoy entendiendo cómo... Es que ya va a ser la una.
+- **[17:58] Alejandra Melo:** Si quieren luego les pregunto.
+- **[17:59] Alejandra Melo:** Que no entiendo cómo va a ser la dinámica, si es que a todos les van a dar un enlace para que ingresen y vean esta esta esto de expo winner. Y y van a poder hacer
+- **[17:59] Jaime Guevara:** las
+- **[17:59] Alejandra Melo:** pruebas o es Santiago o es alguno de ustedes mostrándola desde
+- **[17:59] Alejandra Melo:** uno de los celulares
+- **[17:59] Jaime Guevara:** de ustedes? A ir a
+- **[17:59] Jaime Guevara:** vamos a imprimir QRs para que la gente los escanee y
+- **[17:59] Yo:** Pero
+- **[17:59] Jaime Guevara:** entre a la
+- **[17:59] Jaime Guevara:** al al link.
+- **[17:59] Yo:** pero son las dos, ¿no, James? O sea, porque, por un lado,
+- **[17:59] Jaime Guevara:** Ajá.
+- **[17:59] Yo:** están los QRs que que ingresan y no y ver lo de pero aparte en el workshop
+- **[17:59] Yo:** se van a se va a hacer
+- **[17:59] Yo:** se va a hacer con los que estén ahí presentes. ¿No?
+- **[17:59] Jaime Guevara:** Sí.
+- **[17:59] Yo:** O sea, al al final creo que la la la la
+- **[17:59] Jaime Guevara:** Literal.
+- **[17:59] Yo:** va a ser
+- **[17:59] Yo:** el reto va estar en poder diferenciarlos.
+- **[17:59] Yo:** Porque en el workshop creo que se han mezclado, pero James, ahora el AD, me dijo, el AD comercial,
+- **[17:59] Yo:** me dijo que
+- **[17:59] Yo:** nos dijo que podía compartirnos la data de los asistentes al evento,
+- **[17:59] Jaime Guevara:** Okay.
+- **[18:00] Yo:** que no han vendido nada.
+- **[18:00] Yo:** O sea, están en ceros, que son muchos.
+- **[18:00] Jaime Guevara:** Buenísimo.
+- **[18:00] Yo:** Podríamos luego
+- **[18:00] Yo:** más allá de que estén en el workshop o no,
+- **[18:00] Yo:** hacer lo que dijimos en una de las llamadas de esto,
+- **[18:00] Yo:** que era,
+- **[18:00] Yo:** diferenciémoslos, ¿cómo les va a los usuarios que no venden llamada? Y también, pues, comparamos contra los
+- **[18:00] Yo:** que ya han vendido y que
+- **[18:00] Jaime Guevara:** No, pues, buenísimo. No se podrían
+- **[18:00] Catalina Giraldo Aguirre:** crear como una
+- **[18:00] Jaime Guevara:** cuentita,
+- **[18:00] Catalina Giraldo Aguirre:** pues simple, ¿no?, sin contrastar, no sé, algo simple, una contraste
+- **[18:00] Catalina Giraldo Aguirre:** no sé, alguna cuenta y que se les guarde la sesión para que se pueda, de pronto, evaluar
+- **[18:00] Catalina Giraldo Aguirre:** en un futuro
+- **[18:00] Catalina Giraldo Aguirre:** cómo les está yendo, y que eso se lo lleve
+- **[18:00] Catalina Giraldo Aguirre:** tarea para la casa, revisar cómo se sirve
+- **[18:00] Jaime Guevara:** para hacer podemos
+- **[18:00] Jaime Guevara:** podemos
+- **[18:00] Jaime Guevara:** con el celular lo podemos linkear a una una base de datos.
+- **[18:00] Yo:** Pero ¿cómo es, cómo, me no
+- **[18:00] Yo:** pero no entendí, Cata, el el el propósito, o sea, ¿cómo les está yendo a ver si han vendido?
+- **[18:00] Catalina Giraldo Aguirre:** Sí, es como, sí vendes.
+- **[18:00] Yo:** Pero es que la vaina es que realmente no van a dar ventas del API.
+- **[18:00] Catalina Giraldo Aguirre:** No, van a vender.
+- **[18:00] Yo:** A no ser que tengamos el API James, si se la consigue James.
+- **[18:00] Catalina Giraldo Aguirre:** Ah, ok.
+- **[18:00] Catalina Giraldo Aguirre:** Sí.
+- **[18:01] Jaime Guevara:** Ah, no.
+- **[18:01] Catalina Giraldo Aguirre:** Entonces,
+- **[18:01] Yo:** No se toca, de hecho, para acreditar
+- **[18:01] Catalina Giraldo Aguirre:** pues, entonces, ¿para qué se lo? Pero pero,
+- **[18:01] Jaime Guevara:** o sea,
+- **[18:01] Jaime Guevara:** no, pero sí de alguna manera tenemos que hacerle seguimiento, porque, pues, al final
+- **[18:01] Jaime Guevara:** a ver si vendieron o no.
+- **[18:01] Yo:** ¿Sí qué, sí qué?
+- **[18:01] Jaime Guevara:** Si vendieron o no.
+- **[18:01] Yo:** Pues que no
+- **[18:01] Jaime Guevara:** O si no, verlo nosotros
+- **[18:01] Catalina Giraldo Aguirre:** mismos y vendemos.
+- **[18:01] Yo:** ¿Sabes qué sería lo único, James?
+- **[18:01] Catalina Giraldo Aguirre:** ¿Sabes dónde se puede
+- **[18:01] Jaime Guevara:** ver?
+- **[18:01] Jaime Guevara:** En la base de datos, en en el catálogo, en, pues sí, la base de datos con el ID del usuario, el correo o el celular.
+- **[18:01] Yo:** James, pero lo único,
+- **[18:01] Yo:** o sea, podemos ver si vendieron si capturamos desde como vamos a montar un ecommerce
+- **[18:01] Jaime Guevara:** Ajá.
+- **[18:01] Yo:** ¿cierto?
+- **[18:01] Yo:** Ver si hubo gente que entró y y compró.
+- **[18:01] Yo:** La vaina es que la venta nunca le va llegar a esa gente que compró.
+- **[18:01] Jaime Guevara:** No, pero si la
+- **[18:01] Jaime Guevara:** hace, o sea, no, es que la gente tiene que montar las órdenes. Por eso te digo, o sea, si
+- **[18:01] Jaime Guevara:** si hacen el ejercicio y montan las órdenes, sí.
+- **[18:01] Jaime Guevara:** O sea, al final tenemos que llevar
+- **[18:01] Yo:** Sí.
+- **[18:01] Jaime Guevara:** Sea, al final tenemos que llevarlos a que monta en las orden.
+- **[18:01] Yo:** Ah, bueno, ¿sabes qué? Podríamos podríamos hacer el disclaimer, se me hace bueno, es
+- **[18:02] Jaime Guevara:** O un plan calguro.
+- **[18:02] Yo:** bueno, ya pero ojo, que esto es una prueba de conceptos, esto no está conectado.
+- **[18:02] Yo:** Sin embargo,
+- **[18:02] Yo:** sí tendríamos, ¿sabes qué?, que
+- **[18:02] Yo:** Es que como está Dynamic Sandro picking.
+- **[18:02] Yo:** Que si se genera una orden,
+- **[18:02] Yo:** les llegue algún correo o les llegue algo.
+- **[18:02] Yo:** Porque, o sea, no podemos hacerle que le llegue a dropping,
+- **[18:02] Jaime Guevara:** Un WhatsApp. ¿Le puede llegar un WhatsApp?
+- **[18:02] Yo:** porque no vamos a tener
+- **[18:02] Yo:** Un WhatsApp y es como, este es su aviso para que
+- **[18:02] Yo:** usted vaya ahora sí manualmente a Dropy y cree la orden.
+- **[18:02] Jaime Guevara:** Sí, le puedes mandar el WhatsApp, de una vez ahí esté la notificación, ¿eso está? ¿O acá no?
+- **[18:02] Yo:** ¿Sí?
+- **[18:02] Jaime Guevara:** Ya, pues,
+- **[18:02] Yo:** Así.
+- **[18:02] Jaime Guevara:** No, pues de una, ya ahí lo medimos, o sea, WhatsApp que se genere, ahí
+- **[18:02] Jaime Guevara:** puedes medir, no, eso está brutal, obvio.
+- **[18:02] Yo:** Sí, o sea o sea, es un es un mock,
+- **[18:02] Jaime Guevara:** Ahí tenemos esa
+- **[18:02] Yo:** pero como sí podemos rastrear
+- **[18:02] Yo:** las la compra del carrito, tocaría hacerlo, yo voy montar alejada, yo monto
+- **[18:02] Yo:** monto que es la lógica por debajo,
+- **[18:02] Yo:** para que al hacer compra en el carrito,
+- **[18:03] Yo:** llegue la notificación al dropshipper,
+- **[18:03] Yo:** y ya ahí teníamos es que empezar a monitorear
+- **[18:03] Yo:** empezar a monitorear
+- **[18:03] Yo:** podemos montar en user,
+- **[18:03] Yo:** pilot,
+- **[18:03] Yo:** esos dropshippers que hayan hecho los flujos,
+- **[18:03] Yo:** luego de que que creen una orden, preguntarles si fue por el evento,
+- **[18:03] Yo:** ¿Tiene...? ¿Les parece que tiene sentido?
+- **[18:03] Yo:** O sea, si fue si si fue si fue si fue una venta a través de
+- **[18:03] Yo:** el prototipo ExpoWinners, algo así.
+- **[18:03] Yo:** No?
+- **[18:03] Jaime Guevara:** Yo creo que igual seño se puede.
+- **[18:03] Catalina Giraldo Aguirre:** No sé. Pero
+- **[18:03] Jaime Guevara:** igual,
+- **[18:03] Jaime Guevara:** Sí, sí, en Joseph Palo se puede.
+- **[18:03] Yo:** Sí, pero, o sea,
+- **[18:03] Yo:** es un es cuando creen la orden, clic en crear orden,
+- **[18:03] Yo:** de una vez como una encuesta pequeña, de esta orden fue a través de, o te llegó
+- **[18:04] Yo:** notificación de
+- **[18:04] Jaime Guevara:** Tienes que crear el evento solo para esos números de teléfono.
+- **[18:04] Jaime Guevara:** O ID, ajá, eso.
+- **[18:04] Yo:** Hexa los correos.
+- **[18:04] Jaime Guevara:** A esos correos, pero, pues,
+- **[18:04] Jaime Guevara:** sí mapeamos el correo, ¿no?
+- **[18:04] Yo:** Pero sí, el el el
+- **[18:04] Yo:** va a estar siempre que sea el mismo del
+- **[18:04] Yo:** Toca toca en expo winners preguntar el correo.
+- **[18:04] Jaime Guevara:** Exacto.
+- **[18:04] Yo:** Toca
+- **[18:04] Jaime Guevara:** Si si eso pasa, sí, claro.

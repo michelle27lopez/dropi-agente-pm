@@ -1,0 +1,1984 @@
+# Product Lab 2.0 - El nuevo arte de lanzar productos en Dropi
+
+- **ID:** `not_u4uQW2wX8Jgbcy`
+- **Fecha:** 2026-08-28T14:00:29.571Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/d11b637e-8ac9-4bb3-8421-3f0c0bfb7068)
+- **Asistentes:** Santiago Herrera Acosta, Catalina Giraldo, Kevin Paternina, Michel Pino, Catherin Salazar, Jose Pineda, Laura Torres, Nicolas Vargas, Alejandra Melo, Diana Margarita Aldana Echeverry, Jaime Guevara, Francisco Velandia, Laura Contreras, Katerine Pencue, Michelle Lopez, Juan Bautista, Maria Calderon, Paula Macias
+
+---
+
+## Resumen de la Reunión
+
+# Contexto y Objetivo del Taller
+
+- Taller de metodología TARS: el nuevo marco para lanzar productos en Dropi
+- Objetivo: pasar de lanzamientos como tareas operativas a estrategias de crecimiento
+- Marco narrativo: una funcionalidad se lanza como una película, en tres actos
+  - Historia (discovery y problema)
+  - Producción (mapa cualitativo y cuantitativo)
+  - Estreno (adopción, retención, satisfacción)
+- Cada PM trabajó en parejas con su Product Designer sobre una funcionalidad real de su célula
+
+# Funcionalidades Ofensivas vs. Defensivas
+
+- Ofensiva: aporta directamente a un OKR (adquisición, retención, monetización)
+  - Ejemplo: deslizar en Tinder, pagos integrados en Eventbrite, canal compartido de Slack
+- Defensiva: mínimo viable para que el producto funcione; evita deterioro de KPIs
+  - Ejemplo: cancelación en Uber, sincronización entre dispositivos
+- Clasificar cada funcionalidad como ofensiva o defensiva es parte del documento end-to-end
+
+# Público Objetivo y Tamaño del Segmento
+
+- Solo usuarios activos (al menos una orden movilizada) como regla base de TARS
+  - Medir con usuarios inactivos implicaría medir el producto en general, no la funcionalidad
+- Usuarios principales: mayor probabilidad de obtener valor o mover el OKR
+- Usuarios adyacentes: podrían encontrar valor, pero no son el segmento primario
+- Usuarios no adyacentes: la funcionalidad no fue diseñada para ellos
+- Tamaño objetivo expresado como porcentaje de la base activa (\~97k usuarios en Dropi)
+  - Ejemplo PagePilot: \~5k usuarios huérfanos con Shopify integrado, sobre 97k activos
+- Debate sobre usuarios no activados (40% de Dropi)
+  - Santi y Aleja señalaron que para funcionalidades de activación el público objetivo son usuarios que aún no han generado órdenes
+  - Catherin reconoció la excepción; propuso afinarlo cuando la funcionalidad esté testeada
+  - Definición de “huérfanos”: sin líder de comunidad ni gestor comercial (Katerine)
+
+# Mapa Cualitativo: Gravedad, Frecuencia y Valor
+
+- Gravedad del problema: baja, media o alta según si la funcionalidad bloquea la operación
+  - Alta: módulo de órdenes, wallet, firma electrónica (sin ellas el usuario no puede operar)
+  - Baja: calculadora, actualización de perfil, guardar podcasts en Spotify
+- Santi aportó: gravedad también medible por impacto directo en el ingreso de Dropi
+  - Si bloquea el flujo de entrega o el retiro de saldo, es gravedad alta
+- Frecuencia del problema: diaria, semanal, mensual u ocasional
+  - Define con qué velocidad se debe medir la adopción y cuándo pasar a retención
+
+# Calculadora TARS: Adopción, Retención y Satisfacción
+
+- Funnel de métricas cuantitativas post-lanzamiento:
+  - Adopción: % de usuarios objetivo que realizaron el evento de adopción al menos una vez
+  - Retención: % de adoptados que siguieron utilizando la funcionalidad
+  - Satisfacción: % de retenidos que percibieron valor y encontraron fácil la funcionalidad
+- Fórmula ejemplo (hipotético):
+  - Tamaño objetivo 20% → adoptados 70% → retenidos 60% → satisfechos 85%
+  - Resultado: \~7.1% de usuarios satisfechos sobre el total activo
+- Puntuación TARS: sobre 50% se considera buena; en rojo indica que hay que iterar
+- Calculadora se integrará en Darwin conectada a todos los lanzamientos
+- Comité TARS con Dianys y Lau Contreras revisará la matriz de características periódicamente
+
+# Retención y Satisfacción (Dianys)
+
+- Retención: medir incremento semana a semana en el uso de la funcionalidad
+  - Si la curva sigue cayendo: señal de problema (bug, fricción, promesa de valor no cumplida)
+  - Ejemplo real: Scanner tuvo bugs que afectaron retención; se resolvió con TI y se relanzó
+- Satisfacción: tres métricas a implementar
+  - NPS: relación general con el producto (fórmula pendiente de definir)
+  - CSAT: satisfacción con una interacción específica
+  - CES: facilidad de uso de la funcionalidad
+- Pregunta base al usuario: “¿Qué tan fácil fue para ti realizar esta tarea con la funcionalidad?”
+- Métricas de satisfacción aún en construcción; fórmulas exactas por definir con el equipo
+
+# Documento End-to-End y Tiers de Lanzamiento
+
+- Nuevo documento end-to-end creado con Lau Torres; los PMs deben diligenciarlo con los datos del taller
+- Incluye: insights, valor para el negocio, eventos de User Pilot, eventos del back, encuestas, data warehouse
+- Eventos del back deben solicitarse con anticipación a TI (métricas transaccionales no medibles con User Pilot)
+  - Ejemplo PagePilot: páginas exportadas por usuario, órdenes creadas por página exportada
+- Clasificación de lanzamientos por tiers:
+  - Tier 0: corrección de bugs o mejora visual, solo banner en User Pilot, no activa mesa estratégica
+  - Tier 1: mejora continua (nuevo filtro, dashboard), puede necesitar Academy, no activa mesa estratégica
+  - Tier 2: nuevas funcionalidades (PagePilot, Scanner, Pulso), activa mesa estratégica
+  - Tier 3: proyectos mayores (rearquitectura de Dropi), activa mesa estratégica con máxima prioridad
+
+# Definición de Lanzamiento y Próximos Pasos
+
+- Lanzamiento = funcionalidad testeada, sin bugs, desplegada a todos los usuarios sin segmentación
+  - Beta o pruebas controladas en producción no son lanzamiento; el equipo de marketing no se activa
+  - En beta: los PMs definen su propio público y comunicación; pueden solicitar User Pilot si lo necesitan
+- Debate sobre migración de perfil de marcas (Katerine y Michel)
+  - Salida por fases a segmentos no califica como lanzamiento bajo la definición actual
+  - Fricción conceptual entre “beta”, “release controlado” y “lanzamiento” sin resolver
+  - Michel propuso alinear nomenclatura con el equipo de desarrollo (release vs. lanzamiento controlado)
+  - También señaló que hay desarrollos que salen sin pasar por diseño ni control de métricas
+- Catherin propuso hablar primero con Jaime para alinear criterios y luego citar a todo el equipo
+
+# Próximos Pasos
+
+- **Alinear definición de lanzamiento y nomenclatura con Jaime** (Catherin)
+
+  Resolver dudas sobre migración por fases, releases controlados y cuándo se activa el equipo de marketing.
+- **Diligenciar el documento end-to-end con los datos del taller**
+
+  Cada PM debe completar público objetivo, gravedad, eventos de adopción, tier y métricas de retención y satisfacción.
+- **Solicitar eventos del back a TI desde el inicio del desarrollo**
+
+  Métricas transaccionales (páginas exportadas, órdenes por página) no son medibles con User Pilot y deben pedirse con anticipación.
+- **Definir fórmulas de satisfacción (NPS, CSAT, CES) con el equipo** (Dianys)
+
+  Las métricas están identificadas pero las fórmulas exactas aún están pendientes de formalizar.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/d2fb60ac-4bfe-4edd-9f61-115502a76766](https://notes.granola.ai/t/d2fb60ac-4bfe-4edd-9f61-115502a76766)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[14:01] Catherin Salazar:** Hola, buenos días.
+- **[14:01] Yo:** Hola, hola, ¿cómo estás?
+- **[14:01] katerine Pencue:** Hola, buenas, ¿cómo están?
+- **[14:01] Catherin Salazar:** Bien, gracias, ¿y ustedes?
+- **[14:01] katerine Pencue:** Muy bien. ¿Qué más, pues?
+- **[14:01] katerine Pencue:** No escape.
+- **[14:01] Catherin Salazar:** Bien, ¿y ustedes?
+- **[14:01] Catherin Salazar:** ¿Cómo va todo?
+- **[14:01] katerine Pencue:** Bien, ya es viernes y el cuerpo lo sabe.
+- **[14:01] Catherin Salazar:** Ay, ¿no es cierto?
+- **[14:01] katerine Pencue:** Bueno, cuando es viernes,
+- **[14:01] Catherin Salazar:** y
+- **[14:01] katerine Pencue:** aún más cuando es festivo, pero septiembre no
+- **[14:01] Catherin Salazar:** trae festivo.
+- **[14:01] Catherin Salazar:** Pero ya los dos se nos fueron. Ay, perdón que
+- **[14:01] Catherin Salazar:** me toca, me toca trabajar desde mi cuarto porque estaba arreglando el apartamento.
+- **[14:02] katerine Pencue:** Ah, ¿conseguiste apartamento siempre?
+- **[14:02] Catherin Salazar:** Sí, pero igual,
+- **[14:02] Catherin Salazar:** lo conseguí, tuvieron que hacer obra, no quedé malas, pero bueno.
+- **[14:02] katerine Pencue:** Bueno, pero ya salió del otro, pero lo
+- **[14:02] Catherin Salazar:** importante. Sí, sí, sí.
+- **[14:02] Catherin Salazar:** Bueno, vamos a grabar el espacio.
+- **[14:02] Catherin Salazar:** Demos como tres minutos más y
+- **[14:02] Catherin Salazar:** porque igual si
+- **[14:02] Catherin Salazar:** Igual, María, ni María ni José,
+- **[14:02] Catherin Salazar:** ni Jaime, perdón.
+- **[14:02] Jose Pineda Pitre:** Aquí
+- **[14:02] Catherin Salazar:** estoy,
+- **[14:02] Jose Pineda Pitre:** aquí
+- **[14:02] Catherin Salazar:** estoy.
+- **[14:02] Catherin Salazar:** Se escucha.
+- **[14:02] Jose Pineda Pitre:** Aquí estoy, aquí
+- **[14:02] Catherin Salazar:** estoy. Hola.
+- **[14:02] Catherin Salazar:** Espero que hayan llegado con
+- **[14:02] Catherin Salazar:** el brief.
+- **[14:02] Catherin Salazar:** Y con la funcionalidad
+- **[14:02] Jose Pineda Pitre:** future.
+- **[14:03] Jose Pineda Pitre:** Kate, ¿dónde estás?
+- **[14:03] Jose Pineda Pitre:** Ese es otro spot de tu casa.
+- **[14:03] Catherin Salazar:** Sí,
+- **[14:03] Catherin Salazar:** Mi cuarto, mi cuarto, porque me tocó acá.
+- **[14:03] Jose Pineda Pitre:** ¿Y la otra Kate? ¿Dónde está?
+- **[14:03] Catherin Salazar:** Eso
+- **[14:03] Jose Pineda Pitre:** É isso?
+- **[14:03] Jose Pineda Pitre:** ¿O en su casa o en
+- **[14:03] Catherin Salazar:** dónde? ¿Hacer tu deseo en la finca?
+- **[14:03] Jose Pineda Pitre:** Cati vive en una casa quinta,
+- **[14:03] Jose Pineda Pitre:** de trescientas hectáreas, más grande que Luka
+- **[14:03] Catherin Salazar:** de
+- **[14:03] Catherin Salazar:** Yo sé.
+- **[14:03] Catherin Salazar:** Que tenés la verdad, Kate.
+- **[14:03] Jose Pineda Pitre:** Kate tiene campos petroleros.
+- **[14:03] katerine Pencue:** No, no, solo que yo hagas afuera.
+- **[14:04] katerine Pencue:** Vio a las afueras de Neiva, pero pues decir, vivo a las afueras de Neiva no es como decir, vivo a las afueras de
+- **[14:04] katerine Pencue:** nunca, jamás en la vida, Neiva es un
+- **[14:04] katerine Pencue:** afuera sí, pues a las afueras hay un poquito más de naturaleza.
+- **[14:04] Catherin Salazar:** No
+- **[14:04] Jose Pineda Pitre:** sé, no no sé, eso parece, ¿no? Te lo pides en una
+- **[14:04] Jose Pineda Pitre:** Sí, sí, sí,
+- **[14:04] Catherin Salazar:** Bueno.
+- **[14:04] Jose Pineda Pitre:** Esperemos que llegue. Estamos esperando que también de llegar los muchachos. ¿Cierto?
+- **[14:04] Jose Pineda Pitre:** Ay, por
+- **[14:04] Catherin Salazar:** por mi cargador. Pues al menos que lleven los peds.
+- **[14:04] Catherin Salazar:** Lau Contreras no se une.
+- **[14:04] Catherin Salazar:** Jaime tampoco y María tampoco.
+- **[14:04] Francisco Velandia:** Hola, Tim, buenos días. ¿Cómo van?
+- **[14:04] Catherin Salazar:** Hola.
+- **[14:04] Catherin Salazar:** Hola, buenos días.
+- **[14:05] Catherin Salazar:** Hola, Cata, buenos días, ¿cómo van?
+- **[14:05] Michel David Pino Aguilar:** Buenos días, equipo, ¿cómo están?
+- **[14:05] Catherin Salazar:** Buenos días, bien, gracias.
+- **[14:05] Catherin Salazar:** Bueno, creo
+- **[14:05] Catherin Salazar:** Bueno, creo que vamos a ir comenzando porque
+- **[14:05] Catherin Salazar:** el taller está un poquito largo y no sabemos si alcancemos
+- **[14:05] Catherin Salazar:** terminarlo.
+- **[14:05] Catherin Salazar:** Bueno,
+- **[14:05] Catherin Salazar:** cuénteme si trajeron todos
+- **[14:05] Catherin Salazar:** las ideas, si se les dificultó.
+- **[14:05] Catherin Salazar:** Recuerden que hay una hay un bonus para los que participen,
+- **[14:05] Catherin Salazar:** Todos pueden traer sus ideas con sus PDFs.
+- **[14:05] Catherin Salazar:** De una
+- **[14:05] katerine Pencue:** Sí, sí, sí, sí.
+- **[14:05] Catherin Salazar:** Eso, eso, eso,
+- **[14:05] katerine Pencue:** eso.
+- **[14:05] Catherin Salazar:** Me encanta la participación.
+- **[14:05] Catherin Salazar:** Chicos, les voy a enviar la presentación, porque voy a ser una presentación un poco
+- **[14:05] Catherin Salazar:** ya que es un taller,
+- **[14:05] Catherin Salazar:** para que arranquemos, ¿listo?
+- **[14:05] Catherin Salazar:** Bueno,
+- **[14:06] Catherin Salazar:** Entonces, vamos a comenzar con este taller. Ah, espérense y grabo.
+- **[14:06] Catherin Salazar:** Me falta algo muy importante, y es grabar.
+- **[14:06] Catherin Salazar:** Listo.
+- **[14:06] Catherin Salazar:** Entonces, ¿qué vamos a hacer hoy? Vamos a trabajar en un taller
+- **[14:06] Catherin Salazar:** con toda la metodología Tars y el nuevo arte de lanzar productos en drop in.
+- **[14:06] Catherin Salazar:** Vamos a poder entender cómo se van a lanzar los
+- **[14:06] Catherin Salazar:** productos, cómo se van a lanzar las funcionalidades y cómo se van a lanzar todas las ideas
+- **[14:06] Catherin Salazar:** ustedes tienen para la mejora de la plataforma según las células de cada uno.
+- **[14:06] Catherin Salazar:** ¿Listo?
+- **[14:06] Catherin Salazar:** Vamos a comenzar a entender cómo va a ser de ese producto a la adopción
+- **[14:06] Catherin Salazar:** retención y satisfacción,
+- **[14:06] Catherin Salazar:** que son como todas las métricas que vamos a tener en tars. Acá yo les traje como una frase, construir la película es lo que hacemos en producto, conseguir que la gente la vea, la termine y quiera volver, es lo que vamos a hacer en product growth market. Y eso es lo que estamos haciendo justamente con algunas de las funcionalidades que ya tenemos como lo de SPEG Pilot, rearquitectura y y de ahora en adelante como ya después de terminar nuestra prueba piloto, con todos los lanzamientos que tengamos. ¿Listo? Entonces, ¿qué vamos a hacer hoy? Hoy vamos a dejar en pensar que en un lanzamiento como una tarea de comunicación como lo veníamos trabajando,
+- **[14:07] Catherin Salazar:** vamos a tratarlo como una producción y una película donde
+- **[14:07] Catherin Salazar:** se vivía en tres partes. Primero la historia, después el
+- **[14:07] Catherin Salazar:** luego la producción, y solo al final vamos a conocer el estreno.
+- **[14:07] Catherin Salazar:** Vamos a trabajar en parejas cada product manager con un product designer.
+- **[14:07] Catherin Salazar:** Listo.
+- **[14:07] Catherin Salazar:** Entonces, vamos a comenzar con este acto cero, con un rompehielos, que es
+- **[14:07] Catherin Salazar:** este tráiler.
+- **[14:07] Catherin Salazar:** Antes de hablar de la metodología, y vamos a hacer una predicción.
+- **[14:07] Catherin Salazar:** Entonces,
+- **[14:07] Catherin Salazar:** creo que todos conocemos estas cuatro funcionalidades y estas cuatro plataformas,
+- **[14:07] Catherin Salazar:** si no lo saben, me dicen
+- **[14:07] Catherin Salazar:** que es Tinder, Spotify,
+- **[14:07] Catherin Salazar:** es LeadWise, que es como pagos nativos entre usuarios,
+- **[14:08] Catherin Salazar:** DocuSign, que DocuSign es una plataforma para firma electrónica, es decir, por ejemplo, cuando
+- **[14:08] Catherin Salazar:** firman contratos, por ejemplo, cuando ingresan en Adropi firmar un contrato con dropping,
+- **[14:08] Catherin Salazar:** pues hay hay como una es como una manera de firmar contratos en línea.
+- **[14:08] Catherin Salazar:** Con firma digital.
+- **[14:08] Catherin Salazar:** Entonces, imaginemos que mañana tienes que lanzar cada una de estas funcionalidades
+- **[14:08] Catherin Salazar:** creen que pasaría?
+- **[14:08] Catherin Salazar:** Si tienen que lanzar estas funcionalidades?
+- **[14:08] Catherin Salazar:** Por ejemplo, deslizar para elegir en Tinder.
+- **[14:08] katerine Pencue:** Pues,
+- **[14:08] Catherin Salazar:** en mi casa,
+- **[14:08] katerine Pencue:** a mí me
+- **[14:08] katerine Pencue:** cuesta saber cómo llegarle. Entonces, yo me bloquearía.
+- **[14:08] katerine Pencue:** Y utilizaría mi pedido.
+- **[14:08] katerine Pencue:** Que me ayude.
+- **[14:08] Catherin Salazar:** Ok, ok.
+- **[14:08] katerine Pencue:** Para lanzarlo,
+- **[14:08] katerine Pencue:** siento que me cuesta todavía llegar a los usuarios finales. Sé que tengo que tener un gancho,
+- **[14:08] katerine Pencue:** un gancho y una muy buena narrativa, conocer a mi usuario,
+- **[14:09] katerine Pencue:** para poder lanzar, o sea, que que esa narrativa llame la atención del usuario.
+- **[14:09] katerine Pencue:** Para que lo use.
+- **[14:09] Catherin Salazar:** Total.
+- **[14:09] Catherin Salazar:** Listo. Y eso es lo que vamos a hoy aprender, ¿listo?
+- **[14:09] Catherin Salazar:** Entonces,
+- **[14:09] Catherin Salazar:** para cada una de estas funcionalidades, ¿qué crees que pasó?
+- **[14:09] Catherin Salazar:** Éxito de taquilla
+- **[14:09] Catherin Salazar:** película de culto,
+- **[14:09] Catherin Salazar:** fracaso de taquilla. Éxito de taquillas, ¿qué? Una funcionalidad
+- **[14:09] Catherin Salazar:** o una película se la, pues, digamos que sale en estreno,
+- **[14:09] Catherin Salazar:** y hay una muy buena adopción y hay una muy buena retención por parte de los usuarios.
+- **[14:09] Catherin Salazar:** ¿Sí?
+- **[14:09] Catherin Salazar:** Película de culto es una película que se lanzó, pero que no generó tanto revenue en taquilla.
+- **[14:09] Catherin Salazar:** Entonces, pero, sin embargo, un pequeño grupo de usuarios
+- **[14:09] Catherin Salazar:** la adoptaron
+- **[14:09] Catherin Salazar:** comenzaron a ser fans de ella y lograron que, pues,
+- **[14:09] Catherin Salazar:** digamos que al menos un un segmento muy pequeño
+- **[14:09] Catherin Salazar:** hayan logrado como generar una una fanaticada.
+- **[14:09] Catherin Salazar:** Pero no fue para todos, o sea, no todos como que
+- **[14:09] Catherin Salazar:** en ese lanzamiento de la película lograron generar mucho revenue en taquilla.
+- **[14:10] Catherin Salazar:** Y un fracaso de taquilla es definitivamente una película que fracasó.
+- **[14:10] Catherin Salazar:** En todos los sentidos, es decir, ni siquiera un grupo pequeño de usuarios la adoptaron.
+- **[14:10] Catherin Salazar:** Piensen
+- **[14:10] Catherin Salazar:** para cada una de estas funcionalidades
+- **[14:10] Catherin Salazar:** pasó, si tuvo un éxito de taquilla, si fue una película de culto o si fue un fracaso de taquilla. Esto es interactivo, entonces pueden como jugar con esto, pueden marcarlo opción me pueden decir y la podemos marcar. Para Tinder, deslizar para elegir qué creen que pasó.
+- **[14:10] Jose Pineda Pitre:** Éxito de taquilla.
+- **[14:10] Jose Pineda Pitre:** Película
+- **[14:10] katerine Pencue:** de ocultos, yo creo.
+- **[14:10] katerine Pencue:** Ah, no,
+- **[14:10] Catherin Salazar:** es un éxito de taquilla.
+- **[14:10] Catherin Salazar:** ¿Por
+- **[14:10] Jose Pineda Pitre:** qué? Es que Kate no utilizaba tanto Tinder.
+- **[14:10] Catherin Salazar:** Realizar para elegir es la funcionalidad más importante de
+- **[14:10] Jose Pineda Pitre:** Tinder, Kate.
+- **[14:10] Catherin Salazar:** ¿Por qué? Pues
+- **[14:10] Jose Pineda Pitre:** porque,
+- **[14:10] Catherin Salazar:** obviamente, ahí estás mirando,
+- **[14:10] Catherin Salazar:** a las personas que te van gustando y las que no te van gustando.
+- **[14:10] Catherin Salazar:** Pero vas deslizando.
+- **[14:11] Catherin Salazar:** Y
+- **[14:11] Jose Pineda Pitre:** yo ahí quiero aportar algo y es el gesto que uno hace
+- **[14:11] Jose Pineda Pitre:** es un gesto muy asociado al descartar
+- **[14:11] Jose Pineda Pitre:** o aprobar.
+- **[14:11] Jose Pineda Pitre:** Que, digamos, eso también es algo que está relacionado con el producto.
+- **[14:11] Catherin Salazar:** Exactamente. Entonces, sí se dan cuenta, esto es un alcance masivo,
+- **[14:11] Catherin Salazar:** es el cien por ciento de la interacción del producto con una lealtad altísima,
+- **[14:11] Catherin Salazar:** y se construyó como una
+- **[14:11] Catherin Salazar:** funcionalidad ofensiva.
+- **[14:11] Catherin Salazar:** Ya les voy a explicar un poco qué es una funcionalidad ofensiva para que cuando vayamos
+- **[14:11] Catherin Salazar:** construyendo las funcionalidades, vayamos pensando en las soluciones a los problemas
+- **[14:11] Catherin Salazar:** tenemos dentro de drop y desde sus células, podamos ir pensando cuando las diseñemos
+- **[14:11] Catherin Salazar:** si van a ser unos, si va a ser ofensiva o defensiva.
+- **[14:11] Catherin Salazar:** Ofensiva es una funcionalidad
+- **[14:11] Catherin Salazar:** que en la teoría nos dice que
+- **[14:11] Catherin Salazar:** aporta directamente a un OKR. De la plataforma o del producto en general. Defensiva es una funcionalidad que sirve como mínimo producto viable para que esa plataforma funcione. ¿Sí? Entonces, para mí digamos que ofensiva en Tinder, porque Porque aportó directamente al OKR, ¿sí? Esto hace que, por ejemplo,
+- **[14:12] Catherin Salazar:** muchas personas más se vuelvan adictas como a deslizar
+- **[14:12] Catherin Salazar:** no sé, puedan comenzar a pagar suscripciones.
+- **[14:12] Catherin Salazar:** En Tinder, ¿sí?, o planes pagos.
+- **[14:12] Catherin Salazar:** Spotify, where that podcast desde la web es una
+- **[14:12] Catherin Salazar:** funcionalidad como éxito en taquilla, película de culto, fracaso de taquilla.
+- **[14:12] Catherin Salazar:** ¿Cómo lo vemos?
+- **[14:12] Michel David Pino Aguilar:** Yo película de culto, ¿no?
+- **[14:12] Michel David Pino Aguilar:** Porque, pues,
+- **[14:12] Catherin Salazar:** Ay, parece
+- **[14:12] Michel David Pino Aguilar:** bien. Como que usuarios que consuman mucha cantidad de podcast, como que no
+- **[14:12] Michel David Pino Aguilar:** o sea, es por ahí, ahí el foco es la música.
+- **[14:12] Michel David Pino Aguilar:** Pero igual
+- **[14:12] Catherin Salazar:** ellos, pues,
+- **[14:12] Michel David Pino Aguilar:** tienen ese producto ahí, porque, es un producto que tiene
+- **[14:12] Michel David Pino Aguilar:** una
+- **[14:12] Michel David Pino Aguilar:** comunidad que sí lo busca, lo usa y lo guarda, pero,
+- **[14:12] Michel David Pino Aguilar:** al final buscamos el Spotify, disparamos y
+- **[14:13] Catherin Salazar:** Exacto, exactamente.
+- **[14:13] Catherin Salazar:** Es una es una funcionalidad de nicho, es decir, es para unos pocos usuarios.
+- **[14:13] Catherin Salazar:** Que algunos pocos usuarios la adoptan, pero realmente
+- **[14:13] Catherin Salazar:** pues, tiene un bajo alcance.
+- **[14:13] Catherin Salazar:** ¿Sí? No, y como lo dice Mitch, pues sí.
+- **[14:13] Catherin Salazar:** Eso es
+- **[14:13] Catherin Salazar:** no no es algo que todo el mundo las la utilicen, porque la funcionalidad de Spotify o la o la
+- **[14:13] Catherin Salazar:** de Spotify es algo diferente.
+- **[14:13] Catherin Salazar:** Listo para SpriteWise,
+- **[14:13] Catherin Salazar:** ¿cuál creen que es?
+- **[14:13] Catherin Salazar:** No sé, vale que esté mirando las respuestas.
+- **[14:13] Catherin Salazar:** Simplemente como que piensen y y y me digan.
+- **[14:13] Catalina Giraldo Aguirre:** ¿Película de costo?
+- **[14:13] Catherin Salazar:** A ver, miremos.
+- **[14:13] Catherin Salazar:** Es un fracaso de taquilla. ¿Por qué? Porque es una funcionalidad que fracasó.
+- **[14:13] Catherin Salazar:** Porque ya vienen unas funcionalidades que las personas utilizaban.
+- **[14:13] Catherin Salazar:** ¿Sí?
+- **[14:13] Catherin Salazar:** Como transferencias. Entonces, probablemente se pensó como una funcionalidad ofensiva,
+- **[14:14] Catherin Salazar:** pero no lo lo no logró la atracción esperada. ¿Qué puede pasar con muchas de las funcionalidades?
+- **[14:14] Catherin Salazar:** Que pronto ustedes hagan? ¿Sí? Que ustedes digan, no, esta es la solución a este problema,
+- **[14:14] Catherin Salazar:** y ya vamos a entender un poco cómo es que ustedes deben pensar
+- **[14:14] Catherin Salazar:** para sacar algún future desde la plataforma.
+- **[14:14] Catherin Salazar:** Puedan entender todo esto.
+- **[14:14] Catherin Salazar:** ¿Listo?, para que
+- **[14:14] Catherin Salazar:** pues igual, si no si si lo piensan como una funcionalidad
+- **[14:14] Catherin Salazar:** por ejemplo, que vaya a movilizar el OKR de dropping,
+- **[14:14] Catherin Salazar:** pues piensen también en
+- **[14:14] Catherin Salazar:** la solución a una necesidad real del usuario.
+- **[14:14] Catherin Salazar:** Listo. DocuSign con firma electrónica, ¿qué creen que es?
+- **[14:14] Jose Pineda Pitre:** Película de culto.
+- **[14:14] Catherin Salazar:** ¿Por qué?
+- **[14:14] Jose Pineda Pitre:** Porque
+- **[14:14] Jose Pineda Pitre:** porque no todo el mundo utiliza la firma electrónica, sino que esto es un
+- **[14:14] Jose Pineda Pitre:** recurso más de una empresa B2B,
+- **[14:14] Jose Pineda Pitre:** o, sí, esto es algo que contrata más una empresa B2B,
+- **[14:15] Jose Pineda Pitre:** mentira
+- **[14:15] Nicolas Vargas Galindo:** que es
+- **[14:15] Jose Pineda Pitre:** éxito en taquilla.
+- **[14:15] Catherin Salazar:** Claro.
+- **[14:15] Jose Pineda Pitre:** Taquilla, total.
+- **[14:15] Catherin Salazar:** Todo el mundo
+- **[14:15] Jose Pineda Pitre:** necesita firmar de tu casa.
+- **[14:15] Catherin Salazar:** Claro, es que DocuSign es una plataforma justamente para firmar
+- **[14:15] Catherin Salazar:** documentos electrónicamente. Entonces, si no existiera la firma electrónica, pues sí,
+- **[14:15] Catherin Salazar:** la plataforma no existiría.
+- **[14:15] Catherin Salazar:** ¿Sí?
+- **[14:15] Catherin Salazar:** Entonces, ¿sí ven cómo vamos
+- **[14:15] Catherin Salazar:** las funcionalidades en defensivas, ofensivas?
+- **[14:15] Catherin Salazar:** Y cuándo pueden llegar realmente a ser exitosas y a mover
+- **[14:15] Catherin Salazar:** movilizar la el OKR,
+- **[14:15] Catherin Salazar:** Listo, continuamos.
+- **[14:15] Catherin Salazar:** Si nos dijeran que el éxito no depende únicamente de qué tan buena es la funcionalidad,
+- **[14:15] Catherin Salazar:** Depende de muchas factores, de
+- **[14:15] Catherin Salazar:** quién la necesita, cuánto valor la le genera
+- **[14:15] Catherin Salazar:** si la adopta, si regresa y si realmente está satisfecha.
+- **[14:15] Catherin Salazar:** Nuestra funcionalidad siempre tenemos que pensar en eso.
+- **[14:15] Catherin Salazar:** Que el usuario la adopte, es decir, que la utilice al menos una vez,
+- **[14:15] Catherin Salazar:** que el usuario
+- **[14:16] Catherin Salazar:** tenga retención con esa funcionalidad, es decir,
+- **[14:16] Catherin Salazar:** que la siga utilizando y que la funcionalidad, que
+- **[14:16] Catherin Salazar:** el usuario se encuentre satisfecho con la funcionalidad.
+- **[14:16] Catherin Salazar:** ¿Sí?
+- **[14:16] Catherin Salazar:** Eso es lo que siempre debemos pensar. Por eso,
+- **[14:16] Catherin Salazar:** la metodología del taller
+- **[14:16] Catherin Salazar:** que es tars, y es lo que vamos a aprender hoy.
+- **[14:16] Catherin Salazar:** ¿Listo? Lo traje como una moda narrativa y lo trajimos con la autorresión
+- **[14:16] Catherin Salazar:** como a un modo de narrativa desde las películas para que podamos entender y para
+- **[14:16] Catherin Salazar:** que sea mucho más dinámico el taller.
+- **[14:16] Catherin Salazar:** Pero la idea es que hoy nos vayamos como
+- **[14:16] Catherin Salazar:** muy interiorizados en la metodología Tars, porque esta metodología es
+- **[14:16] Catherin Salazar:** el corazón de nuestro equipo.
+- **[14:16] Catherin Salazar:** Y es el corazón con el que vamos a hacer todos los lanzamientos de ahora en adelante y con el que hemos
+- **[14:16] Catherin Salazar:** estado trabajando con los equipos anteriormente. Por ejemplo,
+- **[14:16] Catherin Salazar:** Ale ha podido estar en algunos talleres, en algunas mesas estratégicas del equipo,
+- **[14:16] Catherin Salazar:** Diani Saldana, Lau Torres y, bueno,
+- **[14:16] Catherin Salazar:** Entonces, acto uno,
+- **[14:16] Catherin Salazar:** la historia.
+- **[14:16] Catherin Salazar:** Esta es la funcionalidad que ustedes trajeron,
+- **[14:17] Catherin Salazar:** o sea, como caso
+- **[14:17] Catherin Salazar:** puede ser hipotético, caso real que vayan a sacar en en un futuro en dropping o en mediano, corto plazo, Toda película necesita una historia antes de tener un guion técnico. ¿Listo? Película necesita siempre que el director o el el
+- **[14:17] Catherin Salazar:** la escriba,
+- **[14:17] Catherin Salazar:** que tenga una historia, que la piense, antes de ya sentarse a
+- **[14:17] Catherin Salazar:** escribir como todo el guion. Tiene que tener al menos una idea y una narrativa.
+- **[14:17] Catherin Salazar:** Una funcionalidad no comienza con un Figma,
+- **[14:17] Catherin Salazar:** comienza con un problema real y con una necesidad real del usuario.
+- **[14:17] Catherin Salazar:** ¿Qué vamos a hacer, Deuren?, o sea, ¿cómo cómo cómo va hacer esa transición?
+- **[14:17] Catherin Salazar:** En los lanzamientos de dropping?
+- **[14:17] Catherin Salazar:** El cambio de la lógica. Vamos a tener de una tarea operativa a una
+- **[14:17] Catherin Salazar:** de crecimiento.
+- **[14:17] Catherin Salazar:** ¿Listo? Entonces, por ejemplo, antes usted le entregaban la funcionalidad
+- **[14:17] Catherin Salazar:** autorredes, le entregaban lo, pues, el material que necesitaban, Tango, Figma y demás,
+- **[14:17] Catherin Salazar:** las les entregaban a ustedes las piezas como equipo de marketing y se publicaba.
+- **[14:18] Catherin Salazar:** Se lanzaba sin una estrategia, digamos, que real y robusta.
+- **[14:18] Catherin Salazar:** Ahora va a haber un problema, va a haber un usuario, vamos a
+- **[14:18] Catherin Salazar:** pensar quién es un usuario,
+- **[14:18] Catherin Salazar:** cuál es el valor que le voy a dar a mi usuario, cuáles son las hipótesis que voy a manejar
+- **[14:18] Catherin Salazar:** con respecto a ese problema, cuál va ser la estrategia,
+- **[14:18] Catherin Salazar:** de lanzamiento, cuál va ser el lanzamiento,
+- **[14:18] Catherin Salazar:** cuál va, cómo voy a medir la adopción, cómo voy a medir la retención,
+- **[14:18] Catherin Salazar:** cómo va medir la satisfacción y de todo ese proceso, cuál va a ser los aprendizajes
+- **[14:18] Catherin Salazar:** para volver a iterar la funcionalidad.
+- **[14:18] Catherin Salazar:** Entonces, ¿qué cambia cuando dejamos de pensar en
+- **[14:18] Catherin Salazar:** el lanzamiento? Y esto es una pregunta para todos,
+- **[14:18] Catherin Salazar:** una tarea y empezamos a verlo como una estrategia. ¿Qué creen que podría cambiar?
+- **[14:18] Catherin Salazar:** Cuando se comienza a ver el lanzamiento como una estrategia y no como se estaba viendo antes.
+- **[14:18] katerine Pencue:** Podemos medir
+- **[14:18] katerine Pencue:** los resultados del feature, podemos ver el error
+- **[14:18] katerine Pencue:** los errores del feature en las primeras semanas, como esa
+- **[14:19] katerine Pencue:** porque muchas veces la adopción se ha afectado por esas fricciones técnicas.
+- **[14:19] katerine Pencue:** Nosotros ya lo vivimos en casa producto y creo que más o menos mismo, esa ese ejercicio
+- **[14:19] katerine Pencue:** o lo llevamos a cabo. Entonces, yo creo que si se plantea
+- **[14:19] katerine Pencue:** como una estrategia, yo creo que suma más valor
+- **[14:19] katerine Pencue:** al trabajo hecho. Bueno, no sé,
+- **[14:19] Catherin Salazar:** No, pero si
+- **[14:19] katerine Pencue:** a la manera profesional, y yo siento que cuando algo sale bien, yo a
+- **[14:19] katerine Pencue:** les pongo como mi bebé uno, mi bebé dos,
+- **[14:19] katerine Pencue:** que uno se alegra y creo que con los pedes o con los pedes que
+- **[14:19] katerine Pencue:** he trabajado, creo que nos genera
+- **[14:19] katerine Pencue:** como que qué alegría que el usuario lo utilice. Ejemplo, huella digital.
+- **[14:19] katerine Pencue:** Ahí pasó Pablo Macías, pasaron muchos y y
+- **[14:19] katerine Pencue:** y PDS también y y ver que todavía sigue siendo el hit
+- **[14:19] katerine Pencue:** después de ciertos meses, yo creo que eso es
+- **[14:19] katerine Pencue:** es satisfacción a nivel profesional y claramente ganancia para drop y su usuario.
+- **[14:19] Catherin Salazar:** En total.
+- **[14:19] Catherin Salazar:** Y también hay una cosa muy importante, y es que le vamos a hablar al público correcto.
+- **[14:19] Catherin Salazar:** Lo que dice Kat es muy cierto, para llegar a una buena adopción hay que hablarle al público correcto,
+- **[14:20] Catherin Salazar:** hay que hablarle al usuario que realmente necesita esa funcionalidad.
+- **[14:20] Catherin Salazar:** ¿Sí?
+- **[14:20] Catherin Salazar:** Entonces, ahí es donde tenemos que comenzar a pensar en el valor al que le queremos dar,
+- **[14:20] Catherin Salazar:** cuál es mi problema, cuál es la gravedad de ese problema que tienes
+- **[14:20] Catherin Salazar:** que te se tenía que se tiene dentro de dropping, cuál es esa necesidad real del usuario
+- **[14:20] Catherin Salazar:** a quién le voy a hablar con mi funcionalidad, porque la función, no todas las funcionalidades
+- **[14:20] Catherin Salazar:** están hechas para todo para todo el mundo, ¿sí?
+- **[14:20] Catherin Salazar:** Y desde aquí tenemos que comenzar a pensar en eso.
+- **[14:20] Catherin Salazar:** Que tú digas sí, la, por ejemplo, huella digital puede que sí esté hecha
+- **[14:20] Catherin Salazar:** para todos, pero
+- **[14:20] Catherin Salazar:** puede que no todos la adopten.
+- **[14:20] Catherin Salazar:** Tenemos que pensar en realmente quién es mi usuario y quién va a adoptar esa funcionalidad.
+- **[14:20] Catherin Salazar:** Listo.
+- **[14:20] Catherin Salazar:** El acto dos, el casting, el público objetivo.
+- **[14:20] Catherin Salazar:** Vamos a pensar quién es mi público objetivo
+- **[14:20] Catherin Salazar:** de esa funcionalidad que traje hoy a este taller.
+- **[14:20] Catherin Salazar:** Entonces, el público objetivo
+- **[14:20] Catherin Salazar:** es el segmento de usuarios activos del producto que
+- **[14:20] Catherin Salazar:** tiene mayor probabilidad de obtener valor de la funcionalidad. Tenemos que pensar en ese público objetivo
+- **[14:21] Catherin Salazar:** en solamente usuarios activos. ¿Por qué? Porque si pensamos, por ejemplo,
+- **[14:21] Catherin Salazar:** un usuario se registró en drop it y nunca se activó,
+- **[14:21] Catherin Salazar:** pues ahí ahí entra otra conversación, que es medir
+- **[14:21] Catherin Salazar:** que es medir realmente el producto en general, mas no mi funcionalidad como tal.
+- **[14:21] Catherin Salazar:** Por eso mi funcionalidad solamente
+- **[14:21] Catherin Salazar:** tiene que estar para usuarios activos,
+- **[14:21] Catherin Salazar:** ¿listo? Y que es usuarios activos en drop y, pues, que al menos hayan generado alguna orden.
+- **[14:21] Catherin Salazar:** ¿Listo? Entonces, tengo que pensar en mis usuarios principales
+- **[14:21] Jose Pineda Pitre:** preguntas.
+- **[14:21] Jose Pineda Pitre:** Una pregunta.
+- **[14:21] Jose Pineda Pitre:** Cuéntame.
+- **[14:21] Jose Pineda Pitre:** ¿Eso siempre se mantiene? O sea, como que eso es una regla de oro,
+- **[14:21] Jose Pineda Pitre:** por ejemplo, si nosotros estamos haciendo un feature
+- **[14:21] Jose Pineda Pitre:** que
+- **[14:21] Jose Pineda Pitre:** No, bueno, ya, mentira, ya me respondí. Si yo estoy haciendo un feature,
+- **[14:21] Jose Pineda Pitre:** que tiene
+- **[14:21] Jose Pineda Pitre:** como objetivo
+- **[14:21] Jose Pineda Pitre:** mejorar la activación de los usuarios
+- **[14:21] Jose Pineda Pitre:** Puedo estar teniendo en
+- **[14:21] Jose Pineda Pitre:** de mi público principal
+- **[14:22] Jose Pineda Pitre:** usuarios que no están activos.
+- **[14:22] Jose Pineda Pitre:** Pero que
+- **[14:22] Jose Pineda Pitre:** iniciaron sesión en algún momento en dropping,
+- **[14:22] Jose Pineda Pitre:** pero que no la no la están utilizando ya por x o y razón.
+- **[14:22] Catherin Salazar:** Pero, por ejemplo,
+- **[14:22] Catherin Salazar:** a ver, hay hay que diferenciar varias cosas.
+- **[14:22] Catherin Salazar:** Los lanzamientos se van a hacer bajo la metodología tars,
+- **[14:22] Catherin Salazar:** y para tars es una regla de oro que todos sean activos, ¿sí?
+- **[14:22] Catherin Salazar:** Por lo que te digo, porque si no, va a ser es
+- **[14:22] Catherin Salazar:** voy a medir es si el producto en general está funcionando, es decir,
+- **[14:22] Catherin Salazar:** drop it como plataforma. Pero tars
+- **[14:22] Catherin Salazar:** solo va a estar enfocado en un
+- **[14:22] Jose Pineda Pitre:** Ah, por
+- **[14:22] Catherin Salazar:** eso es que no adopción.
+- **[14:22] Catherin Salazar:** Por
+- **[14:22] Jose Pineda Pitre:** eso es que no se hace con pruebas de conceptos, sino con todo lo que ya... Ya, ya.
+- **[14:22] Jose Pineda Pitre:** Ya
+- **[14:22] Catherin Salazar:** Y solo personas que me vayan a generar adopción.
+- **[14:22] Catherin Salazar:** ¿Sí?
+- **[14:22] Catherin Salazar:** R. Es decir, yo, por ejemplo, como líder de Product Growthman marketing,
+- **[14:22] Catherin Salazar:** le voy a hablar a todos los usuarios con la funcionalidad, pero
+- **[14:23] Catherin Salazar:** solamente va a medir mi adopción, mi retención y satisfacción,
+- **[14:23] Catherin Salazar:** con mi público objetivo.
+- **[14:23] Catherin Salazar:** ¿Entienden un poco la diferencia?
+- **[14:23] Catherin Salazar:** O sea, les podemos enviar una comunicación masiva a todos,
+- **[14:23] Catherin Salazar:** pero solamente le voy a medir mi funcionalidad con mi población objetivo, que yo desde el principio estoy diligente.
+- **[14:23] Catherin Salazar:** No sé si hay algunas manos más levantadas.
+- **[14:23] katerine Pencue:** Tá, Peta, yo solamente quería saber en la primera narrativa cuando dices,
+- **[14:23] katerine Pencue:** que vamos a medir con con el público activo, que activo es que tenga
+- **[14:23] katerine Pencue:** una orden
+- **[14:23] katerine Pencue:** me imagino que creada y
+- **[14:23] Catherin Salazar:** movilizada,
+- **[14:23] katerine Pencue:** pero que también en esa narrativa sean frecuentes,
+- **[14:23] katerine Pencue:** porque nosotros podemos tener muchas personas activas, pero que
+- **[14:23] katerine Pencue:** que hicieron su primer proceso,
+- **[14:23] katerine Pencue:** se quedaron en el tiempo. Yo yo
+- **[14:23] Catherin Salazar:** entiendo el
+- **[14:23] katerine Pencue:** tema del público objetivo,
+- **[14:23] katerine Pencue:** pero entonces en la narrativa son todos esos activos
+- **[14:23] katerine Pencue:** frecuentes, recurrentes,
+- **[14:23] Catherin Salazar:** fieles,
+- **[14:23] Catherin Salazar:** Eso depende de muchos factores, Katherine. Ahí sí, eso es lo que ustedes
+- **[14:24] Catherin Salazar:** tienen que comenzar a analizar.
+- **[14:24] Catherin Salazar:** ¿Sí? Si, por ejemplo, mi problema es un problema que se le está
+- **[14:24] Catherin Salazar:** presentando el usuario
+- **[14:24] Catherin Salazar:** en una frecuencia
+- **[14:24] Catherin Salazar:** diaria,
+- **[14:24] Catherin Salazar:** como no sé, que tengan un bloqueo en algo,
+- **[14:24] Catherin Salazar:** y yo saqué una funcionalidad para
+- **[14:24] Catherin Salazar:** que me solucione ese bloqueo, que me solucione que, no sé, que el usuario
+- **[14:24] Catherin Salazar:** puede que no continúe, por ejemplo, en dropping,
+- **[14:24] Catherin Salazar:** pues debo pensar también ese tipo de usuarios, ¿sí?
+- **[14:24] Catherin Salazar:** Pero, por ejemplo, para drop y usuarios activos es que al menos hayan movilizado una orden.
+- **[14:24] Catherin Salazar:** No sé si después con el tiempo eso vaya a cambiar y vayamos a ver
+- **[14:24] Catherin Salazar:** qué
+- **[14:24] Catherin Salazar:** otro tipo de usuarios activos. Pero eso es lo que tenemos que comenzar a analizar, Katherine.
+- **[14:24] Catherin Salazar:** Porque ustedes son los que están planteando la
+- **[14:24] Catherin Salazar:** y desde el delivery desde el delivery no sino el discovery,
+- **[14:24] Catherin Salazar:** ustedes deben pensar
+- **[14:24] Catherin Salazar:** en para quién va a ser esa funcionalidad, para quién va a ser esa solución.
+- **[14:24] Catherin Salazar:** ¿Sí?
+- **[14:24] Catherin Salazar:** Digamos que hay es una discusión, Kate, pero
+- **[14:25] Catherin Salazar:** eso es lo que nosotros tenemos que comenzar a analizar. Si mi si
+- **[14:25] Catherin Salazar:** si son usuarios que con los que hace mucho tiempo o quiero activar esos usuarios,
+- **[14:25] Catherin Salazar:** pero son usuarios que al menos, pues ya
+- **[14:25] Catherin Salazar:** movilizaron una orden y se quedaron en el tiempo,
+- **[14:25] Catherin Salazar:** o sea, al menos ya saben crear una orden,
+- **[14:25] Catherin Salazar:** ya vendieron en un en algún momento, así sea un pedido,
+- **[14:25] Catherin Salazar:** pero ya vendieron.
+- **[14:25] Catherin Salazar:** Por eso, creo que dentro de Aeropi se consigue
+- **[14:25] Catherin Salazar:** se considera usuarios activos.
+- **[14:25] Catherin Salazar:** Porque igual hay usuarios que se registraron y ya, y no pasó nada, eso, pues, ¿para qué les voy a hablar a ellos?
+- **[14:25] Catherin Salazar:** Puede que sea otra estrategia distinta, pero con mi funcionalidad para que lo
+- **[14:25] Catherin Salazar:** hablara ellos y eso es un poco lo que dice Tars, y la y la teoría.
+- **[14:25] Catherin Salazar:** Si yo voy a hablarle a un usuario
+- **[14:25] Catherin Salazar:** que
+- **[14:25] Catherin Salazar:** no se registró, por ejemplo, que se registró y nunca más volvió a utilizar dropping,
+- **[14:25] Catherin Salazar:** ya tengo que mirar es la plataforma como un todo,
+- **[14:25] Catherin Salazar:** mi producto como un todo para mirar qué está pasando con ese tipo de usuarios, que
+- **[14:25] Catherin Salazar:** son bastantes aparte de eso.
+- **[14:26] Catherin Salazar:** Tengo que pensarlo ya es como un todo del producto, mas no solo
+- **[14:26] Catherin Salazar:** la funcionalidad que yo vayas a lanzar.
+- **[14:26] Catherin Salazar:** No sé si me dice entender.
+- **[14:26] katerine Pencue:** Sí, sí, fíjate. Igual, digamos que yo tenía varios ejercicios,
+- **[14:26] katerine Pencue:** también con los p d, por ejemplo, pon un ejemplo, garantías,
+- **[14:26] katerine Pencue:** módulo de garantía salió y nosotros no, no sirve, no hay adopción, no sé
+- **[14:26] katerine Pencue:** qué, de pronto teníamos ese, nuestra población era muy grande y y en el ejercicio
+- **[14:26] katerine Pencue:** la adopción de marcas para garantía podía ser baja, porque las mismas marcas no gestionan
+- **[14:26] katerine Pencue:** por por su pago. Y digamos que sí voy
+- **[14:26] katerine Pencue:** voy voy anidando cositas y y es yo creo que la palabra
+- **[14:26] katerine Pencue:** adecuada o lo que me enfoca mucho es ese público objetivo.
+- **[14:26] katerine Pencue:** Mi público objetivo es el que me da la medición.
+- **[14:26] katerine Pencue:** Exactamente. Ahí yo miro si está activo y es activo frecuente,
+- **[14:26] katerine Pencue:** fiel,
+- **[14:26] Catherin Salazar:** bueno,
+- **[14:26] katerine Pencue:** ya ahí comienzo a jugar con todos mis activación.
+- **[14:26] Catherin Salazar:** Y eso es muy importante para beta.
+- **[14:26] Catherin Salazar:** Por ejemplo.
+- **[14:26] Catherin Salazar:** Porque el beta es el que me va a definir el task.
+- **[14:26] Catherin Salazar:** Con los hallazgos que yo tengo en beta es que voy a definir el tars.
+- **[14:27] Catherin Salazar:** Y la estrategia tars.
+- **[14:27] Catherin Salazar:** Entonces, por ejemplo, si yo en beta testeé
+- **[14:27] Catherin Salazar:** con estos usuarios y realmente, pues no, veo que
+- **[14:27] Catherin Salazar:** que pasó esto y esto, pues puedo decir, ah, ok, entonces,
+- **[14:27] Catherin Salazar:** mi público objetivo realmente no es este.
+- **[14:27] Catherin Salazar:** Listo,
+- **[14:27] katerine Pencue:** Katherine.
+- **[14:27] Catherin Salazar:** Usuarios principales, ¿para quién la funcionalidad fue diseñada
+- **[14:27] Catherin Salazar:** mayor probabilidad de obtener valor o de que me movilice el OKR.
+- **[14:27] Catherin Salazar:** Usuarios adjacentes podrían encontrar valor, pero no son el segmento
+- **[14:27] Catherin Salazar:** que es lo que hablábamos ahorita, de película de culto,
+- **[14:27] Catherin Salazar:** y usuarios no adyacentes es que la funcionalidad no fue diseñada para ellos.
+- **[14:27] Catherin Salazar:** Por ejemplo, no sé, un Roax.
+- **[14:27] Catherin Salazar:** Puede que la funcionalidad no haya sido diseñada para
+- **[14:27] Catherin Salazar:** sé, una persona que hasta ahora está entendiendo.
+- **[14:27] Catherin Salazar:** De del del negocio. O PagePay o o o creador de páginas con inteligencia
+- **[14:27] Catherin Salazar:** artificial, puede que no sea para una persona que ya esté máster.
+- **[14:27] Catherin Salazar:** Que ya
+- **[14:27] Catherin Salazar:** pues ellos ya tienen como sus propias automatizaciones, ya tienen sus propios agentes en
+- **[14:28] Catherin Salazar:** con con cloud y ya hacen páginas
+- **[14:28] Catherin Salazar:** mucho más enfocadas en conversión.
+- **[14:28] Catherin Salazar:** ¿Listo? Entonces, el arreglado ahora es que comencemos siempre por los usuarios principales.
+- **[14:28] Catherin Salazar:** Y después,
+- **[14:28] Catherin Salazar:** pensemos en estos en estos otros usuarios. ¿Para quién es mi funcionalidad?
+- **[14:28] Catherin Salazar:** Y para quién de pronto podría encontrarle valor en el tiempo?
+- **[14:28] Catherin Salazar:** Listo, tamaño del objetivo, ¿qué tan grande es esa audiencia?
+- **[14:28] Catherin Salazar:** Esto es superimportante porque, por ejemplo,
+- **[14:28] Catherin Salazar:** muchas veces no no me llegan con el tamaño objetivo.
+- **[14:28] Catherin Salazar:** El tamaño objetivo se debe representar en un porcentaje, es decir,
+- **[14:28] Catherin Salazar:** del cien por ciento de usuarios que hay activos en drop
+- **[14:28] Catherin Salazar:** que creo que son como noventa y siete mil algo,
+- **[14:28] Catherin Salazar:** de ese noventa y siete mil,
+- **[14:28] Catherin Salazar:** no sé, el treinta por ciento va ser mi tamaño objetivo.
+- **[14:28] Catherin Salazar:** Entonces, tengo que estimar
+- **[14:28] Catherin Salazar:** ese porcentaje del tamaño objetivo, de la base de usuarios activa.
+- **[14:28] Catherin Salazar:** Esto yo se lo recomiendo siempre que lo miren en números conmigo,
+- **[14:28] Catherin Salazar:** Yo siempre que les estoy ayudando, por ejemplo, en la arquitectura y eso, lo he mirado conmigo estos números.
+- **[14:29] Catherin Salazar:** Con PagePilot también pueden verlo, pero con MIG es mucho más certero.
+- **[14:29] Catherin Salazar:** ¿Por qué? Porque hay un hay un dato transaccional también.
+- **[14:29] Catherin Salazar:** ¿Sí?
+- **[14:29] Catherin Salazar:** Entonces, por ejemplo, no sé, usuarios, yo le decía a Miguel cuáles son usuarios huérfanos
+- **[14:29] Catherin Salazar:** cuáles son usuarios que que sigan huérfanos, eso no lo podemos medir en en en user pilot. Entonces, solo contabilizamos usuarios objetivos sean usuarios activos del producto, como como la que estábamos hablando. Esto nos permite distinguir el problema está en la funcionalidad, o simplemente el usuario no está utilizando el producto? Entonces, ven cómo es la diferencia y cómo comenzamos a pensar en mi público objetivo y después en mi tamaño del objetivo. Listo. Hagamos esta actividad en parejas y cinco minuticos. Entonces, elijan su audiencia con la funcionalidad que trajeron, trabajen sobre la funcionalidad real de la célula. La que trajeron. Entonces, vamos a colocar quién es el usuario principal,
+- **[14:29] Catherin Salazar:** problema tiene
+- **[14:29] Catherin Salazar:** qué comportamiento demuestra que tiene ese problema,
+- **[14:30] Catherin Salazar:** qué porcentaje estima estimas que representa dentro de los usuarios activos.
+- **[14:30] Catherin Salazar:** ¿Listo? Hagamos una estimación ahí, pues,
+- **[14:30] Catherin Salazar:** no con números tan grandes, sino simplemente como como, bueno,
+- **[14:30] Catherin Salazar:** creo que mi mi porcentaje de usuarios es el veinte por ciento o el diez por ciento.
+- **[14:30] Catherin Salazar:** Igual todo esto les va a quedar consolidado al final,
+- **[14:30] Catherin Salazar:** y ustedes pueden como
+- **[14:30] Catherin Salazar:** pegar toda la información y podérselas llevar.
+- **[14:30] Catherin Salazar:** Para que lo tengan muy presente al momento de diligenciar el end to end.
+- **[14:30] Catherin Salazar:** Y
+- **[14:30] Catherin Salazar:** Y voy a dar cinco minutos.
+- **[14:31] Catherin Salazar:** ¿Cómo, amor?
+- **[14:32] Francisco Velandia:** Bien, bien, bien,
+- **[14:32] Catherin Salazar:** avanzando un poco.
+- **[14:32] Catherin Salazar:** ¿Ah?
+- **[14:32] Yo:** ¿Cuánto tiempo queda?
+- **[14:32] Catherin Salazar:** A ver, ¿qué ha?
+- **[14:32] Catherin Salazar:** Tres minutos.
+- **[14:32] Catherin Salazar:** Igual, si no si no si si necesita más tiempo, me dicen,
+- **[14:32] Catherin Salazar:** ¿Histónico?
+- **[14:32] Catherin Salazar:** Igual, tranqui, o sea, si tienen dudas,
+- **[14:33] Catherin Salazar:** nos pueden decidir, las solucionamos,
+- **[14:33] Catherin Salazar:** La idea del taller es que ustedes se vayan como con esto bien interiorizado.
+- **[14:33] Yo:** Una duda. ¿Qué te
+- **[14:33] Yo:** Una de dos, que tenemos aquí con Aleja. Dos versiones, una más extensa que otra. La idea es que se pueda responder la pregunta con frases muy cortas, hay que ser muy conciso, o se puede ser un poco más descriptivo.
+- **[14:33] Catherin Salazar:** Sí, eso puede ser un...
+- **[14:33] Catherin Salazar:** Creo que entre más información nos compartan el equipo de nosotros,
+- **[14:33] Catherin Salazar:** para el lanzamiento, es más, va a ser mucho más fácil entender
+- **[14:33] Catherin Salazar:** la funcionalidad y poder hacer una comunicación estratégica.
+- **[14:33] Yo:** Okay.
+- **[14:34] Catherin Salazar:** ¿Listo? ¿Vos?
+- **[14:34] Catherin Salazar:** A ver, ¿quién me hiciste?
+- **[14:34] Catherin Salazar:** Bueno.
+- **[14:34] Catherin Salazar:** De una.
+- **[14:34] Yo:** Bueno, nosotros ya estamos.
+- **[14:34] Catherin Salazar:** Creo que ya todos estamos, ¿no es cierto? Frank, Kate,
+- **[14:34] Catherin Salazar:** Sí,
+- **[14:34] katerine Pencue:** Sí, me hace falta el último dato, pero dale que te voy a escuchar, voy a verificarlo.
+- **[14:34] Catherin Salazar:** Listo, listo, de una. Continuemos. Entonces, ahora nos vamos para el acto tres,
+- **[14:35] Catherin Salazar:** la producción.
+- **[14:35] Catherin Salazar:** Este va a ser un mapa cualitativo.
+- **[14:35] Catherin Salazar:** Entonces, el mapa de características, entonces,
+- **[14:35] Catherin Salazar:** Ya tenemos, esto va a ser antes de los números,
+- **[14:35] Catherin Salazar:** esta es una información cualitativa que ustedes nos deben dar,
+- **[14:35] Catherin Salazar:** que es población objetivo,
+- **[14:35] Catherin Salazar:** valor del usuario,
+- **[14:35] Catherin Salazar:** y valor del negocio.
+- **[14:35] Catherin Salazar:** Digamos que se vive en tres partes, ¿no?
+- **[14:35] Catherin Salazar:** Y son siete cosas que ustedes nos nos tienen que entregar.
+- **[14:35] Catherin Salazar:** Entonces, gravedad del problema.
+- **[14:35] Catherin Salazar:** Pasa si esta funcionalidad no existe?
+- **[14:35] Catherin Salazar:** Mire qué tan importante es el problema que estamos resolviendo.
+- **[14:35] Catherin Salazar:** Por ejemplo, una gravedad baja son los pagos nativos en
+- **[14:35] Catherin Salazar:** usuarios. ¿Por qué? Porque hay alternativas a esos pagos nativos dentro de Splitwise.
+- **[14:35] Catherin Salazar:** Spotify, guardar podcasts desde la web
+- **[14:35] Catherin Salazar:** es una gravedad baja porque hay alternativas, y no es como una funcionalidad
+- **[14:35] Catherin Salazar:** que
+- **[14:35] Catherin Salazar:** que
+- **[14:35] Catherin Salazar:** no sé, que dañe la experiencia del usuario o que realmente el
+- **[14:36] Catherin Salazar:** usuario no pueda utilizar la plataforma. Por ejemplo, para para dropping,
+- **[14:36] Catherin Salazar:** no sé, una funcionalidad como Roblox Si no está, pues, digamos que
+- **[14:36] Catherin Salazar:** eso impulsa a los usuarios a generar más ventas,
+- **[14:36] Catherin Salazar:** pero si no está, pues, los usuarios van a seguir operando normalmente en la plataforma.
+- **[14:36] Catherin Salazar:** Una gravedad alta es la
+- **[14:36] Catherin Salazar:** por ejemplo, en Tinder la experiencia de deslizar,
+- **[14:36] Catherin Salazar:** Si esa funcionalidad no no está, pues los usuarios no van a poder
+- **[14:36] Catherin Salazar:** continuar con la experiencia dentro de la plataforma, o DocuSign con firma electrónica.
+- **[14:36] Catherin Salazar:** Entonces, por ejemplo, si en Dropi
+- **[14:36] Catherin Salazar:** el módulo de órdenes no está,
+- **[14:36] Catherin Salazar:** pues
+- **[14:36] Catherin Salazar:** ¿qué pasa? Que va ser una gravedad alta porque el usuario no va a poder operar.
+- **[14:36] Catherin Salazar:** ¿Listo?
+- **[14:36] Catherin Salazar:** Este es un semáforo de gravedad,
+- **[14:36] Catherin Salazar:** vamos a clasificar la funcionalidad que ustedes trajeron en baja, media o alta.
+- **[14:36] Yo:** Acá, para
+- **[14:36] Catherin Salazar:** No sé si
+- **[14:36] Yo:** Para, no no sé si sirve el comentario como para aportar
+- **[14:36] Catherin Salazar:** Ok.
+- **[14:36] Yo:** poquito lo que acabas de decir.
+- **[14:36] Yo:** Pero aquí una buena una una buena forma de
+- **[14:36] Yo:** de también medirlo es
+- **[14:36] Yo:** qué tanto impacto tiene sobre el ingreso.
+- **[14:37] Yo:** Entonces, el ingreso de dropping, me refiero.
+- **[14:37] Yo:** Entonces, es
+- **[14:37] Yo:** si no está esa funcionalidad o ese paso,
+- **[14:37] Yo:** por ejemplo, el caso de drop-y, va a evitar que se pueda hacer el el el
+- **[14:37] Yo:** contra entrega?
+- **[14:37] Yo:** ¿Sí?
+- **[14:37] Yo:** Entonces, es, por ejemplo, en caso de de sería, claro, es un ese módulo de órdenes, pues,
+- **[14:37] Yo:** puedo, si no,
+- **[14:37] Yo:** puedo, de pronto, gestionar incluso una novedad
+- **[14:37] Yo:** también me va me va a afectar
+- **[14:37] Catherin Salazar:** El OKR.
+- **[14:37] Yo:** Sí, no, no, me me va afectar realmente el el el
+- **[14:37] Yo:** el ingreso al final, que es lo que mueve a dropping.
+- **[14:37] Yo:** Mientras que las que están más alrededor, por ejemplo, no sé, la de la una calculadora,
+- **[14:37] Yo:** no me va a afectar mayor cosa,
+- **[14:37] Yo:** o que pueda actualizar de pronto el perfil
+- **[14:37] Yo:** puede que me genere claramente temas de soporte,
+- **[14:37] Yo:** y más una percepción como de
+- **[14:37] Yo:** de que esté incompleto,
+- **[14:37] Yo:** pero al final, la orden de esa entrega, al final el dinero va a entrar a la cuenta.
+- **[14:37] Yo:** Y para nosotros, que también es percepción de
+- **[14:37] Yo:** que el inhave moment está cuando le entra el dinero,
+- **[14:37] Catherin Salazar:** Mhmm.
+- **[14:37] Yo:** Por ejemplo,
+- **[14:38] Yo:** pasa después de la orden.
+- **[14:38] Yo:** ¿Sí?, de que se entregue inclusive.
+- **[14:38] Yo:** Si hay un error sobre que yo pueda retirar el saldo,
+- **[14:38] Yo:** es como si no tuviera la plata.
+- **[14:38] Yo:** Entonces, aunque va después de la orden,
+- **[14:38] Yo:** evita o hay una fricción entre
+- **[14:38] Yo:** el usuario ya pueda
+- **[14:38] Yo:** sentir que el producto le está entregando el valor prometido?
+- **[14:38] Catherin Salazar:** Okay.
+- **[14:38] Catherin Salazar:** Sí, pero ¿sabes qué, Santi? Ahí
+- **[14:38] Catherin Salazar:** también se podría clasificar en funcionalidad ofensiva o defensiva
+- **[14:38] Catherin Salazar:** respecto a si aporta el OKR o moviliza la métrica de dropping, pero acá siento que un poco la gravedad es como
+- **[14:38] Catherin Salazar:** claro, lo que tú dices tiene mucho sentido.
+- **[14:38] Catherin Salazar:** Pero, por ejemplo,
+- **[14:38] Catherin Salazar:** también es si rompe en términos de experiencia, ¿sí?
+- **[14:38] Catherin Salazar:** Si hay una alternativa a, por ejemplo, a la a la a lo que tú estás diciendo. Por ejemplo, no sé,
+- **[14:38] Catherin Salazar:** el el
+- **[14:38] Catherin Salazar:** ¿Cuál era la funcionalidad que estaba haciendo de AeroP, Santi?
+- **[14:38] Yo:** Al principio,
+- **[14:38] Catherin Salazar:** Ajá.
+- **[14:39] Yo:** hablando de órdenes por el flujo de entregarla, pero después también está la wallet como tal.
+- **[14:39] Catherin Salazar:** Exacto.
+- **[14:39] Catherin Salazar:** Por ejemplo, si la wallet no está,
+- **[14:39] Catherin Salazar:** pues,
+- **[14:39] Catherin Salazar:** es una
+- **[14:39] Catherin Salazar:** ¿Y no hay alternativa?
+- **[14:39] Catherin Salazar:** Hay un problema grave.
+- **[14:39] Yo:** Sí, es es un barrio cero.
+- **[14:39] Catherin Salazar:** Exacto. Sí, sí, sí, Santi, es lo correcto. Ajá.
+- **[14:39] Catherin Salazar:** Entonces, clasifiquemos como esa funcionalidad
+- **[14:39] Catherin Salazar:** justifiquemos la elección de por qué escogí
+- **[14:39] Catherin Salazar:** esa gravedad del problema.
+- **[14:39] Catherin Salazar:** También, bueno,
+- **[14:39] Catherin Salazar:** ya ahorita les digo, pero
+- **[14:39] Catherin Salazar:** también pensemos en
+- **[14:39] Catherin Salazar:** cuál es la frecuencia de esa de esa
+- **[14:39] Catherin Salazar:** de esa gravedad del problema también.
+- **[14:39] Catherin Salazar:** Sí, no sé, mi usuario la experimenta diarias y la
+- **[14:39] Catherin Salazar:** semanal, si la experimenta
+- **[14:39] Catherin Salazar:** mensual.
+- **[14:39] Yo:** Igual, no es por eso por la que nos vamos a ir nosotros, pero
+- **[14:40] Yo:** de acuerdo con eso.
+- **[14:40] Catherin Salazar:** Cuéntame, Ale.
+- **[14:40] Catherin Salazar:** Es
+- **[14:40] Alejandra Melo:** que a mí me quedó sonando lo de que la población objetivo debe de ser sí o sí usuarios
+- **[14:40] Catherin Salazar:** Sí, porque si no, recuerda a Ale que
+- **[14:40] Catherin Salazar:** estaríamos hablando
+- **[14:40] Catherin Salazar:** si mi usear uno es activo, entonces hay un problema del producto.
+- **[14:40] Catherin Salazar:** Para ese usuario.
+- **[14:40] Catherin Salazar:** En general.
+- **[14:40] Yo:** Ahí ahí, perdón, estamos hablando justo de eso.
+- **[14:40] Alejandra Melo:** Exacto.
+- **[14:40] Catherin Salazar:** Ajá.
+- **[14:40] Yo:** Corales internamente, acá,
+- **[14:41] Yo:** es que
+- **[14:41] Yo:** el reto para sellers es tan activar usuarios.
+- **[14:41] Yo:** Por ende, nuestro público no son usuarios activos, de hecho, son usuarios que están
+- **[14:41] Alejandra Melo:** Exacto.
+- **[14:41] Yo:** y que aún no se han activado.
+- **[14:41] Yo:** Y ese ya es el cuarenta por ciento de dropping.
+- **[14:41] Catherin Salazar:** Sí,
+- **[14:41] Yo:** Entonces,
+- **[14:41] Yo:** o sea, creo que ahí ahí puede llegar a
+- **[14:41] Yo:** flexibilizarse la norma, porque, pues, justamente es la excepción, ¿no? Es como, bueno, yo
+- **[14:41] Yo:** hay funcionalidades también de activación.
+- **[14:41] Yo:** O no sé cómo lo
+- **[14:41] Diana Aldana:** Pues
+- **[14:41] Yo:** lo lo he
+- **[14:41] Diana Aldana:** Puede ser, tienes un buen punto, Santi,
+- **[14:41] Diana Aldana:** porque una
+- **[14:41] Catherin Salazar:** activación
+- **[14:41] Diana Aldana:** puede ser tal vez un usuario que hizo un proceso de validación de identidad,
+- **[14:41] Diana Aldana:** que es como el primer paso para
+- **[14:41] Diana Aldana:** tú registrarte, si haces eso
+- **[14:41] Diana Aldana:** es un síntoma de que estás interesado en la plataforma, así no hayas hecho tu primera orden.
+- **[14:41] Catherin Salazar:** Entonces, allí
+- **[14:41] Catherin Salazar:** Entonces, ahí es que entre tenemos que entrar en la discusión que yo decía ahorita y es
+- **[14:41] Catherin Salazar:** entonces, ¿qué podrían ser usuarios activos para dropping?
+- **[14:41] Catherin Salazar:** Solamente se registraron también,
+- **[14:41] Yo:** O sea, yo creo que esa esa esa esa definición no es
+- **[14:42] Yo:** fácil de de mover.
+- **[14:42] Catherin Salazar:** Exacto.
+- **[14:42] Yo:** Porque finalmente activo es al
+- **[14:42] Yo:** el que logra entregar su orden,
+- **[14:42] Yo:** Sin embargo,
+- **[14:42] Yo:** se puede hacer es un zoom, ah, bueno, de los que no se han activado,
+- **[14:42] Catherin Salazar:** Sí.
+- **[14:42] Yo:** y ahí, ¿no?
+- **[14:42] Yo:** Qué caracterización puede hacerse
+- **[14:42] Yo:** para tratar de acotar aún más
+- **[14:42] Catherin Salazar:** Sí, sí, sí.
+- **[14:42] Yo:** público, ¿no?, para para igual
+- **[14:42] Yo:** luego le damos en una en en una reunión
+- **[14:42] Yo:** que también puede estar llegando mucho
+- **[14:42] Yo:** mucho registro,
+- **[14:42] Yo:** que realmente no tiene una intención, una motivación clara.
+- **[14:42] Yo:** Esa esa data aún no se tiene. Si alguien aquí la tiene, me la comparte, por
+- **[14:42] Yo:** Pero el el el que está motivando a llegar a AdRobin, esos usuarios que
+- **[14:42] Yo:** son huérfanos y que nunca se han activado, que solamente crearon una cuenta y separan
+- **[14:42] Yo:** podría estar claramente uno poniendo esos esos esas capas, ¿no?, de
+- **[14:42] Yo:** quienes validan mi identidad, pero no sé si
+- **[14:42] Yo:** habrán personas que validen mi identidad sin todavía
+- **[14:42] Yo:** conocer o percibir el valor de la plataforma
+- **[14:43] Catherin Salazar:** Ok, simplemente se registraron, sí, por por
+- **[14:43] Yo:** Entonces,
+- **[14:43] Yo:** Exacto.
+- **[14:43] Catherin Salazar:** porque lo vieron por ahí y ya, pero no entienden nada del negocio.
+- **[14:43] Yo:** Y, de hecho, nosotros
+- **[14:43] Yo:** supongo, llegaremos eso más adelante, que era el ejercicio que pusiste ahora.
+- **[14:43] Yo:** En la identificación está, justamente, los huérfanos, que no se han activado,
+- **[14:43] Yo:** que no saben nada de ecommerce ni dropshipping.
+- **[14:43] Yo:** Porque es, justamente, son esas personas que, del cuarenta por ciento, ya son el noventa por ciento,
+- **[14:43] Yo:** O sea, es un público gigantesco,
+- **[14:43] Catherin Salazar:** My
+- **[14:43] Yo:** y es el que no está activo,
+- **[14:43] Yo:** Entonces, también el reto está en
+- **[14:43] Yo:** cómo
+- **[14:43] Yo:** a través de la página de una forma totalmente
+- **[14:43] Yo:** para el usuario, que no sabe nada de
+- **[14:43] Yo:** de ecommerce,
+- **[14:43] Yo:** logra darse de alta.
+- **[14:43] Catherin Salazar:** Okay.
+- **[14:43] Yo:** Y que perciba el valor mucho más rápido. Por eso la
+- **[14:43] Yo:** creo que es lo duda que tenemos con Aleja.
+- **[14:43] Yo:** De en ese caso,
+- **[14:43] Yo:** cómo cambia la metodología respecto a
+- **[14:43] Yo:** al un público que no está activo.
+- **[14:43] Catherin Salazar:** Okay.
+- **[14:43] Catherin Salazar:** Santi, yo creo que eso es una eso es una eso es un punto muy interesante que podemos entrar a eso. Y poder pensar un poco en la estrategia para ellos, y cómo esa funcionalidad, pues, quieren como también lanzarla y cómo lo voy términos de números. Si quieres, lo podemos conversar en cuando ya la funcionalidad, pues, ya esté testeada y demás. Santi, ¿te parece?
+- **[14:44] Yo:** Dora. Sí, sí, igual, de hecho, es es galli para equipo winners.
+- **[14:44] Yo:** Pero ese galli va a tener una modificación para que ya sea un
+- **[14:44] Yo:** end to end completo, pudiendo ser generar órdenes reales,
+- **[14:44] Catherin Salazar:** Okay.
+- **[14:44] Yo:** y un poco la la
+- **[14:44] Yo:** la
+- **[14:44] Yo:** no sé, las métricas que sacamos de expowear, comentarios, el nivel de llamémoslo adopción o de entendimiento que tenga la herramienta, para que siga después de expo winners, y conectarla de alguna forma con drop it. Siendo como un poco de espejo, no espejo de dropping. Sino un un un flujo paralelo que en algún punto pueda desbordar a Dropi, para esos usuarios que no saben usar la plataforma. Pero, bueno, sí, creo que veremos como el el taller. Gracias.
+- **[14:44] Catherin Salazar:** Okay.
+- **[14:45] Catherin Salazar:** De una, de una, sí, me parece.
+- **[14:45] Catherin Salazar:** Una, Santi.
+- **[14:45] Catherin Salazar:** Listo. Entonces,
+- **[14:45] Catherin Salazar:** acá es donde vamos a hablar de ofensiva o defensiva,
+- **[14:45] Catherin Salazar:** Para cerrar el valor del negocio del mapa cualitativo hay que
+- **[14:45] Catherin Salazar:** identificar si la funcionalidad está atacada o a defender.
+- **[14:45] Catherin Salazar:** Ofensiva impulsa proactivamente un KPI del producto,
+- **[14:45] Catherin Salazar:** en adquisición, retención o monetización,
+- **[14:45] Catherin Salazar:** agrega valor a nivel neto,
+- **[14:45] Catherin Salazar:** por ejemplo, los pagos integrados en en en Eventbrite, que es una plataforma donde mucha gente llega para poder mirar eventos en diferentes partes del mundo. ¿Sí?, o el canal compartido de Slack. Que, por ejemplo, lo que pasaba con Slack es que se dieron cuenta que
+- **[14:45] Catherin Salazar:** llegaban personas a Slack, pero de otras organizaciones que no pagaban Slack.
+- **[14:45] Catherin Salazar:** Entonces, como que hacían que
+- **[14:45] Catherin Salazar:** hicieron una funcionalidad de canal compartido y lo que hicieron fue atraer más usuarios.
+- **[14:45] Catherin Salazar:** A Slack.
+- **[14:46] Catherin Salazar:** Es como un loop de adquisición que hicieron, un loop, no no viral, sino un loop de adquisición.
+- **[14:46] Catherin Salazar:** Y la defensiva es necesaria para que el producto funcione
+- **[14:46] Catherin Salazar:** o para cumplir los requisitos mínimos del mercado.
+- **[14:46] Catherin Salazar:** ¿Sí?
+- **[14:46] Catherin Salazar:** Puede no mejorar directamente los KPIs, pero evita que se te
+- **[14:46] Catherin Salazar:** que se deterioren.
+- **[14:46] Catherin Salazar:** ¿Listo? Ejemplos, por ejemplo, la cancelación en Uber o la sincronización
+- **[14:46] Catherin Salazar:** de entre entre dispositivos de
+- **[14:46] Catherin Salazar:** Entonces, volvamos al acto cero,
+- **[14:46] Catherin Salazar:** miremos el de Tinder, DocuSign, los que fueron
+- **[14:46] Catherin Salazar:** en taquilla.
+- **[14:46] Catherin Salazar:** Funciones ofensivas que, pues, dispararon la adopción, la retención y la
+- **[14:46] Catherin Salazar:** a la vez.
+- **[14:46] Catherin Salazar:** Porque, por ejemplo, Tinder, pues, al ver
+- **[14:46] Catherin Salazar:** y al y al y al volver como una dicción, el tema del
+- **[14:46] Catherin Salazar:** de de seguir o seguir
+- **[14:46] Catherin Salazar:** pues hay una adopción,
+- **[14:46] Catherin Salazar:** los usuarios se retuvieron y generar una monitación, porque al final
+- **[14:46] Catherin Salazar:** muchos también pagan planes.
+- **[14:46] Catherin Salazar:** En Tinder.
+- **[14:47] Catherin Salazar:** Entonces, miremos esto.
+- **[14:47] Catherin Salazar:** Y comencemos a clasificar la funcionalidad. Si creemos que eso
+- **[14:47] Catherin Salazar:** funcionalidad ofensiva y que me va a aportar al OKR de dropping, o si es una
+- **[14:47] Catherin Salazar:** funcionalidad defensiva.
+- **[14:47] Catherin Salazar:** ¿Listo? Esto es superimportante porque esto va a ser par todo lo que
+- **[14:47] Catherin Salazar:** estamos viendo va a ser parte del nuevo documento end to end, que ya lo vamos a ver al final y que creo que yo se los compartí.
+- **[14:47] Catherin Salazar:** ¿Listo? Entonces, si es ofensiva, ¿qué KPI impulsa?
+- **[14:47] Catherin Salazar:** ¿Adquisición, retención o monetización? Si es defensiva, ¿qué requisito
+- **[14:47] Catherin Salazar:** mínimo el mercado cubre,
+- **[14:47] Catherin Salazar:** y justifiquemos como la elección.
+- **[14:48] Catalina Giraldo Aguirre:** Kate, ¿en qué slide se puede ver eso?
+- **[14:48] Jose Pineda Pitre:** Dime. Ya
+- **[14:48] Catherin Salazar:** te estaba slide. Si tú te vas a ir, dice Katherine,
+- **[14:48] Catherin Salazar:** catre, perdón, en clasifica tu funcionalidad.
+- **[14:48] Catherin Salazar:** Account.
+- **[14:48] katerine Pencue:** Yo sea igual, buscármelo.
+- **[14:48] Catherin Salazar:** ¿Impactó el negocio? ¿Ofensivas o o defensiva?
+- **[14:48] Catherin Salazar:** Ahí abajo en el índice, pueden guiarse.
+- **[14:48] Nicolas Vargas Galindo:** Es normal que la
+- **[14:48] Nicolas Vargas Galindo:** presentación que yo estoy viendo sea moradita?
+- **[14:48] Jose Pineda Pitre:** Ay, yo estoy viendo lo mismo.
+- **[14:48] Catherin Salazar:** ¿Sí?
+- **[14:48] Catalina Giraldo Aguirre:** También.
+- **[14:48] Nicolas Vargas Galindo:** Sí.
+- **[14:48] Catherin Salazar:** Sí, creo que lo
+- **[14:48] Catalina Giraldo Aguirre:** amoradita. Por siete.
+- **[14:48] Catherin Salazar:** Pensé que era Ay, no, no me lo Pensé que
+- **[14:48] Nicolas Vargas Galindo:** era una versión
+- **[14:48] Nicolas Vargas Galindo:** para
+- **[14:48] Nicolas Vargas Galindo:** Para, pues,
+- **[14:48] Jose Pineda Pitre:** y para testers.
+- **[14:48] Nicolas Vargas Galindo:** Qué
+- **[14:48] Catherin Salazar:** raro.
+- **[14:49] Catherin Salazar:** Margeni
+- **[14:49] Catherin Salazar:** De
+- **[14:49] Diana Aldana:** pronto el link que compartiste, Kate, era el del anterior.
+- **[14:49] Catherin Salazar:** Espérate y yo
+- **[14:49] Diana Aldana:** reviso
+- **[14:49] Catherin Salazar:** ahí.
+- **[14:49] Diana Aldana:** Confirma el link, así como
+- **[14:49] Catherin Salazar:** Lo voy a compartir otra vez.
+- **[14:49] Catherin Salazar:** Y eso
+- **[14:49] Jose Pineda Pitre:** se y lo
+- **[14:49] Catherin Salazar:** que yo ya Es que sí,
+- **[14:49] Catherin Salazar:** una moradita, había una moradita que yo había hecho antes.
+- **[14:49] Jose Pineda Pitre:** Ah, entonces
+- **[14:49] Catherin Salazar:** Pero lo cambié a la gráfica y la narrativa de dropping.
+- **[14:49] Catherin Salazar:** A ver, miren, a ver si de pronto...
+- **[14:49] Catherin Salazar:** Qué raro.
+- **[14:49] Catherin Salazar:** No,
+- **[14:49] Jose Pineda Pitre:** me sigue ahorita
+- **[14:49] Michelle Lopez Obregon:** ¿si ahorita? Cuando tú un arte,
+- **[14:49] Michelle Lopez Obregon:** ti ya les voy a publicar. Arriba que dice share,
+- **[14:49] Catherin Salazar:** Sí.
+- **[14:49] Michelle Lopez Obregon:** Hay varias Opiá. Lo que hay último.
+- **[14:49] Catherin Salazar:** A ver, pero ¿por qué me copia este? No entiendo.
+- **[14:49] Catherin Salazar:** Ah, espérate, yo Pero lo que ya se lleva se
+- **[14:49] katerine Pencue:** pierde,
+- **[14:49] katerine Pencue:** o o qué? ¿O toca volverlo a pasar a este, que calcule y eso?
+- **[14:49] Catherin Salazar:** Pucha, sí, porque yo hice varios cambios para que se...
+- **[14:49] Catherin Salazar:** Es que doctora me Bien, ya,
+- **[14:50] katerine Pencue:** nada, y estoy ganando nada. Listo.
+- **[14:50] Catalina Giraldo Aguirre:** No, ya estoy viendo la la la chévere.
+- **[14:50] Jose Pineda Pitre:** La que La
+- **[14:50] Catherin Salazar:** última, la última. Sí, sí, sí. Es que les compartí, fui una la primera versión, mejor dicho.
+- **[14:50] Jose Pineda Pitre:** Listo,
+- **[14:50] Catherin Salazar:** entonces
+- **[14:50] Jose Pineda Pitre:** nos da cinco minuticos para
+- **[14:50] Jose Pineda Pitre:** todo.
+- **[14:50] Catherin Salazar:** Sí, sí, sí, acá en la, acá en la, de una, de una.
+- **[14:50] Catherin Salazar:** Gracias, gracias, chicos, por decirme.
+- **[14:50] Jose Pineda Pitre:** Es que, ¿cómo es por winners? Tiene la versión like y la
+- **[14:50] Alejandra Melo:** versión
+- **[14:50] Alejandra Melo:** yo pensé que esa era la versión light, yo donde activo la versión dark,
+- **[14:50] Alejandra Melo:** pero no me he dado cuenta.
+- **[14:50] Catherin Salazar:** No.
+- **[14:50] Catherin Salazar:** Sí, sí, sí, esta es la última versión.
+- **[14:50] Catherin Salazar:** Y ahí es donde van a poder copiar todo lo que surgió del taller,
+- **[14:50] Catherin Salazar:** para que lo tengan presente para el cuando vayan ahí licenciar el documento en tu end.
+- **[14:50] Yo:** Kate, ahora que hablo de de de versiones.
+- **[14:50] Yo:** ¿Cómo cómo aplica en temas de de versionamientos?
+- **[14:50] Yo:** O sea, creo que es algo que no no no se ha manejado
+- **[14:50] Catherin Salazar:** Cuando se itera la funcionalidad, Santi,
+- **[14:51] Yo:** Sí, exacto,
+- **[14:51] Catherin Salazar:** Ok. Yo creo
+- **[14:51] Yo:** cuando sí te la funcionalidad.
+- **[14:51] Yo:** O no, o sea, que que sea algo desde cero.
+- **[14:51] Catherin Salazar:** Ya lo vamos a ver, Santi.
+- **[14:51] Catherin Salazar:** Ya lo vamos a ver con términos de en términos de medición y de números.
+- **[14:51] Catherin Salazar:** ¿Listo? Y ahí ya después vamos a poder entender la
+- **[14:51] Catherin Salazar:** clasificación que le vamos a dar y las funcionalidades
+- **[14:51] Yo:** De una, de una vez.
+- **[14:51] Catherin Salazar:** en una matriz.
+- **[14:51] Catherin Salazar:** ¿Listo?
+- **[14:51] Catherin Salazar:** Tranqui, tranqui, que todo eso está en el taller.
+- **[14:51] Catherin Salazar:** ¿Quieren que les ponga música?
+- **[14:51] Catherin Salazar:** Silencio.
+- **[14:51] Catherin Salazar:** Silencio, sí.
+- **[14:51] Catherin Salazar:** A ver.
+- **[14:51] Participante:** Me parece.
+- **[14:51] Participante:** Que
+- **[14:51] Jose Pineda Pitre:** ponga así, sí, una cancioncita para ahí.
+- **[14:51] Jose Pineda Pitre:** Llenar el vacío.
+- **[14:52] Jose Pineda Pitre:** ¿Y
+- **[14:52] Catherin Salazar:** qué quieren, qué quieren?
+- **[14:52] Catherin Salazar:** A ver.
+- **[14:52] Catherin Salazar:** Hoy es viernes. Sorprende los casos. Sí, sí, nada.
+- **[14:52] Jose Pineda Pitre:** A ver, pero
+- **[14:52] Catherin Salazar:** digan una canción.
+- **[14:52] Jose Pineda Pitre:** Por lo que es
+- **[14:52] Jose Pineda Pitre:** coloques algo así como de
+- **[14:52] Jose Pineda Pitre:** como tecnito suave de blades.
+- **[14:52] Yo:** No empieza con eso, no estamos en cycling.
+- **[14:52] Catherin Salazar:** Voy a poner
+- **[14:52] Participante:** A ver, les voy poner esta.
+- **[14:52] Catherin Salazar:** Dizque no, esa no, ¿qué les pasa? Espérese.
+- **[14:52] Jose Pineda Pitre:** ¿Cuál
+- **[14:52] Catherin Salazar:** cuál cuál cuál dices tú?
+- **[14:52] Catherin Salazar:** José?
+- **[14:52] Jose Pineda Pitre:** Cualquiera así como de tecñito de piscina.
+- **[14:53] Jose Pineda Pitre:** Como de blades, algo así.
+- **[14:53] Catherin Salazar:** A ver, Techno House dos mil veintiséis. I like money, fair stay shit.
+- **[14:53] Catherin Salazar:** Uy, no, por eso está muy fuerte.
+- **[14:53] Jose Pineda Pitre:** Es está muy gringa.
+- **[14:53] Catherin Salazar:** A ver. No, espera.
+- **[14:53] Yo:** ¿No puede hacer ejercicio acá?
+- **[14:53] Catherin Salazar:** A poner más in house.
+- **[14:53] Jose Pineda Pitre:** Sí, epa.
+- **[14:53] Michel David Pino Aguilar:** Bien house.
+- **[14:53] Catherin Salazar:** Sí, hacer ejercicio en
+- **[14:53] Catherin Salazar:** Esa canción es muy chistosa, de verdad.
+- **[14:53] Michel David Pino Aguilar:** ¿No?
+- **[14:53] Catherin Salazar:** Sí, sí, sí. La de hacer ejercicio es de Nina Grady.
+- **[14:53] Catherin Salazar:** Me avisan cuando
+- **[14:53] Catherin Salazar:** on this.
+- **[14:54] Catherin Salazar:** Jason's end.
+- **[14:54] Catherin Salazar:** Think you
+- **[14:54] Yo:** Solo tú estás escuchando la música, entonces.
+- **[14:54] Jose Pineda Pitre:** Nosotros estamos escuchando
+- **[14:54] Jose Pineda Pitre:** la música desde el bafle de Kate.
+- **[14:54] Catherin Salazar:** Yo sé.
+- **[14:54] Yo:** Gracias.
+- **[14:54] Catherin Salazar:** Esperé saber si puedo... No, pero ¿cómo se puede...?
+- **[14:54] Yo:** Mi intención no me importa.
+- **[14:54] Catherin Salazar:** Tengo que decir a Claudia cómo me genere también música dentro del español. Ajá.
+- **[14:54] Catherin Salazar:** Okay.
+- **[14:55] Catherin Salazar:** I miss you.
+- **[14:55] Catherin Salazar:** Subscribe, engine.
+- **[14:56] Catherin Salazar:** Chico, hijo. Chico, qué
+- **[14:56] Catherin Salazar:** ¿Listo?
+- **[14:56] Catherin Salazar:** Música. ¿Qué hora piensa a esa hora, María?
+- **[14:56] Yo:** ¿Y ese
+- **[14:56] Yo:** Y ese título solamente es para WhatsApp, por favor.
+- **[14:56] Yo:** Eso, lo, si
+- **[14:56] Yo:** si me lo comparten de algún otro grupo en el que este va, puede ir, no sé, propia intelectual de
+- **[14:56] Catherin Salazar:** Hay
+- **[14:56] Jose Pineda Pitre:** que ponerle nombre a esa vaca.
+- **[14:56] Catherin Salazar:** Ay, bueno.
+- **[14:57] Catherin Salazar:** Bueno, ¿cómo vamos?, ¿listo?
+- **[14:57] Yo:** Sí, listo.
+- **[14:57] Catherin Salazar:** Listo, continuemos. Entonces,
+- **[14:57] Catherin Salazar:** el acto cuatro va a ser el estreno de nuestra película,
+- **[14:57] Catherin Salazar:** y va a ser la adopción de nuestra funcionalidad.
+- **[14:57] Catherin Salazar:** Acá es donde vamos a ver si nuestra película
+- **[14:57] Catherin Salazar:** tuvo buena fue taquillera, no fue traquillera o fracasó.
+- **[14:57] Catherin Salazar:** ¿Listo?
+- **[14:57] Catherin Salazar:** Entonces, la adopción es la proporción de usuarios objetivos activos
+- **[14:57] Catherin Salazar:** que eso lo podemos ir discutiendo con otras funcionalidades, que realizan el evento
+- **[14:57] Catherin Salazar:** que demuestra que adoptaron la funcionalidad.
+- **[14:57] Catherin Salazar:** ¿Listo? Entonces, se definió ya el el público objetivo, se definió el evento de
+- **[14:57] Catherin Salazar:** bueno, que el evento de adopción es algo que ustedes también deben definir dentro del documento en tu end,
+- **[14:57] Catherin Salazar:** El evento de adopción, por ejemplo, Santi, para Page Pilot es exportar páginas a Shopify,
+- **[14:57] Catherin Salazar:** y con eso se va a medir nuestro equipo de adopción,
+- **[14:57] Catherin Salazar:** medir usuarios adoptados y calcular la adopción.
+- **[14:58] Catherin Salazar:** Esta esta métrica, pues, obviamente nuestro equipo es la que la va calcular, que son usuarios objetivos que adoptaron, viven usuarios objetivos activos. O los que definimos como tamaño del público objetivo. Por cien, ¿listo? Evento de adopción es el dato técnico que se dispara
+- **[14:58] Catherin Salazar:** o lo que se va a solicitar en el acto siete, que puede ser un evento de adopción desde user pilot
+- **[14:58] Catherin Salazar:** o un evento de adopción desde un evento en el back.
+- **[14:58] Catherin Salazar:** Dependiendo de la funcionalidad que tengamos.
+- **[14:58] Catherin Salazar:** La métrica de opciones es la definición del negocio en lenguaje humano.
+- **[14:58] Catherin Salazar:** Lo que significa haber adoptado la funcionalidad. ¿Qué es haber también adoptado la
+- **[14:58] Catherin Salazar:** Que al menos la hayan utilizado una vez.
+- **[14:58] Catherin Salazar:** ¿Listo? Pero igual ahí no queda.
+- **[14:58] Catherin Salazar:** También tenemos que saber si nuestra funcionalidad se retuvo y si tuvo satisfacción.
+- **[14:58] Catherin Salazar:** Entonces,
+- **[14:58] Catherin Salazar:** continuemos.
+- **[14:58] Catherin Salazar:** El acto cinco es la la taquilla. Acá ya vamos a comenzar a made el tars
+- **[14:58] Catherin Salazar:** a nivel cuantitativo y vamos a entender. Vamos a
+- **[14:59] Catherin Salazar:** hipotéticamente, vamos a pensar que nuestra funcionalidad ya se lanzó.
+- **[14:59] Catherin Salazar:** ¿Listo? Nuestra funcionalidad ya se lanzó
+- **[14:59] Catherin Salazar:** ya podemos medir y podemos saber números.
+- **[14:59] Catherin Salazar:** Entonces,
+- **[14:59] Catherin Salazar:** público objetivo,
+- **[14:59] Catherin Salazar:** adopción, retención y satisfacción. Vamos a tener números hipotéticos.
+- **[14:59] Catherin Salazar:** Ejemplo hipotético de Room. Esto va a ser un ejemplo, unos números hipotéticos,
+- **[14:59] Catherin Salazar:** no son datos reales, pero los traje acá a la mesa.
+- **[14:59] Catherin Salazar:** Entonces, supongamos que los usuarios activos
+- **[14:59] Catherin Salazar:** el cien por, bueno, mis usuarios activos son el cien por ciento.
+- **[14:59] Catherin Salazar:** ¿No es cierto? Y mis usuarios activos son el veinte por ciento de los
+- **[14:59] Catherin Salazar:** cien por de los cien, de los tantos x de dropping.
+- **[14:59] Catherin Salazar:** La población objetivo es el veinte por ciento,
+- **[14:59] Catherin Salazar:** los adoptados son el setenta por ciento,
+- **[14:59] Catherin Salazar:** de ese veinte por ciento,
+- **[14:59] Catherin Salazar:** de mi población objetivo.
+- **[14:59] Catherin Salazar:** Entonces, ¿cómo saco este catorce por ciento, por ejemplo?
+- **[14:59] Catherin Salazar:** Multiplico el setenta por ciento por el veinte por ciento,
+- **[15:00] Catherin Salazar:** y lo multiplico por y y lo divido y lo multiplico por cien, ¿sí?
+- **[15:00] Catherin Salazar:** Si yo
+- **[15:00] Catherin Salazar:** multiplico el setenta por el veinte,
+- **[15:00] Catherin Salazar:** y después por el cien, me va a dar catorce.
+- **[15:00] Catherin Salazar:** Entonces, el catorce por ciento
+- **[15:00] Catherin Salazar:** fueron los usuarios adoptados.
+- **[15:00] Catherin Salazar:** ¿Listo?
+- **[15:00] Catherin Salazar:** Obviamente, todo esto se tiene que mirar con números.
+- **[15:00] Catherin Salazar:** Después los retenidos, el sesenta por ciento
+- **[15:00] Catherin Salazar:** de los del
+- **[15:00] Catherin Salazar:** de lo de los retenidos son
+- **[15:00] Catherin Salazar:** son del setenta por ciento que se adoptó, entonces es como un funnel, tenemos que verlo como un funnel.
+- **[15:00] Catherin Salazar:** Y ahí, ¿cómo hacemos para sacar este ocho coma cuatro que fueron los retenidos realmente?
+- **[15:00] Catherin Salazar:** Multiplicamos sesenta por setenta por veinte por cien.
+- **[15:00] Catherin Salazar:** Y eso me da el ocho coma cuatro por ciento.
+- **[15:00] Catherin Salazar:** Esos son mis usuarios retenidos de los usuarios a los que yo le hablé.
+- **[15:00] Catherin Salazar:** De mi público objetivo.
+- **[15:00] Catherin Salazar:** ¿Listo? Y los satisfechos
+- **[15:00] Catherin Salazar:** son, por ejemplo, en un caso hipotético fueron el ochenta y cinco por ciento de los retenidos.
+- **[15:01] Catherin Salazar:** Entonces,
+- **[15:01] Catherin Salazar:** ¿cómo hago para...? Entonces, acá me dice que los satisfechos fueron el siete coma cuatro por ciento. Siete coma uno por ciento. Entonces,
+- **[15:01] Catherin Salazar:** ¿cómo hago para sacar esta
+- **[15:01] Catherin Salazar:** También multiplico el ochenta y cinco por el sesenta, por el setenta, por el veinte y el por
+- **[15:01] Catherin Salazar:** y el cien por ciento,
+- **[15:01] Catherin Salazar:** y el y por cien, y me va a sacar el siete coma catorce. Igual esto, digamos que son métricas que se van a cuando ya se lanza el producto y que obviamente yo les voy a ayudar como a sacar y a sacar estos números. Pero esto es para que ustedes puedan mirar si la funcionalidad de ustedes realmente tuvo una buena retención y una buena satisfacción. Si no la tuvo, pues tienen que volver a iterarla y decir, ok, mi funcionalidad realmente falta algo. ¿Listo? Entonces, como como como datos hipotéticos, de acá tenemos alguna pregunta esto tiene que quedar superclaro. Super superclaro. Esto tenemos alguna pregunta? Porque ya vamos a mirar cómo se va a medir al final
+- **[15:02] Catherin Salazar:** una métrica que va a ser superimportante para lo que hablaba ahorita Santi.
+- **[15:02] Catherin Salazar:** Para poder clasificar las funcionalidades.
+- **[15:02] Catherin Salazar:** Saber con cuáles tenemos que iterar y con cuáles no.
+- **[15:02] Catherin Salazar:** Bueno, si si no tenemos alguna pregunta, yo les traigo una calculadora tars.
+- **[15:02] Catherin Salazar:** Todas formas. Entonces, vamos a comenzar a mover los controles
+- **[15:02] Catherin Salazar:** y observar el resultado.
+- **[15:02] Catherin Salazar:** Por ejemplo, yo voy a decir,
+- **[15:02] Catherin Salazar:** mis usuarios activos
+- **[15:02] Catherin Salazar:** van a ser
+- **[15:02] Catherin Salazar:** o mi mi público o mi tamaño objetivo van a ser, no sé, doscientos cincuenta y
+- **[15:02] Catherin Salazar:** siete mil usuarios,
+- **[15:02] Catherin Salazar:** De esa población objetivo yo me di cuenta que el sesenta y dos
+- **[15:02] Catherin Salazar:** por ciento de
+- **[15:02] Catherin Salazar:** el sesenta y dos por ciento de esos usuarios activos es mi público objetivo, el tamaño objetivo,
+- **[15:02] Catherin Salazar:** De eso, supongamos que me adoptaron, no sé, el cuarenta y nueve por ciento,
+- **[15:02] Catherin Salazar:** o el cuarenta y cuatro por ciento, la retención es de un treinta y siete por ciento y la
+- **[15:02] Catherin Salazar:** satisfacción de un sesenta por ciento. Obviamente, esto es casi hipotético,
+- **[15:03] Catherin Salazar:** no sabemos, porque no se ha lanzado la funcionalidad que ustedes trajeron.
+- **[15:03] Catherin Salazar:** Esto me va dar una puntuación.
+- **[15:03] Catherin Salazar:** Cuando la puntuación está en rojo,
+- **[15:03] Catherin Salazar:** significa que debo mirar mi funcionalidad, es decir, mi funcionalidad fracasó.
+- **[15:03] Catherin Salazar:** ¿Listo?
+- **[15:03] Catherin Salazar:** Una puntuación ese sobre t se considera buena,
+- **[15:03] Catherin Salazar:** lo que he podido leer es es sobre cincuenta, o sea, más allá de cincuenta por ciento.
+- **[15:03] Catherin Salazar:** ¿Listo? Entonces,
+- **[15:03] Catherin Salazar:** hay una oportunidad, por ejemplo, si mis números son estes,
+- **[15:03] Catherin Salazar:** entonces esta calculadora, que me parece muy interesante para
+- **[15:03] Catherin Salazar:** por ejemplo, subirla en Darwin y que podamos conectarla todos los lanzamientos,
+- **[15:03] Catherin Salazar:** ustedes van a tener ese punto de partida. Ok, ya se lanzó, mi funcionalidad tuvo esta puntuación,
+- **[15:03] Catherin Salazar:** este es mi punto de partida. ¿Cómo hago para yo poder mejorar esta
+- **[15:03] Catherin Salazar:** funcionalidad?
+- **[15:03] Catherin Salazar:** ¿Sí?, y para que genere mayor retención y mayor satisfacción.
+- **[15:03] Catherin Salazar:** Entonces, ahí hay un punto de partida, lo fijo como un punto de partida,
+- **[15:03] Catherin Salazar:** y ya después vuelvo a poner los números y me va a decir, sí, sí, disminuyó con, no sé, con otro iteración de otro lanzamiento, si disminuyó se aumentó, si realmente las mejoras que les hice sí funcionaron o no funcionaron. ¿Listo? Entonces hagamos como con números hipotéticos hagamos como esta simulación, y ya miramos realmente por... Esta es la puntuación más importante para nosotros, porque ya después del comité de tardes que tenemos con Diane y con y con Lau Contreras,
+- **[15:04] Catherin Salazar:** vamos a mirar qué funcionalidades están dentro de la matriz
+- **[15:04] Catherin Salazar:** qué funcionalidades debemos mejorar, qué funcionalidades van a salir, por ejemplo, de dropping,
+- **[15:04] Catherin Salazar:** porque no, realmente no hay una adopción ni una retención ni una satisfacción dentro de Aeropi, ni no está haciendo nada dentro de AeroP, lo que está haciendo es generar confusiones al usuario,
+- **[15:04] Catherin Salazar:** no está aportando valor, por ejemplo, para el negocio,
+- **[15:04] Catherin Salazar:** Entonces, creo que esta es la puntuación más importante de mi funcionalidad.
+- **[15:04] Catherin Salazar:** Si quieren, no sé,
+- **[15:04] Catherin Salazar:** muevan ahí los controles, simulen esta
+- **[15:04] Catherin Salazar:** calculadora la idea es que quede dentro de Darwin y que sea conectada
+- **[15:05] Catherin Salazar:** a todo el tema de lanzamientos,
+- **[15:05] Catherin Salazar:** ¿Listo? ¿Cómo vamos con este con esta simulación?
+- **[15:05] Catherin Salazar:** De los números?
+- **[15:05] Catherin Salazar:** ¿Sí lo entendieron?
+- **[15:05] Catherin Salazar:** Esto es muy importante, chicos, que lo entendamos.
+- **[15:05] Catherin Salazar:** Así es como vamos a medir y vamos a comenzar a tener métricas y a traer métricas.
+- **[15:06] Francisco Velandia:** Katherine, entonces, antes de de las
+- **[15:06] Francisco Velandia:** el producto, ¿hacemos esta como esta estimación con la
+- **[15:06] Catherin Salazar:** calculadora?
+- **[15:06] Catherin Salazar:** No, no creo. Acuérdate que
+- **[15:06] Catherin Salazar:** la adopción
+- **[15:06] Catherin Salazar:** la retención y satisfacción solo se puede medir
+- **[15:06] Catherin Salazar:** cuando se lance el producto.
+- **[15:06] Francisco Velandia:** Ok, ok.
+- **[15:06] Catherin Salazar:** ¿Sí? Vale,
+- **[15:06] Francisco Velandia:** vale.
+- **[15:06] Catherin Salazar:** Pero esto, al de, por eso les dije,
+- **[15:06] Catherin Salazar:** hagan de cuenta que ya tienen números,
+- **[15:06] Catherin Salazar:** ya saben cuál fue la adopción, que ya saben cuál fue la retención,
+- **[15:06] Catherin Salazar:** que ya saben cuál fue la satisfacción de su
+- **[15:06] Catherin Salazar:** Hagan de cuenta que este lanzamiento surgió hace dos meses, no sé.
+- **[15:06] Catherin Salazar:** Tres meses, y ya estamos midiendo.
+- **[15:07] Catherin Salazar:** ¿Cómo les fue?
+- **[15:07] Catherin Salazar:** Lo están entendiendo el ejercicio?
+- **[15:07] katerine Pencue:** Sí, en mi ejercicio estoy menos ocho punto dos
+- **[15:07] katerine Pencue:** puntos porcentuales,
+- **[15:07] katerine Pencue:** este plan, tenemos que hacer algo, literal.
+- **[15:07] katerine Pencue:** Literar para que esa funcionalidad
+- **[15:07] Catherin Salazar:** ¿Es el registro de datos regales, Kate? No,
+- **[15:07] katerine Pencue:** no, estaba haciendo el ejercicio de la calculadora. Te estoy ayudando como con el ejemplo de después de mirar esto, Es que creo que yo yo yo siento que nosotros con con los diferentes PDs sí lo habíamos hecho, Con con con lo anterior, como que siempre mediamos y como que iteremos porque no nos es o no se están reteniendo en la funcionalidad.
+- **[15:07] Catherin Salazar:** Sí, sí, sí, la idea con esto es que, o sea,
+- **[15:07] Catherin Salazar:** podamos entender qué está pasando con la funcionalidad en términos cuantita
+- **[15:07] Catherin Salazar:** que es lo más importante.
+- **[15:08] Catherin Salazar:** ¿Sí?
+- **[15:08] Catherin Salazar:** Eso es lo que nos va a dar el norte de del producto. Listo.
+- **[15:08] Catherin Salazar:** Diani está por acá. Ah, sí, Diani está por acá. Sí, sí, sí, sí, sí.
+- **[15:08] Catherin Salazar:** De una, de una.
+- **[15:08] Catherin Salazar:** Listo.
+- **[15:08] Catherin Salazar:** Chicos,
+- **[15:08] Catherin Salazar:** nosotros tenemos un comité de tars
+- **[15:08] Catherin Salazar:** donde, digamos que
+- **[15:08] Catherin Salazar:** mi equipo va a llegar como hasta medir la adopción, el equipo
+- **[15:08] Catherin Salazar:** de marketing con Lau Torres, ¿listo?
+- **[15:08] Catherin Salazar:** Retención y satisfacción, ya se va a mirar un poco más
+- **[15:08] Catherin Salazar:** adentro con Dianys. Obviamente, yo voy a mirar todo el funnel, pero con Dianys se va a mirar como más la retención y la satisfacción.
+- **[15:08] Catherin Salazar:** ¿Listo?, para que lo tengamos en cuenta.
+- **[15:08] Catherin Salazar:** Listo, continuemos. Entonces,
+- **[15:08] Catherin Salazar:** acá
+- **[15:08] Catherin Salazar:** se va a se con esta calculadora podemos identificar ese cuello
+- **[15:08] katerine Pencue:** de botella.
+- **[15:08] Catherin Salazar:** ¿Sí? Entonces, porque la calculadora, pues, va tiene esas tres etapas.
+- **[15:08] Catherin Salazar:** Adopción, retención o satisfacción.
+- **[15:08] Catherin Salazar:** ¿Listo?
+- **[15:08] Catherin Salazar:** Entonces, bueno,
+- **[15:09] Catherin Salazar:** Kate, Kate, que te quería hacer
+- **[15:09] katerine Pencue:** una pregunta con respecto
+- **[15:09] katerine Pencue:** a la adopción que va al donde va la autorres
+- **[15:09] katerine Pencue:** su merced, y luego sigue Diana, me imagino con ustedes y los pm, conjunto que esto el tema de certificación y retención. Cuando hablas de adopción, ese tiempo de adopción, en su momento teníamos como las reglas de cada mes, cada quince días, bueno, en fin. Pero entonces quiero saber los tiempos de hasta dónde ustedes van y que consideran que la adopción es buena, Yo sé que eso también depende del feature, pero hay un tiempo y luego viene todo el tema de retención y adopción, porque, pues, no sé, por ejemplo, en un feature, voy a pueden o sea, allá ahí todos aportarán. Un feature que la primera semana, las dos primeras semanas
+- **[15:09] katerine Pencue:** también combatimos con todo el tema de los errores tecnológicos y que por eso la adopción no sea bueno.
+- **[15:09] katerine Pencue:** ¿Sí? Entonces, ¿cuáles van a ser esos tiempos en la anterior metodología que
+- **[15:09] katerine Pencue:** creo que es la misma, digamos, que él han ido iterando?
+- **[15:09] katerine Pencue:** Que vamos a tener para saber la opción, la retención,
+- **[15:09] katerine Pencue:** para pasar de opción a retención,
+- **[15:10] katerine Pencue:** y de retención a satisfacción. Y creo que, pues, esas dos ya van muy ligado.
+- **[15:10] katerine Pencue:** ¿Sabes eso que
+- **[15:10] Catherin Salazar:** me lo responde, Kate? Eso me lo responde
+- **[15:10] Catherin Salazar:** la frecuencia del problema que se tenga dentro de la funcionalidad.
+- **[15:10] Catherin Salazar:** Por ejemplo, si es una frecuencia, o sea, si yo
+- **[15:10] Catherin Salazar:** identifiqué que el problema para el usuario es diario,
+- **[15:10] Catherin Salazar:** tenemos que mirar si esa funcionalidad resuelve ese problema diariamente.
+- **[15:10] Catherin Salazar:** No sé si me hago entender.
+- **[15:10] Catherin Salazar:** O sea, yo creo que depende mucho de la future, pero
+- **[15:10] Catherin Salazar:** en el momento yo no tengo y yo no te puedo decir, no, Kate, lo vamos a mirar,
+- **[15:10] Catherin Salazar:** no sé,
+- **[15:10] Catherin Salazar:** porque tengo que revisar números para saber cuándo va a ser. Pero obviamente vamos a estar
+- **[15:10] Catherin Salazar:** como yo creo que semanalmente
+- **[15:10] Catherin Salazar:** revisando esas métricas de adopción al menos. ¿Qué es adopción para nosotros? Que al menos la utilice una vez. Que el usuario al menos hágalo y cumpla con esa funcionalidad y con el objetivo una vez.
+- **[15:10] Catalina Giraldo Aguirre:** Ya ahí
+- **[15:11] katerine Pencue:** la si la siguió
+- **[15:11] Catherin Salazar:** iterando, si la siguió utilizando, ahí es una retención. ¿Ya? Ah, ok, entiendo.
+- **[15:11] katerine Pencue:** Y dependiendo de la frecuencia, asimismo, ustedes también miran hasta dónde van y van soltando, ¿no? Porque, ejemplo, si es día a día, entonces entiende que eso debe de mirar rápido la adopción y si hay algún
+- **[15:11] katerine Pencue:** algo generando fricción, resolver, medir
+- **[15:11] katerine Pencue:** la adopción, que suelten y ya comencemos con la retención. Que creería que todo va muy paralelo, no
+- **[15:11] katerine Pencue:** no tengo que ver escalonado, ¿no? Yo siento que todo es como muy
+- **[15:11] katerine Pencue:** Exacto, que
+- **[15:11] Catherin Salazar:** todo tiene un modelo de órdenes.
+- **[15:11] Catherin Salazar:** Pues yo creo que sí, eso se debe medir, o sea, eso se debe mirar diariamente si realmente
+- **[15:11] Catherin Salazar:** la gente lo está utilizando.
+- **[15:11] Catherin Salazar:** De acuerdo al lanzamiento que nosotros hicimos.
+- **[15:11] Catherin Salazar:** A las comunicaciones que nosotros hicimos al público objetivo.
+- **[15:11] katerine Pencue:** Creo que sí, tienes varias manos levantadas, Katy A ver, ver, a ver, ver.
+- **[15:11] katerine Pencue:** No, solo yo, tenía dos
+- **[15:11] Catalina Giraldo Aguirre:** pregunticas.
+- **[15:11] Catalina Giraldo Aguirre:** La primera es si nos puedes aclarar mejor o cómo es la metodología adecuada para
+- **[15:12] Catalina Giraldo Aguirre:** yo poder asignar un una población objetivo
+- **[15:12] Catalina Giraldo Aguirre:** al cual se le va a llegar.
+- **[15:12] Catalina Giraldo Aguirre:** ¿O o cómo? ¿El número adecuado,
+- **[15:12] Catherin Salazar:** Cata? Sí, o sea, obviamente uno
+- **[15:12] Catalina Giraldo Aguirre:** puede de pronto medir y uno puede decir, quiero que aumente a tanto, pero ¿cómo es? O un método, ya que estamos, como compartiendo fórmulas, para yo poder calcular, precisamente, como es el el el porcentaje del del objetivo, de la población objetivo. Esa es la fórmula que yo les dejé ahorita. Para
+- **[15:12] Catherin Salazar:** calcular el tamaño objetivo. Pero, Cata, es muy fácil. Simplemente, por ejemplo, con page
+- **[15:12] Catherin Salazar:** lo hicimos.
+- **[15:12] Catherin Salazar:** PagePyrott dijimos,
+- **[15:12] Catherin Salazar:** mi público objetivo
+- **[15:12] Catherin Salazar:** es son personas huérfanas. ¿Por qué? Porque
+- **[15:12] Catherin Salazar:** PagePilot no lo va a utilizar una persona ya master, lo que yo les decía al principio.
+- **[15:12] Catherin Salazar:** ¿Sí?
+- **[15:12] Catherin Salazar:** Yo me fui a hablar conmigo y con Santi y con Ale y dijimos,
+- **[15:12] Catherin Salazar:** ¿cuáles son las personas huérfanas que hay dentro de primero? Que necesitamos
+- **[15:13] Catherin Salazar:** tengan integrado Shopify.
+- **[15:13] Catherin Salazar:** Porque es una funcionalidad que solo va a funcionar con integración de Shopify.
+- **[15:13] Catherin Salazar:** Entonces, ahí comenzamos a segmentar ese tamaño.
+- **[15:13] Catherin Salazar:** Dijimos personas que estén integradas con Shopify, creo que eran cuarenta y dos mil,
+- **[15:13] Catherin Salazar:** sobre las noventa y siete mil activas de drop in.
+- **[15:13] Catherin Salazar:** Después dijimos, claro, que están integradas con Shopify, pero puede que una persona master esté integrada con Shopify,
+- **[15:13] Catherin Salazar:** no vaya a ser un público objetivo de la funcionalidad. Entonces dijimos,
+- **[15:13] Catherin Salazar:** personas huérfanas y que sigan huérfanas.
+- **[15:13] Catherin Salazar:** Entonces, eso nos dio más o menos cinco mil personas. Y ese dato no lo sacó Migga. Entonces, b s, ¿no?, entonces, más o menos es como el, no sé, y ahí ya estimo el porcentaje. Entonces, de las cinco mil personas, que yo tengo, que son a a las que les les voy a hablar, hago la fórmula con las noventa y siete mil personas. Que son los usuarios activos. Y ahí sacó el porcentaje, Cata.
+- **[15:13] Catherin Salazar:** Pero tengo que mirar muy bien cuál por eso es mi público objetivo.
+- **[15:14] Catherin Salazar:** Huérfanas aunque no hayan que hayan llegado a Ropi porque sí.
+- **[15:14] Catherin Salazar:** No con un líder de comunidad, Katherine.
+- **[15:14] Catherin Salazar:** Ah,
+- **[15:14] katerine Pencue:** bueno, eso también es importante, porque para mí las huérfanas más allá de que no lleguen con un líder de comunidad, las huérfanas para mí son que no tengan tampoco un ID comercial.
+- **[15:14] katerine Pencue:** Solamente como a nivel de conceptos, que veía que hablaban y hablaban, entonces, de pronto cuando vayamos a medir,
+- **[15:14] katerine Pencue:** bueno, igual soy yo la que defino, bueno, todo el equipo que define las mediciones, sino que
+- **[15:14] katerine Pencue:** y las duerpanas son las que no tienen ni una comunidad ni un un gestor comercial. Es para todos esos igual de para Ah, ok. De
+- **[15:14] Catherin Salazar:** una, sí, sí, sí. O sea, que hayan llegado solas, Adropi. Ajá. Cata, ¿entendiste? Cómo fue el ejercicio con Page Pilot?
+- **[15:14] Catherin Salazar:** Sí.
+- **[15:14] Catherin Salazar:** Ahí ahí pude
+- **[15:14] Catalina Giraldo Aguirre:** comprender
+- **[15:14] Catalina Giraldo Aguirre:** Tengo otra preguntica, Kate, y es,
+- **[15:14] Catalina Giraldo Aguirre:** pues, es un poco más sencilla, es a nivel de satisfacción, porque, listo, yo en
+- **[15:14] Catalina Giraldo Aguirre:** puedo hacer encuestas y más allá y, pues, en las encuestas del total de las
+- **[15:15] Catalina Giraldo Aguirre:** personas que contestaron
+- **[15:15] Catalina Giraldo Aguirre:** sacar un porcentaje,
+- **[15:15] Catalina Giraldo Aguirre:** pero también está como la parte cualitativa,
+- **[15:15] Catalina Giraldo Aguirre:** Entonces,
+- **[15:15] Catalina Giraldo Aguirre:** por ese lado, también como
+- **[15:15] Catalina Giraldo Aguirre:** o qué consejos das para
+- **[15:15] Catalina Giraldo Aguirre:** traducir esa satisfacción a
+- **[15:15] Participante:** a un porcentaje. Creo, es un poco más fácil, creo,
+- **[15:15] Participante:** pero igual,
+- **[15:15] Participante:** si tienes algo
+- **[15:15] Catherin Salazar:** Pues ahí sí, Diani, no sé si tú me apoyas con esa
+- **[15:15] Catherin Salazar:** esa pregunta para para Cata. ¿La puedes repetir,
+- **[15:15] Diana Aldana:** Cata, perdón?
+- **[15:15] Diana Aldana:** Con otra entrada,
+- **[15:15] Catalina Giraldo Aguirre:** es como traduzco ese porcentaje, o sea, ¿cómo yo puedo traducir a números? ¿Cómo es
+- **[15:15] Catalina Giraldo Aguirre:** ahí el porcentaje de satisfacción? Porque yo, sí, claro, o sea, una encuesta
+- **[15:15] Catalina Giraldo Aguirre:** me puede dar
+- **[15:15] Catalina Giraldo Aguirre:** un nivel de
+- **[15:15] Catalina Giraldo Aguirre:** de porcentaje, al igual que una entrevista, pero
+- **[15:15] Catalina Giraldo Aguirre:** como, pues sí, como un método claro para yo poder traducir eso.
+- **[15:15] Catalina Giraldo Aguirre:** Y que no sea muy tanteando el ojo, bueno, este es el porcentaje de tal dado,
+- **[15:16] Catalina Giraldo Aguirre:** bueno, acá las entrevistas de diez, tres me contestan esto, entonces, pues es un tres por ciento, y acá el diez, bueno, entonces, creo que es
+- **[15:16] Catalina Giraldo Aguirre:** sí, ¿cómo cómo puedo traducir de forma correcta ese porcentaje?
+- **[15:16] Catalina Giraldo Aguirre:** Sí, esas son las
+- **[15:16] Diana Aldana:** métricas que vamos a comenzar a trabajar. También con todas las células. Son tres métricas, NPS, normalmente el NPS califica de uno de uno a diez. También, pues, hay una
+- **[15:16] Diana Aldana:** hay una fórmula para eso, pero la vamos a ver en otro espacio.
+- **[15:16] Diana Aldana:** Eso más que todo va medir como la relación general que
+- **[15:16] Diana Aldana:** que que tenemos con los clientes, y hay otras dos métricas adicionales, no sé si la han escuchado, que es el CSAAR, que esto ayuda a medir el grado de satisfacción de un cliente con una
+- **[15:16] Diana Aldana:** interacción específica con su experiencia, y también está la métrica de CES,
+- **[15:16] Diana Aldana:** que mide lo fácil, lo difícil que resulta interactuar
+- **[15:16] Diana Aldana:** con tu funcionalidad. En el pasado, con con lo que estamos haciendo inicialmente en la
+- **[15:16] Diana Aldana:** uno de task, hacíamos preguntas cualitativas
+- **[15:16] Diana Aldana:** validando claramente si el usuario
+- **[15:17] Diana Aldana:** le encontró con valor o no la funcionalidad,
+- **[15:17] Diana Aldana:** y qué tanto esfuerzo
+- **[15:17] Diana Aldana:** tuvo que que invertir al hacer esa esa
+- **[15:17] Diana Aldana:** esa acción. En su momento, la hacíamos de forma
+- **[15:17] Diana Aldana:** obviamente, supercualitativa, pero entonces sí nos toca
+- **[15:17] Diana Aldana:** sacar bien la fórmula,
+- **[15:17] Diana Aldana:** para, pues, para poder identificar esas respuestas y sacar como una métrica específica.
+- **[15:17] Diana Aldana:** No tengo en este momento la la fórmula, pero sí sí lo vamos a hacer.
+- **[15:17] Diana Aldana:** Listo, dale de una.
+- **[15:17] Participante:** Vale.
+- **[15:17] Catherin Salazar:** Sí, es que esto esto como es nuevo, Cata, creo que lo
+- **[15:17] Catherin Salazar:** estamos trabajando hasta ahora todos. Y como no tenemos números,
+- **[15:17] Catherin Salazar:** entonces, sí.
+- **[15:17] Catherin Salazar:** ¿Listo? Listo, continuemos.
+- **[15:17] Catherin Salazar:** Como tú etiquetas los números que uses, entonces indicador de datos,
+- **[15:17] Catherin Salazar:** los números de de este ejercicio, pues, son hipotéticos y utiliza
+- **[15:17] Catherin Salazar:** pues, los los verdes son que utilizas datos reales que estén disponibles.
+- **[15:18] Catherin Salazar:** ¿Listo?
+- **[15:18] Catherin Salazar:** La calculadora no va a inventar datos,
+- **[15:18] Catherin Salazar:** trabaja únicamente con los valores que se introduzcan en el simulador.
+- **[15:18] Catherin Salazar:** Listo, ahora vamos a ver la actividad.
+- **[15:18] Catherin Salazar:** Central, produce tu propia taquilla,
+- **[15:18] Catherin Salazar:** entonces trabaja con la funcionalidad real de tu celular.
+- **[15:18] Catherin Salazar:** Entonces, vamos a comenzar
+- **[15:18] Catherin Salazar:** ya como a traer toda la información que teníamos acá,
+- **[15:18] Catherin Salazar:** como la frecuencia natural de de de lo
+- **[15:18] Catherin Salazar:** que yo, que ahí va muy ligado, Katherine, lo que tú dices para medir,
+- **[15:18] Catherin Salazar:** si mi frecuencia va a ser diaria, semanal, mensual, si mi
+- **[15:18] Catherin Salazar:** se va a utilizar ocasionalmente.
+- **[15:18] Catherin Salazar:** El método de satisfacción, la acción principal, la métrica de adopción que yo vaya a colocar o cómo yo me vaya o
+- **[15:18] Catherin Salazar:** yo necesito medir esa métrica de adopción,
+- **[15:18] Catherin Salazar:** es decir,
+- **[15:18] Catherin Salazar:** sé,
+- **[15:18] Catherin Salazar:** exportar correctamente páginas a Shopify, hay ahí como una hay como ejemplos
+- **[15:18] Catherin Salazar:** Y, pues, van a medir acá la puntuación, que igual eso
+- **[15:19] Catherin Salazar:** creo que ya ya lo hicimos, ¿listo?
+- **[15:19] Catherin Salazar:** Esto, si quieren
+- **[15:19] Catherin Salazar:** lo llenan, y igual,
+- **[15:19] Catherin Salazar:** lo lo importante es que esto va a salir directamente ahorita, como en un resumen.
+- **[15:19] Catherin Salazar:** Que van a poder copiar.
+- **[15:19] Catherin Salazar:** ¿Listo?
+- **[15:19] Participante:** ¿Qué te pasó con la música?
+- **[15:19] Catherin Salazar:** Ay, vengan, vengan y les pongo la música.
+- **[15:19] Catherin Salazar:** La música va hacer ejercicio, ¿bueno?
+- **[15:19] Catherin Salazar:** It's
+- **[15:19] Catherin Salazar:** I can be your angel or your devil.
+- **[15:19] Catherin Salazar:** Come back to
+- **[15:20] Catherin Salazar:** Every bad boy needs a good girl.
+- **[15:20] Catherin Salazar:** Okay. Thank you.
+- **[15:20] Catherin Salazar:** I can.
+- **[15:21] Catherin Salazar:** Dos
+- **[15:21] Jose Pineda Pitre:** Yo todavía no he definido algunas métricas de lo que de cómo voy a medir el éxito ni los
+- **[15:22] Catherin Salazar:** eventos.
+- **[15:22] Jose Pineda Pitre:** Pero lo voy a poner ahí como aún no lo he definido.
+- **[15:22] Catherin Salazar:** Sí, sí, sí, de una. Una. Igual como no tenemos números, pues yo decía como traerlos hipotéticamente para que nos para que nos vayamos familiarizando con las métricas en en general.
+- **[15:22] Jose Pineda Pitre:** Ok, listo.
+- **[15:22] Catherin Salazar:** Ajá.
+- **[15:22] Catherin Salazar:** Four with
+- **[15:23] Catherin Salazar:** Oh,
+- **[15:24] Catherin Salazar:** Manifestemos.
+- **[15:24] Catherin Salazar:** Que
+- **[15:24] Jose Pineda Pitre:** nuestras funcionalidades
+- **[15:24] Catherin Salazar:** tengan
+- **[15:24] Jose Pineda Pitre:** una opción del cien por ciento.
+- **[15:24] Catherin Salazar:** Bueno, bueno.
+- **[15:24] Catherin Salazar:** Como todos hemos participado, creo que todos nos vamos a ganar en hamburguesa.
+- **[15:24] Jose Pineda Pitre:** Ay, de verdad, hay buena hamburguesa,
+- **[15:24] Catherin Salazar:** Ay,
+- **[15:24] Jose Pineda Pitre:** bueno,
+- **[15:24] Catherin Salazar:** hamburguesa.
+- **[15:24] Jose Pineda Pitre:** A un
+- **[15:24] Jose Pineda Pitre:** Está, acá te está empezando a poner la vara de las presentaciones.
+- **[15:24] Jose Pineda Pitre:** Ahí está, o sea, el próximo
+- **[15:24] Catherin Salazar:** que le
+- **[15:24] Jose Pineda Pitre:** sacaste una presentación de
+- **[15:24] Catherin Salazar:** Sí, que no
+- **[15:24] Catherin Salazar:** que darnos ya un almuerzo, ¿quién sabe en dónde? No. Le
+- **[15:24] Jose Pineda Pitre:** toca le toca llegar con presentación
+- **[15:24] Jose Pineda Pitre:** y le toca llegar con con un bono de regalo.
+- **[15:25] Catherin Salazar:** Sí, exacto, ya ya nada de comida.
+- **[15:25] Michel David Pino Aguilar:** Toca llegar con Nemotécnica y y saldo en Amazon.
+- **[15:25] Catherin Salazar:** Yeah.
+- **[15:25] Catherin Salazar:** Pues es que igual esto no es una presentación, esto es un taller
+- **[15:25] Catherin Salazar:** para entender muy bien la metodología.
+- **[15:25] Catherin Salazar:** Porque si
+- **[15:25] Catherin Salazar:** creo que que sí es importante
+- **[15:25] Catherin Salazar:** proyecto de lanzamientos es es algo muy importante para Dropy,
+- **[15:25] Catherin Salazar:** y, pues cambiarlo y cambiar como todas estas estrategias
+- **[15:25] Catherin Salazar:** sí es importante para que ustedes comiencen a entender
+- **[15:25] Catherin Salazar:** desde la creación, desde el
+- **[15:25] Catherin Salazar:** discovery
+- **[15:25] Catherin Salazar:** cómo se va a hacer todo.
+- **[15:25] Catherin Salazar:** ¿Listo?
+- **[15:25] Catherin Salazar:** Para que realmente, pues tengamos unas funcionalidades muy top
+- **[15:25] Catherin Salazar:** dentro de dropping.
+- **[15:25] Catherin Salazar:** Y unos proyectos, pues, obviamente,
+- **[15:25] Catherin Salazar:** muy ganadores, que obviamente sé que hemos tenido muchísimos
+- **[15:25] Catherin Salazar:** pero también hay unos que no se miden, por ejemplo.
+- **[15:26] Catherin Salazar:** Listo, ¿cómo vamos con esto?
+- **[15:26] Catherin Salazar:** ¿Sigo con la música, entonces?
+- **[15:26] Catherin Salazar:** Cuatro minutos.
+- **[15:26] Catherin Salazar:** Sí, que no está bien. Pero
+- **[15:26] katerine Pencue:** pongamos, Dío me da.
+- **[15:26] Catherin Salazar:** Pero ¿quién?
+- **[15:26] Jose Pineda Pitre:** Un dio medazo de viernes hasta ahora.
+- **[15:26] Catherin Salazar:** ¿Un dio mes?
+- **[15:26] Catherin Salazar:** No, bueno, está bien, a ver cuál quieren.
+- **[15:26] Catherin Salazar:** Y les pongo.
+- **[15:26] Jose Pineda Pitre:** El cóndor herido.
+- **[15:26] Catherin Salazar:** ¿El cóndor herido se llama?
+- **[15:26] Catherin Salazar:** Es que no sé no sé mucho de Magellenato, pero a ver si los pongo.
+- **[15:26] Jose Pineda Pitre:** Seguramente lo has escuchado acá.
+- **[15:26] Jose Pineda Pitre:** Eso
+- **[15:26] Catherin Salazar:** es
+- **[15:26] Jose Pineda Pitre:** como casi tan famoso como el himno nacional.
+- **[15:26] Catherin Salazar:** ¿Qué es, Perla?
+- **[15:26] Jose Pineda Pitre:** Me
+- **[15:26] Catherin Salazar:** siento ya en la costa, en la playa.
+- **[15:27] Catherin Salazar:** Me falta la playa. Ajá.
+- **[15:27] Jose Pineda Pitre:** Metría de adopción.
+- **[15:27] Catherin Salazar:** Si yo pudiera,
+- **[15:27] Catherin Salazar:** alzar el duelo.
+- **[15:27] Catherin Salazar:** Me acertou tu pinches, vai de ir na tua piscina,
+- **[15:27] Laura Catherine Torres Ciendua:** ok?
+- **[15:27] Catherin Salazar:** Puedes dar lejos, pero le
+- **[15:27] Catherin Salazar:** El Roy, esto es con Roy.
+- **[15:27] Catherin Salazar:** Acá el guarero no sabe.
+- **[15:28] Jose Pineda Pitre:** Mejor me voy.
+- **[15:28] Jose Pineda Pitre:** ¿Cómo hace el combo de
+- **[15:28] Catherin Salazar:** La, oye, en cualquier parte, yo me la puedo agarrar.
+- **[15:29] Yo:** ¿Sí notan cómo estás? Sí se escucha y la otra, ¿no?
+- **[15:29] Catherin Salazar:** Cien y dos.
+- **[15:29] Yo:** Calidad.
+- **[15:29] Participante:** Pero no, mucho pesado. Próxima
+- **[15:29] Participante:** el la próxima persona que haga estas dier y presentación tiene que traer ver a Maritón repertorio de
+- **[15:29] Participante:** entonces.
+- **[15:29] Participante:** Sí,
+- **[15:29] Catherin Salazar:** Eat the pickles. That's all your
+- **[15:30] Catherin Salazar:** Take all your maids.
+- **[15:30] Catherin Salazar:** Stop.
+- **[15:30] Catherin Salazar:** ¿Cómo les fue? ¿Bien?
+- **[15:30] Catherin Salazar:** Listo. Diani, entonces sigamos.
+- **[15:30] Catherin Salazar:** Entonces, ya vamos a comenzar con la segunda.
+- **[15:30] Catherin Salazar:** Función, que es el acto seis, que es la retención.
+- **[15:30] Catherin Salazar:** Listo, Diani.
+- **[15:30] Catherin Salazar:** Entonces,
+- **[15:30] Catherin Salazar:** hay una cosa importante que les quiero decir y lo que yo les decía.
+- **[15:30] Catherin Salazar:** Que alguien compre la entrada de una película
+- **[15:30] Catherin Salazar:** como muchos nos ha pasado, no significa que haya disfrutado la película.
+- **[15:30] Catherin Salazar:** Y eso es lo que nosotros tenemos que pensar con nuestra funcionalidad. Que alguien la utilice una vez,
+- **[15:30] Catherin Salazar:** me va a generar una adopción, pero que la vuelva a utilizar
+- **[15:30] Catherin Salazar:** puede que no, o sea, puede que no la vuelva a utilizar. Y ahí es donde tenemos que comenzar a mirar
+- **[15:30] Catherin Salazar:** la retención, ¿listo?
+- **[15:30] Catherin Salazar:** Dale, Dianys.
+- **[15:30] Catherin Salazar:** Bueno, como ya
+- **[15:30] Diana Aldana:** Bueno, como ya lo había como ya lo habíamos evaluado antes en el pasado, sabemos que
+- **[15:30] Diana Aldana:** para poder medir una óptima retención, primero que todo, hay
+- **[15:31] Diana Aldana:** que evaluar muy bien el uso de esa aplicación o de esa funcionalidad. Acá, pues,
+- **[15:31] Diana Aldana:** nuestra la frecuencia natural, que puede ser diario, semanal, mensual y ocasional.
+- **[15:31] Diana Aldana:** En su momento, lo que estábamos haciendo era medir el incremento
+- **[15:31] Diana Aldana:** exponencial y el uso de esa aplicación en cada, pues,
+- **[15:31] Diana Aldana:** cada una de de las semanas que el usuario estaba interactuando con esa
+- **[15:31] Diana Aldana:** con esa funcionalidad. Nosotros, pues, normalmente, lo que hacíamos era
+- **[15:31] Diana Aldana:** como comparar
+- **[15:31] Diana Aldana:** comparar ese incremento semana tras semana, pero también evidenciábamos con muchos
+- **[15:31] Diana Aldana:** casos no no incrementaba como el uso de esa funcionalidad.
+- **[15:31] Diana Aldana:** Como que veíamos que, realmente, nosotros teníamos
+- **[15:31] Diana Aldana:** un target inicial bastante alto y una expectativa de que muchos usuarios le iban
+- **[15:31] Diana Aldana:** utilizar, pero en la práctica nos dábamos cuenta que
+- **[15:31] Diana Aldana:** el alcance y la retención, pues, estaba siendo muy bajita.
+- **[15:31] Diana Aldana:** Ahí era Kate cuando, pues, comenzábamos a replantear
+- **[15:31] Diana Aldana:** qué estaba sucediendo en la primera fase de la estrategia de adopción.
+- **[15:32] Diana Aldana:** Ahí es cuando un poco nos devolvemos y decimos, ven, será que faltó algo en ese momento de
+- **[15:32] Diana Aldana:** de adopción?, ¿será que no le llegó al público objetivo?
+- **[15:32] Diana Aldana:** O será que está pasando algo durante el proceso de
+- **[15:32] Diana Aldana:** con la funcionalidad. Puede ser que el nivel de esfuerzo, ahí es cuando
+- **[15:32] Diana Aldana:** les estaba comentando sobre la métrica del CSAT,
+- **[15:32] Diana Aldana:** tal vez el esfuerzo al utilizar esa funcionalidad está siendo, pues,
+- **[15:32] Diana Aldana:** está generando bastantes fricciones, por lo tanto, puede que no
+- **[15:32] Diana Aldana:** estemos viendo un incremento exponencial en la retención.
+- **[15:32] Diana Aldana:** Ahí es cuando, pues, eso esa métrica es la que, pues, vamos a comenzar a medir.
+- **[15:32] Diana Aldana:** De, listo.
+- **[15:32] Catherin Salazar:** Esta es la curva de retención.
+- **[15:32] Catherin Salazar:** Que esto
+- **[15:32] Participante:** Dale, Diani.
+- **[15:32] Participante:** No, no, dale, continúa.
+- **[15:32] Catherin Salazar:** Este, es la curva de retención,
+- **[15:32] Catherin Salazar:** donde nos va a decir si nuestra función en el en el tiempo
+- **[15:33] Catherin Salazar:** se estabiliza dependiendo de la de de la métrica que
+- **[15:33] Catherin Salazar:** tuvimos ahorita y los números que vimos ahorita.
+- **[15:33] Catherin Salazar:** Vamos a ver
+- **[15:33] Catherin Salazar:** si ya la la la métrica final, que es cuando mido ya
+- **[15:33] Catherin Salazar:** toda la retención, la la la adopción, satisfacción y retención,
+- **[15:33] Catherin Salazar:** sí, esa funcionalidad se estabiliza en el tiempo.
+- **[15:33] Catherin Salazar:** Es decir, si las personas la siguen utilizando
+- **[15:33] Catherin Salazar:** si siguen generando una satisfacción sobre ella y si siguen generando una retención.
+- **[15:33] Catherin Salazar:** Si sigue cayendo, pues la curva me va a decir que existe una señal para
+- **[15:33] Catherin Salazar:** un problema de retención en mi funcionalidad, puede ser un bug,
+- **[15:33] Catherin Salazar:** como en un espacio económico de Scanlon, por ejemplo, con Juandi que existían bugs.
+- **[15:33] Catherin Salazar:** Que la gente no la estaba pudiendo, pues, retener de la manera correcta,
+- **[15:33] Catherin Salazar:** ¿qué le tocó a Wendy? Ir a donde el equipo de
+- **[15:33] Catherin Salazar:** pues, de TI, solucionar los problemas y ahora sí vamos a hacer otro lanzamiento y estamos y esa funcionalidad. ¿Sí? Con y con scanner, por ejemplo. Como nos comentaba la vez pasada, todo este tipo de cosas, por eso es tan importante que nosotros lo vayamos y analizando en el tiempo qué está pasando con mi funcionalidad. No es que la entreguemos y ya, y la entreguemos para el lanzamiento y ya, si mirar en el tiempo cómo la podemos iterar. ¿Listo? Dale, Diani. Acá sí habla un poco como la certeza que estabas hablando ahorita.
+- **[15:34] Catherin Salazar:** Sí, lo sí, ya
+- **[15:34] Diana Aldana:** retomando exactamente, es
+- **[15:34] Diana Aldana:** qué satisfacción generó esa funcionalidad, si realmente cumplió
+- **[15:34] Diana Aldana:** cumplió con esa promesa de valor que tanto se incentivó o
+- **[15:34] Diana Aldana:** comunicó en ese primer punto de contacto, que fue la adopción.
+- **[15:34] Diana Aldana:** En la adopción, seguramente en la comunicación prometimos algo, que esa nueva funcionalidad
+- **[15:34] Diana Aldana:** iba a facilitar, iba a ser más eficiente un proceso.
+- **[15:34] Diana Aldana:** Ya posterior a la interacción que tuvo el usuario,
+- **[15:34] Diana Aldana:** al uso constante, porque, pues, tampoco podemos medir la satisfacción en un solo
+- **[15:34] Diana Aldana:** primer uso, porque, pues, el usuario, tenemos que esperar que el usuario tenga
+- **[15:34] Diana Aldana:** una curva, no sé cómo lo llamo, una curva tal vez de
+- **[15:35] Diana Aldana:** de interacción con la funcionalidad, para decidir si esa funcionalidad
+- **[15:35] Diana Aldana:** realmente cumplió su objetivo o no.
+- **[15:35] Diana Aldana:** Y cuando una funcionalidad, pues, cumple el objetivo, pues ahí nos va a dar como la
+- **[15:35] Diana Aldana:** de adopción, que, pues, es lo que vamos a medir, que es
+- **[15:35] Diana Aldana:** qué tanto valor yo percibí en esa funcionalidad, y también
+- **[15:35] Diana Aldana:** qué tan fácil fue utilizar
+- **[15:35] Diana Aldana:** esa funcionalidad. Porque puede que la funcionalidad sí haya cumplido con
+- **[15:35] Diana Aldana:** la promesa de valor, pero al interactuarlo fue muy tedioso,
+- **[15:35] Diana Aldana:** fueron muchos pasos, fue muy enredado, tuvo que contactarme con servicio al cliente, al
+- **[15:35] Diana Aldana:** la final, logré.
+- **[15:35] Diana Aldana:** O también puede llegar a pasar
+- **[15:35] Diana Aldana:** que, básicamente, sí, es muy fácil, realmente eran dos pasos,
+- **[15:35] Diana Aldana:** pero eso que nosotros planteamos realmente no
+- **[15:35] Diana Aldana:** no me está generando valor y, pues, no no me genera
+- **[15:35] Participante:** esa funcionalidad.
+- **[15:35] Participante:** Listo.
+- **[15:36] Catherin Salazar:** Pregunta base,
+- **[15:36] Catherin Salazar:** que lo que la tenemos que hacer es qué tan fácil fue para ti realizar esta tarea utilizando la funcionalidad.
+- **[15:36] Catherin Salazar:** Esa es la pregunta que le debemos hacer a nuestros usuarios. Entonces, por ejemplo, supongamos que ya tenemos
+- **[15:36] Catherin Salazar:** una satisfacción
+- **[15:36] Catherin Salazar:** no sé, que sea
+- **[15:36] Catherin Salazar:** muy fácil o muy difícil, y podamos escribir acá
+- **[15:36] Catherin Salazar:** qué tan fácil fue publicar, por ejemplo, tu landing con creador de día.
+- **[15:36] Catherin Salazar:** Es una pregunta que le tenemos que medir, que hacer a los usuarios para poder medir esa
+- **[15:36] Catherin Salazar:** esa satisfacción.
+- **[15:36] Catherin Salazar:** Hablaba Diane.
+- **[15:36] Catherin Salazar:** Entonces, no sé, inventémonos ahí cualquier
+- **[15:36] Participante:** lo que
+- **[15:37] Participante:** Listo, chicos.
+- **[15:37] Catherin Salazar:** Cuando ya tengamos, por ejemplo, esta calificación
+- **[15:37] Catherin Salazar:** que es usuarios satisfechos dividido usuarios objetivo,
+- **[15:37] Catherin Salazar:** ¿sí?, que ya haya medido todo el tars, como lo vimos ahorita con la
+- **[15:37] Catherin Salazar:** calculadora y que ella me haya dado esa puntuación,
+- **[15:38] Catherin Salazar:** la multiplique por cien,
+- **[15:38] Catherin Salazar:** y mi métrica final fue el seis por ciento,
+- **[15:38] Catherin Salazar:** esto se va a se va a ubicar en un mapa de características
+- **[15:38] Catherin Salazar:** y en una matriz de características, antiquea, ahí es donde nosotros tenemos que entrar a mirar
+- **[15:38] Catherin Salazar:** cómo
+- **[15:38] Catherin Salazar:** cuáles funcionalidades son las que hay que iterar.
+- **[15:38] Catherin Salazar:** La matriz más o menos me va a decir características principales
+- **[15:38] Catherin Salazar:** características de alto rendimiento, características de proyecto, es decir, que toca mirar
+- **[15:38] Catherin Salazar:** qué hacer porque están
+- **[15:38] Catherin Salazar:** con baja adopción o con una puntuación muy baja,
+- **[15:38] Catherin Salazar:** y características
+- **[15:38] Catherin Salazar:** de alta importancia estratégica, pero que toca
+- **[15:38] Catherin Salazar:** toca mirar cómo iterarla porque, no sé, no está generando
+- **[15:38] Catherin Salazar:** la satisfacción que se requiere, pero es de una alta importancia estratégica para
+- **[15:38] Catherin Salazar:** Entonces, según la calificación que me dé,
+- **[15:38] Catherin Salazar:** ejemplo, si me da una clasificación alta,
+- **[15:38] Catherin Salazar:** según la importancia estratégica de la funcionalidad, pues me va a ubicar en una matriz de
+- **[15:39] Catherin Salazar:** que ya con esta matriz de características,
+- **[15:39] Catherin Salazar:** es donde nosotros vamos a entrar con el comité tars y mirar
+- **[15:39] Catherin Salazar:** cuáles son las funcionalidades que realmente
+- **[15:39] Catherin Salazar:** no están impactando en dropping.
+- **[15:39] Catherin Salazar:** ¿Sí? O cuáles realmente necesitan revisión, y ahí es donde ya
+- **[15:39] Catherin Salazar:** lo vamos a compartir como esta información a los pm, y les vamos a decir pues miren la funcionalidades o qué está pasando con los proyectos que ustedes lanzaron, ¿sí? Todas las funcionalidades, ya con esta con estas mediciones y con esta métrica,
+- **[15:39] Catherin Salazar:** es donde vamos a ubicarla en la matriz de características o de futures.
+- **[15:39] Catherin Salazar:** ¿Listo?
+- **[15:39] Catherin Salazar:** Acá también es como muy interactivo, pueden como
+- **[15:39] Catherin Salazar:** moverla
+- **[15:39] Catherin Salazar:** Listo. Entonces,
+- **[15:39] Catherin Salazar:** ejemplos reales.
+- **[15:39] Catherin Salazar:** En como crear un evento como acción
+- **[15:39] Catherin Salazar:** de valor, crear un evento como acción principal de valor,
+- **[15:40] Catherin Salazar:** que es una de las funcionalidades más importantes, porque es como una plataforma
+- **[15:40] Catherin Salazar:** para
+- **[15:40] Catherin Salazar:** ir a eventos y asistir a eventos.
+- **[15:40] Catherin Salazar:** Slack
+- **[15:40] Catherin Salazar:** como invitar a un canal como evento de adopción.
+- **[15:40] Catherin Salazar:** Pues esta esta es la métrica de Slack,
+- **[15:40] Catherin Salazar:** Tinder, deslizar como el comportamiento nuclear del producto,
+- **[15:40] Catherin Salazar:** DocuSign, firmar un documento como acción de alta gravedad.
+- **[15:40] Catherin Salazar:** Spotify, guardar contenido como señal de retención.
+- **[15:40] Catherin Salazar:** Y Splitwise, registrar un gasto como frecuencia natural del problema.
+- **[15:40] Catherin Salazar:** ¿Listo?
+- **[15:40] Catherin Salazar:** Acá yo traje como el caso práctico con el que estábamos
+- **[15:40] Catherin Salazar:** trabajando la mesa estratégica,
+- **[15:40] Catherin Salazar:** Entonces, esos son datos hipotéticos para el ejercicio,
+- **[15:40] Catherin Salazar:** La creas en una
+- **[15:40] Catherin Salazar:** esto yo lo traje como de datos que ya hemos hecho en las mesas estratégicas,
+- **[15:40] Catherin Salazar:** La creación de una landing page persuasiva requiere conocimientos
+- **[15:40] Catherin Salazar:** y de diseño, que esto lo creamos con Santi. Digamos que este problema
+- **[15:41] Catherin Salazar:** lo que genera alta fricción operativa y puede tomar hasta cuarenta y ocho horas de trabajo manual.
+- **[15:41] Catherin Salazar:** Esto, Santi, lo me pasó esta información. Además, el flujo de conexión con Shopify y mediante tokens representa un bloqueo técnico severo para perfiles no técnicos. ¿Listo? Entonces, acá pues le podemos dar como la, pues ya, la calculadora que es la de la que hemos visto todo el tiempo, mira, por ejemplo, el problema, crear una landing hasta cuarenta y ocho horas si requiere conocimiento técnico,
+- **[15:41] Catherin Salazar:** publicación, objetivo de dropshippers activos sin equipo de diseño. Acá el público objetivo, no sé, este realmente el
+- **[15:41] Catherin Salazar:** público objetivo es los huérfanos, que no tienen conocimientos en dropshipping,
+- **[15:41] Catherin Salazar:** Gravedad alta, bloquea
+- **[15:41] Catherin Salazar:** o sea, la hay una gravedad alta porque puede que los usuarios, por ejemplo,
+- **[15:41] Catherin Salazar:** no estén generando órdenes porque no saben crear productos en en
+- **[15:41] Catherin Salazar:** productos o landings de productos. Adopción, la métrica de adopción, que es la nosotros tenemos que llenar el documento end to end, que es publicar una landing generada con IA,
+- **[15:42] Catherin Salazar:** Retención, publicar una nueva landing cada mes. Y satisfacción, pregunta de esfuerzo,
+- **[15:42] Catherin Salazar:** pospublicación. O sea, es decir, qué tan
+- **[15:42] Catherin Salazar:** si realmente fue muy difícil para ellos utilizar la funcionalidad.
+- **[15:42] Catherin Salazar:** ¿Listo? Bueno,
+- **[15:42] Catherin Salazar:** digamos que yo traje como un un espacio para presentación de equipos, pero creo que ya se va a acabar
+- **[15:42] Catherin Salazar:** taller. Entonces, acá les voy a mostrar el nuevo documento end to end.
+- **[15:42] Catherin Salazar:** Este va a ser el nuevo documento en tu event que creamos con Lau Torres,
+- **[15:42] Catherin Salazar:** y el cual
+- **[15:42] Catherin Salazar:** nosotros lo que vamos a hacer como equipo es que ustedes ahora nos van a diligenciar estos datos que fue
+- **[15:42] Catherin Salazar:** todo lo que vimos en el taller, ¿listo? Vamos a mirar todo el tema de tars,
+- **[15:42] Catherin Salazar:** ¿sí?, que está. Miren que acá está todo el tema de tars.
+- **[15:42] Catherin Salazar:** Este, por ejemplo, insights importantes es, por ejemplo, no sé,
+- **[15:42] Catherin Salazar:** si ustedes ven
+- **[15:42] Catherin Salazar:** que hay
+- **[15:42] Catherin Salazar:** No,
+- **[15:42] Catherin Salazar:** bueno, que ustedes tienen, por ejemplo, no, esta funcionalidad puede puede, no sé,
+- **[15:43] Catherin Salazar:** necesito que haya un lanzamiento muy grande, ¿sí?,
+- **[15:43] Catherin Salazar:** pueden agregar investigaciones porque es una funcionalidad muy importante,
+- **[15:43] Catherin Salazar:** porque, no sé, insights que ustedes puedan tener como PMS y que nos puedan agregar valor para
+- **[15:43] Catherin Salazar:** esas comunicaciones que vamos a tener.
+- **[15:43] Catherin Salazar:** Valor para el negocio,
+- **[15:43] Catherin Salazar:** configuración operativa, que estos son los eventos, que va a haber un
+- **[15:43] Catherin Salazar:** espacio para hablar de eventos, de hecho, pensábamos que fuera ahorita, pero no se la
+- **[15:43] Catherin Salazar:** torre si en quince minutos alcancemos a hablarles, porque tenemos también que pensar ustedes
+- **[15:43] Catherin Salazar:** como PMs desde el principio, qué eventos
+- **[15:43] Catherin Salazar:** yo puedo trackear con user pilot
+- **[15:43] Catherin Salazar:** me vayan a medir esa
+- **[15:43] Catherin Salazar:** métrica de adopción
+- **[15:43] Catherin Salazar:** y qué eventos
+- **[15:43] Catherin Salazar:** por ejemplo, pueden haber eventos del BAC que también me puedan medir la métrica de adopción.
+- **[15:43] Catherin Salazar:** Si ustedes, no sé, se acuerdan de este evento del BAC,
+- **[15:43] Catherin Salazar:** por allá cuando ya hayan lanzado la funcionalidad, pues no nos va a servir de mucho.
+- **[15:43] Catherin Salazar:** Porque tenemos que tener una medición muy clara desde el principio de cómo vamos a medir esa funcionalidad.
+- **[15:44] Catherin Salazar:** Entonces,
+- **[15:44] Catherin Salazar:** que ustedes tengan presente que los eventos del bug se deben solicitar no al lado
+- **[15:44] Catherin Salazar:** sino tiene que haber otro proceso para solicitar eventos del back.
+- **[15:44] Catherin Salazar:** ¿Sí? Y que con TI los podamos tener.
+- **[15:44] Catherin Salazar:** Eventos del back, háblese a nivel transaccional y que no podamos medir con user pilot, que no sea un clic,
+- **[15:44] Catherin Salazar:** que no sea una accionable como tal.
+- **[15:44] Catherin Salazar:** ¿Listo?
+- **[15:44] Catherin Salazar:** Que no podamos directamente, sino a nivel más
+- **[15:44] Catherin Salazar:** todo transaccional. Por ejemplo, lo que yo le decía a Santi con page... Perdón traer tanto Page Pilot, pero es
+- **[15:44] Catherin Salazar:** como con lo que hemos sacado nuestra prueba piloto de este lanzamiento, de esta nueva
+- **[15:44] Catherin Salazar:** forma de lanzar productos en Dropi.
+- **[15:44] Catherin Salazar:** Y es que yo le decía a Santi, podemos saber, por ejemplo, cuántos usuarios por usuario
+- **[15:44] Catherin Salazar:** cuántas páginas están creando, ¿sí?
+- **[15:44] Catherin Salazar:** Cuán, cuáles fueron la cantidad de páginas exportadas,
+- **[15:44] Catherin Salazar:** ¿sí?, por usuario.
+- **[15:44] Catherin Salazar:** Eso no lo podemos, digamos que saber directamente con
+- **[15:44] Catherin Salazar:** con User Pilot, perdón, entonces, es superimportante que
+- **[15:44] Catherin Salazar:** tengamos esto. Por ejemplo, cuántas órdenes se crearon por página exportada,
+- **[15:45] Catherin Salazar:** Creo que eso es un una métrica que le que le que le interesa a Santi.
+- **[15:45] Catherin Salazar:** Le interesa para medir la retención.
+- **[15:45] Catherin Salazar:** ¿Sí?
+- **[15:45] Catherin Salazar:** Listo.
+- **[15:45] Catherin Salazar:** Lo mismo, esto sí es igual, solicitud del tracking de user pilot,
+- **[15:45] Catherin Salazar:** solicitud de encuesta en caso de necesitar encuesta,
+- **[15:45] Catherin Salazar:** Una cosa superimportante que tenemos que diferenciar.
+- **[15:45] Catherin Salazar:** Chicos,
+- **[15:45] Catherin Salazar:** cuando ustedes vayan a hacer una prueba controlada, es decir, en beta,
+- **[15:45] Catherin Salazar:** eso no tiene lanzamiento.
+- **[15:45] Catherin Salazar:** Y quiero y, pues, queremos ser muy claros acá.
+- **[15:45] Catherin Salazar:** Si ustedes están hasta ahora testeando la funcionalidad
+- **[15:45] Catherin Salazar:** lo están hasta ahora como haciéndolo con con con usuarios controlados,
+- **[15:45] Catherin Salazar:** eso no tiene no requiere un lanzamiento. Un lanzamiento es cuando ya la funcionalidad está
+- **[15:45] Catherin Salazar:** con usuarios reales, cuando ya los bugs hayan sido solucionados,
+- **[15:45] Catherin Salazar:** cuando ya esté perfecta para utilizar, ahí se hace el lanzamiento, antes no.
+- **[15:45] Catherin Salazar:** De todas formas, si ustedes, por ejemplo,
+- **[15:45] Catherin Salazar:** requieren algo en user pilot para
+- **[15:46] Catherin Salazar:** testear en prueba beta,
+- **[15:46] Catherin Salazar:** se puede solicitar.
+- **[15:46] Catherin Salazar:** Pero no se le solicita no se activa todavía la mesa estratégica de lanzamientos.
+- **[15:46] Catherin Salazar:** ¿Listo? Creo que es importante hacer esa diferenciación, porque si si
+- **[15:46] Catherin Salazar:** si hemos tenido como, ay, no, entonces, ya hagamos el lanzamiento, pero la funcionalidad está en prueba beta.
+- **[15:46] Catherin Salazar:** ¿Listo? Yo voy a estar acompañándolos en prueba beta, pero para mirar para mirar
+- **[15:46] Catherin Salazar:** qué dijeron los usuarios, cuáles fueron las fricciones, para yo poder hacerme una idea de
+- **[15:46] Catherin Salazar:** hacer la comunicación. Pero yo no, o
+- **[15:46] Catherin Salazar:** yo comienzo desde que ya la funcionalidad ustedes me la entregan como perfecta y prácticamente lista,
+- **[15:46] Catherin Salazar:** para para desplegar en producción a todos los usuarios, ¿listo?
+- **[15:46] Catherin Salazar:** Solicitar del data warehouse que, pues, son como todas las
+- **[15:46] Catherin Salazar:** las métricas o o, digamos, que eventos del back,
+- **[15:46] Catherin Salazar:** y ya esta estrategia de lanzamiento
+- **[15:46] Catherin Salazar:** puede que ustedes nos den algo de datos acá,
+- **[15:46] Catherin Salazar:** ¿sí? Pero ya esta estrategia de lanzamiento de nosotros mismos, la
+- **[15:47] Catherin Salazar:** hacemos con el con el equipo de marketing, y ya con la mesa
+- **[15:47] Catherin Salazar:** que tengamos con product marketing, ¿listo?
+- **[15:47] Catherin Salazar:** Esto de launch tier, no se preocupen, ustedes no deben llenar esto. Esto de launch tier para
+- **[15:47] Catherin Salazar:** para
+- **[15:47] Catherin Salazar:** para explicarles un poco
+- **[15:47] Catherin Salazar:** nosotros los lanzamientos los vamos a clasificar por tiers.
+- **[15:47] Catherin Salazar:** Tir cero, uno, dos y tres. Tir cero, por ejemplo, son cambios menores
+- **[15:47] Catherin Salazar:** ustedes nos digan como no, vamos a
+- **[15:47] Catherin Salazar:** vamos a mejorar un book o vamos a hacer una mejora visual en mi función
+- **[15:47] Catherin Salazar:** vamos a que estamos iterando la funcionalidad y vamos a, no sé,
+- **[15:47] Catherin Salazar:** a a
+- **[15:47] Catherin Salazar:** a solucionar un Buk. Eso no requiere una mesa estratégica, ¿sí? Eso requiere una información muy sutil en user pilot con un banner. Puede ser, por ejemplo. Tier cero y tier uno no activan esa estratégica, ¿listo? Tier uno mejora continua, por ejemplo, un nuevo filtro, ¿sí?, un nuevo dashboard de reportes, ¿listo?, puede generar descubrimiento, puede necesitar, por ejemplo, educación con Academy, pero no activa mesa estratégica porque no es un gran lanzamiento. Un tier dos son nuevas funcionalidades, por ejemplo, pulso, por ejemplo, I com scanner, por ejemplo, page page pilot, eso se activa mesa estratégica.
+- **[15:48] Catherin Salazar:** Entonces, para que sepamos, no todo va a activar mesa
+- **[15:48] Catherin Salazar:** estratégica ni todo ni no todos los lanzamientos van a ser una bulla impresionante, ¿no?
+- **[15:48] Catherin Salazar:** Tier tres, por ejemplo, es la rearquitectura de dropping.
+- **[15:48] Catherin Salazar:** Entonces, actívame esa estratégica porque es superimportante, aparte va para todos los países,
+- **[15:48] Catherin Salazar:** y es algo que va a ser es el proyecto más
+- **[15:48] Catherin Salazar:** importante de Dropi en términos de lanzamientos de este año.
+- **[15:48] Catherin Salazar:** Así vamos a clasificar las la los lanzamientos
+- **[15:48] Catherin Salazar:** pero eso lo clasificamos nosotros como equipo. Igual ustedes también nos pueden dar ideas como si, mira, mi
+- **[15:48] Catherin Salazar:** parece que es un un tier cero, un tier uno, tier dos, ¿sí?
+- **[15:48] Catherin Salazar:** Igual eso lo clasificamos nosotros. Dale, Kate.
+- **[15:48] Catherin Salazar:** Pregunta con relación a la palabra lanzamiento.
+- **[15:49] katerine Pencue:** Al público. Por ejemplo, en el caso de
+- **[15:49] katerine Pencue:** de migración,
+- **[15:49] katerine Pencue:** por ejemplo, cuando hay betas controladas, que por cierto, betas un
+- **[15:49] katerine Pencue:** un un escenario de producción, pero habilitado para ciertos usuarios
+- **[15:49] katerine Pencue:** que parezco así, Gerardo.
+- **[15:49] katerine Pencue:** Habilitado para ciertos usuarios
+- **[15:49] katerine Pencue:** En el caso del perfil de marcas que van a ser ciertos segmentos y luego libera
+- **[15:49] katerine Pencue:** a usuarios migrados y posterior ya al público, ¿hay
+- **[15:49] katerine Pencue:** ahí cómo debo yo solicitarles a ustedes en cuanto a la estrategia de lanzamiento?
+- **[15:49] katerine Pencue:** Sí va a haber como un segmento, ¿no?
+- **[15:49] katerine Pencue:** Entonces, como que son estos los que están migrados, entonces yo creo que, no sé si
+- **[15:49] katerine Pencue:** llamar la estrategia de lanzamiento en lo correcto o definir el concepto de qué es lanzamiento,
+- **[15:49] katerine Pencue:** y eso que está antes de ver de que hay usuarios reales
+- **[15:49] katerine Pencue:** porque van a haber usuarios reales, Facebook no mucho, que creo que también le puede pasar a
+- **[15:49] katerine Pencue:** Cuál va ser la estrategia de información para ellos.
+- **[15:49] katerine Pencue:** O sea, quiero como definir bien qué es lanzamiento y qué es antes de ver.
+- **[15:49] katerine Pencue:** De una,
+- **[15:49] Catherin Salazar:** de una, yo acá tengo, de hecho,
+- **[15:50] Catherin Salazar:** una una cosita que construimos con María,
+- **[15:50] Catherin Salazar:** No, esta no es.
+- **[15:50] Catherin Salazar:** Es esta, mira.
+- **[15:50] Catherin Salazar:** Lanzamiento Kate.
+- **[15:50] Catherin Salazar:** Es todo lo que funcionalidades que ya estén
+- **[15:50] Catherin Salazar:** con usuarios reales.
+- **[15:50] Catherin Salazar:** Y con beta, y que ya tengamos hallazgos y que ya, digamos, se lanza todos los usuarios.
+- **[15:50] Catherin Salazar:** Ahí es un lanzamiento.
+- **[15:50] Catherin Salazar:** Antes,
+- **[15:50] Catherin Salazar:** no sé, el descubrimiento, el discovery,
+- **[15:50] Catherin Salazar:** las pruebas, todo lo que hagan,
+- **[15:50] Catherin Salazar:** no es lanzamiento.
+- **[15:50] Catherin Salazar:** Porque eso hace parte del trabajo de ustedes, ¿sí?
+- **[15:50] Catherin Salazar:** Y eso es con el acompañamiento de Jaime, ¿listo? O sea, todo lo que esté
+- **[15:50] Catherin Salazar:** antes de que una funcione el día, ya pasa a delivery,
+- **[15:50] Catherin Salazar:** es parte de ustedes y no hay lanzamiento. O sea, en beta no hay lanzamientos.
+- **[15:50] Catherin Salazar:** Ustedes son los que tienen que definir cuáles van a ser su público objetivo
+- **[15:50] Catherin Salazar:** para beta, quiénes le van a comunicar, cómo va ser esa comunicación,
+- **[15:50] Catherin Salazar:** Si necesitan de user pilot, nos pueden decir.
+- **[15:51] Catherin Salazar:** ¿Sí? Pero nosotros no les vamos a decir no,
+- **[15:51] Catherin Salazar:** tienen que hacerlo con este público, no porque ustedes son los dueños de su funcionalidad.
+- **[15:51] Catherin Salazar:** Ustedes son las que la crearon, ustedes son los creadores de esa solución a ese problema.
+- **[15:51] Catherin Salazar:** ¿Cuándo es lanzamiento?
+- **[15:51] Catherin Salazar:** Y cuándo entró
+- **[15:51] Catherin Salazar:** cuándo entra mi equipo? Cuando ustedes ya nos compartan y ya nos compartan este documento en tu end, porque
+- **[15:51] Catherin Salazar:** ya está en delivery, porque ya TI la va a a lanzar a todo el
+- **[15:51] Catherin Salazar:** todo el mundo porque ya se testeó, ya no hay books, ya está perfecta.
+- **[15:51] Catherin Salazar:** ¿Sí?
+- **[15:51] Catherin Salazar:** Ahí En el en el ejemplo de
+- **[15:51] Catherin Salazar:** en el
+- **[15:51] katerine Pencue:** en el ejemplo, perdón, del perfil de marca,
+- **[15:51] katerine Pencue:** que tienen estos dos segmentos, ¿tú consideras que este que vamos a migrar
+- **[15:51] katerine Pencue:** son usuarios reales y que eso es lo que va a quedar y eso está en producción? O sea, llamarlo beta es
+- **[15:51] katerine Pencue:** es incoherente. Yo le digo beta porque, pues siento que es donde van a salir los errores y vamos a
+- **[15:51] katerine Pencue:** pero en en efecto para el usuario y para todo,
+- **[15:51] katerine Pencue:** lo que salió salió hoy, y tengamos un grupo de de emergencia
+- **[15:51] katerine Pencue:** no va a haber un escenario para devolvernos ni nada de eso. Para mí eso sí sería un lanzamiento.
+- **[15:52] katerine Pencue:** ¿Cierto? Sería como dos estrategias de lanzamiento para la migración y los usuarios.
+- **[15:52] katerine Pencue:** No. Ok.
+- **[15:52] Catherin Salazar:** Para la cuando ya salga todos los usuarios que es el veintinueve de septiembre, Kate,
+- **[15:52] Catherin Salazar:** ahí ya es un lanzamiento.
+- **[15:52] Catherin Salazar:** Porque ya sale todos los usuarios.
+- **[15:52] Catherin Salazar:** Y solamente como para aclarar
+- **[15:52] katerine Pencue:** el veintinueve
+- **[15:52] katerine Pencue:** no sale a todos los usuarios, sale a una fase de usuarios.
+- **[15:52] katerine Pencue:** Porque no lo podemos entrar a todos los usuarios.
+- **[15:52] katerine Pencue:** Entonces, ese es el lanzamiento.
+- **[15:52] Participante:** Ese no es lanzamiento. Que digamos que no lo llamaríamos bet
+- **[15:52] katerine Pencue:** porque no no está en beta, ya está en producción y aprobar con los usuarios.
+- **[15:52] katerine Pencue:** Ah, pero no sale a todos los usuarios, entonces no es la No sale a todo.
+- **[15:52] katerine Pencue:** Ok, entonces, lanzamiento igual a salir a todos los usuarios.
+- **[15:52] katerine Pencue:** Todos, absolutamente todos, sin segmentación.
+- **[15:52] katerine Pencue:** Listo Lo
+- **[15:52] Catherin Salazar:** lo lo veo así, ¿cierto? Exactamente, sí.
+- **[15:52] Catherin Salazar:** O sea, obviamente el lanzamiento tiene que tener la segmentación de tars, ¿no?, lo que hablamos ahorita.
+- **[15:52] Catherin Salazar:** Pero
+- **[15:52] Catherin Salazar:** cuando solo se sale un un ciertos usuarios porque se va a testear,
+- **[15:52] Catherin Salazar:** porque se va a mirar si hay errores, porque se va mirar qué
+- **[15:53] Catherin Salazar:** qué hallazgos tengo, eso no es lanzamiento, ahí no se activa lanzamiento, Kate.
+- **[15:53] Catherin Salazar:** ¿Listo? Creo, eso es gracias por esta aclaración, porque sí es superimportante
+- **[15:53] Catherin Salazar:** que lo tengamos claro. Un lanzamiento se activa cuando yo ya haya testeado mi funcionalidad,
+- **[15:53] Catherin Salazar:** cuando ya sepa que está lista para servir a todos los usuarios, cuando ya sepa que
+- **[15:53] Catherin Salazar:** que ya, mejor dicho, se le puede comunicar a todo el mundo, que es la funcionalidad, que hay una nueva funcionalidad en dropping.
+- **[15:53] Catherin Salazar:** Pero antes no, antes no se activa el lanzamientos, a menos de que necesitemos
+- **[15:53] Catherin Salazar:** para subir al de comunicación y comunicarle a esos usuarios
+- **[15:53] Catherin Salazar:** a esos pocos usuarios con los que va a testear. ¿Listo?
+- **[15:53] Catherin Salazar:** Ok. ¿Y qué clase?
+- **[15:53] Participante:** Dale, Micky.
+- **[15:53] Michel David Pino Aguilar:** Dentro de lo que es el concepto del
+- **[15:53] Michel David Pino Aguilar:** del tiger se ha pensado
+- **[15:53] Michel David Pino Aguilar:** los ambientes de prueba, porque es que, digamos, una cosa es
+- **[15:53] Michel David Pino Aguilar:** que nosotros tengamos, digamos, segmentos de funcionalidad para hacer un
+- **[15:53] Michel David Pino Aguilar:** o lo que tú llamas beta que puede que sea en producción como tal,
+- **[15:53] Michel David Pino Aguilar:** que no sepa a todas las comunidades, o sea, cómo se
+- **[15:54] Michel David Pino Aguilar:** se se segmenta eso, porque, digamos,
+- **[15:54] Michel David Pino Aguilar:** puede que esté en producción, como dice Cate, pero
+- **[15:54] Michel David Pino Aguilar:** no está en producción para todas las comunidades, pero igual ya está en producción, no está en un ambiente beta.
+- **[15:54] Michel David Pino Aguilar:** Porque es que beta es un ambiente de desarrollo,
+- **[15:54] Michel David Pino Aguilar:** Sí, sí, claro. Con usuarios.
+- **[15:54] Michel David Pino Aguilar:** Pero cuando está en lanzamiento, eso ya no es una prueba, eso ya está
+- **[15:54] Michel David Pino Aguilar:** en proceso y y y demás, ¿no?
+- **[15:54] Catherin Salazar:** Exactamente, o sea, un lanzamiento es cuando ustedes ya me entregan la funcionalidad y me
+- **[15:54] Catherin Salazar:** dicen, ya está lista para salir a todo el público.
+- **[15:54] Catherin Salazar:** Ahí es cuando se activa el lanzamientos, y ahí es cuando se activa el mi equipo.
+- **[15:54] Catherin Salazar:** ¿Listo?
+- **[15:54] Catherin Salazar:** Sea Ya. Ustedes me dicen, no, Kat, te voy a hacer un lanzamiento, pero es que hasta ahora lo voy hacer
+- **[15:54] Catherin Salazar:** con estos usuarios para probarla, les voy a decir no.
+- **[15:54] Catherin Salazar:** ¿Por qué? Porque yo ahí no puedo activar
+- **[15:54] Catherin Salazar:** para poder hacer un lanzamiento si ni siquiera la funcionalidad está testeada.
+- **[15:54] Catherin Salazar:** Ya te, yo ahí sí quería
+- **[15:54] katerine Pencue:** que de pronto evaluaran sobre
+- **[15:54] katerine Pencue:** el tema de migración y los procesos que ya está con el área de producto,
+- **[15:55] katerine Pencue:** que era algo que hablábamos con Laura Contreras. El producto adquirió
+- **[15:55] katerine Pencue:** el tema y cuando hablo de productos con el PDF,
+- **[15:55] katerine Pencue:** el tema de se hace el QA, que debería garantizar la tecnología, ¿cierto?
+- **[15:55] katerine Pencue:** Pero igual lo adquirimos y hacemos el proceso.
+- **[15:55] katerine Pencue:** Pero ¿qué pasa con...? Y creo que la misma, bueno, no sé, estoy como alineada con Pino, es que nosotros realmente por ejemplo, migración no va a salir a beta, o sea, beta es una palabra dada, no va tener un switch de beta, ya es producción. Pero va a salir a ese segmento, o sea, borremos beta sino que va a tener el lanzamiento a los que se migran y en la y por ustedes vieron los que se migran para minimizar riesgos, luego como por fases va a salir al público. Entonces, no sé si lo evalúes, el mío no tiene switch de, ni siquiera tiene switch de que vez de producción, pero para ser tus usuarios.
+- **[15:55] katerine Pencue:** Entonces, no sé si se evalúa
+- **[15:55] katerine Pencue:** porque si tú me preguntas, ¿eso ya es producción?
+- **[15:55] katerine Pencue:** Pero va a ser mercado, ahorita riesgos. O sea, ya ahí no tengo buen
+- **[15:55] katerine Pencue:** atrás. Entonces, yo sí siento que te te entran en
+- **[15:55] katerine Pencue:** en el lanzamiento. Dime, muchísimas
+- **[15:56] Michel David Pino Aguilar:** Yo lo que entiendo es que
+- **[15:56] Michel David Pino Aguilar:** o sea, más allá del concepto de ambientes de prueba de desarrollo,
+- **[15:56] Michel David Pino Aguilar:** no, ambientes de desarrollo del equipo técnico,
+- **[15:56] Michel David Pino Aguilar:** nosotros lo que tenemos que tener en cuenta es que si el lanzamiento no es como tal
+- **[15:56] Michel David Pino Aguilar:** si es prueba o si es para cierta gente en producción y demás, sino
+- **[15:56] Michel David Pino Aguilar:** que sea todo el mundo.
+- **[15:56] Michel David Pino Aguilar:** Si es todo el mundo y todo el lo puede ver, ahí es un lanzamiento. Si no,
+- **[15:56] Michel David Pino Aguilar:** el concepto que le están dando es una prueba, pero realmente no es una prueba, porque una prueba es otra cosa.
+- **[15:56] Michel David Pino Aguilar:** Yo yo donde yo tengo como el choque
+- **[15:56] Michel David Pino Aguilar:** de conceptos,
+- **[15:56] Michel David Pino Aguilar:** Porque, digamos, prueba es una prueba de usuario que se hace controlada.
+- **[15:56] Michel David Pino Aguilar:** Es que, por ejemplo, Katherine, ¿tú para
+- **[15:56] Catherin Salazar:** qué lanzas, por ejemplo, el veintinueve a solamente unos
+- **[15:56] Catherin Salazar:** a unos pocos usuarios y no lo lanzas a todo el mundo?
+- **[15:56] Catherin Salazar:** Porque
+- **[15:56] katerine Pencue:** tecnología no me da plataformas para poder probar, pero se
+- **[15:56] katerine Pencue:** entiende que desde tecnología, y creo que ahí es donde está la friction, la tecnología debe estar garantizando
+- **[15:56] katerine Pencue:** eso está diez de diez, ¿no?, porque es que yo lo voy a lanzar a los usuarios.
+- **[15:56] katerine Pencue:** O sea, en este caso yo lo estoy haciendo bastante, ahí vas a seguir en
+- **[15:56] Catherin Salazar:** pruebas.
+- **[15:57] Catherin Salazar:** ¿Sí me entiendes? Ahí vas a seguir en pruebas.
+- **[15:57] Catherin Salazar:** Entonces, ahí
+- **[15:57] Catherin Salazar:** no vamos a hacer lanzamiento, ahí tú tienes que definir a qué usuarios
+- **[15:57] Catherin Salazar:** con qué usuarios estratégicamente vas a hacer las pruebas.
+- **[15:57] Catherin Salazar:** Obviamente, pensando en mi tamaño objetivo, en quién va a ser mi usuario,
+- **[15:57] Catherin Salazar:** en lo que vimos ahorita.
+- **[15:57] Catherin Salazar:** Pero ahí
+- **[15:57] Catherin Salazar:** no se activa el lanzamiento todavía,
+- **[15:57] Catherin Salazar:** porque sigues haciendo pruebas.
+- **[15:57] Catherin Salazar:** Porque tecnología, pues sí, de pronto no entrega todo el diez de diez. Entonces imagínate hacer un gran lanzamiento
+- **[15:57] Participante:** y cuando hagamos un gran lanzamiento, pues,
+- **[15:57] Catherin Salazar:** no sé, haya hayan muchos books.
+- **[15:57] Catherin Salazar:** El lanzamiento va a fracasar,
+- **[15:57] Participante:** y puede puede tener la restricción.
+- **[15:57] katerine Pencue:** Yo a mí me queda claro el el concepto que me has dado, a mí lo que de pronto no me queda claro es cómo
+- **[15:57] katerine Pencue:** ustedes desde sus áreas o realmente no es el área de ustedes,
+- **[15:57] katerine Pencue:** me pueden colaborar a mí para hacer como ese push o alguna estrategia de cómo
+- **[15:57] katerine Pencue:** a esos usuarios que se van a migrar.
+- **[15:58] katerine Pencue:** No sé si ahí entraría el equipo de ustedes, a pesar de que no haya un contenido
+- **[15:58] katerine Pencue:** a a todo el equipo. Según el lineamiento que
+- **[15:58] Catherin Salazar:** tenemos con Marino, no se activa nuestro equipo todavía. Y eso es lo que tengo que hablar. Entonces, hablémoslo con Jaime, ¿les parece? Como para no
+- **[15:58] Catherin Salazar:** no no no les puedo decir como, ay, no, sí, de una.
+- **[15:58] Catherin Salazar:** No, hablémoslo con Jaime y les llevamos esas dudas que tenemos,
+- **[15:58] Catherin Salazar:** y lo alineamos con él. ¿Les parece?
+- **[15:58] Catherin Salazar:** Hágale pues, hágale entonces. De una, de una.
+- **[15:58] Catherin Salazar:** Dale, Mitch.
+- **[15:58] Michel David Pino Aguilar:** No, que yo creo que, o sea, como en cuanto a conceptualización hay que cambiarle como
+- **[15:58] Michel David Pino Aguilar:** sé si de pronto como las características a las nomenclaturas, porque prueba
+- **[15:58] Michel David Pino Aguilar:** se puede entender como una prueba de usuario.
+- **[15:58] Michel David Pino Aguilar:** Y prueba de usuario es una prueba controlada, diferente a un a
+- **[15:58] Michel David Pino Aguilar:** a una beta de producción. O sea, yo creo que
+- **[15:58] Michel David Pino Aguilar:** hay que alinear primero que todo como con desarrollo,
+- **[15:58] Michel David Pino Aguilar:** y los ambientes que ellos tienen de beta, producción y demás,
+- **[15:58] Michel David Pino Aguilar:** y cuando sea un lanzamiento controlado, como que no
+- **[15:59] Michel David Pino Aguilar:** darle esa nomenclatura, porque al final ellos hacen un release,
+- **[15:59] Michel David Pino Aguilar:** O sea, cuando ellos hacen un release en los martes, que ellos lo hacen como desarrollo,
+- **[15:59] Michel David Pino Aguilar:** eso
+- **[15:59] Michel David Pino Aguilar:** dentro del concepto técnico, en cuanto a tecnología, eso es un release.
+- **[15:59] Michel David Pino Aguilar:** Y release en en español el lanzamiento.
+- **[15:59] Michel David Pino Aguilar:** Y eso ya tiene un impacto dentro del core de producción, o sea, que yo creo que son más bien como
+- **[15:59] Michel David Pino Aguilar:** controlados.
+- **[15:59] Michel David Pino Aguilar:** Porque pruebas
+- **[15:59] Michel David Pino Aguilar:** mí una prueba es una prueba de usuario,
+- **[15:59] Michel David Pino Aguilar:** que nosotros hacemos con un prototipo, por ejemplo,
+- **[15:59] Michel David Pino Aguilar:** para testear que esté funcionando bien, pero es un lanzamiento controlado.
+- **[15:59] Michel David Pino Aguilar:** Y otra cosa que yo también tenía como en mente era
+- **[15:59] Michel David Pino Aguilar:** o sea, hay una hay una malla
+- **[15:59] Michel David Pino Aguilar:** de
+- **[15:59] Michel David Pino Aguilar:** lanzamientos que se hacen sin pasar por nuestra Estela, ¿no?, que desarrollo
+- **[15:59] Michel David Pino Aguilar:** hace mucho esa práctica.
+- **[15:59] Michel David Pino Aguilar:** Y hay muchos de esos desarrollos que no tienen ni control de de cómo se lanza,
+- **[15:59] Michel David Pino Aguilar:** ni se miden ni demás, porque son cosas que se priorizan dentro de desarrollo y salen
+- **[15:59] Michel David Pino Aguilar:** como tal sin par por un proceso de diseño y demás.
+- **[15:59] Michel David Pino Aguilar:** ¿Eso cómo hay una contingencia dentro de todo este proceso de eventue en que
+- **[15:59] Michel David Pino Aguilar:** están planteando sobre esos proyectos que no hay
+- **[16:00] Michel David Pino Aguilar:** control directo de lo que el área
+- **[16:00] Michel David Pino Aguilar:** puede llegar a
+- **[16:00] Michel David Pino Aguilar:** abarcar.
+- **[16:00] Catherin Salazar:** Pues, a ver,
+- **[16:00] Catherin Salazar:** yo creo que estos son conversaciones que se deben tener con Jaime.
+- **[16:00] Catherin Salazar:** Y con el y con María también.
+- **[16:00] Catherin Salazar:** Para poder primero que entre todos hablemos el mismo lenguaje
+- **[16:00] Catherin Salazar:** el mismo idioma, y podamos entender cuándo se activa
+- **[16:00] Catherin Salazar:** el mi equipo y cuándo no se va a activar.
+- **[16:00] Catherin Salazar:** ¿Sí?
+- **[16:00] Catherin Salazar:** Porque es que ahorita no no no tengo como esa respuesta tan clara, o sea,
+- **[16:00] Catherin Salazar:** digamos que hay un lineamiento con María y es,
+- **[16:00] Catherin Salazar:** ya te tienen que entregar la funcionalidad completamente testeada, probada y a todos los usuarios.
+- **[16:00] Catherin Salazar:** Porque al fin y al cabo, si bien hay una estrategia task, que es donde yo voy a medir la
+- **[16:00] Catherin Salazar:** opción de los usuarios, que fue la que vimos ahorita, también se le va a comunicar a todos los usuarios ese
+- **[16:00] Catherin Salazar:** digamos, que que salió esa funcionalidad dentro de dropping.
+- **[16:00] Catherin Salazar:** O sea, tiene que estar ya
+- **[16:00] Catherin Salazar:** lista para todos los usuarios y desplegada a todos los usuarios para esa fecha.
+- **[16:01] Catherin Salazar:** De lanzamiento. Entonces, si quieren, yo puedo
+- **[16:01] Catherin Salazar:** primero citar a Jaime un espacio, hablo con él, y después lo cito a todos, o sea, como que hablamos entre todos como equipo y miramos ese este estos temas. ¿Les parece? Y nos alineamos mejor. De una. Chicos, bueno, nada, como les parece el taller, ahí ya nos tenemos que ir a otro espacio. Creo que, no sé si se interiorizaron más en términos de matriz, tars, Creo que, bueno, ahí se los intenté hacer como lo más dinámico posible para que no nos aburriéramos porque fueron dos horas acá,
+- **[16:01] Catherin Salazar:** y ahí ya al final pueden como descargar su resumen para que puedan ya comenzar
+- **[16:01] Catherin Salazar:** a
+- **[16:01] Catherin Salazar:** a tener
+- **[16:01] Catherin Salazar:** pues, ya mucho más claro cómo diligenciar el documento end to end, ¿listo?
+- **[16:01] Catherin Salazar:** Gracias, Mitch.
+- **[16:01] Catherin Salazar:** Bueno. Gracias
+- **[16:01] Michel David Pino Aguilar:** ya a todos ustedes también. Gracias,
+- **[16:01] Catherin Salazar:** que estén muy bien.
+- **[16:01] Catherin Salazar:** Chao, chicos. Muchas gracias,
+- **[16:01] Jose Pineda Pitre:** muy

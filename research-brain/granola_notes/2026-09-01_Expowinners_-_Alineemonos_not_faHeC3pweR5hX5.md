@@ -1,0 +1,408 @@
+# Expowinners - Alineemonos
+
+- **ID:** `not_faHeC3pweR5hX5`
+- **Fecha:** 2026-09-01T20:27:19.000Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/3a43db06-d1e0-447b-b7b7-8779fa80391a)
+- **Asistentes:** Santiago Herrera Acosta, Jaime Guevara, Andres Salazar, Laura Contreras, Maria Calderon, Jose Pineda, Esteban Solano, Juan Bautista, Alejandra Melo, Michel Pino, Catherin Salazar, Diana Margarita Aldana Echeverry, Laura Torres, Carlos Diaz, Luisa Perez
+
+---
+
+## Resumen de la Reunión
+*Not much to summarize here — the transcript appears to be empty or didn’t capture any audio.*
+
+*Granola works best with real conversations, meetings, or voice notes. Try recording a call, an in-person discussion, or even a quick thought dump and the notes will appear here automatically.*
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:31] Yo:** Hola, Kathy.
+- **[20:31] Catherin Salazar:** Hola, Santi, buenas tardes. ¿Cómo vas?
+- **[20:31] Yo:** Bienvenido.
+- **[20:31] Catherin Salazar:** Bien, gracias.
+- **[20:32] Catherin Salazar:** Ya listo para winners.
+- **[20:32] Yo:** Nope.
+- **[20:32] Catherin Salazar:** Hola,
+- **[20:32] Jaime Guevara:** hola. Ok, no, Santiago. Ok, no.
+- **[20:32] Yo:** Perdón, pero creo que las 11 de la mañana a las 3 y media de la tarde no puede cambiar mucho, James.
+- **[20:32] Jaime Guevara:** No.
+- **[20:32] Yo:** O sea, cambió que el morcego, de resto.
+- **[20:32] Jaime Guevara:** Ah, ah,
+- **[20:32] Catherin Salazar:** está
+- **[20:32] Jaime Guevara:** bien.
+- **[20:32] Jaime Guevara:** Está bien, está bien.
+- **[20:32] Laura Contreras:** ¿Qué son todos los temas que vamos a
+- **[20:32] Jaime Guevara:** tocar aquí? Yo necesito hablarles con
+- **[20:32] Laura Contreras:** Pipe. Por eso toquemos ese primero. ¿Cómo se llama ese ambiente? ¿Cómo le ponemos?
+- **[20:32] Jaime Guevara:** Infraestructura.
+- **[20:32] Laura Contreras:** Infraestructura.
+- **[20:32] Laura Contreras:** Listo, luego
+- **[20:32] Laura Contreras:** Al fin vamos a revisar académico, ¿cierto?
+- **[20:33] Jaime Guevara:** Con eso de infraestructura entendemos qué
+- **[20:33] Laura Contreras:** tanto podemos integrar ambas, ¿cierto? Yes. Hola Esteban, ¿cómo estás? Pero sí,
+- **[20:33] Jaime Guevara:** si los metemos ahí podemos, realizamos conexión.
+- **[20:33] Laura Contreras:** Hola,
+- **[20:33] Michel David Pino Aguilar:** buenas
+- **[20:33] Jaime Guevara:** tardes.
+- **[20:33] Yo:** Hola.
+- **[20:33] Laura Contreras:** Hola, hola.
+- **[20:33] Laura Contreras:** Y el tercer punto era lanzamientos.
+- **[20:33] Laura Contreras:** Kate, ¿tú tienes algo que alinear con marketing de lanzamientos para darte el espacio?
+- **[20:33] Catherin Salazar:** Pues igual, solo arquitectura y movía.
+- **[20:33] Catherin Salazar:** En lanzamientos, pero igual ya estamos, o sea, nosotros ya estamos en unas mesas estratégicas esta semana con el equipo de marketing.
+- **[20:33] Catherin Salazar:** Para Expo Winners. Entonces
+- **[20:33] Laura Contreras:** la idea aquí es que tengas contexto de que es todo lo que vamos a hacer desde este lado para ver tú qué utilizas. Sí,
+- **[20:34] Catherin Salazar:** sí,
+- **[20:34] Laura Contreras:** sí, sí.
+- **[20:34] Catherin Salazar:** Igual yo le conectaba ahorita Para mirar qué podemos hacer en academia y nos surgieron algunas ideas también que podemos incluirlas dentro de la app que ellos tienen.
+- **[20:34] Laura Contreras:** Listo, justo de eso íbamos a hablar, pero espérate, etiquetemos a Pipe.
+- **[20:34] Jaime Guevara:** Y necesitamos a Pipe, a
+- **[20:34] Laura Contreras:** Pipe y a Carlos,
+- **[20:34] Jaime Guevara:** ¿cierto?
+- **[20:34] Laura Contreras:** No, es que ellos no están en esta reunión.
+- **[20:34] Jaime Guevara:** No, vamos a seguir.
+- **[20:34] Laura Contreras:** Sí, ellos
+- **[20:34] Jaime Guevara:** están, yo los veo.
+- **[20:34] Laura Contreras:** Sí.
+- **[20:34] Jaime Guevara:** Pues
+- **[20:34] Laura Contreras:** Pipe, Carlos
+- **[20:34] Jaime Guevara:** no lo veo.
+- **[20:34] Laura Contreras:** Carlos no, ni Luisa.
+- **[20:34] Laura Contreras:** Luisa, ¿es que ella?
+- **[20:34] Laura Contreras:** Luisa.
+- **[20:34] Jaime Guevara:** Los más importantes, ellos.
+- **[20:35] Laura Contreras:** Luisa Pérez.
+- **[20:35] Esteban Solano:** Sí.
+- **[20:35] Esteban Solano:** Pues
+- **[20:35] Jaime Guevara:** igual podemos revisar con Esteban lo de academia entonces mientras tanto.
+- **[20:35] Laura Contreras:** Y Carlos Díaz, ¿cierto?
+- **[20:35] Laura Contreras:** Pero no sé si Esteban tiene su app ahí. ¿Tú tienes la app, Esteban, o solo la
+- **[20:35] Jaime Guevara:** tiene marketing? Pero no, es que la app de Esteban no está construida, ¿cierto? O sea, solo son por ahorita diseño, ¿no?
+- **[20:35] Esteban Solano:** ¿O ya está? No, solamente es el Figma, pero técnicamente es dentro de la misma app de IsoPipe. O sea,
+- **[20:35] Jaime Guevara:** no son apps aparte, es una sección. Creo que estás en el grupo, ¿no? Que dijo que sí, o no sé si estás en el grupo, en uno de WhatsApp que me unieron, pero nos estaban pidiendo apoyo a ver si nosotros podíamos baicodiarlo de Lo de Academy para que ellos se puedan concentrar en lo de ellos, porque pues creen que no da el tiempo. Entonces, como para apoyarlos.
+- **[20:36] Jaime Guevara:** No necesitan gas contexto, Esteban.
+- **[20:36] Jaime Guevara:** Igual, Tim, yo creo que para que ahorremos espacio, yo creo que Michel, Juan Di no son tan necesarios. Y la vez de pronto para no ocuparlos en algo, en una reunión.
+- **[20:36] Laura Contreras:** Pues ellos querían estar porque ellos van a desarrollar algo del producto.
+- **[20:36] Jaime Guevara:** Ok.
+- **[20:36] Laura Contreras:** Pero si los quieres sacar,
+- **[20:36] Jaime Guevara:** estoy. Oh no, pues dijo porque si vamos a hablar del otro, perdón, perdón.
+- **[20:36] Jaime Guevara:** Esteban, no te escuchamos. Si algo, hola,
+- **[20:36] Esteban Solano:** hola, hola. No, es que está re malo este computador. No, sí, sí, yo estoy en ese grupo, yo tengo el
+- **[20:36] Jaime Guevara:** contexto de todo eso. Ok, entonces nuestra pregunta es, nosotros tampoco es que tengamos mucho tiempo, también estamos corriendo, qué podemos hacer. Por eso queríamos como echarla a lo con Pipe.
+- **[20:37] Esteban Solano:** Pues, ¿qué hacemos? ¿Lo esperamos o qué? O les muestro
+- **[20:37] Jaime Guevara:** lo que se hizo con Luisa. Mostranos mientras tanto. Listo,
+- **[20:37] Esteban Solano:** por aquí igualmente creo que ya entró, ya entró Luis.
+- **[20:37] Esteban Solano:** Listo, regálame un segundito.
+- **[20:37] Esteban Solano:** Creo que no están viendo, ¿cierto que no?
+- **[20:37] Yo:** No, okay.
+- **[20:37] Esteban Solano:** Ya te vuelvo y entro porque es que mira que no me deja compartir.
+- **[20:37] Esteban Solano:** Me parece bloquear el bot.
+- **[20:38] Laura Contreras:** Bueno, mientras vuelve Santi, un poquito mientras alineamos, es
+- **[20:38] Esteban Solano:** Sí,
+- **[20:38] Laura Contreras:** James, pero creo que esa alineación, bueno, la invitación, ah, bueno, ahí vuelve Esteban.
+- **[20:38] Esteban Solano:** No, pues Luisa, si tú estás por aquí, ¿crees les puedes compartir pantalla del Figma? Este computador definitivamente, desde que le pusieron antivirus, no sirve ni para WhatsApp.
+- **[20:38] Esteban Solano:** Luz, ¿estás por ahí?
+- **[20:39] Luisa Perez:** ¿Ya están viendo?
+- **[20:39] Luisa Perez:** Sí.
+- **[20:39] Esteban Solano:** Sí.
+- **[20:39] Esteban Solano:** Gracias. Listo, equipo, la idea inicial que se ha hablado era de que pues la app que se hizo de marketing, para poner el contexto, como le decía a Kate, Pues funciona para el registro, para la confirmación, pero también hay una parte que se llama la ruta winner, que es donde las personas hacen el recorrido por los stands físicos y tienen que como un espacio interactivo con las diferentes verticales y la parte del universo de Dropy, el mundo de Dropy. Dentro de ese mundo de Dropy pues hay un stand de Dropy Academy y esta sería la parte donde, por la parte interactiva como tal. Las demás verticales o demás herramientas tienen como trivias y cosas así muy sencillas. Con Academy quisimos hacer un poquito más tirado a Duolingo, por decirlo así, y lo hicimos como 3 ejercicios o 3 pruebas o 3 niveles.
+- **[20:40] Esteban Solano:** Que está todo bajo el mismo contexto de dropshipper que ya vende, dropshipper que está buscando productos en Expo Winner, que ya tiene algo de experiencia. Entonces, el primer nivel se trata de que él elija el producto.
+- **[20:40] Esteban Solano:** Y de acuerdo al producto que él elija, pues se hace como una calculadora de precios para saber si el precio al que él lo pretende vender pues sea rentable o no. Entonces se hace como un ejercicio allí. Ese sería como El primer nivel es algo muy sencillo, realmente ellos no se van a demorar ni 2 ni 3 minutos haciendo eso. El siguiente nivel está enfocado más en e inspirado de De hecho, en el módulo que ya tenemos dentro de Dropy de preferencias de transportadora, entonces ahí le mostramos unas transportadoras con unas métricas de cobertura, de efectividad y completo promedio. Y de acuerdo a eso, él debe de elegir pues cuál es la transportadora que más le conviene, cuál es su transportadora preferida. Y en el tercer escenario En el tercer nivel le decimos, hey, tenés una novedad, y le mostramos como un escenario, tenés una novedad, está la novedad, y vos tenés que pues
+- **[20:41] Esteban Solano:** seleccionar cuál es la mejor manera para resolver esa novedad. Ya esa novedad, por ejemplo, que puse ahí de ejemplo, es una de las que más se ven dentro de la operación de una persona. Al finalizar teníamos unos CTAs.
+- **[20:41] Esteban Solano:** Que podríamos hablar aquí si se lleva a cabo, claro está.
+- **[20:41] Esteban Solano:** Al principio se pensaba de que fuera una clase.
+- **[20:41] Esteban Solano:** Que ganaran una clase con Drop Academy. Hablando con Kate ahora, hablábamos de por qué ahí no le metemos o una clase, que agenden una clase sobre rearquitectura.
+- **[20:42] Esteban Solano:** O que los que sea un botón que los lleva a un vídeo en YouTube sobre la rearquitectura, como para enlazar las dos cosas.
+- **[20:42] Esteban Solano:** Entonces sí, ven, realmente está esta sección.
+- **[20:42] Esteban Solano:** Hace parte de lo que ya se había planeado la ruta winner, que entiendo, y según como se presentó a Jenny en su momento.
+- **[20:42] Esteban Solano:** Pues es como lo que realmente va a hacer que las personas vayan a los stands físicos, porque realmente en el stand físico de cada una de las verticales pues prácticamente no, no es que vaya a ser mucha cosa. Entonces era más que todo como eso. Claro está, la parte de academia está un poco más desarrollada de lo que quizás se hizo en otras, en otros stands. Pero hace parte de eso, porque es que en el stand como tal físico lo único que va a haber es un QR para registrarse en la academia y ya está.
+- **[20:43] Esteban Solano:** Entonces eso es como lo que pretendimos hacer en su momento.
+- **[20:43] Esteban Solano:** Pero pues claro, con todo lo que pasó en la ciudad y todo eso, pues sabemos de que hay muchas cosas que se retrasaron. ¿Cómo lo ven?
+- **[20:43] Esteban Solano:** Es posible, no es posible, está alineado con, de hecho ya sí está alineado con el objetivo del evento como tal y podríamos conectarlo con otras cosas como por ejemplo lo de la arquitectura.
+- **[20:43] Esteban Solano:** Una cosa, yo creo
+- **[20:43] Jaime Guevara:** que pues primero está, está, creo que estamos muy alineados en muchas cosas.
+- **[20:43] Jaime Guevara:** Pero desalineados en comunicación.
+- **[20:43] Jaime Guevara:** Alineados como en la intención.
+- **[20:43] Jaime Guevara:** Pero sí.
+- **[20:43] Jaime Guevara:** No sé, bueno, no sé si, bueno, ya sé que viste el chat, perdón, pero todo, necesitamos que todas las iniciativas y apps pasen también por producto, por Para que tengamos como conocimiento todos. No lo digo, no lo digo por usted, sino que nosotros tampoco nos acercamos, creo que nosotros no nos acercamos a ustedes. Ustedes como para validar, y nosotros hicimos algo similar.
+- **[20:44] Jaime Guevara:** Entonces.
+- **[20:44] Jaime Guevara:** Aquí está el punto. Esto yo creo que lo podemos baicuar súper fácil, incluso yo lo puedo baicuar ya.
+- **[20:44] Jaime Guevara:** Pero nos gustaría mostrarte lo que ya hicimos.
+- **[20:44] Jaime Guevara:** A ver si no va y codeamos literalmente lo que tienes, sino que lo unimos dentro de los flujos que tenemos. No sé si te parezca como una buena negociación ahí.
+- **[20:44] Jaime Guevara:** Pues lo revisé, no
+- **[20:44] Esteban Solano:** sabía, no sabía que ya habían hecho algo. Sí, pues sí, o sea, por eso
+- **[20:45] Jaime Guevara:** te digo, no sé si para bien o para mal, pero bueno, aprendimos, que es lo bueno.
+- **[20:45] Jaime Guevara:** Y miremos, miremos. No quiero como, al final pues tomamos una decisión entre todos.
+- **[20:45] Jaime Guevara:** Que no.
+- **[20:45] Jaime Guevara:** Sin que nos diera susceptibilidades.
+- **[20:45] Jaime Guevara:** Ya te comparto acá.
+- **[20:45] Jaime Guevara:** Santi, ¿has subido algo? No, ¿cierto? O sea, podemos estar literal el que ya teníamos.
+- **[20:45] Yo:** No, le podemos darle que Alejandra no ha hecho perro todavía.
+- **[20:45] Jaime Guevara:** Okay.
+- **[20:45] Participante:** Listo.
+- **[20:45] Jaime Guevara:** Pia, igual esto va a estar alineado con la UI de
+- **[20:45] Jaime Guevara:** de la otra aplicación, pero pues más o menos ahí está ahorita.
+- **[20:45] Jaime Guevara:** ¿Qué se me parece a lo que tienes? Entonces tenemos dos cosas. Uno, el juego. Nosotros tenemos acá un juego.
+- **[20:45] Participante:** Con Dropy.
+- **[20:46] Esteban Solano:** Ustedes, ustedes lo escuchan bien, qué pena, es que se está cortando.
+- **[20:46] Jaime Guevara:** Sí, ¿estás viendo el video?
+- **[20:46] Jaime Guevara:** La pantalla.
+- **[20:46] Jaime Guevara:** Hola.
+- **[20:46] Participante:** Hello.
+- **[20:46] Participante:** Todo es material.
+- **[20:46] Participante:** Esteban.
+- **[20:46] Esteban Solano:** O sea, ¿me escucha bien? Es que yo escucho a Jaime precortado.
+- **[20:46] Yo:** No, yo escuché una Jaime sin problema.
+- **[20:46] Jaime Guevara:** Si no, sos vos.
+- **[20:46] Jaime Guevara:** ¿Y no se escucha? ¿Ves la pantalla?
+- **[20:46] Catherin Salazar:** Sí, sí, ahí
+- **[20:46] Esteban Solano:** te veo.
+- **[20:46] Esteban Solano:** Listo, entonces por un lado hicimos un
+- **[20:46] Jaime Guevara:** jueguito que es un poco exactamente como el proceso que tiene un dropshipper. Entonces primero selecciona los productos, Pero ya como más a nivel de juego, seleccionar esto, esto lo lleva leyendas.
+- **[20:46] Jaime Guevara:** Es como que un proyecto de leyendas que le llamaron como Simula Drop, y aquí yo elijo el producto, luego voy a crear la landing.
+- **[20:47] Jaime Guevara:** La creo.
+- **[20:47] Participante:** Como sea.
+- **[20:47] Participante:** Luego voy a pautar.
+- **[20:47] Jaime Guevara:** Y todo eso, aquí en información yo puedo ir y preguntar, y entonces él me va explicando todo. Ve anuncios, ahí defines cuánto presupuesto vas a invertir, está toda la información. Genero los anuncios, por ejemplo, digo que voy a invertir 140,000 y ahí los anuncios empiezan a correr. Los anuncios están encendidos y está llegando tráfico. Entonces mira que aquí me dice el mensajito, tengo que ir Entonces hay un chat, la chica me pregunta, le digo, le respondo.
+- **[20:47] Jaime Guevara:** Y como ya quedó, entonces se genera una orden.
+- **[20:47] Jaime Guevara:** Entonces voy a ver la orden.
+- **[20:47] Jaime Guevara:** Y acá pago contraentrega, creo la orden.
+- **[20:48] Jaime Guevara:** Y seguimos como explorando, etcétera, etcétera, etcétera. Bueno, hasta que llegue al final, ahí van a seguir llegando mensajes y todo hasta que terminemos pues la orden y pueda retirar mis ganancias. Y yo sé si gané o perdí. Perdí. Ese es uno. El otro, por ejemplo, ahí no sé, podríamos integrar vídeos o que al final pues ya Como que antes de salirse le recomendemos unos vídeos de cómo hacer mejor el trabajo, eso desde Academy podría ser. El otro es este, que este falta por iterarse. Pero digamos que acá esto está conectado. No sé si vamos a seguir conectados a Appify, Santi, creo que no.
+- **[20:48] Yo:** Lo vamos a bajar por el catálogo cerrado.
+- **[20:48] Jaime Guevara:** Ok, entonces aquí nosotros vamos a pasar un catálogo cerrado de mi primera venta, que son productos reales.
+- **[20:48] Jaime Guevara:** De los mismos suppliers que van a estar en el Expo Wine. Entonces son productos que los vamos a llamar productos Mi Primera Venta, y es, van a tener unos descuentos especiales, etcétera, etcétera, etcétera. Ellos van a poder seleccionar el producto.
+- **[20:49] Jaime Guevara:** Y acá nosotros les hacemos una simulación de, con inteligencia artificial, con ChatGPT, de más o menos cuánto se ganarían, cuál sería el CPA. Etcétera, todo como la explicación un poco ya un poco más cruda y dura de esto para saber cuánto ganarían. Y ya que continúen, y que cuando continúen ya como decir, ah, listo, ya quiero Arrancar, nos generan a nosotros igual como todo esto va trackeado.
+- **[20:49] Jaime Guevara:** Para saber nosotros en qué punto se quedó y también poderle hacerle push con comercial. Digamos que la intención es un poco también que esto nos genere órdenes, cierto. Entonces digamos que aquí yo Vería un poco que si necesito ayuda podríamos mirar nosotros. Aquí ya le teníamos Dropy Academy, entonces podríamos también integrar un poco eso que tú tienes. Y por último tenemos
+- **[20:50] Jaime Guevara:** Using WordNet.
+- **[20:50] Jaime Guevara:** Y por último tenemos este, bueno, este es otra cosa, pero escanea tu winner, le tomas una foto a un producto que esté ahí y entonces él con ChatGPT te dice Más o menos en cuál está el precio del mercado y si es un producto que tiene un buen score o no tanto para hacer un winner. Pero si le haces una buena página, entonces le vas a aumentar Entonces es como explicarle a la persona aquí en este, pues repito, que si trabajas, le pones buen anuncio, tal, le puedes subir el score para hacerle un winner. Entonces creo que muchas de estas en otro sentido se relacionan con lo que tienes, con la intención que tienes de enseñar. Entonces no sé, ahí yo lo pongo sobre la mesa. Lo mismo, no creo que esta conversación Eso sí, no hubiera sido más interesante desde mucho antes, pero no queremos matar ideas.
+- **[20:51] Jaime Guevara:** Ni tampoco queremos que la nuestra quede en el olvido. Es como lo podemos negociar
+- **[20:51] Catherin Salazar:** ahí. Dale, Cata.
+- **[20:51] Catherin Salazar:** Yo sí quisiera como, bueno, revisar si la ruta, por ejemplo, que habíamos pensado con Diana al ganar arquitectura puede caber dentro del jueguito.
+- **[20:51] Catherin Salazar:** que nos mostrabas al principio, porque creo que sí es muy importante, pues, la que nos mostrabas ahorita.
+- **[20:51] Catherin Salazar:** Porque fíjate que va por todos los módulos.
+- **[20:51] Catherin Salazar:** Y pues como ahorita estamos en ese taller de ideación, no sé, pues igual yo le decía, ajá.
+- **[20:51] Catherin Salazar:** Exactamente.
+- **[20:51] Catherin Salazar:** Si podemos hacer algo allí con arquitectura, con toda la ideación que tenemos, y por ejemplo, si podemos, lo que yo le decía a Esteban, es si podemos, no sé si podemos Quiero empezar la app poniendo como vídeos tutoriales.
+- **[20:52] Catherin Salazar:** O si por el contrario podemos llevarlos como a un link de YouTube donde esté como el video que vamos a tener de la narrativa de la historia de la arquitectura.
+- **[20:52] Jaime Guevara:** Que yo creo que meterlo dentro del juego de pronto no tanto porque es complejo, pero si tienes data de lo que es la arquitectura, me parecería que podría ser Pero igual creo que puede ser prudente que ahí expliquemos eso como medida de apoyo a lo que es la arquitectura. Igual tocaría, eso sí creo que tocaría avaliarlo con María y con Luisa. O sea, podemos validarlos ya prácticamente. Sí, sí, sí, sí, sí, sí.
+- **[20:52] Jaime Guevara:** Sí,
+- **[20:52] Catherin Salazar:** pues como aprovecharlo como un canal adicional para poder comunicar todo lo de arquitectura, porque al fin y al cabo la arquitectura pues se va a comunicar en el lanzamiento de Expo Women. Pero bueno, es literalmente es el lanzamiento de la arquitectura. Creo que podría funcionar. Son de una.
+- **[20:53] Jaime Guevara:** Quiero decir, a Santa Ilusión.
+- **[20:53] Esteban Solano:** Creo que Santiago lo tenía el lanzar primero.
+- **[20:53] Yo:** Sí.
+- **[20:53] Yo:** Sí, lo que les iba a decir es que creo que igual con lo que vemos de Academy, aunque se trata de abordar el mismo problema, los alcances son diferentes. Entonces creo que no había necesidad de matar ideas.
+- **[20:53] Yo:** Porque en últimas penas, el alcance de nosotros es finalmente que se termine de generar la
+- **[20:53] Yo:** La página de venta del producto, inclusive con Rodax, todavía estamos viendo la posibilidad de que se logre generar como una cuenta pública para generar pauta y que se logre cerrar una venta.
+- **[20:53] Yo:** Mientras que igual desde Academy pues la propuesta está más orientada hacia la parte de e-learning, que es como entiendo lo que tratarán de llevarlo, hacia una gamificación de tipo Duolingo. Entonces creo que al final se aborda el mismo problema, solo que es de perspectivas diferentes. Y sí, creo que termina siendo es más un ajuste de storytelling, de en qué momento entra a actuar cada una de las capas. Si de pronto primero sea Arrancaría por el lado de Academy y posterior, o de alguna forma se vincula hacia como un puente, un botón o algo. una URL que nos lleve hacia, hacia Gali, que es como lo tenemos.
+- **[20:54] Yo:** O si simplemente lo tomamos como igual.
+- **[20:54] Yo:** A ver, como pantallas totalmente aisladas.
+- **[20:54] Yo:** Entonces es más como alinear eso. Creo que al final pueden coexistir sin problema. No sé ustedes cómo lo ven.
+- **[20:54] Esteban Solano:** Pues mira, yo íbamos a irnos por ese mismo lado. Antes de comentar sobre eso, mi pregunta es porque no sé qué conversaciones han tenido con Con Pipe, que la idea era que pudiera estar aquí. Si no,
+- **[20:55] Jaime Guevara:** ninguna. ¿Qué pasa? Ninguna. Ahora lo que mandó por el chat.
+- **[20:55] Jaime Guevara:** Listo,
+- **[20:55] Esteban Solano:** sí, porque es que yo entendía que parte de lo de la app era también fomentar de que las personas hicieran eran el recorrido por todos los stands, no solamente los de Progreso sino los de Dropi. Es por eso pues quería como preguntarle eso, pero pues si no tienen contexto de eso, dejémoslo a un lado. Yo lo veo muy bacano el juego y todo lo que colocaron allí. Coincido con Santiago con que pueden coincidir las dos cosas.
+- **[20:55] Esteban Solano:** Y no, no creo que compitan porque es que una de las premisas de lo que queríamos hacer con Academy era de que fuera Sencillo, de que alguien lo pudiera hacer rápido desde, desde el celular y seguir su camino, y no que tuviera que detenerse y quedarse un rato allí, sino que pueda avanzar y al final el CTA para mí es listo no solamente que revisen acá sino que puedan agendar esa esa llamada con nosotros pensaba de pronto ahorita que vos me mostraste ahí en el menú principal donde están los 3, los 3 jueguitos de las 3 cosas estas, podría de pronto la academia estar allí, o no sé, o antes.
+- **[20:56] Esteban Solano:** O después.
+- **[20:56] Esteban Solano:** O en el botoncito este que colocaste allí de si necesitas ayuda, vete a Academy. Pero en esos 3 que estamos haciendo ahí, de pronto un cuarto que sea ese, ese, esa trivia de Academy, o como le queramos llamar a eso.
+- **[20:56] Esteban Solano:** Y ahí lo conecta, lo podemos conectar con el tema de rearquitectura, y que siento que lo mío no solamente pues sí es de pronto más simplificado, pero También es menos técnico, y quizás el otro sí requiere como de pensárselo más, siento yo, de que puede ser mucho más complejo. Entonces me llama a mí la atención de que hayan como todos estos niveles disponibles para las personas, no solamente para, para el top que ya entiende cuánto tiene que invertir en pago Para que eso le traiga cierto retorno, sino también el que, el que simplemente quiere ver, por ejemplo, o quiere, quiere ver cuáles son sus transportadoras, o quiere ver Cómo resolver una novedad de manera manual si no tiene Chatea Pro. Bueno, cosas así como más de los primeros niveles de, pues, de toda esta ruta de leyenda de Dropy.
+- **[20:57] Participante:** No sé cómo lo ven.
+- **[20:57] Jaime Guevara:** Sí, yo más que nada lo digo es por el tema del tiempo, pero
+- **[20:58] Jaime Guevara:** A mí, digamos que no me
+- **[20:58] Jaime Guevara:** No me preocupa el tema de que estemos todos ahí, el tema del tiempo, porque quien codifica es uno.
+- **[20:58] Jaime Guevara:** O sea, ustedes, ¿quién les iba a generar eso? Era marketing, no era Pipe, Carlos.
+- **[20:58] Jaime Guevara:** Sí, era Carlos.
+- **[20:58] Jaime Guevara:** Y ellos nos pidieron la ayuda a nosotros, pero nosotros le dijimos, pues nosotros tampoco es que tengamos mucho tiempo.
+- **[20:58] Jaime Guevara:** No sé, Laura, y si tú ibas a decir algo al respecto.
+- **[20:58] Laura Contreras:** Si no, yo quería, estoy analizando, pero creo que ya te lo dije por interno, y es creo que nos estamos complicando, tenemos que ver cómo hacerlo simple. Creo que en eso sí estoy de acuerdo Con Esteban de pronto entender en qué momento le mostramos qué al usuario para que de verdad vaya a interactuar y no sea simplemente un esfuerzo como que vaya a morir o se perciba como algo repetitivo. Pero sí quería preguntarle a Esteban, como para que veamos cómo simplificar ambas cosas, como cuáles eran los objetivos de las 3, de las 3 como actividades que tú tienes respecto a cada De mí para entender un poco cómo podríamos jugar. O sea, ¿cuál fue la preocupación interna que se nos compartió, Esteban? Como para que sepas, y es como lo desintegrado que se ve.
+- **[20:59] Laura Contreras:** Dropy como por áreas. Entonces tú tienes una cosa con 3 actividades como simples, lo que mencionas. Nosotros tenemos otra cosa y también lo queremos meter ahí. Y aparte está como lo de la ruta winner, que es otra dinámica. Entonces estaba pensando que realmente no, o sea, sí alinearnos, entender cómo los objetivos que tú tienes, pero de pronto no hacer esfuerzos que se vayan a perder porque la gente realmente no va a interactuar. actuar, sí, como hacer lo necesario. No sé si estoy yendo como demasiado allá, pero creo que nos estamos complicando. Entonces quería entender básicamente como los objetivos que tienes de lo que acaba de También porque lo que dice James, eso necesita como de apoyo para que alguien lo baicodee.
+- **[21:00] Laura Contreras:** Y además tiene que estar alineado, un poco más alineado a la aplicación, entiendo yo, respecto a UI. Entonces pues le falta trabajo.
+- **[21:00] Laura Contreras:** No sé si ahí tienes como algo claro respecto a los objetivos de Academy con esas 3 actividades que tenías.
+- **[21:00] Esteban Solano:** Planteadas. Sí, la primera pues va literalmente de la mano de lo que es el evento en sí, que son los productos, elegir un producto. La segunda, que era Pero elegir un
+- **[21:00] Laura Contreras:** producto respecto a enseñar
+- **[21:00] Esteban Solano:** a
+- **[21:00] Laura Contreras:** elegir un producto, o qué quieres.
+- **[21:00] Laura Contreras:** Lograr
+- **[21:00] Esteban Solano:** con la primera, la primera literalmente es saber si un producto va a ser rentable o no de acuerdo a unos precios estándar o unos valores estándar o predeterminados. Como puede ser un flete promedio, el CPA promedio, le muestro el valor del producto según el proveedor, le muestro el valor de la competencia que está vendiendo ese mismo producto, y de acuerdo a eso el Decide en cuanto al poder y el y en este caso el juego le diría si es rentable o no, si está perdiendo, etcétera.
+- **[21:01] Esteban Solano:** Es una calculadora de precio.
+- **[21:01] Esteban Solano:** Que de hecho esos mismos parámetros los usamos nosotros en Academy para enseñar a las personas, más allá de que él elija si el producto tiene un efecto wow, si el producto
+- **[21:01] Laura Contreras:** Bueno, entonces era más
+- **[21:01] Esteban Solano:** enfocado a precio, competencia, rentabilidad.
+- **[21:01] Esteban Solano:** Correcto, es el primero. El segundo, el segundo era el de la transportadora preferida, que para nosotros hemos notado de que muchas personas no conocen muy bien ese módulo dentro de la plataforma y que parece muy simple, pero nosotros lo ampliamos con la información que tenemos de las transportadoras, es decir, Semáforo de efectividad para saber qué tan efectiva una transportadora según la ciudad, saber las coberturas y todo esto como para entender cómo funcionan las transportadoras. De hecho, De hecho, tenemos videos y clases exclusivamente acerca del tema de la trazabilidad de los pedidos. Entonces lo que quisimos fue, listo, Dropi no te muestra cuando vas a elegir tu transportadora preferida, no te muestra Ahora, toda esta información, porque eso está en un Drive aparte que hace el equipo de operaciones, pero entonces en el juego yo te lo muestro, te muestro cuál es la, las métricas de esa transportadora justo en el momento en el que estás haciendo
+- **[21:02] Esteban Solano:** Ese, esa clasificación.
+- **[21:02] Esteban Solano:** Perdóname, perdona que te
+- **[21:02] Laura Contreras:** interrumpa. ¿Y tú crees que en el contexto del, o sea, en el contexto de tener esta actividad como en el transcurso de la feria, realmente sí es esté conectado al entendimiento de las transportadoras, o sea, como que
+- **[21:03] Laura Contreras:** No sé si me entiendes. O sea, como que estamos hablando de un objetivo de una feria de encontrar productos winner. Estoy aquí como analizando como todas las actividades que todos hemos querido meter, y de pronto sí creo que, ¿crees que sí sería como oportuno, por decirlo así, e intentar entrar en algo de entendimiento de transportadoras cuando el enfoque es como lo de, por ejemplo, el de rentabilidad. Siento que sí está como muy acorde, creo que también lo estoy diciendo para nosotros. ¿Cómo lo ves ahí tú, que eres como el experto en enseñar? Te entiendo
+- **[21:03] Esteban Solano:** completamente, sino que lo hicimos como tratando, también
+- **[21:03] Laura Contreras:** pareció lo que ustedes
+- **[21:03] Esteban Solano:** hicieron fue como la ruta
+- **[21:03] Laura Contreras:** de lo que normalmente hace un dropshipper eliges el producto luego
+- **[21:03] Esteban Solano:** tienes que ustedes colocaron ahí muchas más cosas obviamente lo de crear la landing los creativos Yo me salté todo eso y pasé a la parte de las transportadoras
+- **[21:04] Laura Contreras:** y se conecta con la tercera
+- **[21:04] Esteban Solano:** actividad que son las novedades, que es cuando el pedido ya ha salido. Eso fue lo que hice porque realmente la parte de los productos
+- **[21:04] Esteban Solano:** productos, si nos enfocáramos solamente en la selección de productos, pues ahí termina realmente elegir el producto. De ahí para allá sería listo, desarrollo del producto, creativos, y ya nos iríamos yendo, pero estaríamos alejando, porque pues si nos vamos a enfocar solamente en lo de la feria, bueno, del evento, pues sería como que te lo pregunto más como tú,
+- **[21:04] Laura Contreras:** como el experto en academia, ¿y cómo lo ves?
+- **[21:04] Laura Contreras:** O sea, si lo ves, ¿cómo decirlo? O bueno, todos, Santi y Jaime, si de verdad ven bien y útil que por mediante la aplicación en la que se supone, o sea, imaginémonos como la la experiencia, ¿no? Yo estar en la feria viendo productos interesada, pues si soy dropshipper, que el usuario foco es dropshipper, pues en encontrar productos winner y que nosotros empecemos a presentarle un montón extra de información.
+- **[21:05] Laura Contreras:** ¿Cómo lo ven? O sea, es una propuesta, ¿no? Podemos, sí, presentemos el universo Dropy porque va a funcionar, va a causar un impacto, o en realidad lo vamos a distraer, o de pronto vamos a hacer un esfuerzo que no va a poder medirse porque en realidad no vamos a tener tanta interacción. Creo que ya que tuvimos la oportunidad de alinearnos, creo que tenemos que volvernos un poquito y pensar más bien en esos objetivos. Santi.
+- **[21:05] Yo:** Para mí, el ideal, pensando también muy en borrador, habría sido literalmente tener la fusión de ambos conceptos.
+- **[21:05] Yo:** Porque al final se terminan complementando y se potencian, sí, con toda la creación que ya hizo Academy desde concepto, cierto, desde de los visuales, o sea, todo, todo. Siento que logra envolver mucho más y cautivar de lo que nosotros tenemos construido por Gali, porque Gali se ve muy como un silo que trata de, claro, prototipar es una prueba de concepto. Finalmente lo hicimos basado en workshop.
+- **[21:06] Yo:** Propondría, pero no sé si vamos a alcanzar.
+- **[21:06] Yo:** Realmente es
+- **[21:06] Yo:** O de alguna forma fusionar el concepto hacia que nosotros nos acerquemos más hacia, digamos, el UI, sí, desde como lo quiera hacer Acami, porque finalmente es que nosotros estamos apuntando a lo mismo.
+- **[21:06] Yo:** En el sentido de que lo mismo, solo que la podría decirse que la diferencia nuestra está en que más allá de que aprenda es que lo ponga en práctica y de verdad eso genere un Y es lo que logra hacer, logra generar un resultado tangible para el usuario, que es logré vender o logré salir a publicar algo.
+- **[21:06] Yo:** Entonces yo haría como estudiar la opción.
+- **[21:06] Yo:** de.
+- **[21:06] Yo:** Si logramos es mejorar de pronto la aplicación de Expo Winners a nivel de visuales, a nivel de la tipografía, colores.
+- **[21:06] Yo:** Y demás, que de hecho yo se lo he planteado a Alejandra la semana pasada, y era es con el paquete que nos compartió aquí el equipo, por creo que era por este chat, ver cómo lo empezamos a adoptar. Y no sé, por ejemplo, los iconos que tienen, como los tipos stickers y como las transiciones, que está mucho más gamificada por lo que entiendo, Esteban, de que trataron de acercar mucho a Duolingo, ver si lo Podríamos hacer así también para que nosotros le saquemos mayor provecho y de una vez la hacemos un poco más estándar sobre lo que sí es el mundo drop-in, porque nosotros todavía estamos como diseño. Ahora has visto más que yo, más ahora se entra más en detalle cuando ya de pronto lo que te mostró Aleja de que aún estamos yendo por otra línea, todavía muy dark, muy que de pronto no tiene algunos tal vez justamente También los copies, que era lo que hablábamos esta mañana, de mejorarlos, tratar de hacerlo más digerible para el usuario. Pudiéramos terminarle de cerrarle a Gali, pero uniendo ya todos los conceptos de Esteban.
+- **[21:07] Yo:** No sé si dentro también de lo que opine Esteban estaría ok que tratemos de fusionarlo, o si ustedes también consideran que debería igual mantenerse por lados totalmente separados. No hablo de que nosotros agreguemos a Academy, sino que realmente fusionemos el concepto.
+- **[21:08] Yo:** Pero no sé cómo lo ve.
+- **[21:08] Jaime Guevara:** Yo, yo, primero, Esteban, quiero que me entiendas que es más por el tiempo y porque nos tocaría white collar a nosotros. Entonces estoy intentando procesar.
+- **[21:08] Jaime Guevara:** Yo vería como lo bueno de los dos mundos y más bien me enfocaría un poco en, como dice Santi, lo bueno hay de las dos partes. Me enfocaría un poco en Objetivos que podamos medir. Por ejemplo, del lado de Academy, ¿qué te gustaría como objetivo al final?
+- **[21:08] Jaime Guevara:** Porque yo creo que ahí no sé si vas a poder medir que la gente, digamos, que cumple
+- **[21:09] Laura Contreras:** con una orden o no.
+- **[21:09] Laura Contreras:** Digamos que
+- **[21:09] Jaime Guevara:** nosotros, nuestro objetivo al final es que una persona llegue hasta un punto donde ya tiene unos productos seleccionados que son reales y que lo tenemos como un lead calificado.
+- **[21:09] Jaime Guevara:** Entre comillas, porque no sabemos cómo se vaya a desarrollar todo, calificado para que comercial lo aborde y podamos aumentar órdenes. De pronto de ahí podemos ese lead mandarlo también a Academy, y de pronto ahí Cumples con alguna métrica de Academy de tener leads calificados y apoyarlos.
+- **[21:09] Jaime Guevara:** Ese es nuestro, nuestro lado bueno de este mundo, que es estamos en pro de generar leads a través de la plataforma. Tú mencionas Hasta algo de eso al final. Entonces no sé si de pronto uniendo las dos cosas, yo sigo con la propuesta de que dentro de lo que tenemos, así como lo dijiste, ¿Qué te parece? Y entonces ya la gente sabe que ahí tiene como acceso a su repo de cómo llevar el video, cómo escoger un producto. Y así pues como llevarlos como en ese proceso para darles información hasta que digan, ven, en Academy tenemos todo para que llegues de 0 a tus 100 órdenes iniciales.
+- **[21:10] Jaime Guevara:** Me parecería eso más fácil de bycodiar que bycodiar todo lo que tienes de cero y meter. Esa es mi percepción pues actual en estos 10 días que nos quedan.
+- **[21:10] Participante:** Claro, no.
+- **[21:10] Esteban Solano:** A ver, yo no quiero que se lleven la percepción de que soy una persona terca. Al contrario, yo escucho tranquilo, no se preocupen. Yo no tengo problema con eso, yo no me caso Yo lo que, lo que único que les quisiera pedir es que no, si estaba a hacerla, se va a usar.
+- **[21:11] Esteban Solano:** No dejen Academy como por allá un botoncito de si necesitas ayuda dale clic aquí. ¿Por qué? Porque mata el resto de las cosas y cuando la gente vaya al stand no va a servir de nada, no va a haber nada porque el corazón era lo que pudieran hacer desde el teléfono entonces si lo pueden unir como dice Santi bien si pueden agregar un acceso un poco como más obvio, por decirlo así, o más, más llamativo para que vayan a Academy. Listo, si podemos meter vídeos o un acceso a un vídeo o lo que sea, pero que Si les queda más sencillo, en vez de hacer esto o adaptarlo, lo que sea, pero pues no dejar Academy por allá como que simplemente un botón de soporte, porque si no, cuando, cuando Lleguen a los diferentes stands, pues va, se va, se va, se muere ahí todo.
+- **[21:12] Esteban Solano:** Van a encontrar a una persona con el pulgar arriba.
+- **[21:12] Esteban Solano:** Y sí,
+- **[21:12] Jaime Guevara:** nada, total, tienes toda la razón. Y si reducimos la experiencia para no hacer todo el proceso del flujo, no sé qué piensan, y para que sea más rápido y poder enfocarnos solo en los puntos más fuertes. fuertes como, como de así seleccionas un producto.
+- **[21:12] Jaime Guevara:** Y el video y algo muy sencillo, como no sé, igual pues podemos, no sé, es que me preocupa es quién la va a codear.
+- **[21:12] Yo:** No, pero podrías de nuevo, por favor, compartir el MOOC que estábamos viendo ahora.
+- **[21:12] Yo:** Porque, o sea, podríamos simplemente, que tomamos y que tomamos mucho, pueden ser copies.
+- **[21:12] Yo:** Lo que les digo, yo iría más hacia como el system design.
+- **[21:12] Yo:** que se tiene en Academy, muchos de los conceptos que igual ya están trabajados durante mucho tiempo seguramente del lado de Academy, que facilitan el entendimiento. Nosotros estamos tratando de masticarlos para que el usuario lo haga más fácil. De hecho, también tenemos lo de la calculadora.
+- **[21:13] Yo:** Pero pues llevémonos lo mejor que tiene ya Academy, y por eso es que un poco mi comentario hacia pues convirtamos lo que tenemos de Galí
+- **[21:13] Yo:** Un poco más en esta experiencia, que de hecho yo les comenté en algún punto, hagámosla más móvil. De hecho, esta experiencia que mostré, Esteban, es bastante móvil. Entonces Seguramente, pero por ejemplo, nosotros al principio, nada más desde la puerta de entrada, déjenme yo les comparto la pantalla.
+- **[21:13] Laura Contreras:** Ya, ya te entendí.
+- **[21:13] Jaime Guevara:** Ok, o sea, lo que, perdona, y yo lo que creo que no te había entendido.
+- **[21:13] Jaime Guevara:** Cuando entremos al copy drop y copy gali copy.
+- **[21:14] Jaime Guevara:** Academy.
+- **[21:14] Jaime Guevara:** Manejemos como la predominancia de Academy, o sea, así.
+- **[21:14] Yo:** Como concepto, barras de progreso, el cómo disponemos los productos, por ejemplo, los mapas, el robotcito astronauta que todavía no entiendo qué es. Pero me encanta el buen precio. Entonces, como toda esa parte más visual, tratar de agrupar ahí. Por ejemplo, nosotros con lo que tiene Wandi es así parte de transporte. Ahora no me meto Pero por ejemplo, me devuelvo aquí un poquito. Esta ruta aprendizaje capaz no la podríamos tomar toda, pero podríamos poner nivel 1, que sería selección o O vende tu primer producto o creación de tu primer, primera tienda, nosotros le llamaríamos.
+- **[21:14] Jaime Guevara:** Como concepto.
+- **[21:14] Participante:** Ok.
+- **[21:14] Yo:** Tomar como todo esto que ya se trabajó tanto, que tiene tanto diseño encima.
+- **[21:14] Yo:** Entonces, por ejemplo, en la calculadora, Aleja ya está trabajando en las calculadoras. Tomemos estos mismos conceptos de cuando se logre entonces un precio que es un buen margen, lo mismo trabajarlo de esta forma.
+- **[21:15] Yo:** Podremos reutilizar ahí, sí, muchos de estos conceptos, tratar de replicarlos. Como creo que lo que no tiene todavía Gali es como un manual de, un manual de marca.
+- **[21:15] Yo:** Manual de diseño del producto, de lo que podríamos tratar de llevar esto.
+- **[21:15] Participante:** Me parece.
+- **[21:15] Yo:** Para que estemos alineados.
+- **[21:15] Participante:** Excelente idea.
+- **[21:15] Yo:** Y así más fácil de codiar, porque si cogemos esto, le agarramos paleta, tomamos todos estos recursos, lo mismo en el tipo de caso, al final podríamos generar también tipo Lo que dijimos hoy, la de la encuesta, podríamos hacerla aquí mismo. Recopilemos la encuesta de 10 preguntas.
+- **[21:15] Laura Contreras:** Sí, eso estaba pensando, como que podríamos mezclar como lo de la trivia con lo de Esteban. Sí, yo ahí, Santi, solo como recomendación, que creo Creo que fue lo que directamente, y estoy totalmente de acuerdo, creo que así nos integramos mejor y no parecen como esfuerzos muy separados y repetitivos.
+- **[21:15] Yo:** Replica.
+- **[21:16] Participante:** Papucha.
+- **[21:16] Participante:** ¿Qué hacemos?
+- **[21:16] Laura Contreras:** A mí me gusta la interfaz actual de lo de afuera.
+- **[21:16] Laura Contreras:** Y luego vamos a entrar a esta que es como más dropy, ¿no?
+- **[21:16] Laura Contreras:** Y justo lo que nos dijeron es un poco como que no se vea tan, tan, tan desagregada. O sea, yo entiendo que el concepto de la conceptualización del evento, es así como futurista, pam pam pam, leyendas.
+- **[21:16] Laura Contreras:** Pero bueno.
+- **[21:16] Laura Contreras:** Que pensemos un poquito en eso como para tener el argumento bien construido de es que cuando entras ya estás entrando a Dropi, por fuera es la interfaz del evento, puede ser así un poco.
+- **[21:16] Yo:** Sí.
+- **[21:16] Yo:** Por ejemplo, tomaría esta de pronto aquí, aquí me toca funcionar conceptos, no, no vas a tomar, bueno, mentiras, está chévere, de no vas a tomar una clase y vas a completar una misión, y es por ejemplo ahí empezamos a funcionar. Hoy vas a escoger tu primer, hoy vas a vender tu o vas a salir a publicar tu primer producto. El copia ya lo buscamos. Empezar misión, empezar dispara el flujo. Es decir, por ejemplo, James, no escogeríamos como Ir a seleccionar producto es empezar misión, y ahí entonces arranca el recorrido, va reprogreso arriba.
+- **[21:16] Laura Contreras:** Saludos, Nicolás.
+- **[21:17] Participante:** Sí, sí.
+- **[21:17] Laura Contreras:** Ya, perdón.
+- **[21:17] Yo:** Traemos los productos como ya está acá, cierto. Selecciona tu producto. Mira que al final la intención del usuario es la misma. Y por ejemplo estaban las preguntas, la trivia, realmente la Supongo ustedes ahí la intención por debajo de recopilar data, correcto. El si el usuario entendió, no entendió. Para nosotros el alcance va más que si el usuario entendió, no entendió, es en qué parte se quedó. Entonces, o qué faltó para que lo terminaran de entender. Entonces, al final lo que podemos es, las preguntas todas no las tenemos definidas, no está el formulario, creémoslas en conjunto también con Academy para que de ambos lados lleguemos A preguntas que logren resolver.
+- **[21:17] Laura Contreras:** Y un poco separamos esto de
+- **[21:18] Jaime Guevara:** lo que ya se ve
+- **[21:18] Laura Contreras:** dentro del workshop, que sí es como el uso de la herramienta total, ¿cierto?
+- **[21:18] Laura Contreras:** Completa.
+- **[21:18] Yo:** No, lo que yo estoy yendo es tendríamos que transformar Gali.
+- **[21:18] Laura Contreras:** O vamos a
+- **[21:18] Yo:** En este concepto que trae acá.
+- **[21:18] Yo:** Es decir, Gali deja de ser dark, de tener como los flujos como están concebidos. O sea, es que el flujo realmente es el mismo. Lo que está cambiando al final es la disposición de las tarjetas. O sea, de hecho, Aleja, si no que no te aleja lo tienen en localhost déjenme le podrías describir ahí la para ver si si si se podría unir porque de hecho ya la disposición que está haciendo es muy parecida ahí está en el sentido de mostrar como cards más pequeñas, no tan grandes como las que nos trae James. Lo mismo, la calculadora un poco más angostica, sí, más precisa, la data.
+- **[21:19] Yo:** Y de hecho en estos componentes podrías reutilizar aquí varios componentes, ¿no? Y es aquí nosotros lo tomaríamos por ejemplo por proyectos, que fue lo que tenemos en el repo que entregó James, solo que irnos a Entonces estos son los productos para llegar a un mismo estilo. Ahora Aleja seguramente me va a matar porque decir que joder, pero bueno, es cambiarlo porque o sea la idea
+- **[21:19] Yo:** Es no tener tus apps.
+- **[21:19] Participante:** Sí, claro.
+- **[21:19] Yo:** O sea, tener una sola app que cubra las dos necesidades, que cubra la necesidad de producto, de tener una prueba de concepto que se pueda validar y entregarle al usuario para que salga a vender, pero que por debajo también cubra la expectativa de Academia de enseñar y de traer luego resultados de saber si logró enseñar de la forma correcta.
+- **[21:19] Yo:** Pero pues no sé, es mi propuesta.
+- **[21:19] Yo:** No descartar ninguna de las dos porque siento que esta también tiene cosas interesantes. En lo de transportadores, si no, no tengo mucho por opinar porque realmente no sé cuándo y qué. Aquí le estoy preguntando por interno qué va a A unir al repo, no sé, todavía hay que unir. Entonces no sé si a él le interesaría algo parecido.
+- **[21:20] Participante:** Yo tengo que salir.
+- **[21:20] Jaime Guevara:** Un tema de mi esposa, pero sí, una chimba, Santi, qué bacano que llegaste a esa conclusión. Ahí pues ya son ustedes, yo les Les diría es adicional a así que lo hagamos, también saber, uno, pues como que se va a estar de acuerdo.
+- **[21:20] Jaime Guevara:** Que como que vi que sí.
+- **[21:20] Jaime Guevara:** Pues digamos que ir en conjunto ya como equipo y decir pues que lo vamos a hacer de esta manera. Y lo otro es saber cuáles son los sacrificios, los trade-offs. Por ejemplo, pues no vamos a hacer un Figma con lo nuevo de Santi, sino que todo va a ser bycodeado y pues van a haber sacrificios de pixel perfect, obviamente, que no vamos a hacer. Seguramente algunas ventanas no se van a hacer, pero ya creo que el sacrificio más grande es queda dentro del juicio de Santi y Aleja, porque no hay tiempo tanto para iterar.
+- **[21:21] Yo:** Sí, Esteban, ¿qué tal?
+- **[21:21] Yo:** flexible está a sacrificar.
+- **[21:21] Yo:** un poco el concepto de e-learning.
+- **[21:21] Yo:** Y de gamificación de aprendizaje.
+- **[21:21] Yo:** Porque al último creo que cumple las metas de enseñar e inclusive logra tangibilizar si aprendió o no, porque va a lograr crear, tomar un producto y salirlo a vender. Por debajo también, y al final también se podría hacer varias. Al principio, de hecho, queremos ver varias trivias, entonces podemos tomar esos conceptos para que queden gamificados. ¿Qué tan flexible estás a eso? O sea, de que quede una sola aplicación, que Traté de unir lo mejor de lo que ya se hizo acá con lo que ahora te mostró Jaime. ¿Tú qué tan flexible estás a eso?
+- **[21:21] Esteban Solano:** Estoy muy flexible, la verdad.
+- **[21:21] Esteban Solano:** De acuerdo con todo lo que acaban de decir, si no tengo ningún problema.
+- **[21:21] Yo:** Entonces ahora toca convencer a Aleja. Aleja.
+- **[21:21] Esteban Solano:** Bueno,
+- **[21:21] Jaime Guevara:** yo me voy. Chao, qué pena, quiero recordar a mi esposa.
+- **[21:21] Yo:** Dale, Torito. Aleja, a ver.
+- **[21:22] Yo:** Pregunta.
+- **[21:22] Yo:** Esto, estos son los mocs que ya había trabajado. ¿Ahí me escuchas bien?
+- **[21:22] Participante:** Sí, ahí te escucho.
+- **[21:22] Participante:** Hola a todos, ¿cómo están?
+- **[21:22] Yo:** Este es el, es el proyecto que Academy quiere llevar a la realidad.
+- **[21:22] Yo:** Academy hasta aquí todavía, cierto, muy Academy porque aquí son flujos de aprendizaje tratando de aplicar varios conceptos de e-learning y todo el cuento, ¿no?
+- **[21:22] Yo:** Sin embargo, pues ellos necesitan también, me corriges Esteban, si digo algo que no es, pero necesitan también un poco de apoyo para lograrlo realidad, para sacarlo del Figma y realmente ponerlo en el evento, correcto. Yo llegué también con En ese contexto, me corrige si no es así. Pero entonces lo que estamos viendo es, claro, ellos están apuntando un poco bastante a lo mismo que nosotros estamos apuntando del lado de qué Querer comprobar, bueno, querer más hacia ruta aprendizaje, claro, pero querer que un usuario que no sabe de ventas digitales y demás logre vender su primer producto. El asunto es que nuestro alcance está Hacia que de verdad genere una landing y allí lo publique, que es lo que ya conoces. Ellos lo hacen claramente desde la parte más de selecciona un producto, mira si un producto es rentable o no, correcto. Así, mira, esto tiene un buen precio. Esto, bueno, es tema de transportadoras que nadie, nuestro flujo de gallina lo tiene. Y saliste a vender, entonces misión completa. O sea, al final es muy, de hecho, muy gamificado, ¿verdad?
+- **[21:23] Yo:** La pregunta es, ¿cómo vería si tratamos de llevar justamente estos conceptos de diseño?
+- **[21:23] Yo:** A lo que tenemos hoy.
+- **[21:23] Yo:** Al final los flujos no los cambiamos.
+- **[21:23] Yo:** O sea, nos trae productos.
+- **[21:23] Yo:** Vemos los productos, la calculadora que tú ya tienes, todo eso igual, solo que tratamos inclusive, perdón si de pronto lo simplifico ya demasiado, Esteban, pero nos estaríamos quedando con todos estos stickers. Los voy a llamar stickers. Si le diseñé otro nombre, por favor perdona.
+- **[21:24] Yo:** Lo que yo podría hacer para que claramente tú no te sobrecargues es la parte de que habíamos hablado esta mañana.
+- **[21:24] Yo:** Sobre la encuesta previa inicial, el flujo en el workshop, sí, que era como, bueno, en una trivia, ¿cuánto te demoraste? Trivia no es mentira, eso termina siendo más una encuesta. ¿Cuánto te demoras en escoger un producto? O sea, eso muy traído a la realidad, tratar de unir de alguna forma, fusionar el concepto de Academy con lo que nosotros tenemos, es tomarte los recursos Realmente la paleta de colores, barras de progreso, ¿cómo verías eso? ¿Qué tan lograble crees que sea?
+- **[21:24] Yo:** Y si tenemos que hacer sacrificios nosotros también, pues hagámoslo. O sea, por ejemplo, lo de los 3 lujos principales, que es el de no sé qué vender, ¿verdad? Y hay 2 más. Pues si tenemos que sacrificar y pronto darle baja para el concepto de sus lujos, hagámoslo.
+- **[21:24] Alejandra Melo:** Sí, yo creo que toca darle baja como algunas cosas.
+- **[21:24] Alejandra Melo:** Mm-hmm.
+- **[21:25] Yo:** Ya teniendo estos recursos, realmente no sería bueno. De pronto este Academy, sí, ver qué hacemos. Si hacemos un Academy Expo Winners aquí algo subarriba, como lo de los 2, por ejemplo. No sé si el de Expo Winners Podrías tener la temática como en blanco, el fondo, el background en blanco, el background no, el concepto que se hace solamente en blanco con fondo transparente.
+- **[21:25] Alejandra Melo:** Pues.
+- **[21:25] Yo:** Y por ejemplo tener esta temática como de que es el sobrecito y demás, pero lo mismo la paleta.
+- **[21:25] Yo:** En las cards que tú ya tenías montadas, por ejemplo, que la carta se vea algo más como de este estilo, o igual esta es una propuesta. Si tú consideras que podemos mejorarle algo, cambiarle algo, pues hagámoslo. Finalmente, la disposición Termina siendo la que tú puedas trabajar. Lo mismo es el balance entre que encontremos lo mejor que podamos de acá, reutilicémoslo para el de nosotros y saquémosle provecho.
+- **[21:25] Alejandra Melo:** Pero entonces es pasarlo al Cali que tenemos.
+- **[21:25] Yo:** El core es nuestro galí, o sea, no vamos a desbaratar nuestro galí. Es tomemos de acá lo que más se pueda, principalmente colorimetría, stickers.
+- **[21:26] Alejandra Melo:** Sí, entonces lo dejo así, naranja o blanco, los mismos stickers, exactamente lo mismo.
+- **[21:26] Yo:** Barra de progreso, como esos componentes sobre todo de gamificación. Creo que es lo más, de hecho, lo más atractivo sobre todo para usuarios que están iniciando. Y porque mira que aquí ya está muy, muy cercana a la experiencia móvil, sí.
+- **[21:26] Participante:** Okay.
+- **[21:26] Yo:** No sé, es como un poco el planteamiento que tengo. ¿Qué dices?
+- **[21:26] Alejandra Melo:** Pues pásame todos ya.
+- **[21:26] Alejandra Melo:** Just, just.
+- **[21:26] Alejandra Melo:** Disculpa,
+- **[21:26] Esteban Solano:** Aleja.
+- **[21:26] Esteban Solano:** Lo que le mencionaba a Santiago y a Jaime, a todos.
+- **[21:26] Esteban Solano:** Sí, sí, como ya a manera de petición.
+- **[21:26] Esteban Solano:** De no dejar dentro del flujo Academy simplemente pues en el botón rezagado de necesitas ayuda, sino que pues de que lo que les explicaba yo es parte de la experiencia en vivo allí Ya en los stands de Academy dependía mucho de esto. Entonces, como ya vamos a hacer esta versión que es la de ustedes con esta visual, pues no No, no, no matar a Academy del todo. Por eso no sé si el logo, no sé si algo, algo. Y creo que igual yo tendría que compartirlas a ustedes.
+- **[21:27] Esteban Solano:** Que porque al final esta trivia sí iba a tener un CTA, que estábamos hablando con Katherine, si iba a ser un agendamiento, una clase, que eso yo lo puedo hacer y les envío el link para ver. donde se pone en algún botón o algo. Y creo que Catherine también quería algo que tuviera que ver con rearquitectura. Pueden ser dos cosas diferentes, eso pues ya supongo que lo hablarán con ella.
+- **[21:27] Yo:** Ahí sí, ahí sobre eso, de acuerdo. Y les claramente no ocultar a cada nicho, tenemos que hacerlo destacar, sobre todo para los huérfanos, que también es mucho nuestro, nuestro foco. está ahí, no, de los que no están haciendo parte de una comunidad, que todavía no saben vender. Creo que también estamos apuntando a la audiencia, ¿es correcto? O ustedes están yendo por otro lado. Listo, hacia Academy hay muchos partecitas ya muy puntuales del flujo que he hecho.
+- **[21:28] Participante:** Sí, no, de acuerdo.
+- **[21:28] Yo:** que no te mostró Jaime, porque Alejandra, que lo estaba trabajando en la actualización, de hecho esa ya es la versión 1, les está trabajando en la siguiente versión.
+- **[21:28] Yo:** Que va a ser más, va a tener unos conceptos más fáciles también para el usuario. Entonces podemos dejar Academy.
+- **[21:28] Yo:** No sé si vamos a buscar de pronto recursos y es como un expo winner, si lo que ponen siempre como la barrita o el X acá de Torpe Academy también, pero más que eso nosotros tenemos unos flujos que cuando ya se selecciona Selecciona el producto, se guarda y se quiere salir a vender. Porque este, mira que este ustedes muere cuando llega acá, ¿no?
+- **[21:28] Yo:** O sea, aquí ya esta parte de seleccionar el precio, hasta aquí llega, ¿cierto?
+- **[21:29] Participante:** Sí.
+- **[21:29] Yo:** Nosotros, una vez seleccionado el producto, generamos una landing.
+- **[21:29] Participante:** Sí.
+- **[21:29] Yo:** Y con eso es la opción de que empiece venta orgánica o que paute.
+- **[21:29] Yo:** Y ahí también podemos tener unos call to actions de cómo, o sea, links que nos pasen. O sea, claramente la idea es llevarlo a la realidad de que termine el flujo para la venta y en diferentes puntos ver cómo logramos Vamos a hacer unos call to actions que a ustedes les funcione. Y déjame yo, Aleja, para que nos rinda el tiempo, si te parece, yo puedo ir trabajando en esta parte de encuestas y de trivia, ¿sí? Para que tú solo te concentres en el flujo principal, que va a ir codeado, pues yo lo saco.
+- **[21:29] Alejandra Melo:** Listo, sí.
+- **[21:29] Yo:** Y si te parece, Esteban, te saco un espacio esta semana, podría ser el jueves si te queda bien.
+- **[21:29] Yo:** Y organizamos las preguntas. O si las tienes, no nos reunimos ni siquiera. Si las tienes las preguntas, mándamelas, porfa, el banco completo de preguntas que tengas de call to actions, y con eso nosotros lo tomamos de insumo para tratar de ajustar dentro de los flujos y lo que no, pues yo te digo, esto nos afecta o nos cancela otros flujos o nos juega en contra en X cosas. ¿Te parece?
+- **[21:30] Esteban Solano:** Si no, si quieres, yo te lo envío, pero entre las preguntas serían más tipo encuesta, ¿cierto?
+- **[21:30] Yo:** Nosotros, nuestro propósito está muy enfocado en encuesta.
+- **[21:30] Participante:** Okay.
+- **[21:30] Yo:** Pero lo que podemos hacer es lo mismo, un balance en el cómo se presenta la pregunta.
+- **[21:30] Yo:** Para que logre cubrir tanto una encuesta para nosotros así como para ustedes una trivia. Sí, porque si para ustedes una trivia, claro, está en, no sé, en este, sino que no hay el ejemplo, pero a ver, hay ejemplos. empleo de caso de pregunta para, para seleccionar producto.
+- **[21:30] Esteban Solano:** No, para producto no.
+- **[21:30] Yo:** Okay, Esteban.
+- **[21:30] Esteban Solano:** La única que hicimos así es el de Chamultepec, fue, no, ya es
+- **[21:30] Yo:** Okay, está claro.
+- **[21:30] Yo:** Ya, claro.
+- **[21:30] Yo:** Este de selección de transportadora, nosotros en lo que te mostrará Jaime, nosotros no tenemos estos flujos. Entonces este completo selección de transportadoras no lo incluiríamos.
+- **[21:31] Yo:** Porque el objeto de Galin no está ahora en montar
+- **[21:31] Yo:** Sabes qué, déjame, yo trato de hacer este.
+- **[21:31] Yo:** Pero no me comprometo a que salga completo, o sea, a que salga realmente. Es decir, no lo incluimos en Galí porque Alejandra necesita terminar todo este flujo, porque nosotros sí tenemos unas ramificaciones bastante complejas de ahí abajo. Pero yo puedo tratar de hacer el de ruta logística, ¿te parece?
+- **[21:31] Yo:** Y vemos entonces
+- **[21:31] Alejandra Melo:** Okay, qué pena equipo me o salir un momento, qué pena conocer.
+- **[21:31] Yo:** Dale, ya todo bien, ya igual vamos a hacerlo.
+- **[21:31] Alejandra Melo:** Vale.
+- **[21:31] Yo:** Entonces yo trato de hacer el de ruta logística, que parece que igual a nosotros también nos sirve tener una información ahí. Entonces, si quieres, mándame completo toda la información que tengas. Aparte de esto, si tienes carpetas, recursos, lo que sea, me los compartes y yo trato de montar esto. Listo.
+- **[21:31] Participante:** Listo, de verdad.
+- **[21:31] Yo:** De una. Bueno, así quedamos, todo bien.
+- **[21:32] Esteban Solano:** Allez, à bientôt.

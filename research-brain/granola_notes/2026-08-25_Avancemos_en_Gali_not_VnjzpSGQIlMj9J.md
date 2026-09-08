@@ -1,0 +1,845 @@
+# Avancemos en Gali 🤖
+
+- **ID:** `not_VnjzpSGQIlMj9J`
+- **Fecha:** 2026-08-25T14:36:39.273Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/6180a924-ae4f-409d-93e2-eccd89cd00c3)
+- **Asistentes:** Santiago Herrera Acosta, Catalina Giraldo, Laura Contreras, Diana Margarita Aldana Echeverry, Jaime Guevara, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Gali Global: Visión y Concepto
+
+- Gali Grande: Dropi como herramienta AI-first, no solo un chatbot integrado
+- Concepto central: orquestador (“Drop the Orquestador”) que facilita el éxito del comercio
+  - Hiperpersonalización dentro del ecosistema Dropi, sin salir a herramientas externas
+  - Contexto: MCP se lanza en septiembre, usuarios ya automatizan con Claude por fuera
+- Componentes principales del prototipo:
+  - Objetivos con IA: la persona define metas, Gali las monitorea y ajusta
+  - Señales predictivas: más allá de notificaciones, anticipa tendencias y sugiere acciones
+  - Proyectos y campañas: agrupan productos y campañas (ej. campaña Amor y Amistad)
+  - Agentes y skills: configurables, con marketplace para que usuarios comercialicen los suyos
+  - Artefactos: módulos personalizados que se fijan en cualquier parte de Dropi
+  - Conexiones: Google Drive, Sheets y otras integraciones para que Dropi sea “el cerebro”
+- Alcance de usuarios: sellers, proveedores, marcas y administración interna
+  - Aleja señala que el prototipo actual se siente más para usuarios avanzados que principiantes
+  - Cata reconoce que falta trabajar el flujo para usuarios que llegan con Dropi vacío
+
+# Gali Pequeño: Expo Winners
+
+- Objetivo: prueba de concepto mínima para mostrar el potencial de Dropi en el evento
+- Flujo actual: encontrar producto ganador, crear ángulo de venta, llegar hasta WhatsApp o página
+- Métrica principal: activar usuarios huérfanos que no saben nada de ecommerce y lograr su primera orden
+- Idea adicional (Jaime): usar Gali Pequeño como demo tipo “bolsa de inversión”
+  - El usuario interactúa con un demo, ve resultados y se le invita a registrarse
+  - Similar a publicidades de juegos que muestran la experiencia antes de descargar la app
+- Pantallas de Gali Pequeño (proyectos, productos, presupuesto) en dark mode sin estilos actuales de Dropi
+  - Se evalúa si esos flujos se reutilizan en Gali Global o son exclusivos para Expo Winners
+
+# Discovery de Sellers y Usuarios Huérfanos
+
+- María pidió discovery intensivo de flujos de dropshippers antes de generar más features
+  - Santiago y Aleja deben tomar cursos de líderes de comunidad y entender por qué usuarios no se activan
+  - Esto pone un alto temporal a la construcción de nuevas funcionalidades
+- Dato nuevo de María: alto porcentaje de registros de personas sin experiencia previa en ecommerce
+  - Gali identificado como el habilitador clave para cerrar ese gap
+  - Foco prioritario: activación de huérfanos que nunca han generado su primera orden
+- Cata comparte investigación previa de “venta de productos” (dos rondas de entrevistas sobre el journey del seller)
+  - Puede actualizarse con nuevas entrevistas como punto de partida sólido
+
+# Próximos Pasos
+
+- **Definir flujos, alcances y métricas de Gali Pequeño** (Santiago, Alejandra)
+
+  Reunión esta tarde (25 de agosto) con Aleja; se espera tener avances para mañana.
+- **Presentar avances de Expo Winners con María mañana**
+
+  Aprovechar el espacio agendado para alinear la construcción de Gali con su visión y feedback.
+- **Explorar flujo de activación para usuarios nuevos en Dropi vacío** (Catalina)
+
+  Foco en cómo orientar a quien llega sin saber nada, como parte del concepto de Gali Global.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/555ae155-958b-4257-a506-74f23f687312](https://notes.granola.ai/t/555ae155-958b-4257-a506-74f23f687312)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[14:36] Diana Aldana:** A ellos, mientras se conectan
+- **[14:36] Diana Aldana:** y Lau.
+- **[14:36] Yo:** Hola, ¿cómo están?
+- **[14:36] Catalina Giraldo Aguirre:** Hola, Santiago, ¿cómo estás?
+- **[14:36] Yo:** Bien, bien, con malestar de equipo, pero vi ¿Ustedes?
+- **[14:36] Catalina Giraldo Aguirre:** Listo.
+- **[14:37] Catalina Giraldo Aguirre:** Bien.
+- **[14:37] Yo:** Me alegra.
+- **[14:37] Diana Aldana:** Tú sabes si se alcanza a conectar, Santi.
+- **[14:37] Yo:** No habla todo.
+- **[14:37] Yo:** Allí está
+- **[14:37] Yo:** Pues yo le yo tuve
+- **[14:37] Diana Aldana:** El
+- **[14:37] Yo:** ella, pero pero no sé si
+- **[14:37] Diana Aldana:** Ok. Pues el objetivo es saber si tienen alguna duda de Gali, ya cómo identificar el alcance de lo que se va a mostrar en expo winner.
+- **[14:37] Diana Aldana:** Y, pues, también como definir el el alcance general que va a tener Gali, pues, ya que
+- **[14:37] Diana Aldana:** se va a encargar del alcance general y ustedes del evento de expo winner.
+- **[14:37] Diana Aldana:** Pues era también como un juego de alineación
+- **[14:37] Yo:** la, como apenas desde ayer arrancamos ya las tareas de revisar bien el
+- **[14:37] Yo:** detalle más, hoy a las dos tenemos con Aleja una reunión
+- **[14:38] Yo:** para diseño de unos flujos, justamente definir
+- **[14:38] Yo:** los alcances, las métricas. Entonces, por ahora, eso no hay
+- **[14:38] Yo:** definido nada.
+- **[14:38] Yo:** Solamente lo que hemos cada uno explorado y ya hoy le da ese
+- **[14:38] Yo:** empezar como a consolidarlo todo en un documento.
+- **[14:38] Yo:** Y dejar, como ya formalizado. Ahí ya tiene, creo que
+- **[14:38] Yo:** una una parte ya adelantada en FigJam, Eso es para Expo Winners.
+- **[14:38] Yo:** Creo que sí nos ayudaría es más entender el alcance global de Gali Creo que en eso no hemos como profundizado mucho con con Jaime.
+- **[14:38] Diana Aldana:** Ok.
+- **[14:38] Diana Aldana:** Bueno, ¿qué
+- **[14:38] Catalina Giraldo Aguirre:** dice? Sí te podemos
+- **[14:38] Catalina Giraldo Aguirre:** eso para que lo tengas en cuenta?
+- **[14:38] Catalina Giraldo Aguirre:** Y también nos des, vayas dando feedback y
+- **[14:38] Diana Aldana:** y así,
+- **[14:38] Catalina Giraldo Aguirre:** espera.
+- **[14:38] Diana Aldana:** A la espera, deja que se conecte.
+- **[14:38] Diana Aldana:** Jaime se demora, Lau se demora, pero que vayamos arrancando.
+- **[14:38] Diana Aldana:** Puedo, a ver, Alejandro.
+- **[14:38] Diana Aldana:** Unos minutos o o, pues te vamos explicando a ti, Santi.
+- **[14:39] Yo:** Dale, esperemos
+- **[14:39] Yo:** tipo de, si él les ha respondido ahí, pero
+- **[14:39] Yo:** pues sí, sigue nomás, vayamos compartiendo pantalla y vamos hablándole igual.
+- **[14:39] Yo:** Regrabemos la llamada, por si deja tiene que
+- **[14:39] Yo:** revisar esto.
+- **[14:39] Yo:** Listo, ya
+- **[14:39] Catalina Giraldo Aguirre:** Listo.
+- **[14:39] Catalina Giraldo Aguirre:** Entonces, bueno,
+- **[14:39] Catalina Giraldo Aguirre:** un poco
+- **[14:39] Catalina Giraldo Aguirre:** lo que el objetivo de era como
+- **[14:39] Catalina Giraldo Aguirre:** casi que una prueba en la casi más mínima expresión de
+- **[14:39] Catalina Giraldo Aguirre:** que queremos lograr con Gali Grande. Y también un poco, pues,
+- **[14:39] Catalina Giraldo Aguirre:** aprovechando el evento, como para mostrar el potencial de Gropi con
+- **[14:39] Catalina Giraldo Aguirre:** lo que se puede hacer en dropping.
+- **[14:39] Catalina Giraldo Aguirre:** Pero lo, aquí,
+- **[14:39] Catalina Giraldo Aguirre:** este,
+- **[14:39] Catalina Giraldo Aguirre:** este es un feedback que hemos estado haciendo. Gali grande es un concepto
+- **[14:40] Catalina Giraldo Aguirre:** hemos estado trabajando
+- **[14:40] Catalina Giraldo Aguirre:** para, o para entender un poco como dropping,
+- **[14:40] Catalina Giraldo Aguirre:** Puede ir a un futuro siendo una herramienta AI first,
+- **[14:40] Catalina Giraldo Aguirre:** pero
+- **[14:40] Catalina Giraldo Aguirre:** no solamente
+- **[14:40] Catalina Giraldo Aguirre:** tipo, integrando un chatbot de IA o
+- **[14:40] Catalina Giraldo Aguirre:** o simplemente una integración con IA, o ahorita, por ejemplo, de página. Ah, bueno, eso es
+- **[14:40] Catalina Giraldo Aguirre:** son como diferentes features que son de IAN.
+- **[14:40] Catalina Giraldo Aguirre:** Pues más allá de eso es que sea como un top, como que esté
+- **[14:40] Catalina Giraldo Aguirre:** dentro del top,
+- **[14:40] Catalina Giraldo Aguirre:** Y algo muy importante que
+- **[14:40] Catalina Giraldo Aguirre:** frente al concepto
+- **[14:40] Catalina Giraldo Aguirre:** y el valor diferenciado que hemos estado trabajando como a nivel de concepto,
+- **[14:40] Catalina Giraldo Aguirre:** ha sido de que
+- **[14:40] Catalina Giraldo Aguirre:** o sea, sea
+- **[14:40] Catalina Giraldo Aguirre:** el, o sea,
+- **[14:40] Catalina Giraldo Aguirre:** que sea,
+- **[14:40] Catalina Giraldo Aguirre:** un orquestador, por eso el nombre del proyecto es drop the orquestar,
+- **[14:40] Catalina Giraldo Aguirre:** que me ayude o me facilite el éxito del comercio de
+- **[14:40] Catalina Giraldo Aguirre:** después de
+- **[14:40] Catalina Giraldo Aguirre:** pues, de de diferentes herramientas
+- **[14:41] Catalina Giraldo Aguirre:** hiperpersonalizadas. La palabra hyper es porque no solamente
+- **[14:41] Catalina Giraldo Aguirre:** o sea, casi que sea como
+- **[14:41] Catalina Giraldo Aguirre:** configurando con IA mis cosas,
+- **[14:41] Catalina Giraldo Aguirre:** pero la ventaja va a ser que va a vivir dentro de drop in dog.
+- **[14:41] Catalina Giraldo Aguirre:** O sea, no va a estar como saliéndose drop y como al ecosistema o
+- **[14:41] Catalina Giraldo Aguirre:** ah, tengo que integrar esto y lo otro, porque eso es un problema que está pasando. O sea, aquí, mismo,
+- **[14:41] Catalina Giraldo Aguirre:** pues, el MCP de repente, entiendo que ya se va lanzar,
+- **[14:41] Catalina Giraldo Aguirre:** dentro de poquito por ahí en septiembre.
+- **[14:41] Catalina Giraldo Aguirre:** Y las personas, igualmente, ya con Claude, están haciendo sus
+- **[14:41] Catalina Giraldo Aguirre:** herramientas y están haciendo sus cosas, sus automatizaciones para
+- **[14:41] Catalina Giraldo Aguirre:** usar Tropi.
+- **[14:41] Catalina Giraldo Aguirre:** Entonces, es ver, aparte de eso,
+- **[14:41] Catalina Giraldo Aguirre:** qué más valor le puede ofrecer dropping,
+- **[14:41] Catalina Giraldo Aguirre:** siendo una herramienta AI first? Si ya, pues,
+- **[14:41] Catalina Giraldo Aguirre:** con otras personas, ya con otras herramientas, o yo
+- **[14:41] Catalina Giraldo Aguirre:** siendo
+- **[14:41] Catalina Giraldo Aguirre:** muy curioso, puedo automatizar, pues, toda mi operación.
+- **[14:41] Catalina Giraldo Aguirre:** Pues, con IA. Entonces, ¿cómo, pues, se puede adaptar ese ecosistema a eso? Y cómo podemos irlo trabajando? Entonces, eso es un poco lo que la la misión, Entonces, la estrategia es que, pues, te haya con herramientas el ecosistema, aparte de ofrecerme como la las herramientas, yo tenga todo un solo lugar y tenga conocimiento, porque, pues, puedo aprender de las diferentes negocios de todos, y me pueda lanzar Ahorita mismo, el prototipo que hemos estado trabajando, ha sido muy experimental como de concepto, y ha sido muy enfocado a sellers. Pero la idea es que también
+- **[14:42] Catalina Giraldo Aguirre:** este este prototipo, pues, se pueda adaptar para proveedor marca,
+- **[14:42] Catalina Giraldo Aguirre:** y, pues, pero sí, también, ¿por qué no?, administrar.
+- **[14:42] Catalina Giraldo Aguirre:** Como ayudamos al equipo a administrar, a gestionar su su
+- **[14:42] Catalina Giraldo Aguirre:** la operación y y el monitoreo.
+- **[14:42] Catalina Giraldo Aguirre:** Por el momento, lo hemos estado enfocando a
+- **[14:42] Catalina Giraldo Aguirre:** Entonces,
+- **[14:43] Catalina Giraldo Aguirre:** bueno, eso es un poco el repo que tenía,
+- **[14:43] Catalina Giraldo Aguirre:** Bueno, la idea
+- **[14:43] Catalina Giraldo Aguirre:** creo que no me aparece porque soy
+- **[14:43] Catalina Giraldo Aguirre:** Espéreme un momentico.
+- **[14:43] Catalina Giraldo Aguirre:** Voy a entrar a Chrome.
+- **[14:43] Catalina Giraldo Aguirre:** Porque aquí, en Chrome,
+- **[14:43] Catalina Giraldo Aguirre:** aparece el step.
+- **[14:43] Catalina Giraldo Aguirre:** Ya. La idea es que al al iniciar sea un poco como hemos estado de
+- **[14:43] Catalina Giraldo Aguirre:** revisando en la
+- **[14:43] Catalina Giraldo Aguirre:** en el inicio, cuando las personas están haciendo en el Valley Pequeño,
+- **[14:43] Catalina Giraldo Aguirre:** pero son preguntas de cómo estás, que como que cuál es tu objetivo,
+- **[14:43] Catalina Giraldo Aguirre:** o
+- **[14:43] Catalina Giraldo Aguirre:** en este caso, dónde está trabajando tu tu operación actualmente,
+- **[14:43] Catalina Giraldo Aguirre:** ¿Cuál es tu primer canal de pauta? Y
+- **[14:43] Catalina Giraldo Aguirre:** pues, serían otras preguntas de contexto, pero algunas preguntas de contexto para que él se pueda alimentar.
+- **[14:43] Catalina Giraldo Aguirre:** Y
+- **[14:43] Catalina Giraldo Aguirre:** y, pues, esto es un poco el prototipo,
+- **[14:44] Catalina Giraldo Aguirre:** Estaba trabajando con la nueva arquitectura,
+- **[14:44] Catalina Giraldo Aguirre:** Como puedes ver, pues está el catálogo todo, pero hay muchas diferencias, so, hay varias modificaciones en todo lado.
+- **[14:44] Catalina Giraldo Aguirre:** Pero estábamos pensando reutilizar todo en un módulo que se llama
+- **[14:44] Catalina Giraldo Aguirre:** donde tengo todas las las los
+- **[14:44] Catalina Giraldo Aguirre:** por así decirlo, los
+- **[14:44] Catalina Giraldo Aguirre:** pues sí, la las configuraciones que hemos estado trabajando,
+- **[14:44] Catalina Giraldo Aguirre:** Y aquí,
+- **[14:44] Catalina Giraldo Aguirre:** también tendría este chatbot, que yo puedo interactuar, y está fijo.
+- **[14:44] Catalina Giraldo Aguirre:** O la podría intercambiar, así.
+- **[14:44] Catalina Giraldo Aguirre:** Y, bueno,
+- **[14:44] Catalina Giraldo Aguirre:** la idea es que Gali sea una orquestada
+- **[14:44] Catalina Giraldo Aguirre:** y
+- **[14:44] Catalina Giraldo Aguirre:** acá yo tenga este centro de reporte o yo puedo hablar con él desde aquí o yo
+- **[14:44] Catalina Giraldo Aguirre:** pueda tener conversaciones,
+- **[14:44] Catalina Giraldo Aguirre:** las pueda ir guardando.
+- **[14:44] Catalina Giraldo Aguirre:** O
+- **[14:44] Catalina Giraldo Aguirre:** acá puede haber, pues, el tiempo real. Ahorita vamos a ver, pues, la la idea es que tenga agentes,
+- **[14:45] Catalina Giraldo Aguirre:** la persona pueda crear sus propias skills dentro de drop b, sus propias reglas dentro de drop b,
+- **[14:45] Catalina Giraldo Aguirre:** que haya un marketplace de reglas, skills, agentes,
+- **[14:45] Catalina Giraldo Aguirre:** en el tema de señales,
+- **[14:45] Catalina Giraldo Aguirre:** es un poco las notificaciones, pero otro nivel, o sea,
+- **[14:45] Catalina Giraldo Aguirre:** en vez de simplemente notificarme, ah, esto pasó, entonces, se te va sacar el stock o esto,
+- **[14:45] Catalina Giraldo Aguirre:** sean más predictivas y más inteligentes. O sea, que analicen bien la
+- **[14:45] Catalina Giraldo Aguirre:** y digan, ve, mira, este mercado está yendo así,
+- **[14:45] Catalina Giraldo Aguirre:** y y con esto y esto yo te puedo predecir que puede pasar esto.
+- **[14:45] Catalina Giraldo Aguirre:** Entonces, ¿qué puedes decidir en este caso?
+- **[14:45] Catalina Giraldo Aguirre:** Para que la persona se anticipe.
+- **[14:45] Catalina Giraldo Aguirre:** Y ahorita vemos esto, pero también que se
+- **[14:45] Catalina Giraldo Aguirre:** puedan crear como artefactos como en en en cloud,
+- **[14:45] Catalina Giraldo Aguirre:** y se puedan, pues, meter dentro de drop y yo
+- **[14:45] Catalina Giraldo Aguirre:** casi que las personas puedan armar como sus propios artefactos de gráficas, de
+- **[14:45] Catalina Giraldo Aguirre:** de módulos y así,
+- **[14:45] Catalina Giraldo Aguirre:** para que se pueda enterar dentro de Entonces,
+- **[14:45] Catalina Giraldo Aguirre:** más allá de nosotros,
+- **[14:46] Catalina Giraldo Aguirre:** poder estar diseñando de pronto ya y, pues, ya
+- **[14:46] Catalina Giraldo Aguirre:** yo como en el labor del diseñador,
+- **[14:46] Catalina Giraldo Aguirre:** como
+- **[14:46] Catalina Giraldo Aguirre:** sí, podemos es diseñar módulos, pero también diseñar
+- **[14:46] Catalina Giraldo Aguirre:** componentes átomos para que las personas mismas puedan hacer sus propios gráficos,
+- **[14:46] Catalina Giraldo Aguirre:** sus propias cosas y se puedan integrar aquí en drop.
+- **[14:46] Catalina Giraldo Aguirre:** Entonces,
+- **[14:46] Catalina Giraldo Aguirre:** pues, el inicio acá simplemente le dice hola, has alcanzado esto,
+- **[14:46] Catalina Giraldo Aguirre:** Y algo que ¿sí?
+- **[14:46] Yo:** Sí, gracias, gata. Una una consulta es que
+- **[14:46] Yo:** bueno,
+- **[14:46] Yo:** más bien, un aporte. Ayer tuvimos una reunión con
+- **[14:46] Yo:** con María Jaime Lau José y
+- **[14:46] Yo:** Aleja,
+- **[14:46] Yo:** justamente para la célula de sellers.
+- **[14:46] Yo:** Y María nos
+- **[14:46] Yo:** pidió que
+- **[14:46] Yo:** realizáramos un discovery
+- **[14:46] Yo:** intensivo de
+- **[14:47] Yo:** de los flujos de
+- **[14:47] Yo:** de los flujos de los drug shippers, que, de hecho,
+- **[14:47] Yo:** ahora entiendo que de negocio se les quiere empezar
+- **[14:47] Yo:** no no
+- **[14:47] Yo:** un poco empezar a transformar esa etiqueta de dropshippers a emprendedores digitales.
+- **[14:47] Catalina Giraldo Aguirre:** Uh-huh.
+- **[14:47] Yo:** ¿Sí?
+- **[14:47] Yo:** Y lo que se lo que se pidió desde María fue que empezamos Aleja y yo por
+- **[14:47] Yo:** de hecho, a tomar
+- **[14:47] Yo:** varios de los cursos que hay en líderes de comunidad,
+- **[14:47] Yo:** entender por qué algunos de los worksheet no se están activando y demás.
+- **[14:47] Yo:** Y que eso fuera como un prerrequisito antes de empezar a
+- **[14:47] Yo:** generar más features o cambios sobre plataforma.
+- **[14:47] Yo:** ¿Sí?
+- **[14:47] Yo:** Y, de hecho, eso nos, de alguna forma así, nos nos
+- **[14:47] Yo:** nos freían, nos ponía un alto en en lo que con Aleja estábamos como ya
+- **[14:47] Yo:** creando,
+- **[14:47] Yo:** o tratando de sacar adelante, pues, para no empezar a tener reposesos más adelante.
+- **[14:47] Yo:** Entonces,
+- **[14:47] Yo:** pues me gustaría que estuviera aquí como como como
+- **[14:48] Yo:** como como el lado de Jaime, por si tiene más información que de pronto ayer no hayamos alcanzado a charlar,
+- **[14:48] Yo:** pero no sé eso cómo entra
+- **[14:48] Yo:** a
+- **[14:48] Yo:** a
+- **[14:48] Yo:** capaz no de tener, pero a poner unos pasos como previos para Gali, en el, hablando del global, claro está,
+- **[14:48] Yo:** para no empezar a a a seguir construyendo, porque claramente lo que
+- **[14:48] Catalina Giraldo Aguirre:** En ese caso,
+- **[14:48] Yo:** es superrobús,
+- **[14:48] Yo:** ¿sí?
+- **[14:48] Catalina Giraldo Aguirre:** Gali se pensó mucho como para
+- **[14:48] Catalina Giraldo Aguirre:** dar, pues sí, cómo eres ese siguiente paso y ver cómo
+- **[14:48] Catalina Giraldo Aguirre:** qué podemos hacer. Yo creo que te había mostrado
+- **[14:48] Catalina Giraldo Aguirre:** esta el proyecto de venta de ángulos de venta de productos,
+- **[14:48] Yo:** Sí.
+- **[14:48] Yo:** Sí.
+- **[14:48] Catalina Giraldo Aguirre:** Esto va a ayudar bastante
+- **[14:48] Catalina Giraldo Aguirre:** porque aquí, pues, hice casi que doble, pues, dos
+- **[14:48] Catalina Giraldo Aguirre:** tandas de entrevistas,
+- **[14:48] Catalina Giraldo Aguirre:** y se enfocó mucho en cómo los sellers venden.
+- **[14:48] Catalina Giraldo Aguirre:** Cómo es el journey de los sellers al vender. Se puede actualizar un poco,
+- **[14:48] Catalina Giraldo Aguirre:** pues, ya lleva tiempito esta investigación.
+- **[14:48] Catalina Giraldo Aguirre:** De pronto en hacer otras entrevistas, pero, pues,
+- **[14:49] Catalina Giraldo Aguirre:** esto fue esto es como un
+- **[14:49] Catalina Giraldo Aguirre:** un punto de partida bastante sólido.
+- **[14:49] Catalina Giraldo Aguirre:** Y cuando estuvimos haciendo el orquestador,
+- **[14:49] Catalina Giraldo Aguirre:** sí estuvimos viendo también, pues, ese journey del usuario,
+- **[14:49] Yo:** Mhmm.
+- **[14:49] Catalina Giraldo Aguirre:** y ver qué
+- **[14:49] Catalina Giraldo Aguirre:** qué puntos podemos ofrecerle para
+- **[14:49] Catalina Giraldo Aguirre:** para que sea un poco más
+- **[14:49] Catalina Giraldo Aguirre:** fácil aparte de de hacer todo.
+- **[14:49] Yo:** Ahí, además de eso,
+- **[14:49] Catalina Giraldo Aguirre:** De lo que
+- **[14:49] Yo:** es que ayer nos nos trajeron los datos nuevos, María, y era
+- **[14:49] Yo:** sobre la el porcentaje de personas
+- **[14:49] Yo:** que se registraban que nunca habían hecho ecommerce.
+- **[14:49] Yo:** O ningún tipo de ventas digitales.
+- **[14:49] Yo:** Y el reto estaría también
+- **[14:49] Yo:** para que igual todos lo tengamos presente en
+- **[14:49] Yo:** Claramente, esto ya ya ya ya ya logra aterrizar mucho del flujo
+- **[14:49] Yo:** que tiene un dropshipper, que está conociendo, que ya conoce a dropshipper, o de, ni siquiera de de de de ecommerce, dejémoslo ahí. Y el rato estarían las personas que nunca han hecho absolutamente nada de ecommerce. Y y como es que creo que Gali es perfectamente el el instrumento, ¿no?, el habilitador.
+- **[14:50] Catalina Giraldo Aguirre:** Ajá.
+- **[14:50] Yo:** Para lograr eso, ¿no?, para cerrar esos esos gaps.
+- **[14:50] Yo:** Pero sí, lo lo dejo es más porque no no sé si ustedes igual
+- **[14:50] Yo:** otro lado, ya tuvieron también ese espacio con María o no, es para
+- **[14:50] Yo:** no quede, de pronto,
+- **[14:50] Yo:** esa información
+- **[14:50] Catalina Giraldo Aguirre:** Mhmm.
+- **[14:50] Yo:** como sola en la sesión de ayer, y se las traigo acá.
+- **[14:50] Yo:** Eso eso lo que quiere es como que que que le demos mucho mucho foco en lo que
+- **[14:50] Yo:** espero, Jorge, es que se le dé mucho foco
+- **[14:50] Yo:** a a la activación,
+- **[14:50] Yo:** principalmente de de los huérfanos,
+- **[14:50] Yo:** y ese gran volumen que nunca está generando ni siquiera su primera su primera orden.
+- **[14:50] Catalina Giraldo Aguirre:** Sí,
+- **[14:50] Catalina Giraldo Aguirre:** En ese caso, ahorita el prototipo está muy en torno
+- **[14:50] Catalina Giraldo Aguirre:** y, de hecho, el objetivo también del m v chiquito es ese, como
+- **[14:51] Catalina Giraldo Aguirre:** ver cómo podemos activar a esas personas huérfanas o cómo
+- **[14:51] Catalina Giraldo Aguirre:** se puede mostrar
+- **[14:51] Catalina Giraldo Aguirre:** qué tan fácil es comenzar con dropping.
+- **[14:51] Catalina Giraldo Aguirre:** A esas personas que están huérfanas. Pero con María, y y algo que
+- **[14:51] Catalina Giraldo Aguirre:** sí podemos explorar, porque este prototipo es casi que un dropir,
+- **[14:51] Catalina Giraldo Aguirre:** lleno,
+- **[14:51] Catalina Giraldo Aguirre:** como
+- **[14:51] Catalina Giraldo Aguirre:** yo
+- **[14:51] Catalina Giraldo Aguirre:** yo estaba en tropí antes y cambio de tropí
+- **[14:51] Catalina Giraldo Aguirre:** y ahorita tiene mis agentes y todo, ¿no?
+- **[14:51] Catalina Giraldo Aguirre:** Pero sí hay que explorar un poco y ver cómo puede ser la activación,
+- **[14:51] Catalina Giraldo Aguirre:** para
+- **[14:51] Catalina Giraldo Aguirre:** las personas que apenas están empezando.
+- **[14:51] Catalina Giraldo Aguirre:** O cómo lo vamos a
+- **[14:51] Catalina Giraldo Aguirre:** a estar orientando?
+- **[14:51] Catalina Giraldo Aguirre:** De lo que hemos trabajado, aparte del MVP pequeño, es es el foco de, pronto, en la búsqueda de productos. Porque a partir de la búsqueda de productos es que, yo sabiendo el producto, puedo empezar como todo el ciclo de, ah, bueno, con esto empiezo. Y y algo que sí conversamos con María fue el hecho de que drop it,
+- **[14:52] Catalina Giraldo Aguirre:** un poco cuando tú empiezas, está vacío, no hay nada.
+- **[14:52] Catalina Giraldo Aguirre:** Entonces, ¿cómo podemos orientar a la persona y decirle, oye, pues,
+- **[14:52] Catalina Giraldo Aguirre:** sí, group está así o pero es por esto y esto? ¿O cómo podemos hacer
+- **[14:52] Catalina Giraldo Aguirre:** para que dropping no se vea
+- **[14:52] Catalina Giraldo Aguirre:** como
+- **[14:52] Catalina Giraldo Aguirre:** sin
+- **[14:52] Catalina Giraldo Aguirre:** sin nada, y yo decir, bueno, ¿y esto qué es? A ver puras tablas vacías, ¿y qué hago?
+- **[14:52] Catalina Giraldo Aguirre:** Sino más bien,
+- **[14:52] Catalina Giraldo Aguirre:** guiarlo
+- **[14:52] Catalina Giraldo Aguirre:** a que
+- **[14:52] Catalina Giraldo Aguirre:** a al gol que, pues, sería generar su primera orden.
+- **[14:52] Catalina Giraldo Aguirre:** Entonces,
+- **[14:52] Catalina Giraldo Aguirre:** sí, ese es un poco y poco que
+- **[14:52] Catalina Giraldo Aguirre:** que se quiere tomar, y, de pronto, ahorita en esta
+- **[14:52] Catalina Giraldo Aguirre:** iteraciones, como me está enfocando un poco la en Gali pequeño,
+- **[14:52] Catalina Giraldo Aguirre:** pero ahorita como, pues, llamo a enfocar, voy a volver a estar en
+- **[14:52] Catalina Giraldo Aguirre:** como en este
+- **[14:52] Catalina Giraldo Aguirre:** en en esta en este concepto más grande,
+- **[14:52] Catalina Giraldo Aguirre:** pudo, de pronto, revisar y y muy bien
+- **[14:52] Catalina Giraldo Aguirre:** como esa recomendación, ir
+- **[14:52] Catalina Giraldo Aguirre:** ver otra exploración,
+- **[14:52] Catalina Giraldo Aguirre:** o sea, un proceso tipo paralelo a este, de cómo hacemos para que
+- **[14:53] Catalina Giraldo Aguirre:** está asignada,
+- **[14:53] Catalina Giraldo Aguirre:** cómo lo lo activo.
+- **[14:53] Yo:** De una pregunta sobre sobre
+- **[14:53] Yo:** Gali Pequeño y Gali Global. ¿Cómo se espera, o qué han pensado sobre cómo deberíamos hacer como ese más que que entra en cada uno, ¿cierto? Porque sabemos que el el pequeño está para expo webinars, ¿Qué espera el global? Qué el DxportWinner le entregues? O sea, por ejemplo, tú para este global claramente data, ¿no?, data insights, ver qué, opiniones, entrevistas, pero más allá de eso, desde diseño, desde métricas, desde, ya hablamos lo más desde producto, ¿estás esperando algo puntualmente o solamente con lo recopilemos en cuanto a información? ¿No?
+- **[14:53] Catalina Giraldo Aguirre:** ¿Cómo es? El objetivo de spot winners como es, más que todo, mostrar y sacar
+- **[14:54] Catalina Giraldo Aguirre:** más cualitativa de cómo les va,
+- **[14:54] Catalina Giraldo Aguirre:** podría ser este al principio.
+- **[14:54] Catalina Giraldo Aguirre:** Pero el objetivo, antes de hacer todo lo de Vali pequeño,
+- **[14:54] Catalina Giraldo Aguirre:** era hacerlo funcional, como lo más funcional
+- **[14:54] Catalina Giraldo Aguirre:** para nosotros,
+- **[14:54] Catalina Giraldo Aguirre:** empezar a hacerlo, o empezar a vender con herramientas y a
+- **[14:54] Catalina Giraldo Aguirre:** tal cual como un dropshipping lo hace,
+- **[14:54] Catalina Giraldo Aguirre:** para ver qué podemos
+- **[14:54] Catalina Giraldo Aguirre:** o qué puntos se pueden
+- **[14:54] Catalina Giraldo Aguirre:** tener en cuenta de de y qué y qué nos falta.
+- **[14:54] Catalina Giraldo Aguirre:** Por y qué necesidades realmente hay.
+- **[14:54] Catalina Giraldo Aguirre:** O que de toda la prueba del concepto,
+- **[14:54] Catalina Giraldo Aguirre:** Pues, en general, es de toda la prueba de concepto que era la parte de oportunidades de mejora,
+- **[14:54] Catalina Giraldo Aguirre:** es ver en qué hay un hueco o en qué
+- **[14:54] Catalina Giraldo Aguirre:** en qué hueco podemos, dropping puede dar una oferta de valor aparte de las que
+- **[14:54] Yo:** Mhmm.
+- **[14:54] Catalina Giraldo Aguirre:** estamos mencionando aquí.
+- **[14:54] Catalina Giraldo Aguirre:** Pues es de lo que yo, de lo que puedo ver, que
+- **[14:54] Catalina Giraldo Aguirre:** se puede recopilar.
+- **[14:54] Catalina Giraldo Aguirre:** No sé, Diana, si
+- **[14:55] Catalina Giraldo Aguirre:** tenemos como alguna métrica de éxito o algo que podamos
+- **[14:55] Catalina Giraldo Aguirre:** ver acá?
+- **[14:55] Diana Aldana:** Pues
+- **[14:55] Diana Aldana:** preciso, eso era lo que decía Santiago, que iba a hablar con Alejandra por la tarde.
+- **[14:55] Diana Aldana:** Sea, si bien no se puede crear una orden, básicamente, ¿qué se puede hacer en el GADLE actual?
+- **[14:55] Diana Aldana:** Encontrar un producto ganador y crear una estrategia
+- **[14:55] Diana Aldana:** un ángulo de venta. Llega hasta la creación de página, Cata, no recuerdo.
+- **[14:55] Catalina Giraldo Aguirre:** La idea es que sí.
+- **[14:55] Catalina Giraldo Aguirre:** O si no la página, entonces, solamente
+- **[14:55] Catalina Giraldo Aguirre:** la promoción por WhatsApp.
+- **[14:55] Diana Aldana:** WhatsApp.
+- **[14:55] Diana Aldana:** Bueno, que llegue que llegue a WhatsApp ya es una ganancia.
+- **[14:55] Diana Aldana:** Entonces, para mí la métrica principal es lograr activar esos usuarios huérfanos a esos usuarios que no saben nada de estrategia y que ellos logren por lo menos, crear su primera su primera orden.
+- **[14:55] Yo:** Sí, pero pero eso eso respecto al de expo winners. Pero
+- **[14:55] Yo:** a lo a lo que yo me refería es
+- **[14:55] Yo:** además, si además de esa data,
+- **[14:56] Yo:** el Gali global iba a procurar o o tenía planeado reutilizar algo que hiciéramos expo porque expoundance tiene un un juego muy particular ¿cierto? De crear el proyecto, ver los productos, los pros y los contras, los sugeridos, el checklist de qué necesita para que el, y ver viendo cómo ese producto empiece a mejorar dependiendo de de tan qué tanto se le trabaja. Pero ese esos flujos esas pantallas omitiendo que están en dark, y que claramente no tienen los estilos que hoy European maneja.
+- **[14:56] Yo:** Se van a reutilizar, Cata,
+- **[14:56] Yo:** sea, ¿o ese o ese flujo es
+- **[14:56] Yo:** solamente para ExpoWin es para sacar data, y este global
+- **[14:56] Yo:** tiene otra forma de trabajarlo, de llevarlo.
+- **[14:56] Catalina Giraldo Aguirre:** Pues, Edward va a tener otra forma, pero algo que sí,
+- **[14:56] Catalina Giraldo Aguirre:** con Jaime, no sé si lo tengo entre por acá,
+- **[14:57] Catalina Giraldo Aguirre:** Ah, no. Pero era y o es como
+- **[14:57] Catalina Giraldo Aguirre:** de pronto, una idea, no es como que sí o sí va ya a ser así,
+- **[14:57] Catalina Giraldo Aguirre:** pero es hacer como un tipo demo,
+- **[14:57] Catalina Giraldo Aguirre:** Jaime nos mostraba como, por ejemplo, cuando uno está en páginas de invertir en bolsa,
+- **[14:57] Catalina Giraldo Aguirre:** que tú estás como en un demo de bolsa,
+- **[14:57] Catalina Giraldo Aguirre:** y tú interactúas tal cual como con un demo pequeñito,
+- **[14:57] Catalina Giraldo Aguirre:** y después te dice, ah, bueno, ganaste tanto.
+- **[14:57] Catalina Giraldo Aguirre:** ¿Quieres quieres seguir? Pues inscríbete.
+- **[14:57] Catalina Giraldo Aguirre:** Entonces,
+- **[14:57] Catalina Giraldo Aguirre:** el Gali pequeño sirve un poco como también una prueba de concepto para ver cómo
+- **[14:57] Catalina Giraldo Aguirre:** podemos quizás hacer un demo.
+- **[14:57] Catalina Giraldo Aguirre:** Para mostrar dropping.
+- **[14:57] Catalina Giraldo Aguirre:** O sea, la página, una publicidad, o no sé si has visto las publicidades, yo a mí me aparecen
+- **[14:57] Catalina Giraldo Aguirre:** publicidades de jueguitos de como esos
+- **[14:57] Catalina Giraldo Aguirre:** como esos jueguitos de grafas o cosas así,
+- **[14:57] Catalina Giraldo Aguirre:** y te pone como la publicidad hacia la granja y luego
+- **[14:57] Catalina Giraldo Aguirre:** la completas, y ya te dice, ah, bueno, ya tienes tantas monedas en la granja, pues
+- **[14:57] Catalina Giraldo Aguirre:** ya descarga la aplicación.
+- **[14:57] Catalina Giraldo Aguirre:** Y te invita a descargar la aplicación.
+- **[14:58] Catalina Giraldo Aguirre:** Algo parecido puede ser
+- **[14:58] Catalina Giraldo Aguirre:** o se puede refinar para Gali pequeño, para que
+- **[14:58] Catalina Giraldo Aguirre:** el feedback se pueda modificar
+- **[14:58] Catalina Giraldo Aguirre:** ese gallo pequeño no solamente sirva para el concepto grande,
+- **[14:58] Catalina Giraldo Aguirre:** que es este therapy,
+- **[14:58] Catalina Giraldo Aguirre:** sino también para
+- **[14:58] Catalina Giraldo Aguirre:** algún experimento para yo mostrar en alguna página de drop in,
+- **[14:58] Catalina Giraldo Aguirre:** una especie de demo.
+- **[14:58] Catalina Giraldo Aguirre:** De cómo es dropping.
+- **[14:58] Catalina Giraldo Aguirre:** Y y la persona, pero de forma más autónoma, ¿no?
+- **[14:58] Catalina Giraldo Aguirre:** Sino no simplemente como guiándolo y haciendo la promoción, sino más bien
+- **[14:58] Catalina Giraldo Aguirre:** ah, ¿mirás tu tropie?
+- **[14:58] Catalina Giraldo Aguirre:** Sí, volá aquí que haces un pedido, ah, ya hiciste un pedido súper.
+- **[14:58] Catalina Giraldo Aguirre:** Puedes puedes ganar esto y esto,
+- **[14:58] Catalina Giraldo Aguirre:** y, cliente,
+- **[14:58] Catalina Giraldo Aguirre:** O que las ventas sean reales y diga, ah, mira, te ganaste esto.
+- **[14:58] Catalina Giraldo Aguirre:** Y y sea, ¿cómo? Ay, me gané esto, ¿cómo así?
+- **[14:58] Catalina Giraldo Aguirre:** Sí, porque mira, aquí está esta policía, tatata,
+- **[14:58] Catalina Giraldo Aguirre:** ¿Quieres ganar más? Vete acá.
+- **[14:59] Catalina Giraldo Aguirre:** O o algo por el estilo, habría que ver
+- **[14:59] Catalina Giraldo Aguirre:** trabajar un poco mejor la idea,
+- **[14:59] Catalina Giraldo Aguirre:** pero Gali Pequello puede servir como en
+- **[14:59] Catalina Giraldo Aguirre:** servir como una versión uno para algo común, para una idea
+- **[14:59] Catalina Giraldo Aguirre:** similar a la que te estoy contando.
+- **[14:59] Yo:** Listo,
+- **[14:59] Catalina Giraldo Aguirre:** Listo.
+- **[14:59] Catalina Giraldo Aguirre:** ¿Qué más tenemos? Bueno, tenemos acá, pues, el concepto de Gary. Algo que iba a mencionar es que
+- **[14:59] Catalina Giraldo Aguirre:** quizá, bueno, esto es para más,
+- **[14:59] Catalina Giraldo Aguirre:** para las personas que ya tienen algo,
+- **[14:59] Catalina Giraldo Aguirre:** más establecido, pero también para los nuevos.
+- **[14:59] Catalina Giraldo Aguirre:** A categorías es que podamos trabajar por objetivos.
+- **[14:59] Catalina Giraldo Aguirre:** O sea, que la persona, cuando entre a drop in,
+- **[14:59] Catalina Giraldo Aguirre:** le digan, o sea, el la idea le diga, ok, ¿qué quieres hacer?
+- **[14:59] Catalina Giraldo Aguirre:** Y de pronto la persona no sepa nada, diga, no, pues, quiero hacer pedidos.
+- **[14:59] Catalina Giraldo Aguirre:** La, pero que la IA, pues, me determine como, ok,
+- **[14:59] Catalina Giraldo Aguirre:** podemos darnos un buen objetivo inicial de lograr esto y esto y esto.
+- **[15:00] Catalina Giraldo Aguirre:** Para lograr esto y esto y esto necesitamos hacer
+- **[15:00] Catalina Giraldo Aguirre:** tantos pedidos, tener tanta publicidad, hacer esto y así.
+- **[15:00] Catalina Giraldo Aguirre:** Entonces, aquí ya tienes como los objetivos listos,
+- **[15:00] Catalina Giraldo Aguirre:** y yo voy estar evaluando
+- **[15:00] Catalina Giraldo Aguirre:** conforme a esos objetivos.
+- **[15:00] Catalina Giraldo Aguirre:** Y tú vas a estar viendo como como la la métrica de cómo estás yendo con cada lado.
+- **[15:00] Catalina Giraldo Aguirre:** ¿Sí?
+- **[15:00] Catalina Giraldo Aguirre:** Entonces,
+- **[15:00] Catalina Giraldo Aguirre:** por ejemplo, aquí yo tengo mi objetivo general, que es de
+- **[15:00] Catalina Giraldo Aguirre:** escalar a cien pedidos por semana con ROAD multiplicado por dos en doce semanas.
+- **[15:00] Catalina Giraldo Aguirre:** Entonces, me da como un un panorama de cómo están esos objetivos,
+- **[15:00] Catalina Giraldo Aguirre:** Yo podría eliminar algún objetivo, pero, pues, elimino uno.
+- **[15:00] Catalina Giraldo Aguirre:** Me modificaría claramente el general,
+- **[15:00] Catalina Giraldo Aguirre:** o yo podría cambiar el objetivo.
+- **[15:00] Catalina Giraldo Aguirre:** Si yo cambio el objetivo sería, pues, tipo un chatbot, yo le digo,
+- **[15:00] Catalina Giraldo Aguirre:** quiero, ay,
+- **[15:00] Catalina Giraldo Aguirre:** quiero
+- **[15:00] Catalina Giraldo Aguirre:** multiplicar
+- **[15:00] Catalina Giraldo Aguirre:** por
+- **[15:01] Catalina Giraldo Aguirre:** tres, entro a doce, por dos.
+- **[15:01] Catalina Giraldo Aguirre:** ¿Le digo que sí?
+- **[15:01] Catalina Giraldo Aguirre:** Él me dice si hay algún objetivo que cambie o no,
+- **[15:01] Catalina Giraldo Aguirre:** en este caso no, pero, si cambia, pues, me lo modificaría aquí eso.
+- **[15:01] Catalina Giraldo Aguirre:** Ah, bueno, este este es el que me cambia en
+- **[15:01] Catalina Giraldo Aguirre:** Yo le digo que sí, que lo actualice.
+- **[15:01] Catalina Giraldo Aguirre:** Y ya.
+- **[15:01] Catalina Giraldo Aguirre:** Se actualiza el operating.
+- **[15:01] Catalina Giraldo Aguirre:** Si yo ya quiero irme por cada objetivo,
+- **[15:01] Catalina Giraldo Aguirre:** acá la idea es que sea como un grafiquito diferente, pues es como gráfica de barras, pero pues, si si se necesita un gráfico de dólar, sea un gráfico de donas, lo que sea, para yo poder visualizar bien como como el objetivo, ¿no? Y acá me dice, poco como, por ejemplo, el de pedidos me dice, ah, bueno, por este pedido tienes esto, por este pedido tienes estos pedidos, para que estoy viendo ya no me habla de pedidos, sino de ya de pues, de los carayas. Entonces, va a ser es como poco personalizado, según como qué qué objetivo tengo. O podría también agregar otro objetivo. Decirle,
+- **[15:02] Catalina Giraldo Aguirre:** pero
+- **[15:02] Catalina Giraldo Aguirre:** manejar
+- **[15:02] Catalina Giraldo Aguirre:** mejor
+- **[15:02] Catalina Giraldo Aguirre:** devoluciones.
+- **[15:02] Catalina Giraldo Aguirre:** Le digo que sí.
+- **[15:02] Catalina Giraldo Aguirre:** Entonces, ya, sí agregar esto
+- **[15:02] Catalina Giraldo Aguirre:** Y ya.
+- **[15:02] Catalina Giraldo Aguirre:** Y aquí se crea.
+- **[15:02] Catalina Giraldo Aguirre:** Podría editarlo.
+- **[15:02] Catalina Giraldo Aguirre:** Pero aquí ya se creó.
+- **[15:02] Catalina Giraldo Aguirre:** Y
+- **[15:02] Catalina Giraldo Aguirre:** también acá, pues, yo podría identificar como, él me dice, no, pues esto es lo que tienes más
+- **[15:02] Catalina Giraldo Aguirre:** yo le podría decir, no, pues esto es lo que más yo puedo también
+- **[15:02] Catalina Giraldo Aguirre:** decir, no,
+- **[15:02] Catalina Giraldo Aguirre:** lo que hago es más ficción,
+- **[15:02] Catalina Giraldo Aguirre:** son los
+- **[15:02] Catalina Giraldo Aguirre:** pocos clientes.
+- **[15:02] Catalina Giraldo Aguirre:** Entonces, el el el
+- **[15:03] Catalina Giraldo Aguirre:** análisis lo ven, o ya datos financieros, como por parte del objetivo. La parte de señales es la que te mencioné, de predictivos, o sea, digamos, por cada señal me diría, mira, tienes esto, ¿cómo quieres actuar? ¿Sí? ¿Así me vale? Al a Aleja. Hola, Aleja, ¿cómo estás?
+- **[15:03] Alejandra Melo:** Muy bien, bien. No me escribieron y se me había pasado.
+- **[15:03] Catalina Giraldo Aguirre:** Está bien.
+- **[15:03] Catalina Giraldo Aguirre:** Alea, estabas poniendo un poco el
+- **[15:03] Catalina Giraldo Aguirre:** pues, creo que ya tienes el concepto de que es Gali, y está y, pues, Gali ahorita lo vas a estar trabajando para winners,
+- **[15:03] Catalina Giraldo Aguirre:** pero estaba exponiendo un poco cómo es
+- **[15:03] Catalina Giraldo Aguirre:** el como el concepto ya general, bueno, que estamos trabajando, esto sigue en proceso.
+- **[15:03] Catalina Giraldo Aguirre:** Pero el concepto más general de cómo es un orquestador dropping,
+- **[15:03] Catalina Giraldo Aguirre:** como ya
+- **[15:03] Catalina Giraldo Aguirre:** con AI first,
+- **[15:03] Catalina Giraldo Aguirre:** que la idea de este orquestador es que sea
+- **[15:04] Catalina Giraldo Aguirre:** pues sí que, o sea, las personas, no solamente tenga un chat integrado, sino
+- **[15:04] Catalina Giraldo Aguirre:** que, pues, yo pueda ver como al cien por ciento todo el tema de ella,
+- **[15:04] Catalina Giraldo Aguirre:** Y, pues, ahorita estaba exponiendo un poco cómo funcionaba,
+- **[15:04] Catalina Giraldo Aguirre:** o al menos esta idea que estaba funcionando,
+- **[15:04] Catalina Giraldo Aguirre:** pues que, pues va a estar como, esto va a estar cambiando constantemente.
+- **[15:04] Catalina Giraldo Aguirre:** Y y, pues las personas acá tienen una parte
+- **[15:04] Catalina Giraldo Aguirre:** donde tienen como objetivos, se marcan objetivos con IA,
+- **[15:04] Catalina Giraldo Aguirre:** la persona le se le va marcando cómo va con el objetivo, los puede estar editando a los objetivos,
+- **[15:04] Catalina Giraldo Aguirre:** y
+- **[15:04] Catalina Giraldo Aguirre:** acá puede ver las señales.
+- **[15:04] Catalina Giraldo Aguirre:** Y en esta parte,
+- **[15:04] Catalina Giraldo Aguirre:** las señales es como novedades, pero como más más
+- **[15:04] Catalina Giraldo Aguirre:** más avanzado.
+- **[15:04] Catalina Giraldo Aguirre:** Porque la verdad es que
+- **[15:04] Catalina Giraldo Aguirre:** pues, me clasifique las novedades, pues, según la categoría,
+- **[15:04] Catalina Giraldo Aguirre:** y también sea predictivo.
+- **[15:04] Catalina Giraldo Aguirre:** Sea, aparte de las acciones principales, como ve, mira, está pasando esto,
+- **[15:04] Catalina Giraldo Aguirre:** sea un poco más inteligente y me diga, mira, coordinadora pasó de tanta novedad, tanta,
+- **[15:04] Catalina Giraldo Aguirre:** te pude estar afectando.
+- **[15:05] Catalina Giraldo Aguirre:** Puedes de pronto cambiar aquí o, no sé,
+- **[15:05] Catalina Giraldo Aguirre:** desconectada esta integración o
+- **[15:05] Catalina Giraldo Aguirre:** ya más predictivas,
+- **[15:05] Catalina Giraldo Aguirre:** Por ejemplo,
+- **[15:05] Catalina Giraldo Aguirre:** estamos viendo de que esto está bajando o esto está pasando,
+- **[15:05] Catalina Giraldo Aguirre:** según las métricas y según lo que sabemos,
+- **[15:05] Catalina Giraldo Aguirre:** deberías de pronto agregar este este esta parte,
+- **[15:05] Catalina Giraldo Aguirre:** o
+- **[15:05] Catalina Giraldo Aguirre:** o podrías, aquí, pues, me ha dado dos opciones, ¿no?, como haz esto, haz esto,
+- **[15:05] Catalina Giraldo Aguirre:** aplicar el cambio aquí y me aplicaría el cambio.
+- **[15:05] Catalina Giraldo Aguirre:** O
+- **[15:05] Catalina Giraldo Aguirre:** también,
+- **[15:05] Catalina Giraldo Aguirre:** le podría agregar, no se le ha agregado, pero como que, aparte de los cambios de la
+- **[15:05] Catalina Giraldo Aguirre:** opciones, de pronto chatbot, y que me me gestionen como las las señales.
+- **[15:05] Catalina Giraldo Aguirre:** Y, pues, en esta interfaz también está, pues, un chatbot lateral.
+- **[15:05] Catalina Giraldo Aguirre:** Podría yo también hablar con el chatbot.
+- **[15:05] Catalina Giraldo Aguirre:** Aquí sí hablo, pues, no me contesta me contesta, pues,
+- **[15:05] Catalina Giraldo Aguirre:** todo basiquito, pero la idea es que también yo pueda gestionar como lo que hay acá,
+- **[15:05] Catalina Giraldo Aguirre:** aquí.
+- **[15:05] Catalina Giraldo Aguirre:** E incluso, si estoy en otro módulo, por ejemplo, productos,
+- **[15:05] Catalina Giraldo Aguirre:** pues yo puedo dar algún producto y decirle, ah, mira, quiero esto, esto,
+- **[15:06] Catalina Giraldo Aguirre:** pues acá también lo gestionen.
+- **[15:06] Catalina Giraldo Aguirre:** Y
+- **[15:06] Catalina Giraldo Aguirre:** qué más hay?
+- **[15:06] Catalina Giraldo Aguirre:** Un poco la idea de lo que se trasladó de de Gali Pequeño es como el concepto de estar con proyectos, y que los proyectos en este caso, para Gali Pequeño, un proyecto es como un, pues, un producto y ya,
+- **[15:06] Catalina Giraldo Aguirre:** pero la idea aquí es que más allá un producto sea o
+- **[15:06] Catalina Giraldo Aguirre:** Ah, bueno, en Galipe que yo sea el conjunto de productos, pero
+- **[15:06] Catalina Giraldo Aguirre:** aquí
+- **[15:06] Catalina Giraldo Aguirre:** sea como conjunto de campañas
+- **[15:06] Catalina Giraldo Aguirre:** que tienen productos.
+- **[15:06] Catalina Giraldo Aguirre:** O sea, si yo lanzo un proyecto, es como, ah, yo quiero lanzar la campaña tal de no,
+- **[15:06] Catalina Giraldo Aguirre:** sé, amor y amistad, ejemplo.
+- **[15:06] Catalina Giraldo Aguirre:** Y y, pues, la campaña amor y amistad tiene
+- **[15:06] Catalina Giraldo Aguirre:** este este proyecto tiene tantas campañas,
+- **[15:06] Catalina Giraldo Aguirre:** tantos productos, y los va a vender
+- **[15:06] Catalina Giraldo Aguirre:** un poco para yo poder organizar eso y podervelar meter el gas de una vez aquí.
+- **[15:06] Catalina Giraldo Aguirre:** Y, pues, acá aparecen los objetivos o según los proyectos
+- **[15:06] Catalina Giraldo Aguirre:** ahorita según los proyectos.
+- **[15:07] Catalina Giraldo Aguirre:** Y las y las proyectos que voy voy voy
+- **[15:07] Catalina Giraldo Aguirre:** analizando. Ya me lo pueden clasificar por si está o sea, apenas lo
+- **[15:07] Catalina Giraldo Aguirre:** estoy haciendo, no no he terminado como de configurar anteriormente el proyecto para
+- **[15:07] Catalina Giraldo Aguirre:** si está escalando, si está en riesgo,
+- **[15:07] Catalina Giraldo Aguirre:** como interactúa.
+- **[15:07] Catalina Giraldo Aguirre:** Y, pues, aquí yo podría ver un resumen,
+- **[15:07] Catalina Giraldo Aguirre:** por campañas, cómo está interactuando,
+- **[15:07] Catalina Giraldo Aguirre:** Aquí gestiona, ahorita vemos la parte de agentes,
+- **[15:07] Catalina Giraldo Aguirre:** pero la idea es que yo pueda asignar agentes con skills,
+- **[15:07] Catalina Giraldo Aguirre:** y reglas y, pues, unas instrucciones específicas por cada campaña para que
+- **[15:07] Catalina Giraldo Aguirre:** estar gestionando
+- **[15:07] Catalina Giraldo Aguirre:** qué quiero hacer.
+- **[15:07] Catalina Giraldo Aguirre:** Y acá, por ejemplo, yo estoy viendo aquí el producto cómo le está yendo,
+- **[15:07] Catalina Giraldo Aguirre:** podría ver en detalle, ya podría ver por producto ya el
+- **[15:07] Catalina Giraldo Aguirre:** la métrica, ¿no?, del producto.
+- **[15:07] Catalina Giraldo Aguirre:** O podría agregar aquí otro producto la
+- **[15:07] Catalina Giraldo Aguirre:** Acá podría ver, porque cuántos ángulos no
+- **[15:07] Catalina Giraldo Aguirre:** estoy haciendo el producto, ah, bueno, podría pausar aquí el ángulo de identidad o el ángulo no sé qué,
+- **[15:08] Catalina Giraldo Aguirre:** podría ya crear otro
+- **[15:08] Catalina Giraldo Aguirre:** otro ángulo.
+- **[15:08] Catalina Giraldo Aguirre:** Llegar a unos productos.
+- **[15:08] Catalina Giraldo Aguirre:** Y acá yo voy a buscarlo. Obviamente, la idea es que sea como Macher Arquilabus,
+- **[15:08] Catalina Giraldo Aguirre:** búsqueda o ya este este tema como de la interacción.
+- **[15:08] Catalina Giraldo Aguirre:** ¿Te veo yo aquí podría crear un nuevo proyecto?
+- **[15:08] Catalina Giraldo Aguirre:** Este este este flujo de nuevo proyecto es un poco
+- **[15:08] Catalina Giraldo Aguirre:** es lo que se trajo un poco galipequeño, pero más resumido.
+- **[15:08] Catalina Giraldo Aguirre:** Como más rápido, porque la idea es que sea eficiente.
+- **[15:08] Catalina Giraldo Aguirre:** Entonces, en este en este, ¿quieres lograr por el proyecto?
+- **[15:08] Catalina Giraldo Aguirre:** Yo podría decir, un nuevo producto, ya está,
+- **[15:08] Catalina Giraldo Aguirre:** o yo podría decirle escalar, optimizar un portafolio,
+- **[15:08] Catalina Giraldo Aguirre:** podría simplemente tener un proyecto
+- **[15:08] Catalina Giraldo Aguirre:** que no esté atado a un producto, o sea, que no sea de vender productos,
+- **[15:08] Catalina Giraldo Aguirre:** sino más bien de
+- **[15:08] Catalina Giraldo Aguirre:** negociar, optimizar operación, de hacer novedades o
+- **[15:08] Catalina Giraldo Aguirre:** o
+- **[15:08] Catalina Giraldo Aguirre:** otras partes de la de la de lo que es Tegan Tropy que no sea tal cual, ah, bueno, quiero es vender o agarrar una campaña y venderla, sino más bien un proyecto dedicado a a optimizar otra parte. Aquí en el MOCAP no tengo proyectos como
+- **[15:09] Catalina Giraldo Aguirre:** Ah, bueno, este es de, por ejemplo, portafolio.
+- **[15:09] Catalina Giraldo Aguirre:** Entonces, dice, utilizar portafolio,
+- **[15:09] Catalina Giraldo Aguirre:** y eso está incompleto. Ah, bueno.
+- **[15:09] Catalina Giraldo Aguirre:** Creo que no, no no tengo alguno que no se
+- **[15:09] Catalina Giraldo Aguirre:** aquí un proyecto que no se relacione con un
+- **[15:09] Catalina Giraldo Aguirre:** un producto, pero bueno, la idea es que sea así. Voy a lanzar aquí un nuevo proyecto,
+- **[15:09] Catalina Giraldo Aguirre:** o sea, que mi pregunta que te llegó en mente, pues yo le podría decir o le podría escribir acá.
+- **[15:09] Catalina Giraldo Aguirre:** Acá lo lo llamo,
+- **[15:09] Catalina Giraldo Aguirre:** o sí, aquí ya le podría decir dos agentes,
+- **[15:09] Catalina Giraldo Aguirre:** Acá, luego vuelvo a los agentes, pero los agentes son como los que tengo,
+- **[15:09] Catalina Giraldo Aguirre:** podría aquí, pues, crear uno personalizado acá en el chatbot,
+- **[15:09] Catalina Giraldo Aguirre:** o acá en el centro, vale, que, pues, me lo crea.
+- **[15:09] Catalina Giraldo Aguirre:** Y
+- **[15:09] Catalina Giraldo Aguirre:** proyectos.
+- **[15:09] Catalina Giraldo Aguirre:** No proyecto.
+- **[15:09] Catalina Giraldo Aguirre:** Listo.
+- **[15:09] Catalina Giraldo Aguirre:** Va ser que la sea nuevo proyecto,
+- **[15:10] Catalina Giraldo Aguirre:** a este, le va decir que estos agentes ¿Este proyecto alimentó alguna de las metas?
+- **[15:10] Catalina Giraldo Aguirre:** Entonces, las metas son los objetivos que ahorita mostré,
+- **[15:10] Catalina Giraldo Aguirre:** pues, yo le podría decir que sí.
+- **[15:10] Catalina Giraldo Aguirre:** Le digo, continuar.
+- **[15:10] Catalina Giraldo Aguirre:** Me dice, ¿quieres añadir una campaña ahora?
+- **[15:10] Catalina Giraldo Aguirre:** Pues le puedo decir que más tarde, pues, el proyecto queda así.
+- **[15:10] Catalina Giraldo Aguirre:** O le puedo decir que sí, que creemos una campaña en Alts. Aquí ella me dice, ok, ¿qué producto necesitas? Acá se
+- **[15:10] Catalina Giraldo Aguirre:** puede implementar lo que es mucho la búsqueda inteligente.
+- **[15:10] Catalina Giraldo Aguirre:** Porque en este caso es muy basiquita.
+- **[15:10] Catalina Giraldo Aguirre:** O me recomienda productos, pero según como la la publicidad y el margen,
+- **[15:10] Catalina Giraldo Aguirre:** pero acá se puede integrar más como lo de Galik pequeño y lo que queremos trabajar
+- **[15:10] Catalina Giraldo Aguirre:** también en otras partes del buscador es que sea más inteligente la búsqueda.
+- **[15:10] Catalina Giraldo Aguirre:** Acá ya luego me dice qué tipo de campaña vas a crear.
+- **[15:10] Catalina Giraldo Aguirre:** Entonces, Pautar Meta, TikTok.
+- **[15:10] Catalina Giraldo Aguirre:** Secuencia de chatear pro, póliza de
+- **[15:10] Catalina Giraldo Aguirre:** chatea pro o dos y canal de pago,
+- **[15:11] Catalina Giraldo Aguirre:** sin presupuesto.
+- **[15:11] Catalina Giraldo Aguirre:** Le podría decir que
+- **[15:11] Catalina Giraldo Aguirre:** con meta,
+- **[15:11] Catalina Giraldo Aguirre:** Si es Meta,
+- **[15:11] Catalina Giraldo Aguirre:** si es Meta, pauta en Meta y TikTok,
+- **[15:11] Catalina Giraldo Aguirre:** Aquí me va a decir como, ok,
+- **[15:11] Catalina Giraldo Aguirre:** solo meta, solo TikTok ads, mete TikTok,
+- **[15:11] Catalina Giraldo Aguirre:** del meta a a landing page,
+- **[15:11] Catalina Giraldo Aguirre:** o el de Meta ChatGan Bro, o es
+- **[15:11] Catalina Giraldo Aguirre:** todo completo, Meta, landing page y Shatea Pro,
+- **[15:11] Catalina Giraldo Aguirre:** o cómo lo quieres enfocar.
+- **[15:11] Catalina Giraldo Aguirre:** Te voy decir que completico.
+- **[15:11] Catalina Giraldo Aguirre:** Acá si me falta algo, pues me diría que lo conecte.
+- **[15:11] Catalina Giraldo Aguirre:** Ya me dice el presupuesto,
+- **[15:11] Catalina Giraldo Aguirre:** Esta parte del presupuesto sí la hemos afinado bastante con Jaime.
+- **[15:11] Catalina Giraldo Aguirre:** En el Cali pequeño. Del Cali pequeño yo podría decir que algo raro
+- **[15:11] Catalina Giraldo Aguirre:** es que
+- **[15:11] Catalina Giraldo Aguirre:** no es raro, sino que es mucha información, entonces, como cuidar la información para que sea como más resumida.
+- **[15:11] Catalina Giraldo Aguirre:** Pero que se extienda un poco mejor que eso.
+- **[15:12] Catalina Giraldo Aguirre:** Es así, poquito el reto ahorita con alguien pequeño que tenía.
+- **[15:12] Catalina Giraldo Aguirre:** Acá el precio beta, pues lo podría
+- **[15:12] Catalina Giraldo Aguirre:** no me lo está dando, qué loco.
+- **[15:12] Catalina Giraldo Aguirre:** No me está pero
+- **[15:12] Catalina Giraldo Aguirre:** imaginemos que hay números.
+- **[15:12] Catalina Giraldo Aguirre:** Y ya, si quiero crear creativos,
+- **[15:12] Catalina Giraldo Aguirre:** le puse crear yo mismo o Gali lo hace por mí.
+- **[15:12] Catalina Giraldo Aguirre:** Te va a decir que acá lo
+- **[15:12] Catalina Giraldo Aguirre:** puse próximamente, porque es un paso que tendría que crear el flujo.
+- **[15:12] Catalina Giraldo Aguirre:** ¿Lo va decir que ya lo haga por mí?
+- **[15:12] Catalina Giraldo Aguirre:** La idea es que ya me lo haga y haya, y sea poco
+- **[15:12] Catalina Giraldo Aguirre:** a como
+- **[15:12] Catalina Giraldo Aguirre:** se tiene pensado, por ejemplo, en robots, el equipo de robots, como para hacer los ángulos de venta,
+- **[15:12] Catalina Giraldo Aguirre:** o el proyecto que les mostré anteriormente de
+- **[15:12] Catalina Giraldo Aguirre:** venta de productos, que es como la creación de de
+- **[15:12] Catalina Giraldo Aguirre:** ya de la estrategia,
+- **[15:12] Catalina Giraldo Aguirre:** pero un poquito más corto.
+- **[15:12] Catalina Giraldo Aguirre:** Tanto esto hay que acortarlo, porque, si ven, es como un paso paso bastante largo.
+- **[15:12] Catalina Giraldo Aguirre:** Y eso hace que, pues, las personas quizás se
+- **[15:13] Catalina Giraldo Aguirre:** al ver que no están inmediatos, se puedan alejar.
+- **[15:13] Catalina Giraldo Aguirre:** Y, pues, ya aquí se crea y, pues, me dice con
+- **[15:13] Catalina Giraldo Aguirre:** su pupitío está,
+- **[15:13] Catalina Giraldo Aguirre:** dónde se alimenta.
+- **[15:13] Catalina Giraldo Aguirre:** Y ya puedo ver a los proyectos.
+- **[15:13] Catalina Giraldo Aguirre:** Luego, esta parte, esto es de artefactos,
+- **[15:13] Catalina Giraldo Aguirre:** Lo que estaba pensando es que, aparte de, pues, yo estar haciendo las cosas, y algo que me parece chévere
+- **[15:13] Catalina Giraldo Aguirre:** de un prototipo que mostró MG que se quiere lanzar es que
+- **[15:13] Catalina Giraldo Aguirre:** John Trope pueda crear artefactos.
+- **[15:13] Catalina Giraldo Aguirre:** O sea, yo, por ejemplo, aquí yo pueda crear un artefacto,
+- **[15:13] Catalina Giraldo Aguirre:** sea con IA,
+- **[15:13] Catalina Giraldo Aguirre:** o
+- **[15:13] Catalina Giraldo Aguirre:** o sea, de pronto aquí chateando, yo le digo,
+- **[15:13] Catalina Giraldo Aguirre:** claro que te facto,
+- **[15:13] Catalina Giraldo Aguirre:** Ejemplo, artefacto.
+- **[15:13] Catalina Giraldo Aguirre:** ¿O qué frecuencia quieres? Yo digo una
+- **[15:13] Catalina Giraldo Aguirre:** cuando pasa algo específico.
+- **[15:13] Catalina Giraldo Aguirre:** Entonces,
+- **[15:13] Catalina Giraldo Aguirre:** bueno, acá me veo las opciones.
+- **[15:13] Catalina Giraldo Aguirre:** Me no le a decir que clara, sí está como rola esta foto.
+- **[15:14] Catalina Giraldo Aguirre:** Aquí ya se crearía el artefacto, no sé por qué no está apareciendo.
+- **[15:14] Catalina Giraldo Aguirre:** Pero, bueno, es que yo pueda crear un artefacto y pueda, voy a crearlo aquí.
+- **[15:14] Catalina Giraldo Aguirre:** Aquí yo creo que sí se crearía, y yo podría fijarlo con un agente,
+- **[15:14] Catalina Giraldo Aguirre:** con un agente,
+- **[15:14] Catalina Giraldo Aguirre:** si quiero,
+- **[15:14] Catalina Giraldo Aguirre:** o y lo podría fijar también una pantalla en dropping. Por ejemplo, yo quiero un agente que esté
+- **[15:14] Catalina Giraldo Aguirre:** en
+- **[15:14] Catalina Giraldo Aguirre:** retiros de saldos.
+- **[15:14] Catalina Giraldo Aguirre:** Y
+- **[15:14] Catalina Giraldo Aguirre:** me va a decir que haga esto y luego general.
+- **[15:14] Catalina Giraldo Aguirre:** Aquí es un ejemplo de cómo podría generarle y lo podría fijar ya
+- **[15:14] Catalina Giraldo Aguirre:** ejemplo, a órdenes.
+- **[15:14] Catalina Giraldo Aguirre:** Entonces, aquí ya estaría mi
+- **[15:14] Catalina Giraldo Aguirre:** mi artefacto,
+- **[15:14] Catalina Giraldo Aguirre:** y si me voy a órdenes,
+- **[15:14] Catalina Giraldo Aguirre:** Por aquí, bueno,
+- **[15:15] Catalina Giraldo Aguirre:** le voy a estar aquí arribita, o podría yo también organizarlo, ¿no?, como
+- **[15:15] Catalina Giraldo Aguirre:** una especie de módulo, si yo literalmente edito duropi,
+- **[15:15] Catalina Giraldo Aguirre:** y, pues, ya acá yo podría poner mis artefactos.
+- **[15:15] Catalina Giraldo Aguirre:** ¿Qué más tenemos? Y, el tema de agentes es
+- **[15:15] Catalina Giraldo Aguirre:** que yo tenga los agentes y estos agentes yo los puedo configurar con unas instrucciones y que se puedan
+- **[15:15] Catalina Giraldo Aguirre:** y que puedan también estar asociados a
+- **[15:15] Catalina Giraldo Aguirre:** habilidades o skills,
+- **[15:15] Catalina Giraldo Aguirre:** o a reglas.
+- **[15:15] Catalina Giraldo Aguirre:** Y yo aquí pueda crear mis agentes o skills.
+- **[15:15] Catalina Giraldo Aguirre:** Lo puedo crear acá.
+- **[15:15] Catalina Giraldo Aguirre:** O los pueda buscar en el marketplace, que eso es una oportunidad muy chévere.
+- **[15:15] Catalina Giraldo Aguirre:** Ya que las personas van a estar creando cosas en drop y ya la están haciendo,
+- **[15:15] Catalina Giraldo Aguirre:** pues, ver acá y que ellos puedan, de pronto, comercializar sus skills,
+- **[15:15] Catalina Giraldo Aguirre:** pero que nosotros como dropping sí le demos algunas agentes basiquitos,
+- **[15:15] Catalina Giraldo Aguirre:** como esto, pues yo aquí propuse stock, ROAS, es logite logitech,
+- **[15:15] Catalina Giraldo Aguirre:** y agente paraba crear artefacto,
+- **[15:15] Catalina Giraldo Aguirre:** como tipo clon.
+- **[15:15] Catalina Giraldo Aguirre:** ¿Y las conexiones?
+- **[15:16] Catalina Giraldo Aguirre:** Bueno, eso es más como las integraciones, pero
+- **[15:16] Catalina Giraldo Aguirre:** pues, también como me conecto no solamente con la extensión en
+- **[15:16] Catalina Giraldo Aguirre:** sino también, por ejemplo, con Google Drive, con Google Sheets.
+- **[15:16] Catalina Giraldo Aguirre:** Las personas tienen como todo todo lado.
+- **[15:16] Catalina Giraldo Aguirre:** Tienen
+- **[15:16] Catalina Giraldo Aguirre:** pues sí, tienen todo, la operación humanas
+- **[15:16] Catalina Giraldo Aguirre:** lados, y la idea es que dropice al cerebro, que
+- **[15:16] Catalina Giraldo Aguirre:** que lea y sepa todo.
+- **[15:16] Catalina Giraldo Aguirre:** Todo lo tuyo.
+- **[15:16] Catalina Giraldo Aguirre:** Y, pues, sí, de pronto, sí tengas tu Google Drive, tienes tu Google Sheets,
+- **[15:16] Catalina Giraldo Aguirre:** pero aparte de eso, pues, que Dropbox se alimente eso constantemente
+- **[15:16] Catalina Giraldo Aguirre:** que eso ayude a que los otros agentes actúen.
+- **[15:16] Catalina Giraldo Aguirre:** Y te
+- **[15:16] Catalina Giraldo Aguirre:** la gente es tocó, la gente de búsqueda producto o algo,
+- **[15:16] Catalina Giraldo Aguirre:** sabiendo cómo va tu operación,
+- **[15:16] Catalina Giraldo Aguirre:** y o o que pueda actualizar tu operación sin que tú lo
+- **[15:16] Catalina Giraldo Aguirre:** pues, estés como actualizando manualmente todo.
+- **[15:16] Catalina Giraldo Aguirre:** Y
+- **[15:16] Catalina Giraldo Aguirre:** y ya, pues la idea, y lo que hemos también es estar modificando un poco la parte de productos,
+- **[15:16] Catalina Giraldo Aguirre:** sea, por ejemplo,
+- **[15:17] Catalina Giraldo Aguirre:** pues un, bueno, este concepto está poquito
+- **[15:17] Catalina Giraldo Aguirre:** falta afinarlo, pero la idea es que
+- **[15:17] Catalina Giraldo Aguirre:** acá, por ejemplo, en el catálogo de productos, pues, no sé, de pronto me pueda recomendar productos top. Obviamente, la idea es que sepamos cómo vamos a recomendar productos para que las las personas no tengan se les recomiende los mismos productos de siempre y se soltura el mercado. Pero así que me recomiende productos según cómo cómo es mi operación, me llegan las métricas,
+- **[15:17] Catalina Giraldo Aguirre:** llega, bueno, mira, este producto va decir, la sal con Gali, o también
+- **[15:17] Catalina Giraldo Aguirre:** y algo aquí que me falta es involucrarlo con drop inpulso, que eso sí está en el Gali pequeño.
+- **[15:17] Catalina Giraldo Aguirre:** Y
+- **[15:17] Catalina Giraldo Aguirre:** yo podría dar clic a un producto y él me dice, ah, mira, este producto tiene esto, mira, que es así,
+- **[15:17] Catalina Giraldo Aguirre:** o más información,
+- **[15:17] Catalina Giraldo Aguirre:** rapidito,
+- **[15:17] Catalina Giraldo Aguirre:** y podría quedar
+- **[15:17] Catalina Giraldo Aguirre:** el proyecto de una vez.
+- **[15:17] Catalina Giraldo Aguirre:** Me llevaría
+- **[15:17] Catalina Giraldo Aguirre:** de una a
+- **[15:17] Catalina Giraldo Aguirre:** a lanzarlo, podría lanzarlo de una vez o configurar
+- **[15:17] Catalina Giraldo Aguirre:** poco a poco la parte de la de la
+- **[15:18] Catalina Giraldo Aguirre:** de la de la
+- **[15:18] Catalina Giraldo Aguirre:** pues, el paso a paso que les mostré, cómo se crea el proyecto.
+- **[15:18] Catalina Giraldo Aguirre:** Y la idea es que por cada agente pueda intervenir un poco en cómo se ve dropping,
+- **[15:18] Catalina Giraldo Aguirre:** los productos vendidos. Ah, mira,
+- **[15:18] Catalina Giraldo Aguirre:** pues, el agente financiero te dice esto, y yo pueda meter
+- **[15:18] Catalina Giraldo Aguirre:** agente financiero aquí.
+- **[15:18] Catalina Giraldo Aguirre:** Y y, pues, va a ir terminando en cada parte de
+- **[15:18] Catalina Giraldo Aguirre:** y se pueda ver cómo se
+- **[15:18] Catalina Giraldo Aguirre:** cómo dropping cambia según los agentes que voy poniendo, los artefactos,
+- **[15:18] Catalina Giraldo Aguirre:** y cómo yo los voy poniendo.
+- **[15:18] Catalina Giraldo Aguirre:** Y ya.
+- **[15:18] Catalina Giraldo Aguirre:** Eso es lo que era el concepto.
+- **[15:18] Yo:** Listo, Kat. ¿Aleján?
+- **[15:18] Yo:** No sé si tengas preguntas.
+- **[15:18] Yo:** De
+- **[15:18] Yo:** desde que llegaste.
+- **[15:18] Alejandra Melo:** Tengo todas las preguntas del mundo.
+- **[15:18] Alejandra Melo:** Yo creo que me toca como sacar un espacio con Cata para que me lo
+- **[15:18] Alejandra Melo:** explique mejor, porque, la verdad, pues,
+- **[15:18] Alejandra Melo:** no sé, Gali es para qué nivel de dropshippers, porque siento que eso
+- **[15:19] Alejandra Melo:** como para un nivel más avanzado.
+- **[15:19] Alejandra Melo:** Más que para un principiante. ¿O tienen pensado un Gali para un principiante?
+- **[15:19] Catalina Giraldo Aguirre:** Gali sería para todo.
+- **[15:19] Catalina Giraldo Aguirre:** Dropshippers, nuevos, viejos, proveedores
+- **[15:19] Alejandra Melo:** Es que siento que
+- **[15:19] Alejandra Melo:** siento que, o sea, es como tener una, sí, es
+- **[15:19] Alejandra Melo:** la IA en dropping, ¿cierto? Es eso, Karen.
+- **[15:19] Alejandra Melo:** Ajá, pero es como, por ejemplo, tener un, o sea, no tener un
+- **[15:19] Alejandra Melo:** a ver, ¿cómo les explico? Un ChatGPT, sino como tener un
+- **[15:19] Alejandra Melo:** cloud ahí supercon todos los poderes ahí integrado.
+- **[15:19] Alejandra Melo:** Mientras que los principiantes usan eso, un ChatGPT.
+- **[15:19] Alejandra Melo:** Los más avanzados sí usan un cloud
+- **[15:19] Alejandra Melo:** con antigravity y con todos los códigos y demás.
+- **[15:19] Alejandra Melo:** Claro. Y vi más a Gali como así, como el para para
+- **[15:19] Alejandra Melo:** para los más avanzados, más que para los principiantes. Entonces, no sé,
+- **[15:19] Alejandra Melo:** tendría que mirar a ver, de pronto, porque como me lo mostraste todo así,
+- **[15:20] Alejandra Melo:** ya prácticamente armado, de pronto, por eso. Entonces, cuando uno está comenzando como
+- **[15:20] Alejandra Melo:** cómo sería?
+- **[15:20] Catalina Giraldo Aguirre:** Eso es lo que voy a estar trabajando ahorita.
+- **[15:20] Catalina Giraldo Aguirre:** Porque con el Gali pequeño queríamos, de pronto, como activar a la persona o ver cómo podemos hacer para activarlo. Pero ahorita veo que mi enfoque de ir con las preguntas que están teniendo es enfocarme en cómo es dropping vacío. Sin nada, y cómo la persona llega sin saber Dropi cómo se puede
+- **[15:20] Alejandra Melo:** acceder. Con
+- **[15:20] Catalina Giraldo Aguirre:** IA.
+- **[15:20] Alejandra Melo:** Sí, sí.
+- **[15:20] Yo:** Si tal,
+- **[15:20] Alejandra Melo:** Porque sí, se fumó.
+- **[15:20] Alejandra Melo:** Cómodo, Santi.
+- **[15:20] Yo:** No, es que le le decía a Alejandro sobre la reunión que tuvimos ayer con María, de de del discovery, sobre todo para usuarios que
+- **[15:20] Yo:** no se han activado y que no saben nada de nada de de ecommerce.
+- **[15:20] Yo:** Como desde ese punto de partida,
+- **[15:20] Yo:** Igual, ahí está la diferenciación
+- **[15:21] Yo:** de, pues, del Gali global, que es el que estamos hablando
+- **[15:21] Yo:** que es diferente al que tú y yo estamos trabajando ahora, es el de expo winners.
+- **[15:21] Yo:** Que está más enfocado, es en levantar data.
+- **[15:21] Alejandra Melo:** Mhmm.
+- **[15:21] Yo:** One. Listo.
+- **[15:21] Participante:** Listo.
+- **[15:21] Yo:** Yo creo que
+- **[15:21] Yo:** de del, mañana tenemos otro espacio ahí que ya el aula agendó.
+- **[15:21] Yo:** El de revisemos Gali,
+- **[15:21] Catalina Giraldo Aguirre:** Sí, ¿eso es con María?
+- **[15:21] Catalina Giraldo Aguirre:** Podemos aprovecharlo.
+- **[15:21] Catalina Giraldo Aguirre:** Y y hablar un poco más de
+- **[15:21] Catalina Giraldo Aguirre:** pues, de esta construcción.
+- **[15:21] Catalina Giraldo Aguirre:** A a ver qué le parece.
+- **[15:21] Yo:** De una... Sí, y para mañana yo creo que ya
+- **[15:21] Yo:** vamos a tener, por lo que les decía, que esta tarde tenemos espacio con Aleja,
+- **[15:21] Yo:** vamos a ya tener unos avances sobre lo que sería expo buenos, ¿listo?
+- **[15:21] Alejandra Melo:** Listo.
+- **[15:21] Yo:** Bueno.
+- **[15:21] Yo:** Gracias
+- **[15:21] Diana Aldana:** Bueno.
+- **[15:21] Yo:** por la
+- **[15:21] Yo:** Chao.
+- **[15:22] Catalina Giraldo Aguirre:** Vale, dato
+- **[15:22] Alejandra Melo:** qué
+- **[15:22] Diana Aldana:** se...
+- **[15:22] Alejandra Melo:** Se
+- **[15:22] Catalina Giraldo Aguirre:** muy bien.

@@ -1,5 +1,28 @@
 function truncate(text: string, max: number) {
-  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
+  if (text.length <= max) return text;
+  return text.slice(0, max - 1).replace(/[\s·]+$/, "") + "…";
+}
+
+// Limpia los tokens de formato ("## ", "- ", líneas "---") antes de recortar
+// para la fila/tarjeta de la lista — el modal sí los interpreta, la lista
+// solo necesita texto corrido. Las viñetas ("- ") suelen ser pares
+// etiqueta: valor (ej. "Fase: Delivery | En QA") — unirlas con un simple
+// espacio las pegaba en un bloque ilegible ("Fase: X Prioridad: Y..."), así
+// que cada viñeta cierra con " · " para separarlas visualmente.
+function stripMarkup(text: string) {
+  return text
+    .split("\n")
+    .filter((line) => line.trim() !== "---")
+    .map((line) => {
+      const noHeading = line.replace(/^#+\s*/, "");
+      const isBullet = /^-\s+/.test(noHeading);
+      const clean = noHeading.replace(/^-\s*/, "");
+      return isBullet ? `${clean} ·` : clean;
+    })
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .replace(/\s*·\s*$/, "")
+    .trim();
 }
 
 // Preview de una fila de `celula_updates` para la tarjeta/fila de la lista
@@ -24,5 +47,5 @@ export function previewUpdateContent(content: string): string {
       return "Resumen con métricas — ver detalle.";
     }
   }
-  return truncate(content, 160);
+  return truncate(stripMarkup(content), 160);
 }

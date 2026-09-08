@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import ProjectWeekly, { type ProjectUpdate } from "@/components/ProjectWeekly";
 import {
   ChevronDown, ChevronUp, FileText, Rocket, Layers,
-  Users, Wrench, GitBranch, Search, Sparkles, ExternalLink,
+  Wrench, Sparkles, ExternalLink,
 } from "lucide-react";
 
 /* ── Shared styles (mismos tokens que gro-002 / fin-001 / marcas) ── */
@@ -76,24 +77,29 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
   );
 }
 
-function StatusPill({ tone, children }: { tone: "ok" | "warn" | "bad"; children: React.ReactNode }) {
-  const map = {
-    ok: { fg: "#166534", bg: "#DCFCE7" },
-    warn: { fg: "#B45309", bg: "#FEF3C7" },
-    bad: { fg: "#B42318", bg: "#FEE4E2" },
-  }[tone];
-  return <span style={{ ...badgeStyle(map.fg, map.bg), marginRight: 8 }}>{children}</span>;
-}
+type PocChild = { id: string; name: string; project_code: string | null; estado_interno: string | null };
 
 export default function Gro004ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
+  const [pocs, setPocs] = useState<PocChild[]>([]);
+  const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
+
+  useEffect(() => {
+    fetch("/api/proyectos/gro-004")
+      .then((res) => res.json())
+      .then((data) => {
+        setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC"));
+        setUpdates(data?.updates ?? []);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="GRO-004 · HelpCenter / Biblia IA"
-        subtitle="Célula Growth · PM: José Pineda"
+        subtitle="José Pineda · Growth Product Manager"
         currentSlug="gro-004"
       />
 
@@ -101,9 +107,12 @@ export default function Gro004ProjectPage() {
 
         {/* ── Breadcrumb & título ── */}
         <div style={{ marginBottom: 20 }}>
-          <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}>
-            ← Volver al Hub
-          </a>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+            <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+              ← Volver al Hub
+            </a>
+            <ProjectWeekly updates={updates} />
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
@@ -120,7 +129,7 @@ export default function Gro004ProjectPage() {
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
-                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>PM / Owner</div>
+                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>Growth Product Manager</div>
                 <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>José Pineda</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
@@ -129,7 +138,7 @@ export default function Gro004ProjectPage() {
               </div>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
                 <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>Product Designer</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>Sin asignar</div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>Francisco Velandia</div>
               </div>
             </div>
           </div>
@@ -139,7 +148,6 @@ export default function Gro004ProjectPage() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 24 }}>
           {[
             { label: "CSAT Chile vs. meta", value: "~0.30–0.40", sub: "meta 0.75 — señal de presión sobre SAC que Help Center busca aliviar", color: "#B42318" },
-            { label: "Historias de usuario con QA", value: "7", sub: "US-HC-01 a 07, verificadas con navegación interactiva real", color: "var(--dropi)" },
             { label: "Superficies con base de conocimiento única", value: "3", sub: "Botón flotante · Cards contextuales · Portal tipo Shopify", color: "#0E7C74" },
             { label: "Probabilidad de citación en formato FAQ", value: "81%", sub: "según estudios de la industria GEO/AEO 2026 — el formato que más citan las IAs", color: "#7C3AED" },
           ].map((k) => (
@@ -165,6 +173,28 @@ export default function Gro004ProjectPage() {
             </div>
           </a>
         </div>
+
+        {/* ── POCs de este proyecto ── */}
+        {pocs.length > 0 && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>
+              🧩 POCs de este proyecto ({pocs.length})
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {pocs.map((p) => (
+                <a
+                  key={p.id}
+                  href={p.project_code ? `/proyectos/${p.project_code.toLowerCase()}` : "#"}
+                  style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 10, padding: "12px 14px" }}
+                >
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#0E7C74" }}>{p.project_code}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", marginTop: 2 }}>{p.name}</div>
+                  <div style={{ fontSize: 11.5, color: "#94A3B8", marginTop: 3 }}>{p.estado_interno ?? "Sin definir"}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Actualización semanal ── */}
         <Callout tone="info" title="📌 Tres frentes convergiendo en la misma base de conocimiento (28 ago 2026)">
@@ -216,8 +246,6 @@ export default function Gro004ProjectPage() {
                     { id: "resumen", label: "🧠 1. Resumen & Kick-off" },
                     { id: "superficies", label: "🧩 2-3. Superficies & Arquitectura" },
                     { id: "geo", label: "🔍 4. GEO/AEO" },
-                    { id: "beta", label: "🛠️ 7. Beta técnica & QA" },
-                    { id: "pendientes", label: "🔀 8-9. Pendientes & equipo" },
                   ].map((t) => (
                     <button key={t.id} onClick={() => setTab(t.id)} style={{ background: tab === t.id ? "#0E7C74" : "#ffffff", color: tab === t.id ? "#ffffff" : "#475569", border: tab === t.id ? "1px solid #0E7C74" : "1px solid #CBD5E1", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.15s ease" }}>
                       {t.label}
@@ -252,9 +280,9 @@ export default function Gro004ProjectPage() {
                     <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 8 }}>
                       <thead><tr><th style={tableHeaderStyle}>Rol</th><th style={tableHeaderStyle}>Nombre</th></tr></thead>
                       <tbody>
-                        <tr><td style={tableCellStyle}>Owner / PM</td><td style={tableCellStyle}>José Pineda (Growth)</td></tr>
+                        <tr><td style={tableCellStyle}>Growth Product Manager</td><td style={tableCellStyle}>José Pineda</td></tr>
                         <tr><td style={tableCellStyle}>Co-responsable</td><td style={tableCellStyle}><strong>Laura Núñez</strong> — líder de Servicio al Cliente. El proyecto nace de su equipo.</td></tr>
-                        <tr><td style={tableCellStyle}>Product Designer</td><td style={tableCellStyle}>Sin asignar todavía</td></tr>
+                        <tr><td style={tableCellStyle}>Product Designer</td><td style={tableCellStyle}>Francisco Velandia</td></tr>
                         <tr><td style={tableCellStyle}>Growth Ops / Gali (IA de triage sobre Intercom)</td><td style={tableCellStyle}>Marlon</td></tr>
                         <tr><td style={tableCellStyle}>Userpilot</td><td style={tableCellStyle}>Laura Torres (con Katerin Salazar)</td></tr>
                         <tr><td style={tableCellStyle}>PO de comunicaciones</td><td style={tableCellStyle}>Majo</td></tr>
@@ -286,24 +314,41 @@ export default function Gro004ProjectPage() {
                       Las 3 superficies comparten la misma base de conocimiento. No puede existir un set de respuestas para el botón flotante, otro para las cards y un tercero para el website — todas responden desde la misma matriz de contenido (candidata natural: <code>FAQs_por_pais.xlsx</code>, ya en uso por Gali/Intercom).
                     </Callout>
 
+                    <h4 style={subHeadingStyle}>POC HelpCenter Intercom</h4>
+                    <p style={pStyle}>
+                      Primer alcance de la experiencia de HelpCenter a través del botón flotante en plataforma. Busca que las consultas que el usuario haga por este canal estén estructuradas a partir de la base de conocimiento unificada de Dropi, garantizándole un acceso rápido al conocimiento necesario para avanzar en su ciclo de usabilidad sin depender de asistencia humana. Este POC será exitoso si los usuarios consultan la información y se autogestionan con facilidad, y si su satisfacción aumenta al encontrar respuesta a sus consultas más frecuentes.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC Website</h4>
+                    <p style={pStyle}>
+                      Visualizador general del HelpCenter, cuyo objetivo es facilitarle la consulta a cualquier tipo de usuario de Dropi por fuera de la plataforma. Este acceso al conocimiento general, a través de una interfaz conversacional, busca mostrarle al usuario toda la información que requiera para avanzar en su activación dentro del ecosistema, además de resolver proactivamente fricciones relacionadas con logística, órdenes, gestión de productos o cualquier otra tipología de fricción. Este POC será exitoso si aumenta la tasa de activación, si se reduce el acompañamiento en los niveles 1 y 2 de SAC, y si la satisfacción del usuario aumenta.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC GEO/AEO</h4>
+                    <p style={pStyle}>
+                      Cuando un usuario haga consultas sobre dropshipping o temas asociados al core estratégico de Dropi, el sistema proyectará respuestas que, además de favorecer la adquisición, faciliten el engagement con Dropi. El usuario podrá consultar cualquier elemento de la base de conocimiento y será guiado hacia el éxito dentro del ecosistema por Gemini, Claude o ChatGPT.
+                    </p>
+
                     <h4 style={subHeadingStyle}>Dos dependencias técnicas críticas, ambas sin resolver</h4>
                     <ul style={ulStyle}>
                       <li><strong>Personalización por nivel de Leyendas Dropi:</strong> los presets de las superficies 1 y 2 deben leer el nivel actual del usuario. Pendiente con Tecnología (José Giraldo) y con Marlon (¿Gali/Intercom puede recibir esto como variable de contexto?).</li>
                       <li><strong>Detección de pantalla/sección:</strong> Dropi ya tiene Userpilot funcionando &quot;full&quot; en la plataforma (Laura Torres, Katerin Salazar) — hipótesis no confirmada: Userpilot resuelve la detección de pantalla, Gali/Intercom resuelve la conversación.</li>
                     </ul>
 
+                    <h4 style={subHeadingStyle}>Capa de integraciones con agentes de IA</h4>
+                    <p style={pStyle}>
+                      Más allá de las 3 superficies, el proyecto contempla una capa de integración con los agentes de IA que ya conviven en la experiencia del cliente: <strong>Gali</strong> (IA de servicio al cliente), <strong>Danna</strong> (IA de Academy) y <strong>Sherlock</strong> (IA de producto que monitorea los grupos de WhatsApp). El objetivo de fondo es que el usuario sienta acompañamiento permanente a lo largo de todo su ciclo de usabilidad en la plataforma, impactando satisfacción, activación y generación de órdenes.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>Capa de visualización y consumo</h4>
+                    <p style={pStyle}>
+                      Por donde el usuario interactúa con la base de conocimiento: el canal de WhatsApp de SAC, el botón flotante de Intercom, el website, los chats de IA (Claude, Gemini, ChatGPT) y un botón de ayuda en cada sección de la experiencia.
+                    </p>
+
                     <h3 style={{ ...sectionHeadingStyle, marginTop: 20 }}><Wrench size={16} /><span>3. Arquitectura pensada para escalar al holding</span></h3>
                     <p style={pStyle}>
                       El <strong>alcance del V1</strong> es exclusivamente Dropi — nada implica pedirle contenido a ChateaPro/Atom/Roax/Estrellas/EcomScanner para el primer lanzamiento. El <strong>principio de diseño organizacional</strong> es que la arquitectura se diseña desde ya pensando en escala del holding, para que sumar un producto nuevo después sea extender, no reconstruir.
                     </p>
-                    <h4 style={subHeadingStyle}>5 decisiones a tomar durante el diseño del V1 (costo bajo ahora, alto después)</h4>
-                    <ul style={ulStyle}>
-                      <li>Esquema de datos con dimensión &quot;Producto&quot; desde el día 1, aunque hoy solo tenga el valor &quot;Dropi&quot;.</li>
-                      <li>La segmentación Seller/Supplier/Brand se modela como &quot;roles dentro de Dropi&quot;, no como el modelo general de segmentación.</li>
-                      <li>Naming del proyecto y de la superficie WebSite: ¿&quot;Dropi Help Center&quot; o algo neutral a nivel holding?</li>
-                      <li>Estructura de navegación: ¿nivel superior &quot;Producto → Segmento&quot; desde ya?</li>
-                      <li>Conversación liviana con Marlon (no bloqueante): ¿Intercom/Gali podría enrutar por producto sin rediseño completo?</li>
-                    </ul>
                   </div>
                 )}
 
@@ -341,70 +386,6 @@ export default function Gro004ProjectPage() {
                       </tbody>
                     </table>
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>Cómo medirlo: 20-30 preguntas típicas probadas periódicamente en ChatGPT/Perplexity/Gemini/Claude/Google AI Mode, registrando si Dropi aparece mencionado (&quot;share of model&quot;). Mínimo 4-6 semanas de seguimiento. Dueño propuesto de la cadencia trimestral: Jose Hurtado.</p>
-                  </div>
-                )}
-
-                {/* TAB 4 — BETA TÉCNICA & QA */}
-                {tab === "beta" && (
-                  <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
-                    <h3 style={sectionHeadingStyle}><Search size={16} /><span>7. Historias de Usuario — reverse-engineered desde el prototipo</span></h3>
-                    <p style={pStyle}>
-                      El prototipo de la superficie WebSite se construyó primero; estas historias documentan lo que ya hace, verificado con navegación interactiva real (clics reales, no solo lectura estática). Nomenclatura <code>US-HC-XX</code>, para no colisionar con <code>US-LND-XX</code>/<code>US-PLAT-XX</code> de Leyendas Dropi.
-                    </p>
-
-                    <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 16 }}>
-                      <thead><tr><th style={tableHeaderStyle}>Historia</th><th style={tableHeaderStyle}>Estado</th><th style={tableHeaderStyle}>Hallazgo</th></tr></thead>
-                      <tbody>
-                        <tr><td style={tableCellStyle}><strong>US-HC-01</strong><br />Landing del Centro de Ayuda</td><td style={tableCellStyle}><StatusPill tone="ok">✅ implementado</StatusPill></td><td style={tableCellStyle}>Coincide con el brief. Falta contenido real de producción.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-02</strong><br />Selector de segmento</td><td style={tableCellStyle}><StatusPill tone="warn">🟡 1 inconsistencia</StatusPill></td><td style={tableCellStyle}>Vendedor (segmento por defecto) no muestra su propia descripción, a diferencia de Proveedor y Marca.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-03</strong><br />Navegación por categoría</td><td style={tableCellStyle}><StatusPill tone="ok">✅ implementado y probado</StatusPill></td><td style={tableCellStyle}>&quot;Garantías y devoluciones&quot; (13 preguntas) coincide con <code>FAQs_por_pais.xlsx</code>. La parte más sólida.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-04</strong><br />Conversación con Gali</td><td style={tableCellStyle}><StatusPill tone="bad">🔴 bug confirmado</StatusPill></td><td style={tableCellStyle}>Pregunta libre que no coincide con un acceso rápido devuelve respuesta incorrecta — sin matching semántico real todavía.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-05</strong><br />Respuesta enriquecida + feedback</td><td style={tableCellStyle}><StatusPill tone="warn">🟡 gap real (CA6)</StatusPill></td><td style={tableCellStyle}>&quot;No&quot; en el feedback muestra solo texto, sin botón/enlace real a soporte — ver alerta narrativa arriba.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-06</strong><br />Puente artículo → Gali/Academy</td><td style={tableCellStyle}><StatusPill tone="ok">✅ verificado</StatusPill></td><td style={tableCellStyle}>&quot;Profundizar con Gali&quot; funciona de verdad, no es decorativo.</td></tr>
-                        <tr><td style={tableCellStyle}><strong>US-HC-07</strong><br />Footer legal/soporte</td><td style={tableCellStyle}><StatusPill tone="bad">🔴 no implementado</StatusPill></td><td style={tableCellStyle}>Los 4 enlaces apuntan al mismo placeholder — depende de contenido de otras áreas (Legal, Academy, Tecnología).</td></tr>
-                      </tbody>
-                    </table>
-
-                    <h4 style={subHeadingStyle}>Bugs/gaps a resolver, en orden de prioridad</h4>
-                    <ul style={ulStyle}>
-                      <li>🔴 Matching de texto libre en el buscador (US-HC-04) — depende de integración real con Gali.</li>
-                      <li>🟡 Feedback negativo sin acción real (US-HC-05) — subido de prioridad por la narrativa de marca.</li>
-                      <li>🟡 Segmento &quot;Vendedor&quot; sin descripción (US-HC-02).</li>
-                      <li>🔴 Enlaces del footer sin destino real (US-HC-07) — depende de contenido de otras áreas.</li>
-                    </ul>
-                    <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>No tocar, ya funciona bien: landing con buscador y accesos rápidos, selector de segmento con estado &quot;Próximamente&quot;, navegación por categoría con acordeón, respuestas enriquecidas de Gali, puente &quot;Profundizar con Gali&quot;.</p>
-                  </div>
-                )}
-
-                {/* TAB 5 — PENDIENTES & EQUIPO */}
-                {tab === "pendientes" && (
-                  <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
-                    <h3 style={sectionHeadingStyle}><GitBranch size={16} /><span>8. Conexión con Leyendas Dropi</span></h3>
-                    <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>Ambos proyectos son de José, con alcance, stakeholders y objetivos distintos — se documentan por separado, esto registra solo los puntos donde legítimamente se tocan.</p>
-                    <ul style={ulStyle}>
-                      <li><strong>Matriz de FAQ compartida:</strong> el contenido de FAQ de Leyendas Dropi se piensa como una categoría dentro de la misma matriz que usa Gali/Help Center.</li>
-                      <li><strong>Personalización por nivel de Leyendas Dropi:</strong> el botón flotante y las cards deben poder leer el nivel del usuario — dependencia técnica real, no solo conceptual.</li>
-                      <li><strong>Misma base de conocimiento:</strong> gobernanza de la matriz — dueño propuesto Jose Hurtado (Customer Success). Ya está recopilando varias bases de conocimiento para alinear el punto de partida con el experimento que está al aire en Argentina; sigue pendiente confirmar si acepta formalmente el rol de dueño.</li>
-                    </ul>
-
-                    <h3 style={{ ...sectionHeadingStyle, marginTop: 20 }}><Users size={16} /><span>9. Pendientes</span></h3>
-                    <ul style={ulStyle}>
-                      <li>Kick-off formal del proyecto con Laura Núñez (Painpoint 2, usuarios implicados, AS-IS completo, objetivos/OKR propios) — sin fecha fija.</li>
-                      <li>Validar con Marlon: esquema real de ingesta de Gali, vigencia de los insumos, bandeja de triage para Leyendas Dropi, viabilidad de exponer el nivel como variable de personalización.</li>
-                      <li>Validar con Tecnología (José Giraldo): viabilidad de que Intercom/Gali (o Userpilot) consuma el nivel de Leyendas Dropi en tiempo real o batch.</li>
-                      <li>Hablar con Katerin y Laura Torres: ¿Userpilot puede segmentar por nivel de Leyendas Dropi y país? ¿Se integra con Gali para abrir el chat desde una card?</li>
-                      <li>Asignar Product Designer del proyecto.</li>
-                      <li>Definir técnicamente cómo se implementa la base de conocimiento compartida entre las 3 superficies.</li>
-                      <li>Confirmar con Jose Hurtado si acepta el rol de dueño de mantener vigente la matriz de FAQ.</li>
-                      <li>Reunión pendiente con Kike (Growth/CRM) para integrar la base de conocimiento a Intercom.</li>
-                      <li>Recibir de Diana Aldana las recomendaciones de mejores prácticas de experiencia, tras mostrarle el proyecto esta semana.</li>
-                      <li>Resolver, en orden de prioridad, los 4 bugs/gaps del prototipo (ver pestaña Beta técnica).</li>
-                    </ul>
-
-                    <Callout tone="success" title="📌 Insumos de datos reales recibidos de Laura Núñez (SAC)">
-                      <code>FAQs_por_pais.xlsx</code> — matriz real que usa hoy SAC, una hoja por país (Colombia, Chile, Argentina, México, Paraguay, Panamá, Guatemala, Ecuador, Perú) + hoja &quot;Proveedores&quot;. Esquema: Pregunta | Respuesta | Categoría | País | Tags | Variaciones | Intención/Bandeja | Resultado. Calidad no 100% consistente entre hojas — buen indicio de estructura, no plantilla perfecta para copiar tal cual.<br /><br />
-                      <code>Intercom_Calificaciones_Negativas_por_Bandejas.xlsx</code> — calificaciones negativas por bandeja/mes/país (abr–jun 2026) + CSAT (Meta vs. Resultado) para Chile. Uso principal: priorización.
-                    </Callout>
                   </div>
                 )}
 

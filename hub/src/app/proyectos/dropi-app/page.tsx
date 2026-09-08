@@ -1,5 +1,7 @@
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import WeeklySelector from "../seguimiento/WeeklySelector";
+import RoadmapGantt from "../seguimiento/RoadmapGantt";
 
 // Estructura: Promp/Documento de Seguimiento.md (plantilla de seguimiento de proyecto)
 // Insumo: Dropi App/Plan Estrategico_ Dropi App (2).md — 20 mayo 2026
@@ -143,8 +145,13 @@ export default function DropiAppPage() {
             <table style={table}>
               <tbody>
                 <tr>
-                  <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kickoff)</td>
-                  <td style={td}>Plan Estrategico_ Dropi App (2).md (carpeta Dropi App)</td>
+                  <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kick-off)</td>
+                  <td style={td}>
+                    Para consultar el detalle completo de la visión y alcance inicial, accede al{" "}
+                    <a href="https://docs.google.com/document/d/1IBNlQN3widRjmeB77ri6aUDXh46BbRpX05ht_zSveYY/edit?usp=sharing" target="_blank" rel="noreferrer" style={{ color: "var(--dropi)", fontWeight: 700 }}>
+                      Documento de Kick-off
+                    </a>.
+                  </td>
                 </tr>
                 <tr>
                   <td style={{ ...td, fontWeight: 700 }}>📊 Archivos / Hojas de Cálculo (Excel)</td>
@@ -169,11 +176,11 @@ export default function DropiAppPage() {
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700 }}>UX/UI Designer</td>
-                <td style={td}>{pending}</td>
+                <td style={td}>Kevin Paternina</td>
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700 }}>Frontend Developer</td>
-                <td style={td}>{pending}</td>
+                <td style={td}>Martin Gonzales</td>
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>Tecnología Growth</td>
@@ -216,20 +223,48 @@ export default function DropiAppPage() {
         </Section>
 
         {/* 🗺️ Roadmap */}
-        <Section icon="🗺️" title="Roadmap">
-          <Field term="Fase 1 (MVP / Q1)">Descubrimiento de productos vía feed de video — completado.</Field>
-          <Field term="Fase 2 (Escala / Q2)">Novedades / gestión de negocio: métricas de ventas, notificaciones push, búsqueda de productos, gestión de órdenes — en desarrollo.</Field>
-          <Field term="Próximos pasos inmediatos">Definir fecha de cierre de Fase 2 y meta numérica objetivo del ratio DAU/Descargas.</Field>
+        <Section icon="🗺️" title="Roadmap del Proyecto">
+          <RoadmapGantt
+            axisStart="2025-11"
+            axisEnd="2026-12"
+            fases={[
+              {
+                nombre: "Fase 1: Gestión de Novedades",
+                estado: "completada",
+                inicio: "2025-11",
+                fin: "2025-11",
+                detalle: "Implementación y centralización de la gestión de novedades para optimizar la operativa inicial. Entregada en noviembre de 2025.",
+              },
+              {
+                nombre: "Fase 2: Búsqueda Avanzada",
+                estado: "proxima",
+                inicio: "2026-10",
+                fin: "2026-11",
+                detalle: "Motor de búsqueda clásica (texto/palabras clave), búsqueda por ID para acceso directo, y búsqueda potenciada con Inteligencia Artificial para mejorar la relevancia de los resultados.",
+              },
+              {
+                nombre: "Fase 3: Escalamiento y Feed",
+                estado: "proxima",
+                inicio: "2026-11",
+                fin: "2026-12",
+                detalle: "Soporte e infraestructura para arquitectura Multipaís, y diseño e implementación del nuevo Feed de experiencia.",
+              },
+            ]}
+            nota="Fase 1 entregada en noviembre de 2025 (confirmado). Fases 2 y 3: fechas estimadas a partir del Weekly Status más reciente (semana del 25 de agosto de 2026) — se ajustan cuando el equipo confirme fechas exactas."
+          />
         </Section>
 
         {/* 🗓️ Weekly Status */}
         <Section icon="🗓️" title="Weekly Status (Sincronización Semanal)">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-            <Field term="Semana del">{pending}</Field>
-            <Field term="Estado general">{pending}</Field>
+          <div style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid var(--border)" }}>
+            <WeeklySelector />
           </div>
-          <Field term="Resumen de la semana">{pending} — sin registros todavía.</Field>
-          <Field term="Retos y Bloqueos">{pending}</Field>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <Field term="Resumen de la semana">
+              Prioridad P2 · Delivery en QA. Pruebas activas por el equipo de Tecnología, pruebas en curso con Coordinadora (última fase para liberación) y pruebas internas habilitadas en TestFlight.
+            </Field>
+            <Field term="Retos y Bloqueos">{pending}</Field>
+          </div>
         </Section>
 
         {/* 📊 Métricas de Seguimiento */}

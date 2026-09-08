@@ -31,6 +31,103 @@ export type WeeklyBackoffice = {
 
 export const weeklyBackoffice: WeeklyBackoffice[] = [
   {
+    id: "2026-09-04",
+    fecha: "4 septiembre 2026",
+    fechaISO: "2026-09-04",
+    foco: "🎉 Argentina lanzamiento esta semana · Guatemala activación sin TI · Sumsub flujos en construcción",
+    temas: [
+      {
+        titulo: "🇦🇷 Facturación Argentina — QA final y lanzamiento público esta semana",
+        badge: "✅ Ajustes listos el 2 sep",
+        color: "#10B981",
+        blocks: [
+          {
+            type: "p",
+            text: "José confirmó que el 2 de septiembre en la tarde quedaron listos todos los ajustes comprometidos del QA. Previamente se reunió con Lina (Financiero) y Juan Camilo para alinear los requerimientos financieros — esa alineación ya está hecha. El módulo pasa a revisión de Producto (Catalina y Paula) para las pruebas finales y, si el QA es exitoso, el lanzamiento al público puede darse esta semana.",
+          },
+        ],
+        acciones: [
+          { owner: "Catalina + Paula", texto: "hacer QA de los ajustes finales y dar el visto bueno para el lanzamiento." },
+          { owner: "Paula", texto: "una vez aprobado el QA, coordinar el lanzamiento público con el área de Comunicaciones." },
+        ],
+      },
+      {
+        titulo: "🪪 Sumsub — Flujos KYC/KYB en construcción coordinada",
+        color: "#6366F1",
+        blocks: [
+          {
+            type: "p",
+            text: "Aclaración técnica clave: en Sumsub hay dos objetos distintos — el NIVEL (Level) y el FLUJO (Flow). Primero se construye el nivel con los pasos y campos requeridos, y luego ese nivel se llama desde el flujo. Los niveles ya creados por Jonatan para Confío Pagos son muy similares a los de Guatemala — con duplicarlos, cambiarles el nombre y agregarle el logo de Dropi, quedan listos.",
+          },
+          {
+            type: "callout",
+            tone: "info",
+            label: "📌 Proceso de construcción acordado",
+            text: "Producto y Compliance exploran el dashboard y la plataforma de Sumsub para entender la lógica → se arma el flujo completo → se valida con TI → TI conecta el web SDK. El equipo técnico de Sumsub (Camilo) acompaña, igual que lo hizo Truora en su momento.",
+          },
+          {
+            type: "p",
+            text: "Prototipo de alertas — actualización de Catalina: usuario nuevo (<20 órdenes) → bloqueado en movimientos financieros. Usuario activo (>20 órdenes) → no bloqueado pero con insistencia alta y periodo de gracia de 20-30 días. Bloqueo cross-country: si el mismo correo intenta registrarse en otro país, el sistema detecta el cruce y aplica el bloqueo en la nueva cuenta.",
+          },
+          {
+            type: "p",
+            text: "Edición de datos post-validación: bloqueo de 6 meses para datos críticos. Los datos no sensibles (ej. correo) se editan con solo un código OTP. La edición de datos va en una épica aparte — no entra en el primer alcance del MVP. TI la incorpora al roadmap como tarea separada para no mezclarla con el desarrollo principal.",
+          },
+          {
+            type: "p",
+            text: "Panel admin: hoy en Colombia el admin valida manualmente en el panel de cuentas. Con Sumsub ese proceso será automático — el admin solo audita. Se está diseñando el módulo para incluir gestión de datos de facturación con visibilidad de estados.",
+          },
+        ],
+        acciones: [
+          { owner: "Jonatan", texto: "enviar al equipo los links y la ubicación de los niveles KYC/KYB ya creados en Sumsub." },
+          { owner: "Jonatan + Juan Camilo + Paula + Catalina", texto: "responder esta semana las preguntas de Camilo (Sumsub) en Telegram de forma coordinada para orientar la construcción de los flujos finales." },
+          { owner: "Catalina + Paula", texto: "terminar de ajustar el prototipo (edición de datos) y compartirlo con TI junto con el documento de criterios de aceptación actualizado." },
+          { owner: "José + Víctor", texto: "una vez el equipo confirme el flujo definitivo en Sumsub, dar la estimación de tiempo del desarrollo del web SDK." },
+        ],
+      },
+      {
+        titulo: "🇬🇹 Guatemala — Activación esta semana, sin depender de TI",
+        color: "#F59E0B",
+        blocks: [
+          {
+            type: "p",
+            text: "Los niveles de KYC y KYB para Guatemala ya están creados en Sumsub (para Confío Pagos, replicables para Dropi en minutos). Jonatan los duplica, les pone el logo de Dropi y envía el link al equipo. Paula actualiza el popup en User Pilot. Todo sin intervención de TI.",
+          },
+          {
+            type: "p",
+            text: "Contrato 'Share' con Coloca: sigue bloqueado porque Coloca aún no ha suministrado la información del representante legal — Jonatan les volvió a escribir. Esto no bloquea el despliegue para usuarios nuevos — son procesos paralelos.",
+          },
+        ],
+        acciones: [
+          { owner: "Jonatan", texto: "duplicar los niveles KYC/KYB con logo de Dropi y enviar los links al equipo hoy (2 septiembre)." },
+          { owner: "Paula", texto: "gestionar la actualización del popup de User Pilot en Guatemala con el link de KYC nuevo de Dropi." },
+        ],
+      },
+      {
+        titulo: "🔑 Activación CAS — Argentina y Paraguay",
+        badge: "Nueva solicitud",
+        color: "#0EA5E9",
+        blocks: [
+          {
+            type: "p",
+            text: "Nueva solicitud que entra al Dropi Score: activación CAS para Argentina y Paraguay. Las historias de usuario y la épica ya están gestionadas con TI para que ejecuten la activación de ambos CAS.",
+          },
+        ],
+      },
+      {
+        titulo: "💳 Confío Pagos — México",
+        badge: "Pequeño avance",
+        color: "#F97316",
+        blocks: [
+          {
+            type: "p",
+            text: "Se logró desbloquear el proceso administrativo de documentación. Confío ahora se encuentra en conversaciones con el proveedor bancario para que les rehabiliten el formulario que deben diligenciar. Sin fecha nueva definida.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: "2026-08-28",
     fecha: "28 agosto 2026",
     fechaISO: "2026-08-28",

@@ -251,3 +251,26 @@ Toda la planeación de la célula se estructura para que cada iniciativa respond
     *   No hay respaldo de que el problema sea "muchos pasos". El motivo real de baja adopción es desconocido.
     *   Hipótesis de uso: (a) uso personal/compra barata, (b) testeo de transportadoras, (c) verificar calidad/garantía, (d) validar tiempos de entrega.
     *   Se montará investigación vía User Pilot cruzando: pidieron muestras + no vendieron vs. pidieron + venden mucho vs. pidieron + no vendieron ese producto.
+
+---
+
+## 10. Acuerdos y Estrategia Gali en ExpoWinners (1-2 Septiembre 2026)
+
+*   **Alcance y Propuesta de Valor:**
+    *   Gali evoluciona de "encontrar mi primer producto" a completar todo el trayecto hasta generar la landing page y dejarla lista para salir a vender.
+    *   Foco en huérfanos sin experiencia previa en e-commerce (el 90% de los huérfanos nunca ha vendido online).
+    *   Alianza Freemium con Roax para pauta inmediata sin configuración de cuentas de anuncios.
+*   **Métricas y Criterios de Éxito:**
+    *   **TTV Meta de Flujo Completo:** $\le$ 15 minutos.
+    *   **Zona de Riesgo (Fatiga Cognitiva / Churn Mental):** > 20 minutos.
+    *   **Umbrales de Completitud (Completion Rate):** Persevere > 70%, Pivot 40%–70%, Kill < 40%.
+*   **Protocolo de Captura de Data en ExpoWinners:**
+    *   **Encuesta Inicial Externa (~10 min):** Separada del flujo conversacional para no sesgar el TTV. Mide tiempos históricos reales de selección, metodología actual, experiencia previa y disposición a pautar vs. venta orgánica.
+    *   **Medición Granular por Hitos (H1 a H5):** H1 Exploración (2-3 min), H2 Selección (2-3 min), H3 Ángulo comercial (3-4 min), H4 Creación de Landing (4-5 min), H5 Listo para publicar/vender (1-2 min).
+    *   **Separación de Canales:** Workshop presencial (muestra balanceada de hasta 60 usuarios, 10 por Leyenda Dropi, foco cualitativo y feedback guiado) vs. Uso abierto de 2 días (volumétrico in-the-wild, filtrado por DB con cohorte de huérfanos con 0 ventas al 31 de agosto).
+    *   **Tracking de Fricción y Abandono:** Captura de paso de caída (H1-H5), tiempo hasta el abandono, motivo cualitativo y nivel de asistencia humana (autónomo, puntual o guiado).
+*   **Ecosistema, Pulso y Transportadoras:**
+    *   Gali opera con catálogo cerrado de 200 productos ganadores (descartando MCP en vivo por estabilidad).
+    *   Dropi Pulso se utiliza para ranking, ponderación y social proof (Jobs presentation de 10 min en tarima), evitando frustración si un producto escaneado en stand no está en el catálogo de Gali.
+    *   Transición fluida desde Gali hacia la selección de transportadoras y parametrización de cobertura para pago contra entrega.
+

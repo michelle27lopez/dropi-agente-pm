@@ -1,0 +1,1816 @@
+# Weekly Product
+
+- **ID:** `not_qydr4zBwxRYaNt`
+- **Fecha:** 2026-08-21T16:03:13.541Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/3df31c7a-6598-4b80-aa96-67cfef2c27b9)
+- **Asistentes:** Santiago Herrera Acosta, Maria Ossa, Juan Bautista, Diana Margarita Aldana Echeverry, Katerine Pencue, Laura Contreras, Jaime Guevara, Laura Torres, Catherin Salazar, Jose Pineda
+
+---
+
+## Resumen de la Reunión
+# Contexto: Colombia y la Perspectiva Global
+
+- Órdenes en Colombia cayeron \~13% esta semana (vs. \~30% la semana pasada)
+- Impacto estimado del mes: \~200k órdenes por debajo de meta, pero la meta anterior se superó en 200-300k
+- Mientras Colombia caía, la representación de otros países subió, absorbiendo parte de la caída
+- Reflexión clave de María: Dropi no es Colombia, es un producto global
+  - Multipaís debe verse como propuesta de valor central, no como mercados separados
+  - Cada país es un “feature” nuevo, no un mundo aparte
+  - Herramientas financieras (Dropi Pay, retiro en euros) ya soportan operación global
+- La misma comunidad dropshipper reaccionó moviéndose a otros países durante la crisis
+- Jaime confirmó que en Sherlock los líderes de comunidad se incentivaban mutuamente a operar en otros países
+
+# Métricas Generales de Órdenes (Santiago)
+
+- Total acumulado del mes: \~2.2M órdenes; proyección no alcanza la meta de agosto
+- Activación neta cayó de \~14 días a 5 días: dato atípico, posible ruido en el agente o cambio de estructura de datos
+  - Hipótesis: los que dejaron de vender eran los que tardaban más en activarse, mejorando artificialmente la métrica
+- Brecha entre activación bruta y neta se mantiene en \~3%, sin instrumentos nuevos en producción aún
+- Recomendación de María: construir un tablero más completo con Jaime y Miguel
+  - Separar órdenes de dropshippers vs. marcas
+  - Diferenciar registros por comunidad vs. huérfanos
+  - Ver activación desde adquisición, no solo desde activación
+  - Santiago presentará el tablero general al inicio del weekly como punto de partida
+
+# Iniciativas de Activación y Experimentos (Santiago)
+
+- Nuevo modelo de notificaciones en diseño; en paralelo, notificaciones proactivas por WhatsApp y email
+  - Reunión el lunes con Enrique y José Hurtado para revisar capacidades del CRM y granularidad de datos
+  - Grupos de control: huérfanos vs. comunidad, para medir impacto de mensajes de activación
+- Fake door: exportar producto al catálogo de WhatsApp Business directamente desde Dropi
+  - Hipótesis: reduce el “setup moment” para vendedores que usan WhatsApp como canal principal
+  - Validación técnica ya hecha; Alejandro mejorando el prototipo
+  - Alerta de María: el copy actual (“vende por WhatsApp”) genera sesgo, casi todos se apuntarán
+    - Recomendación: segmentar mejor el público antes de mostrar el botón, y revisar el copy
+    - Estudiar Estrellas App (spin-off de Dropi para vendedores de catálogo) para entender ese público y reutilizar aprendizajes
+- Discovery de “solicita tu muestra”: entender motivaciones de los diferentes tipos de usuario
+
+# Proyecto Leyendas Dropi y CRM de Líderes (José)
+
+- Arquitectura de información del programa ya construida con Frank; formato desktop maduro, mobile en proceso
+- Estrategia dividida en dos frentes: plataforma (dentro del core de Dropi) y landing
+  - Lunes: sesión de articulación para alinear pipeline de datos e infraestructura
+  - Diccionario de datos enviado para iniciar construcción del panel
+- Lanzamiento objetivo: 12 de septiembre
+- CRM de líderes: alineación con equipo comercial en curso; coexistencia con WIVI pendiente de definir
+  - Alerta: backlog de tecnología compartido con equipo comercial; riesgo de dobles esfuerzos con José Giraldo
+  - Próxima semana: sesión con Gabriela Pasto para rack de servicio completo
+- María solicitó un mapeo consolidado del estado de todos los proyectos alrededor de líderes de comunidad
+  - Incluir WIVI, CRM, leyendas, y cualquier otro actor, antes de tomar decisiones con Growth
+  - Stakeholder principal de José es Luisa (Growth), no Lucho
+
+# Help Center Biblia AI y Academy (José)
+
+- Help Center: base única de conocimiento para todo el holding; narrativa aprobada por Laura Núñez
+  - Chat de Gali exclusivo del website, alimentado de esa base compartida
+  - María: el help center debe estar optimizado para aparecer en motores de búsqueda de AI (SEO/AIO)
+- Academy: se está reformulando toda la experiencia de e-learning
+  - WIVI tiene funcionalidades de e-learning; riesgo de solapamiento
+  - María: definir qué queda en dominio propio de Dropi vs. dominio externo, es decisión estratégica
+  - Tour guides de Majo para la rearquitectura mientras se migran módulos paulatinamente
+  - Contenidos internos de Academy alineados con producto: responsabilidad de product marketing (Katherines)
+
+# Sub-Players, Pulso y Marcas (Jaime y Katerine)
+
+- Sub-players: tiempo de primera orden bajó de \~40 días a \~13 días en nuevos proveedores
+  - Hipótesis: proveedores que ya traían dropshippers de otros lados
+  - Bug identificado: mezcla de marcas y proveedores en el mismo rol; se construirá un bot de prefiltro
+- Pulso: 206 señales registradas; resolución promedio de 15-20 días
+  - Estimado: \~175 señales x \~100 órdenes = \~17,400 unidades potenciales, con equipo no dedicado 100%
+  - Automatizar el proceso multiplicaría el impacto significativamente
+  - Métrica pendiente: cuántas órdenes nuevas ha generado Pulso (aún muy manual para calcular)
+- María: todos los proyectos deben reportar cuántas órdenes han traído, vinculado al OKR de volumen
+- Katerine (Marcas): en 48.6% de la minor star metric (600k órdenes); brecha de \~308k para cerrar
+  - Experimento de leads: 17 marcas propias seleccionadas de lista de 2,000 en Shopify
+    - Investigación profunda hecha; outreach personalizado por sus canales esta semana
+    - Objetivo: escucha directa antes de vender, entender qué necesitan
+    - Hallazgos: ninguna tiene tracking propio confiable, 6 de 17 dependen solo de Coordinadora
+  - Problema de fondo: product-market fit no resuelto para marcas grandes; propuesta de valor aún no clara
+  - Capacidad operativa del equipo de marcas insuficiente: escalar con Growth Ops, no con equipo comercial
+
+# Búsqueda Semántica: Cierre de Primera Fase (Diana)
+
+- Adopción en Paraguay: \~99% (buscador IA como predeterminado)
+- Adopción en Colombia: muy baja; nunca se hizo push post-mejoras de mayo
+- Conclusión: búsqueda con IA no será el buscador predeterminado
+  - Clásica sigue superando en cantidad de resultados (ej. “mascotas”: IA trae \~10, Clásica \~30+)
+  - Problema en Paraguay: usuario no sabe que Clásica trae más resultados, se queda con percepción negativa
+- Próximos pasos técnicos: optimizar calidad de resultados de IA
+- Visión a futuro: buscador unificado (sin tabs Clásica / IA), una vez optimizada la calidad
+- No se hará más push de marketing a búsqueda semántica hasta que mejore la calidad
+- Jaime: oportunidad de iterar desde el ángulo de “cómo ayuda la IA a vender más”, conectando con catálogo de proveedores y Gali
+
+# Próximos Pasos y Temas Organizacionales
+
+- María sale de vacaciones; la próxima semana: maratón de one-to-ones por célula (1.5-2h c/u) con Jaime y Laura
+  - Objetivo: alinear visiones e iniciativas de cara a apuestas grandes hasta diciembre
+- Célula Experience: próxima semana se define dirección con Diana, incluyendo proyectos de rediseño de wallet y Dropi Works
+  - Diana trabajará con Laura Núñez (servicio al cliente) y Sherlock para mapear tickets y quejas de usuarios
+- Líderes de comunidad como canal de product marketing: desarrollar mecanismos de lanzamiento dentro de comunidades (José como interlocutor)
+- Product marketing: enfocado 100% en lanzamientos externos; experimentos internos no deben gestionarse por ese equipo
+- Dólar bajo: impacto en dropshipping no medido internamente; Santiago lo puso en el radar
+  - María sugiere reunión con proveedores grandes (ej. Growth Pub) para entender ciclos de importación
+- Vacantes abiertas: PM de suppliers, PM para célula de back office, product designer
+
+# Próximas Reuniones
+
+- **Reunión con Enrique y José Hurtado el lunes (Santiago)**
+
+  Revisar capacidades del CRM y granularidad de datos disponibles para notificaciones.
+- **Estudiar Estrellas App y revisar métricas con Lina (Santiago)**
+
+  Entender el público objetivo antes de iterar el fake door de WhatsApp; replantear copy y segmentación.
+- **Mapear estado consolidado de todos los proyectos de líderes de comunidad (José)**
+
+  Incluir WIVI, CRM, leyendas y actores involucrados; alinear con Luisa antes de escalar a Lucho.
+- **Sesión de articulación de pipeline de datos y plataforma el lunes (José)**
+
+  Garantizar coexistencia entre infraestructura de plataforma y landing para el lanzamiento del 12.
+- **Agendar espacio con Jaime, Lau y célula de sellers para revisar Estrellas (María)**
+
+  Alinear el fake door de WhatsApp con la dirección de la célula de sellers.
+- **Ejecutar outreach a las 17 marcas piloto la próxima semana (Katerine)**
+
+  Marketing y área comercial ya alineados; objetivo es escucha directa antes de vender Dropi.
+- **Escalar problema de capacidad operativa de marcas con Growth Ops (Katerine)**
+
+  Reunirse con Marlon de Growth Ops y coordinarse con Jaime para plantear solución.
+- **Sacar espacio con Jaime para iterar búsqueda semántica desde catálogo de proveedores (Diana)**
+
+  Explorar cómo mejorar calidad de resultados de IA conectando con el catálogo.
+- **Presentar cronograma y resultados de lanzamientos en el próximo weekly (Laura Contreras)**
+
+  Coordinar con Katerine para que product marketing abra el espacio con ese update.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/a5b28445-5f7d-4e7b-a910-506c023d5973](https://notes.granola.ai/t/a5b28445-5f7d-4e7b-a910-506c023d5973)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[16:03] Jose Pineda Pitre:** Esto es un calor horrible en Cali.
+- **[16:03] Jose Pineda Pitre:** Pero en general bien, con mucho trabajo, hay muchas cosas.
+- **[16:03] Jose Pineda Pitre:** Tenemos un evento el doce.
+- **[16:03] Maria Ossa:** Ajá.
+- **[16:03] Jose Pineda Pitre:** Entonces, estoy, sí, en esa onda.
+- **[16:03] Maria Ossa:** Bueno, me alegra mucho. ¿Y los demás?
+- **[16:03] Maria Ossa:** Santi.
+- **[16:03] Yo:** Bien, afortunadamente, bastante bien, pues, la
+- **[16:03] Yo:** la semana pasada sí fue más de, pues, claro, de de todo.
+- **[16:03] Yo:** Más como sea, la la angustié de poder ayudar, de estar presente para personas
+- **[16:03] Yo:** cercanas. Afortunadamente, de familia nadie nadie resultó como perido, no
+- **[16:03] Yo:** afectado de gravedad. Entonces, no, fue más
+- **[16:03] Yo:** el el no sentirse en el en el mood para poder realmente
+- **[16:04] Yo:** estar más presente más presente en el
+- **[16:04] Yo:** el trabajo. Pero no, ya esta semana, la verdad, mucho mejor ya.
+- **[16:04] Yo:** Que uno volviste a enganche.
+- **[16:04] Maria Ossa:** Qué bueno, me alegra mucho.
+- **[16:04] Maria Ossa:** Y Kate,
+- **[16:04] katerine Pencue:** Bien, acá
+- **[16:04] katerine Pencue:** se sintió fuertecito.
+- **[16:04] Maria Ossa:** Lo primero
+- **[16:04] katerine Pencue:** que dice, mira, María, que no puede entrar a las ocho,
+- **[16:04] katerine Pencue:** en
+- **[16:04] Maria Ossa:** mi mente de trabajar.
+- **[16:04] katerine Pencue:** Qué vergüenza, Mary. Y cuando comencé a escuchar
+- **[16:04] Maria Ossa:** la noticia,
+- **[16:04] katerine Pencue:** dije, te
+- **[16:04] katerine Pencue:** tengo que dejar esa costumbre. Y nada
+- **[16:04] Maria Ossa:** No te preocupes, no fuiste la única.
+- **[16:04] Maria Ossa:** Sí.
+- **[16:04] Jose Pineda Pitre:** Pero grave.
+- **[16:04] Maria Ossa:** Sí, fuiste la única.
+- **[16:04] katerine Pencue:** Nada, menos mal donde vivía, tenía como espacio, revisé la casa y, pues,
+- **[16:04] katerine Pencue:** como que no no hubo ningún así daño, mi familia, pues,
+- **[16:04] katerine Pencue:** también todo bien, mi familia que vive por esos costados también viene, entonces nada.
+- **[16:04] katerine Pencue:** Mirando y apoyando y buscando a Frank por todo lado.
+- **[16:04] katerine Pencue:** Me parecía a
+- **[16:04] Jose Pineda Pitre:** Dory buscando su
+- **[16:04] Maria Ossa:** Sí, cuando me cuando nos vimos con él le dije, oiga, tremendo susto, no
+- **[16:04] Maria Ossa:** pegó. Y él lo siente, lo siento.
+- **[16:05] Maria Ossa:** Pero bueno, qué bueno. Y muchas gracias también, Kate, por estar pendientes.
+- **[16:05] Maria Ossa:** En Bogotá sé que también se siente un montón, ¿no?
+- **[16:05] Laura Catherine Torres Ciendua:** Horrible. Horrible.
+- **[16:05] Diana Aldana:** Estaba en un parque hasta ahora, sacando a mis perros y esos árboles se movían así.
+- **[16:05] Diana Aldana:** Decía
+- **[16:05] Maria Ossa:** no, son los mismos.
+- **[16:05] Diana Aldana:** De las cometas, cuando la
+- **[16:05] Maria Ossa:** gente
+- **[16:05] Diana Aldana:** estaba viendo
+- **[16:05] Jose Pineda Pitre:** agosto, dijo Diana. Llegó agosto, saquemos cometa.
+- **[16:05] Maria Ossa:** Pero en Bogotá,
+- **[16:05] Maria Ossa:** la movida ha sido muy fuerte, ¿no?, también por las ayudas y demás,
+- **[16:05] Maria Ossa:** como que he visto muchas noticias, que en Bogotá ha salido mucha ayuda para todas las partes del país y
+- **[16:05] Maria Ossa:** yo creo que eso es una de las cosas como que también nos deja todo esto, ¿no?, la capacidad de
+- **[16:05] Maria Ossa:** solidaridad y unirnos
+- **[16:05] Maria Ossa:** frente a esos temas. Entonces, primero, pues darle gracias a todos ustedes,
+- **[16:05] Maria Ossa:** por las ayudas que hicieron, no solamente por las personas
+- **[16:05] Maria Ossa:** que vivieron esto, porque sé que muchos de nosotros nos movilizamos
+- **[16:06] Maria Ossa:** y hemos aportado de diferentes maneras, sino también por
+- **[16:06] Maria Ossa:** el apoyo interno que nos hemos dado entre nosotros para
+- **[16:06] Maria Ossa:** como avanzar en un proceso como estos,
+- **[16:06] Maria Ossa:** también las personas que están desde otras ciudades como Kate, Diana, Lau,
+- **[16:06] Maria Ossa:** y Juan Diego, pues, yo sé que ellos estuvieron ahí todo el tiempo también,
+- **[16:06] Maria Ossa:** dándole, avanzando con las cosas mientras nosotros acá estábamos como
+- **[16:06] Maria Ossa:** procesando todo lo que sucedía.
+- **[16:06] Maria Ossa:** Y también a ustedes que el el primer llamado de vamos a ayudar
+- **[16:06] Maria Ossa:** salieron también a hacerlo. Entonces, primero, pues muchas gracias a todos y y
+- **[16:06] Maria Ossa:** otro es que me siento muy feliz y muy contenta de que
+- **[16:06] Maria Ossa:** hoy podamos estar aquí todos trabajando juntos,
+- **[16:06] Maria Ossa:** avanzando en los proyectos, conociéndonos un poquito más,
+- **[16:06] Maria Ossa:** Yo creo que en estas situaciones, digamos que empezamos a entender un poquito más a las demás
+- **[16:06] Maria Ossa:** personas, y y creo que también
+- **[16:06] Maria Ossa:** pues es algo muy bonito a resaltar. Entonces, primero me siento muy feliz,
+- **[16:07] Maria Ossa:** y segundo, pues también muy feliz como de
+- **[16:07] Maria Ossa:** una u otra forma todo el apoyo que nos hemos dado en conjunto. Entonces, gracias a todos y
+- **[16:07] Maria Ossa:** sé que ha sido una situación difícil por
+- **[16:07] Maria Ossa:** mi lado y un poco de desde el liderazgo del área producto
+- **[16:07] Maria Ossa:** uno de mis intereses principales es que
+- **[16:07] Maria Ossa:** cada uno de ustedes
+- **[16:07] Maria Ossa:** se sienta siempre inspirado y bien también para hacer lo que
+- **[16:07] Maria Ossa:** estamos haciendo, porque yo sé que igual esto es un trabajo, pero
+- **[16:07] Maria Ossa:** la invitación que le he hecho a cada uno de ustedes para unirse al área de producto y un poco
+- **[16:07] Maria Ossa:** como para aceptar el reto conmigo,
+- **[16:07] Maria Ossa:** de lo que estamos haciendo acá, es vamos a aprender y vamos a retar, no sé, cosas y
+- **[16:07] Maria Ossa:** vamos a hacer cosas muy chéveres.
+- **[16:07] Maria Ossa:** Pero para eso sí que también necesitamos estar
+- **[16:07] Maria Ossa:** cada uno en unas condiciones emocionales, mentales,
+- **[16:07] Maria Ossa:** muy bien, y y por eso también se ha dado como el espacio para que cada uno pueda
+- **[16:07] Maria Ossa:** ir retomando en la manera en la que se sienta mucho más
+- **[16:07] Maria Ossa:** tranquilo también para que logremos eso.
+- **[16:08] Maria Ossa:** Entonces,
+- **[16:08] Maria Ossa:** lástima que no está aquí Kate en
+- **[16:08] Maria Ossa:** y Wandy, pero
+- **[16:08] Maria Ossa:** pero eso era algo que quería decirles el día de hoy.
+- **[16:08] Maria Ossa:** Antes de comenzar.
+- **[16:08] Maria Ossa:** ¿Listo? Muchas gracias, chicos, en verdad. Yo sé que no fue fácil y
+- **[16:08] Maria Ossa:** al menos en Cali y en muchas partes del país va a ser un proceso complejo,
+- **[16:08] Maria Ossa:** pero, pues, creo que también eso es uno de los propósitos de dropping.
+- **[16:08] Maria Ossa:** Ayudar a democratizar herramientas para que las personas tengan
+- **[16:08] Maria Ossa:** cosas para para crecer. Entonces,
+- **[16:08] Maria Ossa:** yo creo que eso también, pues, motiva mucho
+- **[16:08] Maria Ossa:** ver, bueno,
+- **[16:08] Maria Ossa:** cómo vamos a seguir construyendo cosas para que más personas
+- **[16:08] Maria Ossa:** de una u otra forma puedan de pronto encontrar
+- **[16:08] Maria Ossa:** una un camino de vida que les ayude.
+- **[16:08] Maria Ossa:** Y y esto nos permite también pensar como en la importancia de lo internacional,
+- **[16:08] Maria Ossa:** y es uno de los primeros temas que quiero como ponerles en la mesa, y es que
+- **[16:08] Maria Ossa:** no sé si han visto las Métricas, Ahorita Les Mando El Dibujito. O O La Tabla. Habla De Cómo Se Ha Visto Se Se Ha Se Ha Visto Afectado Colombia en sus en sus órdenes, pero yo quiero que ustedes miren algo en esta métrica.
+- **[16:09] Maria Ossa:** ¿Qué notan?
+- **[16:09] Diana Aldana:** Estava.
+- **[16:09] Yo:** Colombia se desploma.
+- **[16:09] Maria Ossa:** Colombia Se desplomó.
+- **[16:09] Jose Pineda Pitre:** Perú sigue cayendo.
+- **[16:09] Maria Ossa:** Ajá.
+- **[16:09] Jose Pineda Pitre:** Argentina también.
+- **[16:09] Jose Pineda Pitre:** Está teniendo un comportamiento raro,
+- **[16:09] Jose Pineda Pitre:** Espérate.
+- **[16:09] Maria Ossa:** Pero Digamos Que Panamá es un caso que ya a a nivel corporativo sabemos por qué sucede,
+- **[16:09] Maria Ossa:** allá no hay transportadoras, entonces, pues es muy difícil que que avance.
+- **[16:09] Maria Ossa:** Y
+- **[16:09] Maria Ossa:** y lo mismo y lo mismo Perú.
+- **[16:09] Maria Ossa:** Que
+- **[16:09] Maria Ossa:** vemos esos datos, pero ¿qué más? Pero pero ¿qué más pueden ver?
+- **[16:10] Jose Pineda Pitre:** Que la Representación De Los Otros Países Subió Con El La Caída De Colombia, lo que es una oportunidad para que nosotros lo hacemos
+- **[16:10] Jose Pineda Pitre:** cuenta de que, si bien nuestro mercado más maduro es
+- **[16:10] Jose Pineda Pitre:** muy maduro, pero, pues, sufre,
+- **[16:10] Jose Pineda Pitre:** los otros mercados soportan esa caída.
+- **[16:10] Maria Ossa:** Exacto.
+- **[16:10] Maria Ossa:** Esto
+- **[16:10] Diana Aldana:** es
+- **[16:10] Maria Ossa:** muy probable que muchos
+- **[16:10] Maria Ossa:** que hacían dropshipping en Colombia pausaron campañas y se fueron a otros países.
+- **[16:10] Maria Ossa:** Entonces, digamos que
+- **[16:10] Maria Ossa:** No sé, ¿Diajes quieres decir algo?
+- **[16:10] Diana Aldana:** No, pues también que la sumatoria de todos los países no alcanza como
+- **[16:10] Diana Aldana:** a, o sea, en grupo, o sea, no alcanzan como a sumar lo que se hace en Colombia.
+- **[16:10] Maria Ossa:** Es verdad.
+- **[16:10] Maria Ossa:** Digamos que eso es algo como
+- **[16:10] Maria Ossa:** que ya a nivel organizacional sabemos y y
+- **[16:10] Maria Ossa:** y por el cual hay un OKR que busca
+- **[16:11] Maria Ossa:** optimizar la operación en los diferentes países para que
+- **[16:11] Maria Ossa:** puedan llegar a un mismo nivel como el de Colombia. Pero lo que quiero
+- **[16:11] Maria Ossa:** poner en la mesa,
+- **[16:11] Maria Ossa:** es eso, es que
+- **[16:11] Maria Ossa:** mientras
+- **[16:11] Maria Ossa:** pues, hubo una situación, muchas
+- **[16:11] Maria Ossa:** personas se fueron a operar en otros países. Eso
+- **[16:11] Maria Ossa:** para mí es un punto de reflexión que es el el que quiero traer a la mesa,
+- **[16:11] Maria Ossa:** porque dropping no es Colombia.
+- **[16:11] Maria Ossa:** Dropi es un producto global,
+- **[16:11] Maria Ossa:** Ajá. Y cuando nosotros lo vemos como un producto global,
+- **[16:11] Maria Ossa:** la posibilidad que nosotros le damos a las personas de hacer dropshipping
+- **[16:11] Maria Ossa:** no es
+- **[16:11] Maria Ossa:** haga dropshipping en Colombia, es haga dropshipping
+- **[16:11] Maria Ossa:** en cualquier parte, porque si usted sabe hacer dropshipping,
+- **[16:11] Maria Ossa:** puede hacer dropshipping en Colombia, en México, en Ecuador, en Chile, en Panamá.
+- **[16:11] Maria Ossa:** Entonces, es algo que nosotros, de una u otra forma,
+- **[16:11] Maria Ossa:** ahí con el equipo de product design y también
+- **[16:11] Maria Ossa:** con el equipo de de de del product management,
+- **[16:11] Maria Ossa:** Cómo nosotros vendemos a a Dropi y y realmente resta el esa propuesta de valor de Dropi como un producto global.
+- **[16:12] Maria Ossa:** Nuestro mind
+- **[16:12] Maria Ossa:** country es Colombia,
+- **[16:12] Maria Ossa:** ¿cierto? ¿Por qué?
+- **[16:12] Maria Ossa:** Porque es en donde ha crecido Droppy y en donde han salido los líderes de comunidad,
+- **[16:12] Maria Ossa:** es el que tiene mayor desarrollo, porque aquí están nuestros headquarters. Pero
+- **[16:12] Maria Ossa:** si yo quiero empezar a hacer dropshipping, no tiene que ser Colombia.
+- **[16:12] Maria Ossa:** Puedo hacer en Chile, en Ecuador,
+- **[16:12] Maria Ossa:** en España, en cualquier otra parte del mundo.
+- **[16:12] Maria Ossa:** Incluso estando desde Colombia.
+- **[16:12] Maria Ossa:** Y ahí y ahí se articula medio las herramientas financieras.
+- **[16:12] Maria Ossa:** Drop y pay y como otras herramientas que si yo vendo en en
+- **[16:12] Maria Ossa:** y gano euros, ¿cómo me traigo esos euros?
+- **[16:12] Maria Ossa:** Se puede traer porque también tenemos el servicio de
+- **[16:12] Maria Ossa:** retirada en euros, pero
+- **[16:12] Maria Ossa:** transferimos en pesos a tu wallet.
+- **[16:12] Maria Ossa:** Entonces,
+- **[16:12] Maria Ossa:** no podemos ver a dropping simplemente como una
+- **[16:12] Maria Ossa:** herramienta Colombia, sino que somos una herramienta del mundo.
+- **[16:13] Maria Ossa:** Global.
+- **[16:13] Maria Ossa:** Sé si ustedes conocen esta plataforma global sesenta y seis,
+- **[16:13] Maria Ossa:** Creo que es.
+- **[16:13] Yo:** Sí.
+- **[16:13] Maria Ossa:** Que
+- **[16:13] Maria Ossa:** que lo que tú haces es que metes ahí tu dinero, compras dólares y te dan una
+- **[16:13] Maria Ossa:** eCard, por decirlo así, física,
+- **[16:13] Maria Ossa:** donde puedes comprar en cualquier parte del mundo.
+- **[16:13] Maria Ossa:** Y es un un producto que se vende global,
+- **[16:13] Maria Ossa:** No no es que nosotros vayamos a a comprarnos con la fintech, sino que lo que yo quiero es que
+- **[16:13] Maria Ossa:** piensen en el concepto global.
+- **[16:13] Maria Ossa:** Pensemos en dropping solo como
+- **[16:13] Maria Ossa:** vendo en Colombia, sino
+- **[16:13] Maria Ossa:** vendo en cualquier parte del mundo.
+- **[16:13] Maria Ossa:** Somos globales, y piensen que el multipaís
+- **[16:13] Maria Ossa:** es una propuesta de valor
+- **[16:13] Maria Ossa:** es una de las propuestas de valor más fuertes que tenemos,
+- **[16:13] Maria Ossa:** pero que no estamos resaltando y que no estamos, digamos, viéndolo. Entonces,
+- **[16:13] Maria Ossa:** quiero aprovechar esto
+- **[16:13] Maria Ossa:** un poco y para
+- **[16:13] Maria Ossa:** hablarles de eso,
+- **[16:13] Maria Ossa:** y que empecemos a a incorporar mucho más eso en nuestro pensamiento
+- **[16:13] Maria Ossa:** y en cómo nosotros vendemos nuestro producto y en cómo nosotros entendemos nuestro producto
+- **[16:14] Maria Ossa:** y cómo nosotros
+- **[16:14] Maria Ossa:** hablamos
+- **[16:14] Maria Ossa:** de ese producto.
+- **[16:14] Maria Ossa:** Y eso él va a ser muy importante para todos los, para el equipo de design,
+- **[16:14] Maria Ossa:** porque
+- **[16:14] Maria Ossa:** como nosotros en nuestro producto empezamos a hablar de la globalidad,
+- **[16:14] Maria Ossa:** cómo nuestra página web habla de la globalidad. José, Cómo Leyendas Drop Y Habla De La Globalidad. ¿Qué Tal Que Tengamos Un Leyenda Intergaláctico? No Sé. Que Tiene Operación En Tres Países Y Puede Tener Su Su Chapita De Intergaláctico Como Llevamos A A Los Que Están Escalando A Otros Países. Entonces, Mira, Que Cuando Empezamos A Hablar De La Globalidad, No Como Cada País Como Un Mundo Separado, Sino Cada País Como Un Feature Nuevo. Entonces, Yo Empiezo Mi Feature De Colombia, pero luego abro mi
+- **[16:14] Maria Ossa:** mi fisher de Guatemala y luego mi fisher de Costa Rica,
+- **[16:14] Maria Ossa:** y
+- **[16:14] Maria Ossa:** empiezo a pensar en esa manera global. Entonces,
+- **[16:14] Maria Ossa:** quería como traerles un poquito esto de reflexión
+- **[16:15] Maria Ossa:** porque creo que el tema de la globalidad es un concepto que tenemos que también empezar
+- **[16:15] Maria Ossa:** a incorporar muy bien en todo lo que hacemos.
+- **[16:15] Maria Ossa:** Y, bueno,
+- **[16:15] Maria Ossa:** ha sido un un duro golpe para Colombia, pero
+- **[16:15] Maria Ossa:** creo que
+- **[16:15] Maria Ossa:** vamos a tener que seguir como monitoreando. Yo yo, la verdad, pensé que
+- **[16:15] Maria Ossa:** íbamos a iba a ser un poco más grave,
+- **[16:15] Maria Ossa:** La semana pasada estaba en un treinta por ciento, pero esta semana mira que ya bajó
+- **[16:15] Maria Ossa:** trece por ciento, entonces, quiere decir que, pues, de una u otra forma como que
+- **[16:15] Maria Ossa:** los dropshippers y el país como que ha estado también como
+- **[16:15] Maria Ossa:** surfeando día a día toda la situación que ha que ha venido sucediendo.
+- **[16:15] Maria Ossa:** Pero el emprendedor siempre va a encontrar un camino, chicos, y por eso
+- **[16:15] Maria Ossa:** nosotros
+- **[16:15] Maria Ossa:** como dropping,
+- **[16:15] Maria Ossa:** Nuestro objetivo no es ser el back office logístico, Santiago,
+- **[16:15] Maria Ossa:** Copyright,
+- **[16:15] Maria Ossa:** Santiago, sino que nuestro objetivo es que somos una herramienta para el crecimiento
+- **[16:16] Maria Ossa:** de los emprendedores.
+- **[16:16] Maria Ossa:** Entonces,
+- **[16:16] Maria Ossa:** cambian la perspectiva de las herramientas que nosotros les damos a ellos, ¿listo?
+- **[16:16] Maria Ossa:** ¿Jaime?
+- **[16:16] Jaime Guevara:** Pues, yo yo sí iba a decir eso, creo que que
+- **[16:16] Jaime Guevara:** haciendo
+- **[16:16] Jaime Guevara:** pues, como las cuentas y viendo lo de
+- **[16:16] Jaime Guevara:** lo de la el mes pasado, el impacto no fue
+- **[16:16] Jaime Guevara:** tan tan, pues, pareciera que se estuviera refuntando, ¿no?, porque
+- **[16:16] Jaime Guevara:** creo que el impacto va a ser como de unas doscientas mil órdenes, más o menos.
+- **[16:16] Jaime Guevara:** De la meta, ¿no?, pero si lo comparamos
+- **[16:16] Jaime Guevara:** porque la la meta pasada sí la superamos como con doscientas mil, trescientas mil órdenes.
+- **[16:16] Jaime Guevara:** Pues sí, digamos que no no fue tan impactante, creería yo, pero obviamente sí.
+- **[16:16] Jaime Guevara:** Adicional a eso, quería decir que yo estuve todo ese
+- **[16:16] Jaime Guevara:** tiempo estuvimos viendo los chats en Sherlock,
+- **[16:16] Jaime Guevara:** y
+- **[16:16] Jaime Guevara:** y la misma comunidad,
+- **[16:16] Jaime Guevara:** dijo lo que tú decías. O sea, la misma comunidad fue la
+- **[16:16] Jaime Guevara:** se decían unos a otros como que venga,
+- **[16:17] Jaime Guevara:** otro país, éramos dropshipping en otro país.
+- **[16:17] Jaime Guevara:** No sé si muchos se movieron tan bien en comunidad como como
+- **[16:17] Jaime Guevara:** como que me dijo, toca, tú vienes para otro país, pero creo que
+- **[16:17] Jaime Guevara:** ahí la comunicación es superimportante, ¿no? Si si si
+- **[16:17] Jaime Guevara:** no sé, si los si los si los líderes de comunidad, pues,
+- **[16:17] Jaime Guevara:** son los que más tenemos Sí,
+- **[16:17] Diana Aldana:** dime. Empiezan
+- **[16:17] Jaime Guevara:** a hablar sobre
+- **[16:17] Jaime Guevara:** va uno a otros países, otro workshop, otro
+- **[16:17] Jaime Guevara:** tutorial, otro curso para
+- **[16:17] Jaime Guevara:** para hacer dropship en otro país o nosotros mismos lo lo
+- **[16:17] Jaime Guevara:** contamos desde con Maho, no sé, los mandamos.
+- **[16:17] Jaime Guevara:** Hacemos una asesoría, no sé, de pronto está está interesante, o me pareció muy interesante que la gente hubiera escalado en otro lado. Sí.
+- **[16:17] Diana Aldana:** Complementando eso que dice Jaime, estuve viendo mucho el movimiento de muchos líderes de
+- **[16:17] Diana Aldana:** comunidad que ahora están incentivando mucho vender en otros países.
+- **[16:17] Diana Aldana:** Eso sí es una tendencia que que veo muy presente y otra
+- **[16:17] Diana Aldana:** tendencia que veo muy presente es incentivar más el pago anticipado.
+- **[16:18] Diana Aldana:** Muchos líderes comunican que es muy desgastante el pago cuando te entregan.
+- **[16:18] Diana Aldana:** Cuando nos mostraba las métricas, ahorita, Mary, pues yo sé que en Colombia se mueve mucho el pago contra entrega,
+- **[16:18] Diana Aldana:** no sé si
+- **[16:18] Diana Aldana:** en otros países cuál es esa tendencia de pagos
+- **[16:18] Diana Aldana:** si predomina el pago contra entrega o hay países en donde predomina el pago
+- **[16:18] Diana Aldana:** por eso tal vez la gente también puede preferir irse a otros países donde
+- **[16:18] Diana Aldana:** los métodos de pago, pues, generan menos menos riesgo
+- **[16:18] Diana Aldana:** en el momento de entregar un un pedido. No sé si a esa profundidad tenemos ese detalle.
+- **[16:18] Diana Aldana:** Por país.
+- **[16:18] Diana Aldana:** No,
+- **[16:18] Maria Ossa:** pero es algo que se tiene que ir levantando, y es un proyecto que
+- **[16:18] Maria Ossa:** estamos haciendo con Lau Contreras y Jaime, que es el proyecto como del entendimiento de multipaís. Digamos que ahorita
+- **[16:18] Maria Ossa:** una de las primeras puntos que estamos buscando hacer es
+- **[16:18] Maria Ossa:** seguir
+- **[16:18] Yo:** No.
+- **[16:18] Maria Ossa:** diferenciando cómo es la movida
+- **[16:18] Maria Ossa:** del ecosistema en
+- **[16:18] Maria Ossa:** cada uno de los países. Entonces, digamos que ya con México tuvieron unos acercamientos
+- **[16:19] Maria Ossa:** Obvio México, pues, nos entregó un montón de necesidades, pero ahí lo importante
+- **[16:19] Maria Ossa:** va a ser Lau y Jaime como
+- **[16:19] Maria Ossa:** entendamos cuál es el comportamiento del mercado de cada uno de los países
+- **[16:19] Maria Ossa:** que lo tengamos obvio
+- **[16:19] Maria Ossa:** nuestro repositorio.
+- **[16:19] Maria Ossa:** Es, por ejemplo, un México,
+- **[16:19] Maria Ossa:** mueve mucho con el pago anticipado, pero
+- **[16:19] Maria Ossa:** hay algo que pasa con el pago contra entrega, y es que como todos los países de Latinoamérica tienen muy poca bancarización.
+- **[16:19] Maria Ossa:** De hecho, México es uno de los que tiene mayor bancarización, y lo mismo
+- **[16:19] Maria Ossa:** Chile y demás.
+- **[16:19] Maria Ossa:** El pago contra entrega, digamos que abre la posibilidad
+- **[16:19] Maria Ossa:** de uno vender
+- **[16:19] Maria Ossa:** sin ser una gran marca,
+- **[16:19] Maria Ossa:** que eso es lo que posibilita el dropshipping,
+- **[16:19] Maria Ossa:** Por el tema de la confianza,
+- **[16:19] Maria Ossa:** Y dos, que muchas personas que tal vez
+- **[16:19] Maria Ossa:** no estén bancarizadas, pues, puedan comprar.
+- **[16:19] Maria Ossa:** Por eso también el pago contra entregas dominante
+- **[16:19] Maria Ossa:** en todos los países
+- **[16:19] Maria Ossa:** Y en México, un poco contarles que en México no existía la modalidad de
+- **[16:20] Maria Ossa:** contra entrega.
+- **[16:20] Maria Ossa:** A México, Drophy introdujo la modalidad de
+- **[16:20] Maria Ossa:** pago contra entrega. Entonces, uno de los primeros retos que hubo fue
+- **[16:20] Maria Ossa:** reunirnos con las transportadoras y generar estrategias de recaudo con las transportadoras. Recuerden que pago contra entrega es
+- **[16:20] Maria Ossa:** producto logístico combinado con un producto financiero.
+- **[16:20] Yo:** Yes.
+- **[16:20] Maria Ossa:** Entonces,
+- **[16:20] Maria Ossa:** tocó desarrollar esa capacidad de recaudo
+- **[16:20] Yo:** Yes.
+- **[16:20] Maria Ossa:** para poderlo hacer.
+- **[16:20] Maria Ossa:** Aun así, pues, digamos que, como es dropshipping,
+- **[16:20] Maria Ossa:** pues, digamos que ha ayudado al crecimiento
+- **[16:20] Maria Ossa:** ¿Qué sucede en otros países? Pues hay muchos temas con las transportadoras y el pago contra entrega
+- **[16:20] Maria Ossa:** ha sido muy difícil, porque con la transportadora toca
+- **[16:20] Maria Ossa:** negociar y ver cómo se hace ese recaudo y demás,
+- **[16:20] Maria Ossa:** El único país así más diferente es como Argentina,
+- **[16:20] Maria Ossa:** porque en Argentina es el ecommerce, no se no se no se conoce como ecommerce,
+- **[16:20] Maria Ossa:** sino que Mercado Libre creó el ecommerce prácticamente en Argentina. Entonces,
+- **[16:20] Maria Ossa:** todo
+- **[16:20] Maria Ossa:** el ecommerce de de de Argentina, mercado libre, o sea,
+- **[16:21] Maria Ossa:** allá no existe algo así como
+- **[16:21] Maria Ossa:** como aquí múltiples marcas vendiendo, sino que casi que todas las marcas están en ese
+- **[16:21] Maria Ossa:** libre, con su tienda de mercado libre.
+- **[16:21] Maria Ossa:** Entonces, está muy consumido el mercado,
+- **[16:21] Maria Ossa:** Pues, por eso mismo, digamos que
+- **[16:21] Maria Ossa:** el lo importante ahí es, bueno, pues, si está Mercado Libre, pues, me uno a Mercado Libre y absorbo parte de todo ese proceso logístico,
+- **[16:21] Maria Ossa:** pero también le permito desarrollar un mercado alterno de
+- **[16:21] Maria Ossa:** de ecommerce a los usuarios. Eso es bueno.
+- **[16:21] Maria Ossa:** Ahí hay mucha tela para cortar, pero entonces es
+- **[16:21] Maria Ossa:** parte de ese proyecto
+- **[16:21] Maria Ossa:** importante que que tenemos que empezar a interiorizar sobre
+- **[16:21] Maria Ossa:** la internacionalidad.
+- **[16:21] Maria Ossa:** No como, es que desarrollo para Colombia y luego sea para todos los países no es
+- **[16:21] Maria Ossa:** un pensamiento global.
+- **[16:21] Maria Ossa:** ¿Listo?
+- **[16:21] Maria Ossa:** No sé si tengan algo que quieran aportar frente a eso para que ya
+- **[16:21] Maria Ossa:** cerremos y vayamos con nuestro nuestro wiki.
+- **[16:21] Maria Ossa:** No, listo.
+- **[16:22] Maria Ossa:** Entonces, ¿quién desea empezar?
+- **[16:22] Maria Ossa:** O quién va?
+- **[16:22] Maria Ossa:** Eso. Dale, José, gracias.
+- **[16:22] Jose Pineda Pitre:** Bueno, team, buenos días.
+- **[16:22] Jose Pineda Pitre:** Por parte del equipo de producto,
+- **[16:22] Jose Pineda Pitre:** Estamos trabajando en
+- **[16:22] Jose Pineda Pitre:** tres grandes iniciativas, pues, de de mi ingreso. El primero es
+- **[16:22] Jose Pineda Pitre:** es CRM para líderes de comunidad, el segundo es leyendas dropping y el
+- **[16:22] Jose Pineda Pitre:** tercero es help center biblia AI. Con respecto al CRM, líderes de
+- **[16:22] Jose Pineda Pitre:** ya hoy estuvimos con una alineación para el equipo
+- **[16:22] Jose Pineda Pitre:** comercial, todavía hace falta que nos sigamos alineando un poco
+- **[16:22] Jose Pineda Pitre:** porque ellos tienen, digamos, un ciclo de trabajo un poco ya definido,
+- **[16:22] Jose Pineda Pitre:** y nosotros lo que estamos haciendo es acoplarnos en conjunto con el equipo de Google de Growth Ops. Los experimentos y los
+- **[16:22] Jose Pineda Pitre:** deben de proteger la experiencia del líder y mantener los esfuerzos bien enfocados.
+- **[16:22] Jose Pineda Pitre:** Existe una nueva plataforma que se llama Webe,
+- **[16:23] Jose Pineda Pitre:** Tenemos que trabajar sobre la coexistencia entre el CRM y Webe,
+- **[16:23] Jose Pineda Pitre:** Hay una alerta que tengo con este
+- **[16:23] Jose Pineda Pitre:** proyecto y es, pues, en general, hay un backlog específico del
+- **[16:23] Jose Pineda Pitre:** de tecnología con el equipo comercial, entonces ahí yo tengo
+- **[16:23] Jose Pineda Pitre:** que garantizar articularme lo máximo posible con con José Giraldo para
+- **[16:23] Jose Pineda Pitre:** no generar dobles esfuerzos y tener una narrativa coherente con los líderes,
+- **[16:23] Jose Pineda Pitre:** La próxima semana tengo una sesión con Gabriela con Gabriela Pasto.
+- **[16:23] Jose Pineda Pitre:** Este rack de servicio completo para los líderes de comunidad y, pues, garantizar esa integralidad.
+- **[16:23] Jose Pineda Pitre:** Este proyecto de CRM de líderes de comunidad
+- **[16:23] Jose Pineda Pitre:** ahí tiene una insignia identificada con leyendas dropping, vía mapa de afiliación del líder de
+- **[16:23] Jose Pineda Pitre:** comunidad, y aquí tengo también pendiente formalizar como le
+- **[16:23] Jose Pineda Pitre:** sí, informar, formalizar esa integración con el equipo de data, como entender
+- **[16:23] Jose Pineda Pitre:** ellos cómo manejan el ciclo de de información de las
+- **[16:23] Jose Pineda Pitre:** comunidades para poder garantizar que eso se integre a todo el programa de leyendas.
+- **[16:23] Jose Pineda Pitre:** Siguiendo el programa de leyendas dropping, ya en conjunto
+- **[16:24] Jose Pineda Pitre:** con Frank logramos construir una arquitectura de información
+- **[16:24] Jose Pineda Pitre:** bastante sólida con respecto a cómo le vamos a comunicar el programa a los dropshippers,
+- **[16:24] Jose Pineda Pitre:** Todavía seguimos trabajando con el tema de líderes de comunidad y para eso también me voy a reunir con
+- **[16:24] Jose Pineda Pitre:** con Gabriela. Hay un formato desktop ya muy maduro, pero, pues,
+- **[16:24] Jose Pineda Pitre:** tenemos que garantizar que la experiencia mobile sea la mejor posible.
+- **[16:24] Jose Pineda Pitre:** El equipo de growth marketing está madurando toda la capa este
+- **[16:24] Jose Pineda Pitre:** y el concepto de leyendas, también para estar muy alineados como
+- **[16:24] Jose Pineda Pitre:** con el concepto un poco espacial y cinematográfico que
+- **[16:24] Jose Pineda Pitre:** quieren alrededor del programa de gamificación. También estamos validando el rack
+- **[16:24] Jose Pineda Pitre:** con el equipo comercial para que la experiencia del líder esté
+- **[16:24] Jose Pineda Pitre:** con la estrategia y con el equipo
+- **[16:24] Jose Pineda Pitre:** de operaciones para garantizar, pues, que todo esté
+- **[16:24] Jose Pineda Pitre:** alineado con en discurso para poder lanzar el proyecto el doce.
+- **[16:24] Jose Pineda Pitre:** El lunes tenemos una sesión de articulación para garantizar el pipeline de datos y la
+- **[16:25] Jose Pineda Pitre:** de plataforma
+- **[16:25] Jose Pineda Pitre:** para que la infraestructura de plataforma y landing coexistan. Nosotros decidimos
+- **[16:25] Jose Pineda Pitre:** partir la estrategia en dos, algo es plataforma, que es todo lo que vive dentro de drop y pegado a
+- **[16:25] Jose Pineda Pitre:** al core, y lo y la siguiente, o la estrategia paralela es landing.
+- **[16:25] Jose Pineda Pitre:** Allí, digamos que tenemos que alinearnos con el equipo de de tecnología,
+- **[16:25] Jose Pineda Pitre:** para garantizar, pues, que ellos también se hagan
+- **[16:25] Jose Pineda Pitre:** cargo de la integración
+- **[16:25] Jose Pineda Pitre:** entre los datos. También ya tenemos un diccionario de datos
+- **[16:25] Jose Pineda Pitre:** enviado para iniciar, digamos,
+- **[16:25] Jose Pineda Pitre:** una construcción clara de todo ese ese panel de información.
+- **[16:25] Jose Pineda Pitre:** Que va a darle vida al proyecto de leyendas. Y en el tercer punto,
+- **[16:25] Jose Pineda Pitre:** el help center, biblia AI. Esta semana nos reunimos con Sánchez, con Laura Núñez,
+- **[16:25] Jose Pineda Pitre:** y con Diana Aldana. Les mostré un poco el concepto de health center dentro la
+- **[16:25] Jose Pineda Pitre:** superficie web y del botón flotante. Este proyecto nace como un proyecto
+- **[16:25] Jose Pineda Pitre:** de dropping,
+- **[16:25] Jose Pineda Pitre:** estructurarse con capacidad de soportar todas las las herramientas del holding,
+- **[16:26] Jose Pineda Pitre:** por eso debe establecer una base única de conocimiento.
+- **[16:26] Jose Pineda Pitre:** Nosotros tenemos varios repositorios de preguntas frecuentes,
+- **[16:26] Jose Pineda Pitre:** y bases de conocimientos de drop, y la idea es que logremos hacer un consolidado de toda esa información,
+- **[16:26] Jose Pineda Pitre:** para que cualquiera sea la inteligencia artificial o el
+- **[16:26] Jose Pineda Pitre:** mecanismo que decida responderle al usuario,
+- **[16:26] Jose Pineda Pitre:** vaya siempre a la misma base para garantizar coherencia.
+- **[16:26] Jose Pineda Pitre:** Ya tenemos una narrativa de comunicación aprobada por Laura Núñez,
+- **[16:26] Jose Pineda Pitre:** lo tengo todavía que rebotar tanto con
+- **[16:26] Jose Pineda Pitre:** digo, María como con Diana y y Jaime y Lau, que es, básicamente, acompañamiento constante, como un pilar
+- **[16:26] Jose Pineda Pitre:** de nuestra experiencia, y ya también tenemos un
+- **[16:26] Yo:** Y
+- **[16:26] Jose Pineda Pitre:** más o menos definida, donde el chat de Gali es exclusivo del website.
+- **[16:26] Jose Pineda Pitre:** Que se alimenta de la base de conocimiento compartida que
+- **[16:26] Jose Pineda Pitre:** también estamos construyendo.
+- **[16:26] Jose Pineda Pitre:** Hay otro punto que es
+- **[16:26] Jose Pineda Pitre:** un proyecto que esta semana apareció, que es
+- **[16:27] Jose Pineda Pitre:** Academy. Academy está reformulando la experiencia que le va a mostrar al usuario.
+- **[16:27] Jose Pineda Pitre:** Y aquí, digamos, ellos quieren volver a construir todo el servicio de learning
+- **[16:27] Jose Pineda Pitre:** tenemos expuesto a los usuarios. Aquí tenemos que acoplarnos
+- **[16:27] Jose Pineda Pitre:** con WIVI, porque WIVI, digamos, dentro de su concepción tiene funcionalidades de e-learning, entonces ahí mi trabajo va a ser como garantizar que esas dos herramientas no se Y tengo una pregunta que es, la actualización de los contenidos de academy con la arquitectura, ¿es responsabilidad de growth? Estoy validando si se requiere como un seguimiento adicional, para garantizar, pues, que estemos bien articulados con respecto al lanzamiento de la Esos son como mis updates. Preciso, ahorita estamos en una reunión hablando de eso,
+- **[16:27] Yo:** This morning.
+- **[16:27] Diana Aldana:** y ahorita para el lanzamiento lo que va a hacer Majo es que va van a sacar unos tour guides,
+- **[16:28] Diana Aldana:** de la rearquitectura mientras se hace la
+- **[16:28] Diana Aldana:** paulatinamente de todos los módulos
+- **[16:28] Diana Aldana:** Ok, ok. Esa era como la única pregunta
+- **[16:28] Jose Pineda Pitre:** que tenía, como para garantizar
+- **[16:28] Jose Pineda Pitre:** que ahí estuviéramos bien. Y eso es todo. ¿Preguntas?
+- **[16:28] Jose Pineda Pitre:** Ok. ¿Alguien tiene preguntas para José?
+- **[16:28] Maria Ossa:** Dale, Jaime.
+- **[16:28] Maria Ossa:** Sí. Perdón,
+- **[16:28] Jaime Guevara:** eso eso de de
+- **[16:28] Jaime Guevara:** y creo que va va con lo mismo que hacía Diana, lo de
+- **[16:28] Jaime Guevara:** Academy, ahorita con el cambio de la rearquitectura,
+- **[16:28] Jaime Guevara:** En cuanto... Hay hay un tema con la arquitectura y es que eso pasa a producción, ¿no? Entonces,
+- **[16:28] Jaime Guevara:** inmediatamente eso no es beta ni nada, sino que pasa a producción y
+- **[16:28] Jaime Guevara:** y hay que cambiar los videos.
+- **[16:28] Jaime Guevara:** Me imagino que hay que cambiar los videos en la cadena de mi... No sé si eso lo lo
+- **[16:28] Jaime Guevara:** lo tienes mapeado, no sé si eso es de de
+- **[16:28] Jaime Guevara:** Por por eso por eso estaba preguntando como
+- **[16:28] Jose Pineda Pitre:** que si yo tenía que
+- **[16:28] Jose Pineda Pitre:** tener como alguna responsabilidad ahí,
+- **[16:29] Jose Pineda Pitre:** No. Ah, ok. Ok. O sea, el contenido interno de acá de mí
+- **[16:29] Maria Ossa:** y que el contenido interno de Academy esté relacionado con el producto, es una responsabilidad de product growth. De, perdón, de product marketing. Entonces, digamos que ahí sí el trabajo, Jaime,
+- **[16:29] Maria Ossa:** está de mano de Katherine y de la y de la de las Katherine's,
+- **[16:29] Maria Ossa:** de las Katherine's para
+- **[16:29] Maria Ossa:** hacer la alineación con todas las partes sobre eso.
+- **[16:29] Maria Ossa:** Ya quien ejecuta eso tiene que ser académico en el equipo de comunicaciones
+- **[16:29] Maria Ossa:** paulatinamente, pero es un proyecto que de una u otra forma desde aquí
+- **[16:29] Maria Ossa:** uno tenemos que solicitar, y dos tenemos que hacerle seguimiento,
+- **[16:29] Maria Ossa:** eso es todo tema del equipo de
+- **[16:29] Maria Ossa:** de product marketing.
+- **[16:29] Maria Ossa:** Recuerde que el equipo de product marketing es el equipo
+- **[16:29] Maria Ossa:** que va a darle megáfono a las cosas que nosotros hacemos internamente,
+- **[16:29] Maria Ossa:** ese que va a permitir facilitar la comunicación hacia afuera.
+- **[16:29] Maria Ossa:** Entonces, lo que necesitemos frente a ese tema, pues,
+- **[16:29] Maria Ossa:** digamos ahí, José, o o en rearquitectura.
+- **[16:30] Maria Ossa:** Sabemos que todas las pantallas van a cambiar y necesitamos que se cambie todos los contenidos interno, frittera,
+- **[16:30] Maria Ossa:** pantallas. Eso ya lo gestiona
+- **[16:30] Maria Ossa:** product marketing.
+- **[16:30] Maria Ossa:** Lo importante es, digamos, como como como alinear eso. ¿Listo?
+- **[16:30] Maria Ossa:** José. Ah, dale, dale, dale, Jaime.
+- **[16:30] Jaime Guevara:** Sí, José,
+- **[16:30] Jaime Guevara:** en
+- **[16:30] Maria Ossa:** lo, se ve que puedes poner
+- **[16:30] Jaime Guevara:** otra vez, please. ¿Hay
+- **[16:30] Jaime Guevara:** para recordar lo que lo que estaba, lo que te iba a preguntar.
+- **[16:30] Jaime Guevara:** Lo que tiene que ver con líderes de comunidad,
+- **[16:30] Jaime Guevara:** yo yo no hemos hablado un poco de este tema de líderes de comunidad,
+- **[16:30] Jaime Guevara:** Hay hay un tema ahí que que quería ponerlo sobre la mesa, ver si
+- **[16:30] Jaime Guevara:** y es que
+- **[16:30] Jaime Guevara:** pues ellos
+- **[16:30] Jaime Guevara:** en teoría, o sea, nosotros no tenemos ninguna intención de
+- **[16:30] Jaime Guevara:** sino que antes nos potencian mucho.
+- **[16:30] Jaime Guevara:** Y ahorita estamos, pues, con varias herramientas,
+- **[16:30] Jaime Guevara:** ¿no? Por ejemplo, lo digo por pulso, porque pulso se está
+- **[16:30] Jaime Guevara:** se va a lanzar con la comunidad de con el Pareto de la comunidad de Iván Caicedo.
+- **[16:30] Jaime Guevara:** Entonces, si si todas estas herramientas que vamos a
+- **[16:31] Jaime Guevara:** sacar, que estamos sacando, que apoyan, podemos también
+- **[16:31] Jaime Guevara:** de alguna manera, hacer partícipes a los líderes de en caso de que una... Porque yo sé que ellos también están sacando como herramientas, y de pronto ella hacer como ese tipo de alianza para que para que si hay alguna herramienta que nosotros sacamos y que a ellos les sirva, para hacer un curso o un o algo, o para fomentar que utilicen, pues eso nos puede ayudar también a mover órdenes. Yo, súper al lugar, sí, señor.
+- **[16:31] Jose Pineda Pitre:** De hecho, ahorita en la reunión que tuve con el equipo comercial, pues, una reunión de varias personas, le mencioné a Gabriela,
+- **[16:31] Jose Pineda Pitre:** es como líder, y a Daniel Bombo,
+- **[16:31] Jose Pineda Pitre:** que
+- **[16:31] Jose Pineda Pitre:** nos íbamos a sentar, pues, yo les iba a buscar, eso, el
+- **[16:31] Jose Pineda Pitre:** yo les iba a buscar un espacio contigo y con Lau Contreras,
+- **[16:31] Jose Pineda Pitre:** como para lograr estructurar un servicio claro para los líderes de
+- **[16:32] Jose Pineda Pitre:** y que entre ese, sí, ese
+- **[16:32] Jose Pineda Pitre:** ese blueprint de servicio, ahí ya nosotros le podamos integrar
+- **[16:32] Jose Pineda Pitre:** iniciativas maduras, iniciativas en discovery,
+- **[16:32] Jose Pineda Pitre:** iniciativas en delivery, entonces. Buenísimo, por, nosotros en, pues,
+- **[16:32] Jaime Guevara:** como todavía estoy apoyando ahí a Mitch en su player, ella iba a a cuadrar
+- **[16:32] Jaime Guevara:** reunión con líderes de comunidad la próxima semana, entonces, más bien alineémonos y
+- **[16:32] Jaime Guevara:** Listo. Listo, sí,
+- **[16:32] Jose Pineda Pitre:** señor.
+- **[16:32] Laura Contreras:** Sí,
+- **[16:32] Jaime Guevara:** señor, sí,
+- **[16:32] Laura Contreras:** señor, ya ya
+- **[16:32] Jose Pineda Pitre:** ya saco la reunioncita.
+- **[16:32] Jose Pineda Pitre:** Oye, ahí hay un tema importante,
+- **[16:32] Maria Ossa:** y esto para product marketing.
+- **[16:32] Maria Ossa:** Las Katherine, pues, no está Katherine, pero, pues, Lau te lo llevas para hablar con ella.
+- **[16:32] Maria Ossa:** Y es que dentro del proceso de product marketing hay que desarrollar un canal
+- **[16:32] Maria Ossa:** que es el canal de las comunidades.
+- **[16:32] Maria Ossa:** Quiere decir eso? Es importante que ustedes se reúnan también con el equipo de las comunidades
+- **[16:32] Maria Ossa:** para establecer mecanismos de cómo hacemos esos lanzamientos dentro la
+- **[16:33] Maria Ossa:** comunidades. Entonces, ahí José, digamos que José es el interlocutor que nos une también con esto todo
+- **[16:33] Maria Ossa:** el tema de leyendas y comunidades, porque eso también es parte, pues, de de lo que tiene que entender José del global,
+- **[16:33] Maria Ossa:** pero es un canal más. Entonces,
+- **[16:33] Maria Ossa:** digamos que nosotros podemos hacer lanzamientos exclusivos para una comunidad, por
+- **[16:33] Maria Ossa:** decirles
+- **[16:33] Maria Ossa:** oiga, Iván, armemos un un minievento con su comunidad para eso,
+- **[16:33] Maria Ossa:** o presentarles a los líderes las funcionalidades y ver ellos
+- **[16:33] Maria Ossa:** nos dicen,
+- **[16:33] Maria Ossa:** también, o darles herramientas especiales al equipo de líderes
+- **[16:33] Maria Ossa:** para que hagan lanzamientos con los líderes,
+- **[16:33] Maria Ossa:** porque ellos son los que van a, ellos son el principal canal también de difusión. Entonces, si los líderes
+- **[16:33] Maria Ossa:** conocen las herramientas, pues ellos van a enseñarles a los demás también a usar las herramientas. Entonces, eso es un canal
+- **[16:33] Maria Ossa:** Así como tenemos Instagram, TikTok,
+- **[16:33] Maria Ossa:** el homes y todas las cosas de la herramienta, los líderes de comunidad son un canal.
+- **[16:33] Maria Ossa:** Que hay que desarrollar dentro de la estrategia de product marketing, ¿listo?
+- **[16:34] Maria Ossa:** Listo, de una, me lo llevo para trabajarlo.
+- **[16:34] Laura Catherine Torres Ciendua:** Bueno.
+- **[16:34] Laura Catherine Torres Ciendua:** Yo tengo varias cosas, no sé si
+- **[16:34] Maria Ossa:** alguien más tenga para José. José, estuvo
+- **[16:34] Maria Ossa:** mojito con las intervenciones. Entonces, lo primero,
+- **[16:34] Yo:** Nope.
+- **[16:34] Maria Ossa:** para el proyecto de líderes sí me parece importante, José,
+- **[16:34] Maria Ossa:** hagamos un update grande
+- **[16:34] Maria Ossa:** del estado actual del tema de líderes con growth.
+- **[16:34] Maria Ossa:** Cuando digo growth es Luisa.
+- **[16:34] Maria Ossa:** Porque está ese tema de wave
+- **[16:34] Maria Ossa:** que nos estamos enterando a través tuyo un poco de qué es ese proyecto. De
+- **[16:34] Maria Ossa:** De WIVI, exacto. Y y no sabemos hasta dónde va a llegar WIVI,
+- **[16:34] Maria Ossa:** y
+- **[16:34] Maria Ossa:** cómo
+- **[16:34] Maria Ossa:** no no no segmenta la estrategia. Digamos que uno de
+- **[16:34] Maria Ossa:** problemas que nosotros tenemos internamente con estas verticales
+- **[16:34] Maria Ossa:** es que de alguna otra forma falta hacer una alineación estratégica
+- **[16:34] Maria Ossa:** si la vertical se lleva todo el tema de
+- **[16:34] Maria Ossa:** las herramientas para los líderes de comunidad, pues la herramienta, el
+- **[16:34] Maria Ossa:** la estrategia de líderes de comunidad queda descomunicada,
+- **[16:35] Maria Ossa:** de nosotros, y nosotros no podemos perder gobernanza
+- **[16:35] Maria Ossa:** los líderes de comunidad.
+- **[16:35] Maria Ossa:** Digamos que ahí tenemos que ser, eso es un tema más corporativo,
+- **[16:35] Maria Ossa:** por eso sí es importante que hagas un mapeo importante de todo el
+- **[16:35] Maria Ossa:** estado de, tenemos este actor, tenemos esto, nos están pidiendo esto. Antes de
+- **[16:35] Maria Ossa:** empezar a tomar decisiones con Growth para que tengamos un lineamiento
+- **[16:35] Maria Ossa:** estratégico por parte de Luisa de cómo deberíamos abordarlo, ¿listo?
+- **[16:35] Maria Ossa:** R, r. Sí, yo me imaginaba
+- **[16:35] Jose Pineda Pitre:** como
+- **[16:35] Jose Pineda Pitre:** bueno, yo lo voy a hacer y te lo voy a mostrar,
+- **[16:35] Jose Pineda Pitre:** yo tengo un segmento que se llama líderes de comunidad, en ese segmentos hay muchos hay muchos
+- **[16:35] Jose Pineda Pitre:** proyectos. Entonces, voy a hacer una recopilación de todo para que
+- **[16:35] Jose Pineda Pitre:** quede una alineación estándar. Voy a ver qué formato utilizo para
+- **[16:35] Jose Pineda Pitre:** que haya entendimiento.
+- **[16:35] Jose Pineda Pitre:** De todo eso.
+- **[16:35] Jose Pineda Pitre:** Exacto, o
+- **[16:35] Maria Ossa:** sea, más allá de todos los proyectos, porque, digamos,
+- **[16:35] Maria Ossa:** que yo puedo hacer, es decir, tenemos veinte proyectos, pero más allá de todos los proyectos es
+- **[16:35] Maria Ossa:** ven y esto es lo que está sucediendo alrededor de todo lo que es líderes de comunidad,
+- **[16:36] Maria Ossa:** para que haya un entendimiento real.
+- **[16:36] Maria Ossa:** Cómo, uno, relacionarnos con las otras partes
+- **[16:36] Maria Ossa:** y dos, qué, entonces, de qué de todos esos
+- **[16:36] Maria Ossa:** proyectos deberíamos darle fuerza.
+- **[16:36] Maria Ossa:** R, capitano. Yo sé que va ser difícil la reunión
+- **[16:36] Yo:** Yes.
+- **[16:36] Jose Pineda Pitre:** con Loop,
+- **[16:36] Maria Ossa:** pero insístale, y sáquele la reunión.
+- **[16:36] Maria Ossa:** Listo, listo, listo, sí, señora. Listo, eso eso
+- **[16:36] Jose Pineda Pitre:** cuál quieres
+- **[16:36] Jose Pineda Pitre:** Leyendas
+- **[16:36] Maria Ossa:** me parece que hay, el tema del help center, importante
+- **[16:36] Maria Ossa:** La estrategia del help center no solamente es para la mejora de la
+- **[16:36] Maria Ossa:** experiencia, sino que es una estrategia de crecimiento
+- **[16:36] Maria Ossa:** y todo eso tiene que quedar optimizado para que nosotros
+- **[16:36] Maria Ossa:** aparezcamos en los motores de búsquedas de AI. No sé si tú
+- **[16:36] Maria Ossa:** ese documento y toda esa información para
+- **[16:36] Maria Ossa:** que quede muy desde el planteamiento del proyecto, porque si eso sale
+- **[16:36] Maria Ossa:** aislado del Internet, no por la página. De eso, pues no hacemos nada.
+- **[16:36] Maria Ossa:** Listo. Sí, señora, sí lo tengo integrado, sí
+- **[16:36] Jose Pineda Pitre:** lo tengo integrado.
+- **[16:37] Jose Pineda Pitre:** Y en Academy
+- **[16:37] Maria Ossa:** sí me parece importante que
+- **[16:37] Maria Ossa:** entendamos bien lo de Willie,
+- **[16:37] Maria Ossa:** y qué va a quedar de nuestro en nuestro dominio.
+- **[16:37] Maria Ossa:** Ojo que acá en mí es demasiado estratégico de growth interno.
+- **[16:37] Maria Ossa:** Y me preocupa de que vaya a quedar en dominio
+- **[16:37] Maria Ossa:** en un dominio que nosotros no podamos
+- **[16:37] Maria Ossa:** Contrarrar. Entonces, por eso te digo,
+- **[16:37] Maria Ossa:** habla con Lu, que miren cómo se van a sacar esos proyectos adelante
+- **[16:37] Maria Ossa:** y cómo va ser el relacionamiento con web y frente a ese tema,
+- **[16:37] Maria Ossa:** porque si ahorita se decide que
+- **[16:37] Maria Ossa:** rehagamos academia internamente,
+- **[16:37] Maria Ossa:** es porque la idea es que academy
+- **[16:37] Maria Ossa:** muy conectado con nosotros.
+- **[16:37] Maria Ossa:** Me entiendes? O sea, si una persona está en
+- **[16:37] Maria Ossa:** pues de ese módulo lo mandamos directamente a y academy
+- **[16:37] Maria Ossa:** pues sí va a estar adentro de drop, know,
+- **[16:37] Maria Ossa:** son definiciones estratégicas que se tienen que hacer también desde la experiencia.
+- **[16:37] Maria Ossa:** Es para que lo tengas en cuenta. Y por último, para
+- **[16:37] Maria Ossa:** que lo tengas ahí en el tintero, hace unas semanas en en el comité de producto,
+- **[16:38] Maria Ossa:** Luchito me solicitó
+- **[16:38] Maria Ossa:** pensáramos a ver un tema
+- **[16:38] Maria Ossa:** y es que nosotros como Dropi tenemos asociación con diferentes plataformas. ¿Qué quiere decir eso? Por ejemplo, tenemos un link de referido Shopify, entonces todas las
+- **[16:38] Maria Ossa:** personas que se registren con ese link de dropping
+- **[16:38] Maria Ossa:** dropi gana comisión. Y tenemos también, por ejemplo, con minier, Exacto, entonces, digamos que todas las personas que se registren con el link de drop y drop y gana comisión, pero aparte de eso le dan un descuento al dropshipper al utilizar minea. Entonces, lo que queremos hacer con eso es empezarnos a pensar una sección dentro de la plataforma, donde podamos promover todos esos links de reheridos. Ya había pensado que de pronto nos miremos todo el tema de integraciones, tal vez es la posibilidad para entrar a, de pronto, rediseñar, se ven las integraciones, pero el objetivo de esto es un, digamos, un nuevo canal de monetización
+- **[16:38] Maria Ossa:** que permita hacer como un growth
+- **[16:39] Maria Ossa:** interno. Entonces,
+- **[16:39] Maria Ossa:** ponlo ahí en el tintero, ¿sí?, como para que lo tengamos así. No tenemos que desarrollarlo allá,
+- **[16:39] Maria Ossa:** ya, pero eso va a entrar por por allá, ¿listo?
+- **[16:39] Maria Ossa:** Tengo una María,
+- **[16:39] Jose Pineda Pitre:** como para irme preparando
+- **[16:39] Jose Pineda Pitre:** tú más o menos en qué en qué, sobre qué fecha ves que le
+- **[16:39] Jose Pineda Pitre:** vamos a presentar como iniciativas de growth a a Lucho,
+- **[16:39] Jose Pineda Pitre:** ¿A qué te refieres a iniciativas de growth?
+- **[16:39] Jose Pineda Pitre:** No sé,
+- **[16:39] Maria Ossa:** o sea, como como que a mí me
+- **[16:39] Jose Pineda Pitre:** gustaría como
+- **[16:39] Jose Pineda Pitre:** mostrarle a todo el equipo todo lo que tengo de growth, como para
+- **[16:39] Jose Pineda Pitre:** antes de irle a mostrar a Lucho, como garantizar que todos estemos articulados,
+- **[16:39] Jose Pineda Pitre:** porque como Grow es tan transversal, pues yo ya tengo cosas con Kate, con
+- **[16:39] Jose Pineda Pitre:** con Dianys, con
+- **[16:39] Jose Pineda Pitre:** O sea, yo yo sé que es importante aquí con Lucho, pero
+- **[16:39] Maria Ossa:** digamos que es que
+- **[16:39] Maria Ossa:** Lucho está más que todo en el producto general de dropshipping.
+- **[16:39] Maria Ossa:** Realmente, tu stakeholder principal es Luisa.
+- **[16:40] Maria Ossa:** Ok, ok, ok, listo, listo, listo. Entonces,
+- **[16:40] Jose Pineda Pitre:** más bien tú tienes que estar muy alineado con Growth y con Luisa,
+- **[16:40] Maria Ossa:** para ya luego nosotros sí mostrarle a Lucha.
+- **[16:40] Maria Ossa:** Porque si vamos a mostrarle a Lucho algo sin la
+- **[16:40] Jose Pineda Pitre:** alineación
+- **[16:40] Maria Ossa:** del área de growth,
+- **[16:40] Maria Ossa:** estamos como desarticulando todo el sistema.
+- **[16:40] Maria Ossa:** Eso es parte de todo esto, bueno, todo eso es viene de la estrategia de growth,
+- **[16:40] Maria Ossa:** y por eso digamos que
+- **[16:40] Maria Ossa:** una vez estemos alineados con growth, ahí sí ya
+- **[16:40] Maria Ossa:** podemos sacar la comunicación afuera.
+- **[16:40] Maria Ossa:** R, capitana.
+- **[16:40] Maria Ossa:** Listo. Gracias,
+- **[16:40] Jose Pineda Pitre:** José. Sé que van a estar
+- **[16:40] Maria Ossa:** blanditos porque hace rato no los dejo,
+- **[16:40] Maria Ossa:** pero están carnosos. Bien, todo bien. Siguiente.
+- **[16:40] Maria Ossa:** Yo muestro lo de que
+- **[16:40] Jaime Guevara:** lo de subplayers, que, la verdad, pues no no hice
+- **[16:40] Jaime Guevara:** mucha presentación, pero tengo las
+- **[16:40] Jaime Guevara:** unas métricas interesantes que quería mostrar.
+- **[16:40] Jaime Guevara:** Esta
+- **[16:41] Jaime Guevara:** que aquí hay un tema ahí con marcas.
+- **[16:41] Jaime Guevara:** Yo sé que este tú este tú no lo tienes, ¿cierto, Kate? Pero bueno.
+- **[16:41] Jaime Guevara:** Resulta que
+- **[16:41] Jaime Guevara:** Lo veo mirando.
+- **[16:41] Jaime Guevara:** Ah,
+- **[16:41] katerine Pencue:** bueno. Listo.
+- **[16:41] Jaime Guevara:** Resulta que
+- **[16:41] Jaime Guevara:** cuando nos entregaron la, bueno, el
+- **[16:41] Jaime Guevara:** value de proveedores,
+- **[16:41] Jaime Guevara:** igual identificamos que
+- **[16:41] Jaime Guevara:** no hay como, aquí también hay hay hay marcas.
+- **[16:41] Jaime Guevara:** Pero bueno.
+- **[16:41] Jaime Guevara:** Eso fue un tema que ya se está resolviendo, se va a hacer un bot,
+- **[16:41] Jaime Guevara:** para, se va a hacer como un prefiltro, y después de ese prefiltro
+- **[16:41] Jaime Guevara:** ya dividirlos en marcas o o en proveedores.
+- **[16:41] Jaime Guevara:** Sin embargo, yo lo que les quería traer aquí es que en este ejercicio que se hizo,
+- **[16:41] Jaime Guevara:** independientemente que no sepamos quién nos marca y quién es proveedor,
+- **[16:41] Jaime Guevara:** pero miren que el el
+- **[16:41] Jaime Guevara:** el el tiempo de primera orden, o sea, la activación
+- **[16:41] Jaime Guevara:** neta bajó a doce a trece días prácticamente.
+- **[16:42] Jaime Guevara:** Es muy bajito, pues, a diferencia de lo que hemos tenido, que eran cuarenta días,
+- **[16:42] Jaime Guevara:** treinta días,
+- **[16:42] Jaime Guevara:** es extremadamente bajito.
+- **[16:42] Jaime Guevara:** Y si nosotros vamos a ver la cantidad de órdenes, entonces tenemos que, eso no lo tengo aquí, pero tenemos que nuevos proveedores han generado veinte, treinta órdenes en un mes. Diez órdenes, Todavía no no se ha hecho, pues, como la exploración de lo que de lo que sucede, pero la teoría es que son son son, uno, son en son proveedores que ya venían como con cliente, o que son proveedores que armaron o otro perfil, ¿cierto?, proveedores que ya estaban, armaron otro perfil y ya tienen dropshippers. Que ya tenían dropshippers de otros lados, y los trajeron acá. Pero, bueno, aquí un tema importante y es que
+- **[16:42] Jaime Guevara:** las personas sí pueden hacerse una activación bastante rápida, si están bien
+- **[16:42] Jaime Guevara:** Entonces, eso me pareció demasiado curioso.
+- **[16:43] Jaime Guevara:** Y el otro,
+- **[16:43] Jaime Guevara:** es pulso,
+- **[16:43] Jaime Guevara:** Pulso, pues, ya está, lo está utilizando, pues, comercial,
+- **[16:43] Jaime Guevara:** yo quería establecer estas métricas, porque esto nos puede servir a todos.
+- **[16:43] Jaime Guevara:** Y ese relacionamiento con comercial. En comercial tenemos una
+- **[16:43] Jaime Guevara:** no sé si si sea feo, pero una mano
+- **[16:43] Jaime Guevara:** ayudar a nosotros a
+- **[16:43] Jaime Guevara:** a las a las iteraciones, ¿cierto? Tanto como
+- **[16:43] Jaime Guevara:** Un recurso.
+- **[16:43] Jaime Guevara:** Un recurso operativo que nos puede ayudar a
+- **[16:43] Jaime Guevara:** a movilizar cosas.
+- **[16:43] Jaime Guevara:** Miren que
+- **[16:43] Jaime Guevara:** aquí en pulso tenemos estas métricas de que
+- **[16:43] Jaime Guevara:** se han registrado
+- **[16:43] Jaime Guevara:** doscientas seis señales. ¿Qué son señales? Son solicitudes que hacen los dropshippers
+- **[16:43] Jaime Guevara:** Todavía no está automatizado, en este momento las solicitudes se las hacen directamente a
+- **[16:44] Jaime Guevara:** a a la persona de de
+- **[16:44] Jaime Guevara:** de a la, nosotros le pusimos asistencia a dropshipper, dropshipper assistant,
+- **[16:44] Jaime Guevara:** y son doscientas seis señales, y por acá tenemos
+- **[16:44] Jaime Guevara:** cómo se comportan esas señales en los tiempos de respuesta entre ese drops, entre
+- **[16:44] Jaime Guevara:** esa asistencia dropshipper,
+- **[16:44] Jaime Guevara:** la asistencia de sub player.
+- **[16:44] Jaime Guevara:** Dropshipper hace una solicitud
+- **[16:44] Jaime Guevara:** y la la asistente lo lo procesa,
+- **[16:44] Jaime Guevara:** y se la, y la asistencia del supplier le ayuda a conseguir
+- **[16:44] Jaime Guevara:** ese ese stock.
+- **[16:44] Jaime Guevara:** ¿Cierto? También pasa que son al cuidado de campañas, y es que los asistentes de los
+- **[16:44] Jaime Guevara:** están revisando y están apoyando a
+- **[16:44] Jaime Guevara:** dropshippers que son como premium, o que están dentro de las
+- **[16:44] Jaime Guevara:** comunidades, y ahí también entra la comunidad, y los están ayudando. Entonces, miren que hay la resolución,
+- **[16:44] Jaime Guevara:** como veinte días, quince días,
+- **[16:44] Jaime Guevara:** de de de resolución y más o menos una
+- **[16:44] Jaime Guevara:** una una estimación de cuántas órdenes se se se generan
+- **[16:45] Jaime Guevara:** por completar, nos dijeron que más o menos son cien, pero eso todavía no lo hemos podido calcular.
+- **[16:45] Jaime Guevara:** Pero si ven aquí, por ejemplo, son ciento setenta y cinco,
+- **[16:45] Jaime Guevara:** por cien, son como diecisiete mil cuatrocientas unidades.
+- **[16:45] Jaime Guevara:** Con personas que no están cien por ciento del tiempo enfocadas en eso. Entonces,
+- **[16:45] Jaime Guevara:** ahí esta esta esta métrica me pareció interesante porque si logramos automatizar qué es lo que estamos haciendo, automatizar cómo esos contactos, esa posibilidad de generar una negociación rápida, una oportunidad rápida, pues seguramente vamos a multiplicar x, veinte x, no sé. Entonces, esos son los dos que tenemos. Y campañas, que cyber days la campaña por lo del tema de del terremoto y eso. Pero ayer ya se retomó la campaña de cyberdates, y algo es que la gente ha estado comentando, los proveedores han estado preguntando como que venga,
+- **[16:45] Jaime Guevara:** ¿cuándo va ser?, ¿qué va ser?, ¿qué pasó?, y eso. Bueno.
+- **[16:45] Jaime Guevara:** Ve, Jaime, sí me parece
+- **[16:45] Maria Ossa:** importante, y para todos los del equipo,
+- **[16:46] Maria Ossa:** que en los proyectos tengamos una métrica de
+- **[16:46] Maria Ossa:** cuántas órdenes ha traído eso. ¿Sí? Entonces, digamos que obvio ahí tú en el tema de proveedores como que, oiga, disminuimos y y hay proveedores activos,
+- **[16:46] Maria Ossa:** entonces, tenemos un
+- **[16:46] Maria Ossa:** una métrica de activación, de decir, oiga, gracias a esto,
+- **[16:46] Maria Ossa:** logramos activar tantos proveedores y movimos la métrica de activación de tanto a tanto,
+- **[16:46] Maria Ossa:** pero eso nos trajo
+- **[16:46] Maria Ossa:** esta cantidad de órdenes Entonces, digamos que
+- **[16:46] Maria Ossa:** eso, pues, nos nos mueve todo porque, digamos que
+- **[16:46] Maria Ossa:** todas estas iniciativas de activación que estamos haciendo
+- **[16:46] Maria Ossa:** son van al primero KR, que es aumentar el volumen.
+- **[16:46] Maria Ossa:** ¿Cierto?
+- **[16:46] Maria Ossa:** Al final tenemos que siempre relacionar esto al OKR final,
+- **[16:46] Maria Ossa:** es aumentar el volumen. Entonces,
+- **[16:46] Maria Ossa:** listo, movimos la métrica de activación, pero la hipótesis que tenemos es, si yo activo más personas, eventualmente voy a traer más órdenes y eso me va a hacer crecer más. Entonces, cuántas órdenes hemos traído en una primer versión y cuántas órdenes van a seguir trayendo estos nuevos usuarios que se que se que se activaron. Lo mismo en pulso, Entonces, en pulsos hablamos de activación de productos, para movilizar las órdenes. ¿Cuántas órdenes nuevas nos ha traído Pulso? El dato? No, porque no lo hemos, todavía no hemos podido
+- **[16:47] Jaime Guevara:** calcular eso, porque es muy manual. Ok, pero estamos conectando.
+- **[16:47] Maria Ossa:** Organizando
+- **[16:47] Jaime Guevara:** para que eso salga aquí automática a la a las
+- **[16:47] Jaime Guevara:** Pero entonces, digamos que ahí entraría eso, lo mismo Kate, por ejemplo,
+- **[16:47] Maria Ossa:** Kate, tú tienes disminución del time to value que has activado un montón de usuarios.
+- **[16:47] Maria Ossa:** ¿Cuántas órdenes nuevas ha traído esos usuarios activos?
+- **[16:47] Maria Ossa:** ¿Sí?
+- **[16:47] Maria Ossa:** Tanto en su primer mes de activación, pero también el seguimiento de esos usuarios por
+- **[16:47] Maria Ossa:** si tú activas un usuario,
+- **[16:47] Maria Ossa:** el usuario te trae muchas órdenes a lo largo del tiempo, pues tienes un
+- **[16:47] Maria Ossa:** un un light down value interesante,
+- **[16:48] Maria Ossa:** que deberíamos también medir. Entonces, ¿cuánto cuántas órdenes me puede traer un usuario
+- **[16:48] Maria Ossa:** en la historia?
+- **[16:48] Maria Ossa:** En cuánto tiempo está aquí con nosotros y eso cómo se traduce, pues, también a ese caer.
+- **[16:48] Maria Ossa:** Entonces, lo que te iba a decir es,
+- **[16:48] Maria Ossa:** uno,
+- **[16:48] Maria Ossa:** miremos las órdenes de los proveedores que activaron nuevos,
+- **[16:48] Maria Ossa:** y tan tanto de pulso como de del proyecto de activación en los dos proyectos?
+- **[16:48] Maria Ossa:** Si son de dropshippers viejos o son de dropshippers nuevos.
+- **[16:48] Maria Ossa:** Eso es un dato interesante, ¿sabe?
+- **[16:48] Maria Ossa:** Porque si son de dropshippers nuevos, pues
+- **[16:48] Maria Ossa:** ayudándonos con la activación de de dropshippers.
+- **[16:48] Maria Ossa:** Pero si son de dropshippers viejos, nos está ayudando con temas de expansión.
+- **[16:48] Maria Ossa:** Ahí luego podemos profundizar, si son dropshippers viejos que ya vendían con estos proveedores,
+- **[16:48] Maria Ossa:** o no.
+- **[16:48] Maria Ossa:** Y lo es cuántas órdenes en total hemos logrado, que era lo que te decía. Para que empecemos a a profundizar más un poco en estos datos y ver qué otros insights nos trae referente al tema de la activación. ¿Listo? Sé si alguien más tenga algo para para Jaime.
+- **[16:49] Maria Ossa:** No, realmente, bueno, yo
+- **[16:49] katerine Pencue:** solamente como para complementar lo de Jaime, los hallazgos que hemos tenido
+- **[16:49] katerine Pencue:** a nivel de proveedores y marcas, compartimos el mismo rol. Entonces,
+- **[16:49] katerine Pencue:** nada, se están trabajando en mensajes mensajes de bienvenida, la tomamos todos nosotros
+- **[16:49] katerine Pencue:** porque, pues, hemos estado como muy insistentes y ahí mismo también Francisco ha estado dialogando con proveedores
+- **[16:49] katerine Pencue:** para dejar ese ese bug que hubo,
+- **[16:49] katerine Pencue:** donde hay un sesgo donde no sabemos si son marcas y proveedores,
+- **[16:49] katerine Pencue:** y hay también una propuesta de un recovery
+- **[16:49] katerine Pencue:** en los pasos, que también lo estamos trabajando con Laura Katherine y, pues, inmediatamente
+- **[16:49] katerine Pencue:** también se está trabajando o de la mano con el área de proveedores, pues, para dejar el flujo
+- **[16:49] katerine Pencue:** de cierta forma lista.
+- **[16:49] katerine Pencue:** Era como para aportarte que ahí hemos ido
+- **[16:49] katerine Pencue:** ayudando a todo el tema de la activación, tanto para proveedores y marcas.
+- **[16:49] katerine Pencue:** Súper.
+- **[16:50] Maria Ossa:** Bueno, ¿no? Equipo, siguiente.
+- **[16:50] Maria Ossa:** ¿Quién va?
+- **[16:50] Yo:** Poi già è listo.
+- **[16:50] Yo:** Entonces,
+- **[16:50] Yo:** claramente por, ya ya lo hablamos al inicio de la de la de la sesión, pero, pues,
+- **[16:50] Yo:** esta esta anterior semana, pues, claramente afectó en parte igual
+- **[16:50] Yo:** el el volumen,
+- **[16:50] Yo:** sobre todo, porque igual Colombia es el que más aporta en tema de órdenes. Y usuarios que también, no solamente son órdenes, porque hay que hay que tener en cuenta que el usuario también nos va a pegar time to value, ajá moments, pues ahí hay una parte importante de la Aquí hay dos fuentes, una es la que, de hecho, María comparte en en la tablita, pero también está una que nos comparte Miguel,
+- **[16:50] Yo:** semanalmente,
+- **[16:50] Yo:** Principalmente, pues, hablaríamos de que hoy tenemos ya
+- **[16:50] Yo:** dos punto un, dos punto dos, casi dos punto dos millones de órdenes. Esto
+- **[16:50] Yo:** proyectado al mes, según, pues, lo lo que tengo aquí programado con el agente no se acercaría al
+- **[16:50] Yo:** de agosto.
+- **[16:51] Yo:** En cuanto a cómo esté en la tabla, sin embargo, pues estamos todavía distantes de
+- **[16:51] Yo:** de la siete punto ocho, pues, por mes, ¿no? Tenemos un dato atípico que te toca hacer un Zoom, porque se equivocó el agente o definitivamente pronto cambió la estructura del dato,
+- **[16:51] Yo:** tenemos de que
+- **[16:51] Yo:** para este mes el tiempo de activación neta
+- **[16:51] Yo:** se nos cayó de lo que teníamos, que era como catorce días, a cinco días, y, pues, es una caída entonces, no tiene sentido. Lo lo dejo es más porque hay una hay hay hay hay un ruido que toca explorar,
+- **[16:51] Maria Ossa:** ¿Qué real? Excelente. Pero si no,
+- **[16:51] Yo:** Sí, pero ojo,
+- **[16:51] Maria Ossa:** está, hay hay que entrar a veces.
+- **[16:51] Yo:** definitivamente los que
+- **[16:51] Yo:** los que los quedaron de vender fueron los que nos estaban haciendo dañar la métrica de activación,
+- **[16:51] Yo:** los que no se activaban rápido son los que definitivamente, pues, fueron los que nos bajaran órdenes, pero es esa típica
+- **[16:51] Yo:** creería que hay algo mal ahí.
+- **[16:51] Yo:** En temas ya ya, digamos, del gap que hay entre la activación net y la activación bruta, claramente las dos bajaron, no se lograron aumentar más, pero tienen aproximadamente la misma diferencia. Que viene siendo un tres por ciento, el resto del tres por ciento. Esto todavía nosotros no hemos colocado en producción ningún instrumento o herramienta nueva como para empezar a subirla. Sin embargo, ya ahí voy a seguir ese punto, es qué estamos haciendo para comenzar ahora sí a impactar en en tiempos de activación. Y, por ende, también claramente en el en el número, en el volumen de las órdenes. Actualmente, actualmente, lo que lo que se está construyendo es, entonces, uno,
+- **[16:52] Yo:** por un lado, estamos haciendo las notificaciones, bueno, el el nuevo modelo de notificaciones,
+- **[16:52] Yo:** ¿sí?, este, haciendo el diseño, pero
+- **[16:52] Yo:** a la par, en paralelo, se está trabajando
+- **[16:52] Yo:** en notificaciones proactivas por WhatsApp y por email.
+- **[16:52] Yo:** Lo que se quiere hacer, junto con la tabla que les compartí por el chat, ya
+- **[16:52] Yo:** ya hace unas tres semanas, es que desde las diferentes células se nos aporte la información
+- **[16:53] Yo:** de qué notificaciones deben enviar,
+- **[16:53] Yo:** ya en el en el weekly
+- **[16:53] Yo:** en el sell board de esta semana tuvimos ya reunión con el equipo de growth para aprovechar el CRM,
+- **[16:53] Yo:** empezar a enviar notificaciones de WhatsApp, y y y por email,
+- **[16:53] Yo:** a los diferentes usuarios en dos grandes, digamos, categorías,
+- **[16:53] Yo:** de activación y los de retención,
+- **[16:53] Yo:** y empezar a ver dependiendo con diferentes mensajes, ahí vamos a manejar algunos experimentos.
+- **[16:53] Yo:** Saber cuáles son los mensajes y esos call to actions que nos van a activar.
+- **[16:53] Yo:** La idea es, sobre todo, empezar con grupos de control
+- **[16:53] Yo:** queremos tener, entonces, los que son huérfanos versus los que son
+- **[16:53] Yo:** de comunidad, y ver si justamente esos mensajes de activación
+- **[16:53] Yo:** acercan un poco, reducen más bien esa brecha entre los huérfanos y
+- **[16:53] Yo:** los de comunidad, ¿sí?, más pensando en la madurez que ya tienen los los
+- **[16:53] Yo:** los usuarios de, por ejemplo, de usuarios de la comunidad de de Ivanka y por ejemplo.
+- **[16:53] Yo:** Entonces, enviaríamos esas mesas de activación para tener, entonces,
+- **[16:53] Yo:** una un dato muy específico de qué tanto se nos mueve un usuario cuando le enviamos una notificación
+- **[16:53] Yo:** por WhatsApp de tienes pedidos por confirmar o reviso, recuerda hacer la configuración de x y cosa,
+- **[16:54] Yo:** Eso es uno. Dos, estamos trabajando
+- **[16:54] Yo:** en un prototipo que por ahora va a ser un fake door,
+- **[16:54] Yo:** Esto es un algo que se hizo su pregunta rápido, y ya Alejandro Aleja le está mejorando, pero es, básicamente, tenemos un porcentaje que dentro del take door queremos
+- **[16:54] Yo:** bien cuál va a ser el impacto que vende por catálogo WhatsApp.
+- **[16:54] Yo:** No por el API de WhatsApp, que es el que maneja Chatea Pro,
+- **[16:54] Yo:** sino no que solamente tiene como instrumento, evidentemente, por WhatsApp,
+- **[16:54] Yo:** Entonces, una hipótesis que sí facilitamos
+- **[16:54] Yo:** el exportar el detalle de un producto directamente al catálogo,
+- **[16:54] Yo:** va a reducir el setup moment,
+- **[16:54] Yo:** Esta validación técnica yo ya la hice, de hecho, a Jaime ya le mostré el prototipo,
+- **[16:54] Yo:** y directamente uno desde Meta puede hacer que, como usuario también del Meta Business
+- **[16:54] Yo:** solamente
+- **[16:54] Yo:** empezándolo a agregar a mi catálogo, no tengo que hacer nada más, o sea, se exporta la imagen, la descripción,
+- **[16:54] Yo:** las respuestas cortas, y la idea es que con el figure veamos qué tanto
+- **[16:55] Yo:** logramos estrechar esa diferencia entre el setup de un usuario que usaba mucho WhatsApp.
+- **[16:55] Yo:** Y, por otro lado, está el disco abrir y hacer el de de solicita nuestra, que, entonces, lo que
+- **[16:55] Yo:** nos acercaría es ver por qué no se utiliza más,
+- **[16:55] Yo:** entender realmente cuáles son las motivaciones que tienen los diferentes niveles o tipos de usuario
+- **[16:55] Yo:** al solicitar un nuestro, o sea, para ver cómo respondo las
+- **[16:55] Yo:** transportadoras o simplemente por por uso personal, eso es en lo que está el equipo.
+- **[16:55] Yo:** Hoy.
+- **[16:55] Participante:** Super.
+- **[16:55] Maria Ossa:** ¿Alguien tiene algo para para Santiago?
+- **[16:55] Maria Ossa:** Luego bastantes cosas. No sé si tenga
+- **[16:55] Maria Ossa:** Lo lo de notificaciones, Santi,
+- **[16:55] Maria Ossa:** correos
+- **[16:55] Jaime Guevara:** y todo, toca pasarlos con
+- **[16:55] Jaime Guevara:** comunicaciones.
+- **[16:55] Jaime Guevara:** Para los mensajes. Me imagino que lo vas a hacer por CRM,
+- **[16:55] Jaime Guevara:** CRM con la conexión que tenemos.
+- **[16:55] Yo:** Sí, sí, sí, lo lo que vamos a hacer el lunes
+- **[16:55] Jaime Guevara:** O, perdón, sí.
+- **[16:55] Yo:** tenemos reunión con Enrique y con
+- **[16:55] Yo:** José Hurtado,
+- **[16:55] Yo:** para ver cuáles son las capacidades actuales, porque la idea es que en lo posible dado
+- **[16:56] Yo:** todavía no tenemos el API, de órdenes, de catálogo ni ni ni esta información más transaccional,
+- **[16:56] Yo:** Entiendo que ellos ya tienen unos accesos, lo que es a Cronos,
+- **[16:56] Yo:** pero queremos ver bien cuál es la la particularidad, no la granularidad ya de la data, y
+- **[16:56] Yo:** qué podemos hacer con ella.
+- **[16:56] Yo:** Tenemos ya unas propuestas de copies y demás, pero sí, todo va a pasar claramente
+- **[16:56] Yo:** comunicaciones, igual en el WIC en en en la en en la célula está María José. Y le dije, después, trabajarlo con con ella.
+- **[16:56] Participante:** Dale. Súper. Y lo lo del botón, no sé, ahí
+- **[16:56] Maria Ossa:** si
+- **[16:56] Jaime Guevara:** si nos impacta, y bueno, ahí le pregunto a María.
+- **[16:56] Jaime Guevara:** Nos impacta con la con la con la vertical.
+- **[16:56] Jaime Guevara:** Con con chatea pro o algo ahí.
+- **[16:56] Jaime Guevara:** De hecho, iba a hablar de ese tema, o
+- **[16:56] Maria Ossa:** ¿ti puedes
+- **[16:56] Jaime Guevara:** poner ahí lo del
+- **[16:56] Yo:** Si,
+- **[16:56] Maria Ossa:** paydoor?
+- **[16:56] Maria Ossa:** Un momentico.
+- **[16:56] Maria Ossa:** Primero me parece brutal.
+- **[16:56] Yo:** Sí, hay hay
+- **[16:56] Maria Ossa:** Segundo,
+- **[16:56] Maria Ossa:** Ajá.
+- **[16:56] Yo:** No, no, para para aclarar, porque es algo que, de hecho, sí sí
+- **[16:56] Yo:** sí lo hemos hablado en diferentes espacios con diferentes personas, y es muy de de limitar mucho el alcance.
+- **[16:57] Yo:** Porque esto
+- **[16:57] Yo:** no tiene
+- **[16:57] Yo:** no debe estar muy muy muy cerrado, acotado a que no
+- **[16:57] Yo:** intervienen los procesos flujos de venta, de confirmación ni nada,
+- **[16:57] Yo:** que simplemente es como el atajo, ¿no?,
+- **[16:57] Yo:** es el atajo para que exporte y ya, y ya la venta, el cierre, el recordatorio,
+- **[16:57] Yo:** todo alrededor de la operación logística?
+- **[16:57] Yo:** No se mete.
+- **[16:57] Yo:** Pero sí, es es algo que igual ya ya tenemos ahí presente. De hecho, le doy una reunión pendiente con ellos.
+- **[16:57] Maria Ossa:** Ahí hay varias cosas. Lo primero que
+- **[16:57] Maria Ossa:** te quiero recomendar es que te unas a
+- **[16:57] Maria Ossa:** Lina,
+- **[16:57] Maria Ossa:** Tú sabes quién es Lina, ¿no? Sí, Lina, de nuestro equipo.
+- **[16:57] Yo:** Sí, sí.
+- **[16:57] Maria Ossa:** Ajá. Lina y
+- **[16:57] Maria Ossa:** Alina más que todo, más que Omar, Alina.
+- **[16:57] Maria Ossa:** Que te muestre
+- **[16:57] Maria Ossa:** estrellas.
+- **[16:57] Maria Ossa:** Mira, el y y te recomiendo, descárgate estrellas app.
+- **[16:57] Maria Ossa:** Descárgate y créate una cuenta en estrellas app,
+- **[16:57] Maria Ossa:** porque nosotros lo que hemos hecho en estrellas es un, digamos, un spin off
+- **[16:57] Maria Ossa:** del modelo de dropshipping enfocado a personas que no saben vender.
+- **[16:58] Maria Ossa:** Que prácticamente es el perfil como el vendedor de catálogo.
+- **[16:58] Maria Ossa:** Digamos que en estrellas a algo que sucede es que
+- **[16:58] Maria Ossa:** tú ves el producto
+- **[16:58] Maria Ossa:** y tiene un botón que dice vender,
+- **[16:58] Maria Ossa:** y el sistema automáticamente te crea como una landing page de ese producto.
+- **[16:58] Maria Ossa:** Entonces, les voy a mostrar.
+- **[16:58] Maria Ossa:** A ver, voy a
+- **[16:58] Participante:** entrar aquí a estrellas.
+- **[16:58] Maria Ossa:** Que ahorita se va a llamar by.
+- **[16:58] Maria Ossa:** Porque va a tener un enfoque diferente, pero entonces nosotros
+- **[16:58] Maria Ossa:** podemos reciclar ese concepto de estrellas anterior y de pronto
+- **[16:58] Maria Ossa:** aquí entra
+- **[16:58] Maria Ossa:** un momentico, compartir sin comisión.
+- **[16:58] Maria Ossa:** Entonces, mira, cuando tú usas estrellas y descárguenselo
+- **[16:58] Maria Ossa:** se lo recomiendo un montón,
+- **[16:58] Maria Ossa:** Ay, ¿dónde está?
+- **[16:58] Maria Ossa:** Se los voy a mandar
+- **[16:58] Maria Ossa:** se lo voy a mandar a Jaime. Acá.
+- **[16:59] Maria Ossa:** Entonces, cuando tú
+- **[16:59] Maria Ossa:** compartes un producto en estrellas,
+- **[16:59] Maria Ossa:** estas personas no saben vender por Internet ni nada,
+- **[16:59] Maria Ossa:** concepto de estrellas es comparte.
+- **[16:59] Maria Ossa:** ¿Cómo lo comparten? Pues a través de WhatsApp, que es un poquito lo que estás diciendo.
+- **[16:59] Maria Ossa:** Hay personas que venden a través de un catálogo
+- **[16:59] Maria Ossa:** un catálogo de WhatsApp normal, que no es WhatsApp app, y si no, usan WhatsApp business o usan otra
+- **[16:59] Maria Ossa:** cosas.
+- **[16:59] Maria Ossa:** Mira que lo que ya hace estrellas es que coge el producto
+- **[16:59] Maria Ossa:** se habla con el los proveedores para tener muy buenos contenidos,
+- **[16:59] Maria Ossa:** y ya él solito le crea como su landing,
+- **[16:59] Maria Ossa:** con la información. Mira que nosotros nos hemos esforzado con
+- **[16:59] Maria Ossa:** ponerle todos los triggers, habla de la descripción, la garantía,
+- **[16:59] Maria Ossa:** y demás, y, pues, cuando ya le da comprar ahora,
+- **[16:59] Maria Ossa:** pues eso tiene como una
+- **[16:59] Maria Ossa:** un un checkout integrado, bueno, y demás cosas,
+- **[16:59] Maria Ossa:** permite que rápidamente, pues, el cliente haga la orden y la orden llega
+- **[17:00] Maria Ossa:** a estrellas.
+- **[17:00] Maria Ossa:** Revísalo,
+- **[17:00] Maria Ossa:** yo quiero que la otra semana saquemos un espacio con James,
+- **[17:00] Maria Ossa:** y con Lau, y, bueno, y y la célula de sellers,
+- **[17:00] Maria Ossa:** porque esta semana estuvimos trabajando mucho con
+- **[17:00] Maria Ossa:** como el direccionamiento de las células, de ahí van a salir unos documentos que les vamos a entregar
+- **[17:00] Maria Ossa:** a cada uno y que Janssen la U les van a socializar.
+- **[17:00] Maria Ossa:** Particularmente para la célula de seller,
+- **[17:00] Maria Ossa:** esto que estás haciendo viene un poco alineado como con esa
+- **[17:00] Maria Ossa:** con esa perspectiva. Igual lo que hemos estado trabajando es muy alrededor de
+- **[17:00] Maria Ossa:** todos los insights que ustedes han traído también a la mesa,
+- **[17:00] Maria Ossa:** Entonces, yo creo que esto es estrellas
+- **[17:00] Maria Ossa:** míralo,
+- **[17:00] Maria Ossa:** míralo porque yo creo que
+- **[17:00] Maria Ossa:** un poquito lo que vamos a construir
+- **[17:00] Maria Ossa:** tal vez va un poquito por ese lado,
+- **[17:00] Maria Ossa:** Y ahorita, ya enfrente al al botón,
+- **[17:00] Maria Ossa:** yo sí creo que tienes que buscar un mejor copy
+- **[17:00] Maria Ossa:** porque digamos que cuando se pone como
+- **[17:01] Maria Ossa:** WhatsApp, vendas por WhatsApp,
+- **[17:01] Maria Ossa:** puede generar mucha confusión.
+- **[17:01] Maria Ossa:** Entonces,
+- **[17:01] Maria Ossa:** ¿para qué público tú quieres usar ese Facebook
+- **[17:01] Yo:** Realmente,
+- **[17:01] Maria Ossa:** sea, ¿cuál es la hipótesis que quieres validar?
+- **[17:01] Yo:** Realmente, es que estuvimos estuvimos revisando
+- **[17:01] Yo:** un poco qué qué tanta información había disponible, sobre cuántas
+- **[17:01] Yo:** cuántos de los usuarios que tiene Aeropi venden por WhatsApp Business,
+- **[17:01] Yo:** o sea, por la aplicación del celular,
+- **[17:01] Participante:** Mhmm.
+- **[17:01] Yo:** y realmente no hay una data consistente sobre
+- **[17:01] Yo:** cuánto son
+- **[17:01] Yo:** qué volúmenes venden. Entonces, justamente como lo lo lo que
+- **[17:01] Yo:** ahora preguntaba es de,
+- **[17:01] Yo:** tenemos que, y y, en términos generales de producto, tenemos que tener una métrica de de qué impacto va a tener la funcionalidad cuántas órdenes va a empezar a generar. Leyendo ese, es un poco es el discovery de, que impacto tiene esto, porque parece una solución el problema de tener, o el de tener que descargar una imagen, copiar, pegar, empezar a a a cranearse toda la información, dentro de esta capa, pues no solamente está llevarse en crudo lo que tiene el catálogo,
+- **[17:02] Yo:** porque sabemos que muchos proveedores, pues tienen falencias con Lucky.
+- **[17:02] Yo:** Cómo lo cargan y y y cómo describen los productos, sino que habría una mejora en esa exportación.
+- **[17:02] Yo:** Y eso, pues facilitar esa venta, el colocarlo, ¿sí?,
+- **[17:02] Yo:** Estoy incentivando el el el el
+- **[17:02] Yo:** la venta o a través de un canal puntual, ¿sí?, que no, y y no depender de un ecommerce.
+- **[17:02] Yo:** Un poco lo que se quiere validar es que realmente sí
+- **[17:02] Yo:** está solucionando un problema, que si hay un dólar ahí,
+- **[17:02] Yo:** porque lo que tendría el fake door está en clave toda no hay funcionalidad,
+- **[17:02] Yo:** estaría en preguntar primero
+- **[17:02] Yo:** si es la herramienta principal de venta.
+- **[17:02] Yo:** Y cuántas órdenes él logra
+- **[17:02] Yo:** Sí.
+- **[17:02] Yo:** Vender a través de de de WhatsApp Business.
+- **[17:02] Yo:** Y y, a partir de eso, pues ya se identifica qué qué tan grande es el el el
+- **[17:02] Yo:** el mercado objetivo.
+- **[17:02] Maria Ossa:** ¿Yo te recomendaría que te sientes a estudiar estrellas
+- **[17:02] Yo:** Ok.
+- **[17:02] Maria Ossa:** no by,
+- **[17:02] Maria Ossa:** sino estrellas app, en verdad, y que te pasen los números
+- **[17:03] Maria Ossa:** y que Lina te cuente muy bien el público objetivo, cómo funciona,
+- **[17:03] Maria Ossa:** exploras de todo estrellas, porque estrellas soluciona
+- **[17:03] Maria Ossa:** intenta solucionar un poco ese problema de una persona que nunca va aprender a hacer marketing digital
+- **[17:03] Maria Ossa:** a hacer apps,
+- **[17:03] Maria Ossa:** pero que puede hacer dinero extra compartiendo,
+- **[17:03] Maria Ossa:** que es un poco el mismo público del que tú estás hablando.
+- **[17:03] Maria Ossa:** Entonces, digamos que ahí ya hay un
+- **[17:03] Maria Ossa:** camino muy avanzado de entender
+- **[17:03] Maria Ossa:** si se activa, si no se activa, qué problemas hay, por qué no se activa,
+- **[17:03] Maria Ossa:** bueno, y todos estos temas que creo que te va a ayudar a
+- **[17:03] Maria Ossa:** a a entender más esa hipótesis, y sí te recomendaría de pronto que
+- **[17:03] Maria Ossa:** primero hagas una gran segmentación
+- **[17:03] Maria Ossa:** antes de mostrarle ese botón a todos los usuarios con un mejor copy,
+- **[17:03] Maria Ossa:** porque puede generar, digamos, un
+- **[17:03] Maria Ossa:** una confusión.
+- **[17:03] Maria Ossa:** Si tú hablas de WhatsApp, en generalidad,
+- **[17:03] Maria Ossa:** la gente siempre va a querer vender por WhatsApp, entonces es muy probable que
+- **[17:03] Maria Ossa:** todo mundo se te apunte al botón
+- **[17:03] Yo:** Listo, de una. Ok.
+- **[17:03] Maria Ossa:** Tantix. Entonces, tal vez el pay door
+- **[17:04] Maria Ossa:** no no te va a arrojar data en la data que necesitas,
+- **[17:04] Maria Ossa:** porque hay un sesgo con WhatsApp.
+- **[17:04] Maria Ossa:** Y tienes que como, entonces, Mario, mi recomendación es que lo planees un poco mejor, ¿listo?
+- **[17:04] Yo:** Listo, don Amauri, gracias.
+- **[17:04] Maria Ossa:** Listo. Santi, hey, qué buenos proyectos, están muy interesante.
+- **[17:04] Maria Ossa:** Ah, y por último.
+- **[17:04] Maria Ossa:** Algo que quiero hacer es que, pues, como tú estás con el tema de los sellers,
+- **[17:04] Maria Ossa:** los sellers son los que mueven
+- **[17:04] Maria Ossa:** digamos que aquí, jojo,
+- **[17:04] Maria Ossa:** y tú están un poquito en esa parte. Yo le digo,
+- **[17:04] Maria Ossa:** la línea de batalla, porque Kate, pues maneja
+- **[17:04] Maria Ossa:** los sellers que mueven las órdenes de las marcas y tú
+- **[17:04] Maria Ossa:** los sellers que mueven el resto de las órdenes en todo dropis.
+- **[17:04] Maria Ossa:** Entonces, digamos que por eso
+- **[17:04] Maria Ossa:** está me parece superbueno que estés monitoreando
+- **[17:04] Maria Ossa:** general de todas las órdenes.
+- **[17:04] Maria Ossa:** Pero ahí yo sí recomendaría, de pronto, que nos sentemos con Jaime y
+- **[17:04] Maria Ossa:** Miguel para que hagamos un tablero un poco más profundo, en donde tengamos, por ejemplo,
+- **[17:05] Yo:** Si,
+- **[17:05] Maria Ossa:** el total de las órdenes, cuántas son de dropshippers y cuántas son de marca.
+- **[17:05] Maria Ossa:** Para que miremos si el crecimiento está viniendo en marcas o está viniendo
+- **[17:05] Maria Ossa:** en los dropshippers. Y eso, pues, obvio, les va a impactar a los dos. Otra cosa
+- **[17:05] Maria Ossa:** que es importante es que tú también y y sepamos
+- **[17:05] Maria Ossa:** de los registrados cuánto se están activando, porque puede que ese porcentaje de
+- **[17:05] Maria Ossa:** activación que viste sea porque se están registrando menos personas.
+- **[17:05] Maria Ossa:** Y no porque se están activando más personas.
+- **[17:05] Maria Ossa:** Entonces, sí tenemos que tener muy bien todo el panel estructurado desde
+- **[17:05] Maria Ossa:** cuántos se registraron, cuántos en bruta,
+- **[17:05] Maria Ossa:** activación neta,
+- **[17:05] Maria Ossa:** para que también puedas entender de pronto en dónde
+- **[17:05] Maria Ossa:** la variabilidad, porque solamente estamos viendo la activación desde
+- **[17:05] Maria Ossa:** la activación y no desde la adquisición.
+- **[17:05] Maria Ossa:** La adquisición impacta mucho en tu en tu activación, ¿listo?
+- **[17:05] Maria Ossa:** Y que tengamos los foneles diferenciados.
+- **[17:05] Maria Ossa:** Cuántos se me están registrando por comunidades, cuántos son huérfanos,
+- **[17:06] Maria Ossa:** cómo va variando la activación, porque puede que la activación en este momento te haya variado,
+- **[17:06] Maria Ossa:** en los que se registraron a través de las comunidades.
+- **[17:06] Maria Ossa:** Y no los huérfanos.
+- **[17:06] Maria Ossa:** Entonces, creo que podemos hacer un tabler un poco más general,
+- **[17:06] Maria Ossa:** obvio para que todos tengan acceso a él,
+- **[17:06] Maria Ossa:** que va a permitir seguir profundizando más
+- **[17:06] Maria Ossa:** en las métricas que tú tienes en sellers.
+- **[17:06] Yo:** Ese ese ese ese tablero ese tablero hecho ya está
+- **[17:06] Maria Ossa:** Creo que es un
+- **[17:06] Yo:** por aparte, pero no sé si lo migraríamos a Darwin,
+- **[17:06] Yo:** Sí, si si James acepta
+- **[17:06] Yo:** que vuelvan a meterle mano al frontón de Darwin,
+- **[17:06] Yo:** Y no, pero luego
+- **[17:06] Maria Ossa:** Pero primero,
+- **[17:06] Yo:** un botón escondido allí.
+- **[17:06] Maria Ossa:** pero primero No, no, no, esa es de Laura. Primero,
+- **[17:06] Yo:** Yo no yo no lo
+- **[17:06] Jaime Guevara:** planeamos el tablero, igual si el tablero ya
+- **[17:06] Maria Ossa:** aparte, entonces usemos ese tablero acá. Porque ese va ser como el tablero de control y más bien, Santiago, tú vas a ser el primero.
+- **[17:06] Maria Ossa:** Presente en el en el weekly.
+- **[17:06] Maria Ossa:** Es que ahí vamos a tener como la generalidad. Entonces, empecemos tú
+- **[17:07] Maria Ossa:** presentando, oye, así estamos con nuestras métricas y ya luego entras a lo de sellers. ¿Te parece?
+- **[17:07] Maria Ossa:** Súper. Va.
+- **[17:07] Maria Ossa:** Sigue? Yo
+- **[17:07] katerine Pencue:** un momento. Dame un chance de ahora.
+- **[17:07] katerine Pencue:** Ajá.
+- **[17:07] Maria Ossa:** Hacen sentir mal con eso.
+- **[17:07] katerine Pencue:** Bueno, gracias.
+- **[17:07] katerine Pencue:** Porque hay veces sí
+- **[17:07] Maria Ossa:** me pasó de
+- **[17:07] katerine Pencue:** los jirijilla.
+- **[17:07] katerine Pencue:** Trabajando.
+- **[17:07] Maria Ossa:** Ah, ok. A nivel de ventas.
+- **[17:07] katerine Pencue:** Mary, con Miguel y
+- **[17:07] Maria Ossa:** todo lo que
+- **[17:07] katerine Pencue:** pasaba, Miguel la
+- **[17:07] katerine Pencue:** está terminando de ajustar todos tus tableros. Creo que el tablero que que mencionas
+- **[17:07] katerine Pencue:** podríamos, Santiago, mirarlo, creo que Miguel ya me hizo algo similar.
+- **[17:07] katerine Pencue:** Sin embargo, a nivel de métricas, menor está en
+- **[17:07] katerine Pencue:** son seiscientas mil órdenes, pues claramente estoy en el cuarenta y ocho por ciento.
+- **[17:07] katerine Pencue:** De de MinorStarMetric. Posterior a esto,
+- **[17:07] katerine Pencue:** este análisis que veníamos haciendo, también le pregunta una hipótesis que puede sonar que ese un poco loco o no, pero ayer preguntaba que por qué acá teníamos un crecimiento tan grande y de acá a acá no. Bueno, grande no, pero veinticuatro a dos puntos porcentuales, pues, uno uno uno piensa, y me imagino que agosto por todo el tema de lo sucedido, pues no va a estar como también a nivel de movilización. Sin embargo, los chicos me decían que gran parte de mayo, junio donde iniciamos todo el tema de hacer la gestión de la activación
+- **[17:08] katerine Pencue:** y el en el embudo en todo lo que hemos construido, y que aquí en
+- **[17:08] katerine Pencue:** junio y julio lo que habían hecho era todo el tema de la gestión de sus de de sus usuarios.
+- **[17:08] Yo:** Si.
+- **[17:08] katerine Pencue:** Digamos que ahí es, hay hay ciento
+- **[17:08] katerine Pencue:** que Marca se está quedando un poco
+- **[17:08] katerine Pencue:** corto a nivel de capacidad operativa con relación a las marcas que ya tienen.
+- **[17:08] katerine Pencue:** Y, obviamente, todos los hallazgos que hemos tenido de de la operación y que
+- **[17:08] katerine Pencue:** se vuelve un poco más el área de soporte que de comercial, de temas comerciales,
+- **[17:08] katerine Pencue:** algo que también he indicado en esa bastante. Digamos que en todo el tema de mi ruta,
+- **[17:08] katerine Pencue:** entonces claramente lo que nos importa es que de las seiscientas mil
+- **[17:08] katerine Pencue:** de menores al metric, solamente tengo el cuarenta y ocho coma punto seis de mi meta,
+- **[17:09] katerine Pencue:** me faltan trescientos ocho
+- **[17:09] katerine Pencue:** órdenes de cierta manera para poder cerrar. Tengo una brecha bastante grande,
+- **[17:09] katerine Pencue:** Digamos que entre ese ejercicio nosotros ya hemos estado averiguando a las personas que están adentro,
+- **[17:09] katerine Pencue:** y las personas que están afuera, aún tenemos un vacío con relación a
+- **[17:09] katerine Pencue:** qué es lo que necesita una marca para yo tener como mi mi
+- **[17:09] katerine Pencue:** mi product market fit para esas marcas grandes
+- **[17:09] katerine Pencue:** que de pronto me puedan aportar. Esa conclusión de dónde la saqué claramente voy ir a lo
+- **[17:09] katerine Pencue:** a lo más puntual, que digamos que independientemente del escenario o cuál es
+- **[17:09] katerine Pencue:** serían los escenarios a atacar,
+- **[17:09] katerine Pencue:** digamos que podríamos estar mirando todo el tema de la adquisición,
+- **[17:09] katerine Pencue:** de usuarios y de marcas que realmente aporten a menores a metrics,
+- **[17:09] katerine Pencue:** Actualmente contamos con leads de una lista que pasó broke,
+- **[17:09] katerine Pencue:** con respecto a a a marcas que están en Shopify,
+- **[17:09] katerine Pencue:** y digamos que siendo de manera muy conservadora,
+- **[17:09] katerine Pencue:** ni adquiriendo ni de pronto haciendo mi estrategia de ver qué es lo que he venido
+- **[17:09] katerine Pencue:** pues, trabajando desde que lancé el sell board,
+- **[17:09] katerine Pencue:** que es el tema de proteger todo el tema de los núcleos, que son unas personas que me representan más del sesenta y
+- **[17:10] katerine Pencue:** cuatro. Bueno, eso también depende de cómo vayan cayendo,
+- **[17:10] katerine Pencue:** pero más del sesenta, sesenta y cuatro por ciento de de mis órdenes actuales, que son doscientos
+- **[17:10] katerine Pencue:** doscientos noventa y un k,
+- **[17:10] katerine Pencue:** y otra estrategia es vender a las personas que están creciendo y consolidando.
+- **[17:10] katerine Pencue:** Puedo desligar una de la otra y nos tocaría trabajar de manera híbrida
+- **[17:10] katerine Pencue:** Y yendo de manera híbrida, digamos que no logró cerrar la brecha,
+- **[17:10] katerine Pencue:** pero sí logro llegar en un tema muy conservador y de que podamos
+- **[17:10] katerine Pencue:** de cierta forma, gestionar esos leads,
+- **[17:10] katerine Pencue:** a un cincuenta y tres por ciento de de mi meta total.
+- **[17:10] katerine Pencue:** ¿Listo? Entonces, digamos que con con ese ejercicio expuesto a lo que me ha
+- **[17:10] katerine Pencue:** lo que me hace es como cambiar un poco la
+- **[17:10] katerine Pencue:** y no quedarme solamente adentro, sino también con todo lo que se viene trabajando del y de
+- **[17:10] katerine Pencue:** de entender que necesita una marca
+- **[17:10] katerine Pencue:** de una marca grande para que
+- **[17:10] katerine Pencue:** quiera estar en drop. Digamos que con relación a eso, las accionales que salieron,
+- **[17:10] katerine Pencue:** los voy a presentar aquí en Darwin, fueron los siguientes
+- **[17:11] katerine Pencue:** el experimento de descubrimiento de leads clasificado,
+- **[17:11] katerine Pencue:** se escogió esos diez, de ese de esa lista de dos mil marcas
+- **[17:11] katerine Pencue:** estudiadas en Cali,
+- **[17:11] katerine Pencue:** No sé por qué pasa, pero mi computador se queda un poco
+- **[17:11] katerine Pencue:** Hay diecisiete que vamos a tomar de manera piloto, ayer se expuso en durante la
+- **[17:11] katerine Pencue:** de la célula, ¿y por qué diecisiete? Diecisiete es que están totalmente
+- **[17:11] katerine Pencue:** que son marcas propias. Digamos que eso tenía ahí como un algoritmo, unas columnas a las cuales se filtraron,
+- **[17:11] katerine Pencue:** se hizo una investigación y en esa investigación lo que se busca
+- **[17:11] katerine Pencue:** de cierta forma es hacer un alcance con con marketing
+- **[17:11] katerine Pencue:** Ya vamos a comenzar, ya lo tiene María José, de contactar a estas
+- **[17:11] katerine Pencue:** a estas a estas marcas, pero con el objetivo de entender
+- **[17:11] katerine Pencue:** qué es lo que ellas necesitan, más que vender a drop.
+- **[17:11] katerine Pencue:** ¿Cómo lo vamos a hacer? Claramente, después de la investigación que se hizo,
+- **[17:11] katerine Pencue:** una investigación profunda con con todo el tema de de estas diecisiete leads,
+- **[17:11] katerine Pencue:** para enviar un mensaje por sus canales, y de esos canales que son los que más
+- **[17:11] katerine Pencue:** utilizan, claramente un un mensaje que no esté desconectado a su realidad,
+- **[17:12] katerine Pencue:** sino que con con la investigación profunda que se hizo con ese discovery
+- **[17:12] katerine Pencue:** sin necesidad de contacto, te dieron un mensaje muy adaptado a ellas,
+- **[17:12] katerine Pencue:** y de y de esta manera de de esta manera hacer
+- **[17:12] katerine Pencue:** la escucha directa, que la escucha directa sería crear un plan de Ortridge,
+- **[17:12] katerine Pencue:** canales, mensajes de beneficios, con Maho,
+- **[17:12] katerine Pencue:** y enviárselos, y de ese envío claramente
+- **[17:12] katerine Pencue:** queremos tener un plan piloto, que es el área comercial, digamos, la idea
+- **[17:12] katerine Pencue:** de cierta forma de de también brindarle un beneficio
+- **[17:12] katerine Pencue:** allá si nos contestan, como que
+- **[17:12] katerine Pencue:** no sé, regalar hacer una propuesta de envíos gratis para que pruebe en nuestra plataforma.
+- **[17:12] katerine Pencue:** Posterior a entender qué es lo que les duele. Y, pues, claramente, acá
+- **[17:12] katerine Pencue:** está todo el tema del experimento. Digamos que durante las prioridades de drop
+- **[17:12] katerine Pencue:** lo que se lo que se buscó, lo que se encontró,
+- **[17:12] katerine Pencue:** estas diecisiete marcas que son lean clasificados es que ninguna marca tiene como
+- **[17:12] katerine Pencue:** un tracking, no tiene tracking de marca, elección automática de transportadora,
+- **[17:13] katerine Pencue:** todo el tema de del recaudo anticipado,
+- **[17:13] katerine Pencue:** y control de inventario. Digamos que esas son como la las novedades más grandes que se han encontrado acá,
+- **[17:13] katerine Pencue:** todo el tema de la documentación.
+- **[17:13] katerine Pencue:** Los hallazgos con evidencia, ninguna de las diecisiete tienen un tracking propio confiable,
+- **[17:13] katerine Pencue:** seis de las diecisiete dependen de una sola transportadora que es coordinadora y hay quiebres de
+- **[17:13] katerine Pencue:** importante. Entonces, digamos que con relación a todo el tema de de de los leads
+- **[17:13] katerine Pencue:** ese es el experimento que esperamos ejecutar la próxima semana.
+- **[17:13] katerine Pencue:** Ya marketing y el área comercial están, de cierta forma, ahí alineados.
+- **[17:13] katerine Pencue:** Para poderlo ejecutar y conocer estas marcas de gente enterradas,
+- **[17:13] katerine Pencue:** antes de vender Tropy y saber si tenemos el preparado
+- **[17:13] katerine Pencue:** listo el producto para estas. Adicional a esto tengo otro,
+- **[17:13] katerine Pencue:** no sé qué está pasando, pero no sé, Mary, si me das el tiempito.
+- **[17:13] katerine Pencue:** Yo yo alcanzo en un rato.
+- **[17:13] katerine Pencue:** Yo sé que llevamos tres semanas sin vernos, entonces
+- **[17:13] katerine Pencue:** Listo.
+- **[17:13] Maria Ossa:** Pero no sé qué está pasando con Darwin. Dale,
+- **[17:14] katerine Pencue:** ahí igual,
+- **[17:14] katerine Pencue:** Ahí dale, pues ya.
+- **[17:14] Jaime Guevara:** Sí, oiga, pero
+- **[17:14] katerine Pencue:** hay
+- **[17:14] Jaime Guevara:** que mandarle un ticket al product
+- **[17:14] katerine Pencue:** de de Darwin.
+- **[17:14] katerine Pencue:** Dale y
+- **[17:14] Maria Ossa:** volveré, no, listo, devolver. Sí, mira, ya le di ya le
+- **[17:14] katerine Pencue:** di, no, que hay redes
+- **[17:14] Jaime Guevara:** creo
+- **[17:14] katerine Pencue:** que es mi PC, no se creería. Dale, espérate.
+- **[17:14] Yo:** De pronto es porque estás en el local,
+- **[17:14] katerine Pencue:** Ah, sí, estoy en local.
+- **[17:14] katerine Pencue:** No he subido como todos los cambios todavía.
+- **[17:14] katerine Pencue:** ¿Ahí no te sale?
+- **[17:14] Jaime Guevara:** Conclusión,
+- **[17:14] katerine Pencue:** me
+- **[17:14] Jaime Guevara:** me me se me
+- **[17:14] katerine Pencue:** queda.
+- **[17:14] katerine Pencue:** Conclusión, el otro el otro experimento que tenía y que ya cerré,
+- **[17:14] katerine Pencue:** no sé si ustedes recuerdan que yo había tomado una iniciativa con
+- **[17:14] katerine Pencue:** proveedores que tienen varias marcas,
+- **[17:14] katerine Pencue:** y ves que cinco proveedores que
+- **[17:14] katerine Pencue:** hacen buen volumen, que están dentro de esas sesenta y
+- **[17:14] katerine Pencue:** cuatro el sesenta y cuatro por ciento de las marcas que generan
+- **[17:14] katerine Pencue:** las doscientas noventa y un órdenes, y ellos realmente no me dieron ni
+- **[17:14] katerine Pencue:** positivo ni negativo con relación a
+- **[17:15] katerine Pencue:** al ejercicio. Lo que hicieron ellos de cierta forma fue quejarse de todo el tema de las novedades,
+- **[17:15] katerine Pencue:** y durante todo el tema de las novedades, cuando se estaban quejando,
+- **[17:15] katerine Pencue:** claramente yo toqué muchas puertas, entre estas el celular, la
+- **[17:15] katerine Pencue:** de logística y hay muchos insight que claramente fui repartiendo a las personas
+- **[17:15] katerine Pencue:** involucradas de cierta manera. Entonces, pues ahí tenía como todo el tema de las oportunidades,
+- **[17:15] katerine Pencue:** de las oportunidades en el
+- **[17:15] katerine Pencue:** Se cayó.
+- **[17:15] katerine Pencue:** Pero nada,
+- **[17:15] katerine Pencue:** Recuerde subir a a producción que no se dañe. Sí.
+- **[17:15] Jaime Guevara:** No se dañe. Qué triste porque tenía
+- **[17:15] katerine Pencue:** harto
+- **[17:15] Jaime Guevara:** material.
+- **[17:15] katerine Pencue:** Conclusión, ahí saqué hallazgos como, por ejemplo, todo el tema de la
+- **[17:15] katerine Pencue:** educación logística que no tienen los usuarios,
+- **[17:15] katerine Pencue:** Realmente, gel en que la chica de operación y logística indicaba que muchos de sus usuarios no es
+- **[17:15] katerine Pencue:** Se lo remití también a Juan Diego, de qué podíamos hacer, Agrodops,
+- **[17:15] katerine Pencue:** Adicional a eso, puntos como como
+- **[17:15] katerine Pencue:** victorias rápidas o proyectos que que deberíamos priorizar y cuantificar con data,
+- **[17:16] katerine Pencue:** Ahí en el proyecto está, y nada, nada, estoy con todo el tema de los experimentos y
+- **[17:16] katerine Pencue:** y el tema de del onboarding, que ya es un tema que lo tenemos a nivel de seguimiento.
+- **[17:16] katerine Pencue:** Súper. Kate no
+- **[17:16] katerine Pencue:** Primero,
+- **[17:16] Maria Ossa:** pues para que sepan, nosotros hemos estado teniendo como one's to one's
+- **[17:16] Maria Ossa:** con varias personas,
+- **[17:16] Maria Ossa:** La idea era que la semana pasada me
+- **[17:16] Maria Ossa:** pudiéramos reunir con Jaime, Jaime y yo con los demás, pero
+- **[17:16] Maria Ossa:** estuve un poquito movida la semana, entonces, se movió todo.
+- **[17:16] Maria Ossa:** Entonces,
+- **[17:16] Maria Ossa:** digamos que con Kate nos alcanzamos a reunir y con Juan Diego,
+- **[17:16] Maria Ossa:** entonces, chévere, Kate, que aquí ya se va viendo un poco reflejado
+- **[17:16] Maria Ossa:** eso que veníamos hablando. Kate
+- **[17:16] Maria Ossa:** Kate en particular tiene
+- **[17:16] Jaime Guevara:** un un reto, y
+- **[17:16] Maria Ossa:** es que
+- **[17:16] Maria Ossa:** el producto de ella
+- **[17:16] Maria Ossa:** pensemos en en en tres etapas. ¿Cierto? La primera etapa
+- **[17:16] Maria Ossa:** en el desarrollo de producto es encajar
+- **[17:17] Maria Ossa:** producto necesidad.
+- **[17:17] Maria Ossa:** ¿Cierto?
+- **[17:17] Maria Ossa:** Y ya luego tenemos que encajar el producto en el mercado.
+- **[17:17] Maria Ossa:** Entonces, el proyecto de marcas es un producto que ya encajó con una necesidad.
+- **[17:17] Maria Ossa:** Sabemos que en el mercado hay una necesidad de las marcas de la logística.
+- **[17:17] Maria Ossa:** Pero el problema
+- **[17:17] Maria Ossa:** es que todavía no hemos tenido un buen encaje de producto mercado.
+- **[17:17] Maria Ossa:** ¿Qué es lo que nos permite hacer de una u otra forma el market fix, por decirlo así?
+- **[17:17] Maria Ossa:** Es muy raro el caso de marcas, porque marcas
+- **[17:17] Maria Ossa:** sí sabemos que hay un market fit.
+- **[17:17] Maria Ossa:** Por dropshippers.
+- **[17:17] Maria Ossa:** Y sabemos que hay mucha gente haciendo emprendimiento digital que necesita eso. Entonces,
+- **[17:17] Maria Ossa:** y hay otras marcas en el mercado
+- **[17:17] Maria Ossa:** como Melon y otras competencias que han crecido mucho logística para los para los usuarios. Sucede? Que nuestro producto, pues, al final todavía no ha encajado bien en el mercado porque no hemos entendido muy bien nuestro diferenciador, y realmente qué es lo que están necesitando las marcas. Entonces, digamos que en ese proceso, en este en este momento está Kate,
+- **[17:18] Maria Ossa:** porque, pues la conclusión es, por más que nosotros queramos mejorar la activación y la
+- **[17:18] Maria Ossa:** retención, pues, no vamos a llegar
+- **[17:18] Maria Ossa:** a la mesa.
+- **[17:18] Maria Ossa:** Porque tenemos un
+- **[17:18] Maria Ossa:** definitivamente, un problema de producto que no solamente es el producto, sino
+- **[17:18] Maria Ossa:** que es un problema de propuesta de valor.
+- **[17:18] Maria Ossa:** Que tiene que ver más que todo con el negocio.
+- **[17:18] Maria Ossa:** Digamos que aquí es importante que no solamente hablemos de desarrollo del producto,
+- **[17:18] Maria Ossa:** sino que los invito a cada uno que hay una cosa que se llama el business design,
+- **[17:18] Maria Ossa:** que es el el desarrollo del negocio.
+- **[17:18] Maria Ossa:** Y el producto es la materialización del negocio. Entonces, si mi negocio no está muy claro,
+- **[17:18] Maria Ossa:** por más que yo tenga muy optimizado mi producto, pues no voy a lograr eso. Entonces, digamos que
+- **[17:18] Maria Ossa:** parte de lo que está haciendo hoy Kate,
+- **[17:18] Maria Ossa:** es entender realmente el negocio.
+- **[17:18] Maria Ossa:** Que es diferente al reto de Santiago. Santiago tiene un reto de expansión,
+- **[17:18] Maria Ossa:** porque él ya tiene un market fit
+- **[17:18] Maria Ossa:** descontrolado. Entonces, digamos que esta semana
+- **[17:18] Maria Ossa:** que estuvimos haciendo un poco fue eso. Entonces, la idea es que ya aquí
+- **[17:19] Maria Ossa:** aquí a la otra semana a la otra semana,
+- **[17:19] Maria Ossa:** vamos a volver a tener espacios con cada uno de ustedes
+- **[17:19] Maria Ossa:** para hablar de eso que estuvimos hablando, llevarlo a la mesa y llegar a unos
+- **[17:19] Maria Ossa:** porque la idea es que de aquí a diciembre nos vayamos con unas apuestas grandes y unos enfoques grandes. Creo que ya tuvimos un espacio muy bueno
+- **[17:19] Maria Ossa:** seguir investigando.
+- **[17:19] Maria Ossa:** Que seguir investigando,
+- **[17:19] Maria Ossa:** ¿cierto? Cada cada seis meses vamos a
+- **[17:19] Maria Ossa:** a a sentarnos a pensar cuáles van a ser las apuestas grandes del siguiente período,
+- **[17:19] Maria Ossa:** eso lo vamos a hacer la otra semana. También porque yo salgo a vacaciones
+- **[17:19] Maria Ossa:** Entonces, pues la idea es que quedemos muy alineados
+- **[17:19] Maria Ossa:** con eso.
+- **[17:19] Maria Ossa:** ¿Listo?
+- **[17:19] Maria Ossa:** Ustedes van a quedar con Lau y con Jaime,
+- **[17:19] Maria Ossa:** en muy buenas manos.
+- **[17:19] Maria Ossa:** Y sé que la van a romper un montón.
+- **[17:19] Maria Ossa:** Entonces, y que no me van a escribir.
+- **[17:19] Maria Ossa:** Entonces,
+- **[17:19] Maria Ossa:** podemos hacer esos espacios la otra semana. Yo sé que de pronto se les va a cruzar los espacios
+- **[17:20] Maria Ossa:** algunas cosas, porque
+- **[17:20] Maria Ossa:** la otra semana tengo que viajar a Bogotá antes para hacer unas cosas en Bogotá de dropi,
+- **[17:20] Maria Ossa:** entonces voy a tener como
+- **[17:20] Maria Ossa:** lunes, martes, máximo miércoles para hacer eso, entonces vamos a hacer maratón.
+- **[17:20] Maria Ossa:** Jaime y Lau, ya se están, apenas se están esperando, pero vamos a hacer un maratón
+- **[17:20] Maria Ossa:** de reuniones one to one, que van a ser de una hora y media o dos horas
+- **[17:20] Maria Ossa:** por célula,
+- **[17:20] Maria Ossa:** para que alineemos todas estas iniciativas y estas visiones, ¿listo?
+- **[17:20] Maria Ossa:** Entonces, ahí aprovecho para decirles, ahora sobre brands,
+- **[17:20] Maria Ossa:** Katherine, varias cosas.
+- **[17:20] Maria Ossa:** Sobre las Órdenes, Mira El Histórico De Órdenes De Los Años Atrás. Tú Me Estás Diciendo, Ay, Es Que Tuvimos Un Crecimiento Y No Sé De Dónde Viene El Crecimiento, Y Esto También Va Para Santiago.
+- **[17:20] Maria Ossa:** Dropping,
+- **[17:20] Maria Ossa:** todos los años ha crecido. O sea, si tú miras el histórico,
+- **[17:20] Maria Ossa:** en julio siempre hemos crecido versus el julio anterior.
+- **[17:20] Maria Ossa:** Entonces, digamos que es normal en este momento el proceso de crecimiento.
+- **[17:20] Maria Ossa:** No no no se me hace raro que crezcamos.
+- **[17:20] Maria Ossa:** Pero como esto es ecommerce, los ecommerce tienen unos ciclos.
+- **[17:21] Maria Ossa:** ¿Cierto? Se llaman las temporadas.
+- **[17:21] Maria Ossa:** Hay temporadas o hay cierta parte del año
+- **[17:21] Maria Ossa:** donde tú ves que la métrica se estanca, pero ya luego
+- **[17:21] Maria Ossa:** crece un montón. Entonces, es importante que sepas cómo se comportas
+- **[17:21] Maria Ossa:** tu temporada. Y como tenemos el histórico de casi cuatro años,
+- **[17:21] Maria Ossa:** entonces puedes ver cómo se comportan los julios los agosto en los años anteriores,
+- **[17:21] Maria Ossa:** porque es un error solamente ver este año. O sea, el crecimiento se tiene que
+- **[17:21] Maria Ossa:** ver en el en el histórico y en este momento tenemos histórico para verlo. Entonces, puede que tu crecimiento
+- **[17:21] Maria Ossa:** estar obvio en la activación, y por eso tenemos que ser muy muy
+- **[17:21] Maria Ossa:** muy estratégicos en saber
+- **[17:21] Maria Ossa:** cuántas órdenes realmente me están movilizando las activaciones que
+- **[17:21] Maria Ossa:** estoy haciendo para poder determinar eso, ¿listo? Y lo mismo para Santiago, para el tema de drop shipper. Santiago,
+- **[17:21] Yo:** Sí, preguntas, no no sé,
+- **[17:21] Yo:** era algo que que, como algo que tenía hace rato algunos días, no sé si
+- **[17:22] Yo:** dentro del dropshipping se tiene
+- **[17:22] Yo:** algún alguna tendencia con las bajas del dólar.
+- **[17:22] Yo:** Pensando en en en en que el, por temas de importación, los, justamente, los proveedores no sé si bajen precios, pero, pues, pueden empezar a ser más competitivos, y no sé si eso
+- **[17:22] Yo:** a la larga creo que no teníamos un dólar tan bajo desde el dos mil diecinueve al dos mil dieciocho,
+- **[17:22] Yo:** no sé qué data pueda existir, porque entiendo apenas estaba fundando Dropi
+- **[17:22] Yo:** y si eso de alguna forma se ha identificado,
+- **[17:22] Participante:** Pues mira, es que no no no sabría
+- **[17:22] Maria Ossa:** decirte
+- **[17:22] Maria Ossa:** yo diría que
+- **[17:22] Maria Ossa:** antes tendría un poquito a subir, tal vez,
+- **[17:22] Maria Ossa:** porque la mayoría de cosas que compran ellos
+- **[17:22] Maria Ossa:** un container se demora hasta tres meses, dos meses en llegar.
+- **[17:22] Maria Ossa:** Entonces, tú hoy estás vendiendo productos
+- **[17:22] Maria Ossa:** te costaron
+- **[17:22] Maria Ossa:** tres mil quinientos pesos por dólar, a un dólar que hoy está a tres mil cien. Y, de hecho, mira que esta semana a mí me llegó un mensaje, de hecho, de YouTube, en donde, no sé si les llegó, están subiendo los precios de los de la mensualidad de YouTube premium. Ya no es cuarenta y un mil, sino cuarenta y siete mil pesos,
+- **[17:23] Maria Ossa:** porque en la diferencia que el dólar bajó,
+- **[17:23] Maria Ossa:** el cambio a peso colombianos, bueno, ahí hay un tema,
+- **[17:23] Maria Ossa:** con eso.
+- **[17:23] Maria Ossa:** Está raro, pero
+- **[17:23] Maria Ossa:** hay que mirar.
+- **[17:23] Maria Ossa:** Pero sería bueno que lo miren.
+- **[17:23] Maria Ossa:** Verdad, como
+- **[17:23] Maria Ossa:** podemos de pronto, ¿sabes?,
+- **[17:23] Maria Ossa:** hay unos hay hay un hay una empresa que se llama Growth Pub, que está muy asociada a dropping,
+- **[17:23] Maria Ossa:** trabaja con todo el tema de importación, hay unos grandes proveedores que tal vez podríamos
+- **[17:23] Maria Ossa:** reuniones con ellos,
+- **[17:23] Maria Ossa:** para mirar esa perspectiva de la importación. ¿Qué opinas?
+- **[17:23] Yo:** Sí, sí, estaría chévere, más para entender cómo cómo
+- **[17:23] Yo:** no solamente... Es que ahora que hablaste de ciclos,
+- **[17:23] Yo:** no solamente hablando de ciclos como por temporadas, sino que también
+- **[17:23] Yo:** hay ciertos ciclos económicos que
+- **[17:24] Yo:** pues, uno uno puede empezar a ver cómo cómo afectan el el
+- **[17:24] Yo:** el mercado, el mercado del dropshipping puntualmente. Y lo que te digo es es más, por
+- **[17:24] Yo:** como hace ya varios años no se vivió una tendencia
+- **[17:24] Yo:** como esta, creería que dropping
+- **[17:24] Yo:** de pronto no tienes esa imagen, ¿no?, esas lecciones aprendidas de qué pasa cuando un dólar está
+- **[17:24] Yo:** tan bajito.
+- **[17:24] Maria Ossa:** Sería bueno que lo tengamos en el radar también,
+- **[17:24] Maria Ossa:** porque eso nos puede impactar un montón.
+- **[17:24] Maria Ossa:** Demasiado.
+- **[17:24] Maria Ossa:** Y no lo estamos midiendo, es la verdad, Santiago, no no es algo que internamente
+- **[17:24] Maria Ossa:** momento haya una iniciativa que lo esté midiendo.
+- **[17:24] Maria Ossa:** Entonces, creo que si hacemos algo alrededor de eso, podríamos agregar bastante valor.
+- **[17:24] Yo:** Listo.
+- **[17:24] Maria Ossa:** Perfect.
+- **[17:24] Maria Ossa:** Kate, lo otro que te quería comentar sobre la operación. Me contabas que hoy el equipo de de de de marcas no tiene la operación suficiente para poder operar todo lo que se está haciendo. Eso es algo que es un gap que tenemos que cerrar. Pero no con marcas. Háblate con Growth Ops.
+- **[17:25] Maria Ossa:** Jaime ya tiene un poco, y Laura tienen el contexto de qué es lo que hace Growth Ops,
+- **[17:25] Maria Ossa:** y ese es un problema de Growth offs.
+- **[17:25] Maria Ossa:** No es un problema del equipo comercial.
+- **[17:25] Maria Ossa:** Es un problema operativo que se tiene que solucionar
+- **[17:25] Maria Ossa:** a través de las personas que están trabajando en la parte de la operación.
+- **[17:25] Maria Ossa:** Entonces, puede que la solución sea, no, te juntamos agentes de AI, montamos nuevos flujos o definitivamente hacen un un un balance
+- **[17:25] Maria Ossa:** y hay que contratar más personas,
+- **[17:25] Maria Ossa:** eso se tiene que justificar, blablablá y todo eso,
+- **[17:25] Maria Ossa:** ese es un un planteamiento que recomiendo llevar en una mesa
+- **[17:25] Maria Ossa:** con con Marlon.
+- **[17:25] Maria Ossa:** De Grow dos.
+- **[17:25] Maria Ossa:** Hágate con Jaime, que Jaime ya tiene ahí todo el contacto directo.
+- **[17:25] Maria Ossa:** Y y todo lo que sean problemas operativos, chicos,
+- **[17:25] Maria Ossa:** el direccionamiento es directamente con con Glob dos. El otro que te quería comentar es,
+- **[17:25] Maria Ossa:** tienes que hacer una previsión
+- **[17:26] Maria Ossa:** de cómo se te va a ver afectada la métrica lo que sucedió en el terremoto del país.
+- **[17:26] Maria Ossa:** Todos tus clientes y tus órdenes
+- **[17:26] Maria Ossa:** están prácticamente en Colombia. Entonces, eso también va para Santiago, hay que empezar a
+- **[17:26] Maria Ossa:** qué me mueve Colombia y qué me mueve en otros países,
+- **[17:26] Maria Ossa:** y especialmente para ti, Katherine, hay que estar muy atento de los usuarios
+- **[17:26] Maria Ossa:** a ver eso cómo va a impactar en el movimiento de las órdenes. Entonces,
+- **[17:26] Maria Ossa:** tienes que que prever eso.
+- **[17:26] Maria Ossa:** Del que dijiste, hablemos con people para ver si se si se te
+- **[17:26] Maria Ossa:** puede poner uno mejor.
+- **[17:26] Maria Ossa:** Y una recomendación para todos es que, ojo, pero le
+- **[17:26] Maria Ossa:** de product marketing. Chicos, el equipo de product marketing en este momento solo está enfocado
+- **[17:26] Maria Ossa:** en comunicación
+- **[17:26] Maria Ossa:** externa hacia los lanzamientos y demás.
+- **[17:26] Maria Ossa:** Todo lo que sean pruebas internas,
+- **[17:26] Maria Ossa:** son comunicaciones que vamos a llevar a los usuarios, pero
+- **[17:26] Maria Ossa:** no lo debemos trabajar con el equipo de product marketing.
+- **[17:26] Maria Ossa:** ¿Listo? El equipo de product marketing en este momento está
+- **[17:27] Maria Ossa:** cien por ciento enfocado en el tema de los lanzamientos,
+- **[17:27] Maria Ossa:** en el tema de los relanzamientos para la mejora de la adopción.
+- **[17:27] Maria Ossa:** Lo que sean experimentos internos y demás, esas son cosas que podemos manejar
+- **[17:27] Maria Ossa:** Obvio, comunicaciones nos tiene que aprobar,
+- **[17:27] Maria Ossa:** pero no es un tema de product marketing, ¿listo? Dale, José.
+- **[17:27] Maria Ossa:** No, yo, si quieres, hablo, es una pregunta
+- **[17:27] Jose Pineda Pitre:** lo
+- **[17:27] Jose Pineda Pitre:** último.
+- **[17:27] Jose Pineda Pitre:** Ok.
+- **[17:27] Jose Pineda Pitre:** Listo.
+- **[17:27] Jose Pineda Pitre:** Y y por último,
+- **[17:27] Maria Ossa:** del tema de logística,
+- **[17:27] Maria Ossa:** también estuvimos hablando esta semana, Kate. Lástima que aquí no está Juan Diego.
+- **[17:27] Maria Ossa:** Pero la idea es que vamos a darle un enfoque especial al tema de logística,
+- **[17:27] Maria Ossa:** más que todo desde la experiencia del usuario.
+- **[17:27] Maria Ossa:** Porque hemos estado resolviendo muchos temas muy operativos
+- **[17:27] Maria Ossa:** pero creo que vamos a darle un enfoque más de, bueno,
+- **[17:27] Maria Ossa:** se me están quejando los usuarios de la logística y y a partir de ahí empezar
+- **[17:27] Maria Ossa:** a introducirnos en la operación, no desde la operación
+- **[17:27] Maria Ossa:** ir hacia afuera. Entonces, digamos que esta semana que tengamos la reunión con Juan Diego, de pronto ahí si le das los insumos a Jaime o algo, de todo lo que encontraste,
+- **[17:28] Maria Ossa:** y todo lo que hayan encontrado todos alrededor de la logística y lo que impacte,
+- **[17:28] Maria Ossa:** vamos a estarlo analizando con Juan Diego para ver cómo le damos una nueva
+- **[17:28] Maria Ossa:** a lo que estamos haciendo desde la logística ese insight ha salido por todos los lados.
+- **[17:28] Maria Ossa:** Obvio, lo hemos estado intentando atacar.
+- **[17:28] Maria Ossa:** Desde la operación pero tal vez nos toca como ponerle un lente diferente.
+- **[17:28] Maria Ossa:** ¿Listo?
+- **[17:28] Maria Ossa:** Eso es todo lo que tendría que hacer, si si llamamos tipos de Internet.
+- **[17:28] Maria Ossa:** Listo. ¿Kate?
+- **[17:28] Maria Ossa:** Luna, con respecto a todo el tema de del
+- **[17:28] katerine Pencue:** los no leads, ¿cómo cómo es que los leads han salido por todo lado y que no estábamos haciendo nada
+- **[17:28] katerine Pencue:** ellos? Porque lo ha dicho también Vanna y todo eso, y también se la habían
+- **[17:28] katerine Pencue:** como enviado aquí, que aquí, ¿qué estamos haciendo con estos con estos leads que nos pasó?
+- **[17:28] katerine Pencue:** Luisa? Entonces, digamos que el experimento se dio y ella es de un foro muy pronto,
+- **[17:28] katerine Pencue:** de decir, bueno, yo te ayudo con eso porque yo le llevé más del cinco, es más
+- **[17:29] katerine Pencue:** más de darme forma que de darme fondo. Ya de pronto en la ejecución podría yo ayudarles y que me den
+- **[17:29] katerine Pencue:** acceso a las redes y a los canales.
+- **[17:29] katerine Pencue:** Entiendo sabría con quién manejarlo.
+- **[17:29] katerine Pencue:** No, no entendí.
+- **[17:29] Maria Ossa:** Yo creo que no, lo llevamos y lo revisamos, Katy, ahí
+- **[17:29] Diana Aldana:** con
+- **[17:29] Jaime Guevara:** con Kike o con Ops. Ahí Lo Paramos. Listo, Perfecto. Gracias. Nos Falta
+- **[17:29] Maria Ossa:** Célula Experience. Yanis, Que Yo Sé Que Nos Alojamos Un Poquito, Pero Sí, No, No Tengo Como Muchas Realmente Muchas Novedades.
+- **[17:29] Diana Aldana:** Realmente Los Proyectos Como Sigue Siguen Siguen Andando, Como Saben, Y Órdenes, Pues Sigue Bloqueado Por Por Varios Factores Drop Y App Que Siguen En Cuba, y órdenes por falta, pues, de personas
+- **[17:29] Diana Aldana:** que hagan ese proyecto. Sabemos que rearquitectura estamos en pruebas de Cuba,
+- **[17:29] Diana Aldana:** en dashboard continúan con con ajustes a nivel de cómo se está recolectando la data,
+- **[17:30] Diana Aldana:** El único proyecto que sí tengo como para mostrar ya data data como tal,
+- **[17:30] Diana Aldana:** y ya darle como un poco de cierres al proyecto de búsqueda semántica,
+- **[17:30] Diana Aldana:** El día de ayer ya
+- **[17:30] Diana Aldana:** como que cerramos esta primera fase de experimentos que se
+- **[17:30] Diana Aldana:** que se fue llevando ya con Paraguay. O sea, ya las conclusiones es que sabemos que la
+- **[17:30] Diana Aldana:** adopción en Paraguay de búsqueda con IA es casi un noventa y nueve por ciento,
+- **[17:30] Diana Aldana:** versus Colombia, que la adopción sigue siendo muy bajita.
+- **[17:30] Diana Aldana:** Adicional a eso, se hizo como un comparativo en
+- **[17:30] Diana Aldana:** en países principales cómo estaba haciendo la adopción de búsqueda con IA y búsqueda
+- **[17:30] Diana Aldana:** con IA sigue siendo muy baja la adopción, sigue predominando la adopción por IA.
+- **[17:30] Diana Aldana:** Esto ya nos llevó
+- **[17:30] Diana Aldana:** a unas conclusiones finales. O sea, obviamente, búsqueda con IA sigue funcionando,
+- **[17:30] Diana Aldana:** pero la conclusión final es que no se va a
+- **[17:30] Diana Aldana:** poner como buscador predeterminado y principal,
+- **[17:30] Diana Aldana:** El que sigue predominando es el buscador, pues, de de búsqueda clásica,
+- **[17:30] Diana Aldana:** ya que va a seguir con este proyecto.
+- **[17:31] Diana Aldana:** También ya alineados con marketing no se va no se le va seguir haciendo publicidad, ya que
+- **[17:31] Diana Aldana:** a nivel de concepto, búsqueda con IA es positivo, pero a nivel de rendimiento,
+- **[17:31] Diana Aldana:** no está trayendo la información
+- **[17:31] Diana Aldana:** de buena calidad versus a la de Clásica. Entonces, le
+- **[17:31] Diana Aldana:** de tecnología, básicamente, va a seguir como en la optimización
+- **[17:31] Diana Aldana:** de los resultados y de los productos
+- **[17:31] Diana Aldana:** se traigan, lo que se piensa a futuro de esta funcionalidad
+- **[17:31] Diana Aldana:** es que ya no va a haber una división que el usuario va a tener que seleccionar
+- **[17:31] Diana Aldana:** búsqueda clásica, búsqueda con AI y búsqueda ID, sino
+- **[17:31] Diana Aldana:** tiene que ser un buscador unificado.
+- **[17:31] Diana Aldana:** Porque ya nos dimos cuenta que los usuarios no navegan entre tabs de buscadores, la gente
+- **[17:31] Diana Aldana:** se queda en el principal. Es muy bajito como el porcentaje que se pasa
+- **[17:31] Diana Aldana:** a
+- **[17:31] Diana Aldana:** a a búsqueda con ID, y cuando se pasa, realmente la
+- **[17:31] Diana Aldana:** satisfacción de esos resultados no es la la mejor, ya que trae más resultados la
+- **[17:32] Diana Aldana:** la búsqueda por Clásica. Entonces, ya lo que sigue este proyecto es
+- **[17:32] Diana Aldana:** como un seguimiento a nivel técnico, que se siga optimizando los resultados
+- **[17:32] Diana Aldana:** y cuando ya se optimicen los resultados, ya lo que se va hacer es un rediseño y una unificación
+- **[17:32] Diana Aldana:** de ese buscador como ya como hallazgo principal,
+- **[17:32] Diana Aldana:** Entonces, aprendizajes a nivel conceptual era una buena idea,
+- **[17:32] Diana Aldana:** pero, pues, ya a nivel de rendimiento no no dio la experiencia que que
+- **[17:32] Diana Aldana:** espera el usuario por el momento.
+- **[17:32] Diana Aldana:** Listo.
+- **[17:32] Maria Ossa:** Yanis, no, muchas gracias. Yo creo que
+- **[17:32] Maria Ossa:** que la la otra semana que vamos a tener el espacio
+- **[17:32] Maria Ossa:** un poquito para cada una de las células, vamos a hablar de los direccionamientos de
+- **[17:32] Maria Ossa:** de de lo que está dentro de la célula de experience y lo que va
+- **[17:32] Maria Ossa:** quedar directamente en design ops,
+- **[17:32] Maria Ossa:** un poquito para que todo lo tengamos en cuenta en en el equipo de design ops.
+- **[17:32] Maria Ossa:** No sea llamar designer, sino diseño de experiencia.
+- **[17:32] Maria Ossa:** Vamos a meter todos estos proyectos de rearquitectura y rediseños,
+- **[17:33] Maria Ossa:** porque tiene que ver con el diseño de la experiencia.
+- **[17:33] Maria Ossa:** Y el enfoque del de la célula de experience va a ser
+- **[17:33] Maria Ossa:** muy, en este momento, a
+- **[17:33] Maria Ossa:** a temas de lo que se están quejando los usuarios en diferentes puntos.
+- **[17:33] Maria Ossa:** Entonces, yo creo que aquí, por ejemplo,
+- **[17:33] Maria Ossa:** todos estos que tenemos aquí, búsqueda semántica, dashboard de
+- **[17:33] Maria Ossa:** rearchitectura, dropiada y órdenes,
+- **[17:33] Maria Ossa:** son todos los proyectos que tenemos en el equipo de diseño de experiencia.
+- **[17:33] Maria Ossa:** Hay, Dianys, hay varios proyectos que que necesitamos como como
+- **[17:33] Maria Ossa:** incluir,
+- **[17:33] Maria Ossa:** el proyecto de la mejora del flujo del registro para mejorar la calidad de los datos de contacto
+- **[17:33] Maria Ossa:** que es uno de los proyectos grandes que está y que es importante que lo
+- **[17:33] Maria Ossa:** que lo tengamos. El otro tema también es el
+- **[17:33] Maria Ossa:** se habló de empezar el proyecto del rediseño de la wallet,
+- **[17:33] Maria Ossa:** y el proyecto de pensarnos a Dropi como works,
+- **[17:34] Maria Ossa:** Entonces, yo creo que ya la otra semana, pues, nos sentamos en conjunto y hablamos de esos puntos.
+- **[17:34] Maria Ossa:** Y también de el enfoque
+- **[17:34] Maria Ossa:** vamos a hacer con la célula en conjunto con Growth Ops.
+- **[17:34] Maria Ossa:** Vamos a ir, digamos, a a a darle como un enrutamiento
+- **[17:34] Maria Ossa:** a este punto, porque de las semanas pasadas que hemos hablado como, bueno, ¿qué hace
+- **[17:34] Maria Ossa:** ¿Qué hace realmente la célula de experience?
+- **[17:34] Maria Ossa:** Pues tuve varias conversaciones con diferentes personas y
+- **[17:34] Maria Ossa:** y y salió como un direccionamiento del proyecto de la célula bastante interesante,
+- **[17:34] Maria Ossa:** la idea es que la otra semana lo abordemos, ¿listo? Sí, preciso ayer nos reunimos
+- **[17:34] Maria Ossa:** con Jaime para hablar de eso.
+- **[17:34] Diana Aldana:** Posterior a eso, yo ya tuve como una reunión con Laura Núñez de
+- **[17:34] Diana Aldana:** servicio al cliente y, pues, vamos a manejar muy, vamos a trabajar muy de la mano, ella me está como
+- **[17:34] Diana Aldana:** organizando como una data de los tickets principales de los usuarios.
+- **[17:34] Diana Aldana:** Y adicional vamos a utilizar la herramienta de ShareLock que
+- **[17:34] Diana Aldana:** es que desarrolló Jaime, para ver lo que dicen los usuarios en los diferentes
+- **[17:35] Diana Aldana:** canales, no solamente de WhatsApp, sino ver también qué dicen en redes
+- **[17:35] Diana Aldana:** sociales, como que va a ser como un inman del de ese social selling de todo lo que están diciendo ellos,
+- **[17:35] Diana Aldana:** usuarios, para
+- **[17:35] Diana Aldana:** coger esa información y, obviamente, tomar acción y ver como qué proyectos
+- **[17:35] Diana Aldana:** qué proyectos salen de de todo lo que dicen los usuarios
+- **[17:35] Diana Aldana:** pues,
+- **[17:35] Diana Aldana:** ahí hacer que amen a dropping, que es como el uno de los eslogan, cómo hacemos que
+- **[17:35] Diana Aldana:** amen cada vez más a dropping, sabiendo qué es lo que, pues, los genera dolores actualmente.
+- **[17:35] Diana Aldana:** Entonces, es como lo que No, no, súper.
+- **[17:35] Diana Aldana:** No te manches. Seguramente, o sea,
+- **[17:35] Maria Ossa:** es es eso
+- **[17:35] Diana Aldana:** mismo.
+- **[17:35] Maria Ossa:** Pues digamos que yo venía hablando con Jaime con varias personas, pero qué bueno que ya la
+- **[17:35] Maria Ossa:** bajó directamente a ti.
+- **[17:35] Maria Ossa:** Entonces, nada, ya la otra semana simplemente como terminamos
+- **[17:35] Diana Aldana:** de línea y hacer
+- **[17:35] Maria Ossa:** go.
+- **[17:35] Maria Ossa:** ¿Dale, Kate?
+- **[17:35] Maria Ossa:** Hola, Erinita, yo yo
+- **[17:35] katerine Pencue:** pena que sea tan
+- **[17:35] Maria Ossa:** insistente, pero
+- **[17:35] katerine Pencue:** no sé, soy, o sea, esa era mi bebé.
+- **[17:36] katerine Pencue:** Proyecto de búsqueda semántica y me cuesta cuando no salen.
+- **[17:36] katerine Pencue:** Ese proyecto tú lo mides y dices que en Colombia y en Paraguay no hubo como esa
+- **[17:36] katerine Pencue:** o sea, yo siento que no debe haber punto de
+- **[17:36] katerine Pencue:** porque es que en Colombia yo no vi en ningún momento que hicieran un push
+- **[17:36] katerine Pencue:** para que utilizaran la IA.
+- **[17:36] katerine Pencue:** Después de la de todos los momentos vividos y que el usuario ya sabía que la IA no servía, a diferencia
+- **[17:36] katerine Pencue:** que en Paraguay sí hubo una comunicación estratégica, entendería yo, porque yo me desligué un poco,
+- **[17:36] katerine Pencue:** Entonces, pues comparar uno con el otro a nivel de adopción,
+- **[17:36] katerine Pencue:** Colombia nunca se le hizo, o desconozco si se le haya hecho un push después de las mejoras de las
+- **[17:36] katerine Pencue:** mejoras que fue después de Mayo, Con Relación A A Colombia y Paraguay. Eso por un constante, no sé cómo miraron ahí el tema de la adopción y claramente
+- **[17:36] katerine Pencue:** Paraguay va a tener la adopción, pues, porque tiene eso ya
+- **[17:36] katerine Pencue:** impositivo. Entonces, y ya con el tema que tú decías que la calidad
+- **[17:36] katerine Pencue:** no era buena,
+- **[17:36] katerine Pencue:** pues digamos que
+- **[17:36] katerine Pencue:** ¿cuál es cuáles eran los siguientes pasos o qué
+- **[17:36] katerine Pencue:** o cómo se le va a hacer seguimiento o ya no se le hace seguimiento con relación a la calidad? Porque realmente la
+- **[17:37] katerine Pencue:** es lo que ha hecho que la adopción no sea buena.
+- **[17:37] katerine Pencue:** ¿Sí me va a entender?
+- **[17:37] katerine Pencue:** Sí, efectivamente, o sea, hasta que no se optimice la
+- **[17:37] Diana Aldana:** calidad de los resultados de IA, no se le vuelve a hacer push.
+- **[17:37] Diana Aldana:** A búsqueda semántica. Esas fue como las conclusiones, o sea,
+- **[17:37] Diana Aldana:** la idea, o sea, tú, por ejemplo, buscas en en IA mascotas y
+- **[17:37] Diana Aldana:** te trae como diez resultados. En cambio, mascotas en clásica y te
+- **[17:37] Diana Aldana:** trae más de treinta resultados. Al ser un comparativo,
+- **[17:37] Diana Aldana:** de la cantidad de resultados sigue superando clásica.
+- **[17:37] Diana Aldana:** Porque no está, pues, la calidad de la de la data no es la mejor de la que
+- **[17:37] Diana Aldana:** está trayendo. No sé si eso responde un poco tu tu pregunta.
+- **[17:37] Diana Aldana:** O sea, que por hoy se va a devolver y se va a quedar tal cual, o el tema es
+- **[17:37] katerine Pencue:** de que van a sacar
+- **[17:37] katerine Pencue:** el buscador unificado?
+- **[17:37] katerine Pencue:** A eso se quiere llegar.
+- **[17:37] katerine Pencue:** Que se optimice el resultado
+- **[17:37] Diana Aldana:** de de que
+- **[17:37] Diana Aldana:** que el usuario escriba cualquier
+- **[17:37] Diana Aldana:** palabra,
+- **[17:37] Diana Aldana:** y que realmente traiga buena data, no solamente como diez o cinco o cinco productos. Ok. O sea, que ese sería el proyecto siguiente con las optimizaciones
+- **[17:38] katerine Pencue:** diez de diez, es lo que se vende. Exacto, uno solo, nada de seleccionar y
+- **[17:38] katerine Pencue:** Clásica ID,
+- **[17:38] Diana Aldana:** sino que sea un solo buscador
+- **[17:38] Diana Aldana:** Pero, pues, necesita
+- **[17:38] Diana Aldana:** Pero, pues, necesitamos la optimización de la parte de IA para unificar el buscador.
+- **[17:38] Diana Aldana:** Yo Listo, súper. Dale, Jaime, para que ya me llamo
+- **[17:38] Jaime Guevara:** cerrando.
+- **[17:38] Jaime Guevara:** Yo creo
+- **[17:38] Maria Ossa:** que en ese punto
+- **[17:38] Maria Ossa:** deberíamos ser muy estratégicos,
+- **[17:38] Jaime Guevara:** porque a mí a mí me parece que que los resultados entre comillas, son positivos. Uno, porque, pues, si hay un país que sirve está utilizando, es porque le vio la la utilidad, de cierta manera, y le resolvió una problemática. De pronto, acá las personas, la problemática por ser más es diferente, no sé, pero yo siento que hay más personas involucradas, está Santi, está suppliers,
+- **[17:38] Jaime Guevara:** porque no solo esa búsqueda y la respuesta no solo dependen
+- **[17:38] Jaime Guevara:** de lo que ya está, sino de cómo se podría mejorar ese catálogo, no sé.
+- **[17:39] Jaime Guevara:** Y de Santi, pues, con lo de Gali, por ejemplo, lo que lo que lo que ya se tiene,
+- **[17:39] Jaime Guevara:** de pronto el concepto de buscar con IA puede
+- **[17:39] Jaime Guevara:** puede avanzar un poco más allá y a resolver de verdad esa problemática de, bueno, ok,
+- **[17:39] Jaime Guevara:** que que por qué están buscando con IA, porque quieren su primer producto, porque no quieren su primer, porque quieren
+- **[17:39] Jaime Guevara:** otro producto que les ayude a otro winner. Entonces,
+- **[17:39] Jaime Guevara:** de pronto ahí se puede iterar un poquito más a fondo
+- **[17:39] Jaime Guevara:** desde, bueno, cómo les ayudamos mediante IA a vender más.
+- **[17:39] Jaime Guevara:** A tener más ingresos.
+- **[17:39] Jaime Guevara:** Algo que algo que no mencioné es que si bien
+- **[17:39] Diana Aldana:** hay una
+- **[17:39] Diana Aldana:** alta en Paraguay, porque es un es un buscador que está es el principal,
+- **[17:39] Diana Aldana:** Cuando se hacen pruebas en Paraguay,
+- **[17:39] Diana Aldana:** y se describe una palabra en Paraguay, como está primero día, trae muy pocos resultados en día.
+- **[17:39] Yo:** So
+- **[17:39] Diana Aldana:** Pasa Clásica y trae más resultados. Entonces, ahí nos dice,
+- **[17:39] Diana Aldana:** ay, ahí es cuando decimos, o sea, el usuario no se está quedando en Clásica y se está quedando con una
+- **[17:39] Diana Aldana:** se está quedando en e, se está quedando con una percepción de que el buscador le bota
+- **[17:40] Diana Aldana:** pocos productos. No tiene esa percepción de
+- **[17:40] Diana Aldana:** que pasando a Clásica va a encontrar más productos. Entonces, por eso con la Ya. Vamos a enviar una encuesta para ver qué está pasando a profundidad
+- **[17:40] Maria Ossa:** eso.
+- **[17:40] Diana Aldana:** Llevamos casi diez minutos hablando de este tema, eso
+- **[17:40] Diana Aldana:** significa
+- **[17:40] Maria Ossa:** que hay que sacar, entonces, un espacio diferente para para esto?
+- **[17:40] Maria Ossa:** Gracias, Yanis. Yo creo que de pronto
+- **[17:40] Maria Ossa:** hay una posibilidad ahí,
+- **[17:40] Diana Aldana:** Jaime,
+- **[17:40] Maria Ossa:** desde el catálogo de producto ver
+- **[17:40] Maria Ossa:** eso cómo se mejora, porque eso impacta demasiado el tema de proveedores.
+- **[17:40] Maria Ossa:** Entonces, digamos que ahí pueden sacar un siguiente espacio.
+- **[17:40] Maria Ossa:** No siendo mal, no sé si alguien tenga algo para mencionar.
+- **[17:40] Maria Ossa:** ¿No? Mañana. Nos vemos mañana.
+- **[17:40] Jaime Guevara:** Mañana
+- **[17:40] Maria Ossa:** sí, mañana sí confirmado.
+- **[17:40] Maria Ossa:** Obvio.
+- **[17:40] Jose Pineda Pitre:** ¿Cómo así? Ok.
+- **[17:40] Jose Pineda Pitre:** Ah,
+- **[17:40] Jaime Guevara:** no, es que yo me
+- **[17:40] Laura Contreras:** confundí porque dijimos que íbamos a
+- **[17:40] Jose Pineda Pitre:** hacer después otra cosa, entonces yo
+- **[17:40] Maria Ossa:** dije como,
+- **[17:40] Jose Pineda Pitre:** ah, bueno.
+- **[17:40] Jose Pineda Pitre:** Mañana. Bueno.
+- **[17:40] Jose Pineda Pitre:** Algo importante para Alaska dreams,
+- **[17:41] Maria Ossa:** Lau, para que hables con Cater, es importante que ustedes hagan su update también
+- **[17:41] Maria Ossa:** de todo lo que está sucediendo con el tema de los lanzamientos,
+- **[17:41] Maria Ossa:** Me gustaría que para este espacio
+- **[17:41] Maria Ossa:** empiecen ustedes con el cronograma de lanzamientos
+- **[17:41] Maria Ossa:** y los resultados de los lanzamientos, y así en cómo está
+- **[17:41] Maria Ossa:** cada uno de los proyectos de lanzamiento para que en conjunto, pues todos
+- **[17:41] Maria Ossa:** estemos enterados, porque ustedes son nuestra comunicación hacia afuera, tanto para los equipos internos
+- **[17:41] Maria Ossa:** como para los usuarios.
+- **[17:41] Maria Ossa:** Entonces, va a ser determinante. Listo.
+- **[17:41] Maria Ossa:** Vemos la la otra semana. Chicos, muchas gracias, qué bueno verlos.
+- **[17:41] Maria Ossa:** Alegra que todos estén muy bien.
+- **[17:41] Maria Ossa:** Lo que necesiten, saben que estamos aquí para ustedes.
+- **[17:41] Maria Ossa:** Vamos a agendar esos espacios de la otra semana para, pues, alinear las visiones de las células,
+- **[17:41] Maria Ossa:** Con Jaime y Laura hemos estado trabajando Con Jaime y hemos estado trabajando en
+- **[17:41] Maria Ossa:** pues reunidos mucho. Estoy cansada, de verdad, mentira, no.
+- **[17:41] Maria Ossa:** Los hemos visto mucho para hablar de eso,
+- **[17:41] Maria Ossa:** y
+- **[17:42] Maria Ossa:** y bueno, ahorita estamos en la búsqueda del nuevo PM de suppliers,
+- **[17:42] Maria Ossa:** y también vamos a entrar
+- **[17:42] Maria Ossa:** a la búsqueda de un de un pie nuevo para la célula de back office,
+- **[17:42] Maria Ossa:** Ustedes saben que que Paula Macías es PO, entonces vamos a complementar
+- **[17:42] Maria Ossa:** eso porque se vienen muchas cosas internamente y también un product designer,
+- **[17:42] Maria Ossa:** entonces estamos como en esas vacantes. Eso va a
+- **[17:42] Maria Ossa:** algunas cositas internas del equipo.
+- **[17:42] Maria Ossa:** Nada, movimientos que nos van a beneficiar a todos, Diana y Sairy,
+- **[17:42] Maria Ossa:** estaremos comentando eso cómo cómo también impacta a todos, que
+- **[17:42] Maria Ossa:** van a ser movimientos muy buenos.
+- **[17:42] Maria Ossa:** Entonces, no siendo más
+- **[17:42] Maria Ossa:** Que estén muy bien, feliz día.
+- **[17:42] Laura Catherine Torres Ciendua:** Dale. Nos vemos
+- **[17:42] Maria Ossa:** otra semana. Que estés bien. Bye
+- **[17:42] Yo:** Chipotle
+- **[17:42] Diana Aldana:** bye.

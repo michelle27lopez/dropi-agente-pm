@@ -1,0 +1,930 @@
+# Roax en Copiloto AI
+
+- **ID:** `not_UhK6I22cragTjd`
+- **Fecha:** 2026-08-31T20:15:58.736Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/4492be69-334b-4450-aa7b-445acc1f9470)
+- **Asistentes:** Santiago Herrera Acosta, Juan, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Contexto y Objetivo de la Prueba de Concepto
+
+- Público objetivo: usuarios registrados en Dropi que no han hecho ninguna venta y no pertenecen a una comunidad
+- Meta principal: lograr las primeras órdenes en ese 40% de usuarios inactivos
+- Herramienta: plataforma paralela a Dropi, pensada para novatos, con menor fricción
+  - Genera landing de ventas con imagen, descripción, garantía y checkout
+  - Las órdenes llegan como notificaciones; el usuario las sube manualmente a Dropi
+  - No depende del equipo de desarrollo de Dropi: permite iterar interfaces rápido
+
+# Dominio y Estructura de Landings
+
+- URL compartida bajo un dominio genérico (ej. “[ventascontraentrega.com](http://ventascontraentrega.com)” o similar)
+  - No se le pide al usuario configurar DNS ni dominio propio
+  - Subdominios por usuario: juanduque.dominio.com, santiagoh.dominio.com, etc.
+- Dominio debe tener buenas calificaciones para evitar baneos en Meta/TikTok
+- Hito de progresión sugerido por Juan: a las 50-100 órdenes, guiar al usuario hacia dominio propio y Shopify/Tienda Nube
+
+# Ruta de Venta: Orgánica vs. Pauta
+
+- Pregunta clave a incluir en el flujo: ¿estás dispuesto a invertir en pauta?
+  - Si sí: ruta de pauta con anuncios generados por Roax
+  - Si no: tips de venta orgánica (WhatsApp, grupos, redes personales)
+- Venta orgánica se romantiza, pero no escala; la pauta es el camino real a volumen
+- Kit de venta orgánica ya explorado: exportar imagen + copy del producto a WhatsApp, Instagram, descarga al celular
+- Wallet del usuario empieza en cero: la forma más natural de recargarla es vendiendo primero
+  - Propuesta: tras la primera venta, invitar a recargar e invertir en pauta
+  - Inversión mínima estimada: \~$180.000 COP (60k pauta/día × 3 días + creativos)
+
+# Integración con Roax: Anuncios y Activos de Meta
+
+- Roax genera anuncios desde ID de Dropi, URL o foto del producto
+  - Flujo finaliza con anuncios enviados a Meta
+  - También tiene módulo de ángulos de venta y métricas de CPA por ID de producto
+- Problema central: usuarios novatos no tienen activos de Meta (BM, fan page, cuenta publicitaria, método de pago)
+  - Crear esos activos toma \~2 horas en computador; muchos usuarios solo tienen celular
+- Solución explorada: modelo reseller/BM genérico
+  - Roax operaría cuentas publicitarias genéricas por nicho (con píxeles entrenados)
+  - Usuario recarga vía Nequi/Confío sin necesidad de crear activos propios
+  - Capa mínima viable: pauta a la landing genérica + botón flotante de WhatsApp en la landing
+  - Para WhatsApp como destino de pauta sí se requiere número asociado a portafolio Meta (mayor fricción)
+- Juan se lleva la tarea de consultar con su desarrollador qué tan viable es el esquema reseller de cuentas
+
+# Métricas, Datos y Próximos Pasos
+
+- Duración de la prueba de concepto: al menos un mes tras generar las landings
+- Universo inicial: \~200 IDs de productos del catálogo público de Dropi (aún no entregados; se esperan esta semana)
+- Datos a recopilar: cuántos usuarios van por orgánico vs. pauta, CPA por ID, disposición a pagar
+  - A futuro: decirle al usuario “con $200k de inversión puedes aspirar a X ventas” basado en histórico de Roax
+- Roax tiene calculadora de retorno; Juan propone construir una versión más sencilla para novatos
+- Si la integración de pauta no está lista para ExpoWinner: incluir solo la pregunta de disposición a pagar y recopilar data para una segunda iteración
+
+# Próximos Pasos
+
+- **Compartir URL de landing con Juan en cuanto esté disponible** (Alejandra, Santiago)
+
+  Permite que el equipo de Roax configure el web scraping para ese tipo de URL antes de ExpoWinner.
+- **Agendar sesión el jueves o viernes con Juan** (Santiago)
+
+  Juan mostrará el release de Roax en dev y organizará qué alcance entra a ExpoWinner vs. queda para después.
+- **Consultar con desarrollador de Roax viabilidad del esquema reseller de BMs** (Juan)
+
+  Evaluar qué tan grave es operar cuentas publicitarias genéricas para usuarios sin activos de Meta.
+- **Recibir base de usuarios de Comercial tras cierre de agosto** (Santiago)
+
+  Filtrar registrados en Dropi sin órdenes y sin comunidad: ese es el grupo objetivo de la prueba.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/0de0d9f6-fbdf-48aa-afcc-3918bcd0eb69](https://notes.granola.ai/t/0de0d9f6-fbdf-48aa-afcc-3918bcd0eb69)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:16] Participante:** Fuerte con dos temas en RoaX. O con tres. Uno, nosotros tenemos un generador de anuncios por web scrapping, que es capaz de ir y coger una landing de Shopify y leerle y crear un anuncio,
+- **[20:16] Participante:** en WooCommerce, en Amazon, en Aliexpress, en Mercado Libre.
+- **[20:16] Participante:** O sea, casi todas las URLs comerciales las lee
+- **[20:16] Participante:** los textos y las imágenes y te arma la campaña.
+- **[20:16] Participante:** Dependiendo de la que vayamos a definir acá, habría que hacer la validación de este web
+- **[20:16] Participante:** porque sería muy bueno. Pero ya a la hora de lanzárselo a Meta o a TikTok
+- **[20:16] Participante:** o a las plataformas de pauta,
+- **[20:16] Participante:** tenemos que
+- **[20:16] Participante:** digamos, ser bastante cuidadosos con el tema de
+- **[20:16] Participante:** de baneo,
+- **[20:16] Participante:** ¿Qué han pensado en esa URL? ¿Estaría alojado? No sé,
+- **[20:16] Participante:** dropi marketing punto co, dropi algo? O sea, sería un dominio general de
+- **[20:16] Participante:** dropy para que cada usuario nota que asocia su propio dominio o cómo lo han pensado?
+- **[20:16] Yo:** Claro, nosotros
+- **[20:16] Yo:** como tenemos que simplificarle un montón para esos que apenas están iniciando,
+- **[20:17] Yo:** no podemos pedirle
+- **[20:17] Yo:** tengo un dominio y venga, configúe
+- **[20:17] Yo:** el DNS acá y monte,
+- **[20:17] Yo:** porque ya ahí también lo perdemos y queremos sacarlo, es decir, que sí sería
+- **[20:17] Yo:** una URL compartida
+- **[20:17] Yo:** Value el URL, pues, justamente apenas estamos haciendo la la revisión para lograr que tenga
+- **[20:17] Yo:** tengamos una URL que esté también avalada claramente por Tropi,
+- **[20:17] Yo:** Y en su preferencia que
+- **[20:17] Yo:** no diga dropping.
+- **[20:17] Participante:** Eso está por decirte, y y la o de
+- **[20:17] Yo:** Porque
+- **[20:17] Participante:** pronto, lo tendrá presente. Yo no sé si me lo soñé, o Lucho tiene un dominio que se llama
+- **[20:17] Participante:** ventas contra entrega punto com, ventas contra entrega
+- **[20:17] Participante:** O sea, tiene un dominio que él siempre ha tenido guardado,
+- **[20:17] Participante:** y sabe que es superganador,
+- **[20:17] Participante:** y podría ser algo así. O sea, como un dominio genérico,
+- **[20:17] Participante:** pero que haga
+- **[20:17] Participante:** como relación
+- **[20:17] Participante:** al objetivo, te estoy vendiendo en línea y te estoy vendiendo pago contra entrega. Entonces, pero
+- **[20:17] Participante:** claro en este punto, Santiago, que sería un dominio general que como holding, como grupo y como drop y tendríamos que cuidar mucho,
+- **[20:17] Participante:** tuviera siempre muy buenas calificaciones para que no vaya a terminar propiciando como
+- **[20:18] Participante:** algunos baneos, por decirlo así.
+- **[20:18] Yo:** De acuerdo. Y lo es que
+- **[20:18] Yo:** esto sea la plataforma para que
+- **[20:18] Yo:** ¿Qué nos interesa? Eso lo lo lo lo lo he mencionado con el equipo, es
+- **[20:18] Yo:** no se interesa ni siquiera que ese dropshipper,
+- **[20:18] Yo:** aprenda a caminar,
+- **[20:18] Yo:** nos
+- **[20:18] Yo:** interesa que sepa gatear,
+- **[20:18] Yo:** que tenga
+- **[20:18] Yo:** una, dos, tres, cinco ventas una vez
+- **[20:18] Yo:** logramos que se active,
+- **[20:18] Yo:** porque nuestro problema son los son los grupos chippers que
+- **[20:18] Yo:** nuestros registros ni siquiera son dropshippers, ¿sí?
+- **[20:18] Yo:** Los registros que nunca han logrado ni siquiera una venta,
+- **[20:18] Yo:** que logren, por lo menos, esas primeras
+- **[20:18] Yo:** esas primeras órdenes. Y una vez suceda esto,
+- **[20:18] Yo:** dentro dentro del la prueba de concepto está
+- **[20:18] Yo:** empezarlo a mover
+- **[20:18] Yo:** muy orgánicamente,
+- **[20:18] Yo:** hacia lo que le va a permitir escalar.
+- **[20:18] Yo:** Que por ahora sería
+- **[20:18] Yo:** Shopify, Tienda Nube,
+- **[20:18] Yo:** cualquier otra herramienta que tenga mayor infraestructura
+- **[20:19] Yo:** y que le permita automatizar procesos.
+- **[20:19] Yo:** Para estos primeros que, claro, un un grupo dice, no, pues es que no quiero que mi
+- **[20:19] Yo:** tienda diga, comparta el dominio con las demás, pero en este punto realmente
+- **[20:19] Yo:** eso se le puede aclarar al usuario,
+- **[20:19] Yo:** y es estás partiendo de un dominio compartido, y de a poco yo lo vaya guiando, bueno,
+- **[20:19] Yo:** ¿cómo usted se consigue un dominio privado?
+- **[20:19] Yo:** ¿Sí?
+- **[20:19] Yo:** Y y le empieza a sugerir, a enseñar, empieza ya todo lo lo lo que
+- **[20:19] Yo:** algunos temas que con José Pineda, el product manager de Growth, ya ya ya ya hemos trabajado,
+- **[20:19] Yo:** de cómo lo vamos a progresivamente
+- **[20:19] Yo:** hacer adquirir un mayor nivel de conciencia.
+- **[20:19] Yo:** ¿Listo? Entonces, sí, inicialmente sería compartido,
+- **[20:19] Yo:** genial, siendo mi niño que esté relacionado
+- **[20:19] Yo:** explícitamente con pago contra entrega, porque parte de las landings que se van ir generando
+- **[20:19] Yo:** pues, van a ser un un gran énfasis en esto es pago contra entrega.
+- **[20:19] Yo:** Aquí no necesitas
+- **[20:19] Yo:** registrar la tarjeta, no necesitas hacer pagos
+- **[20:19] Yo:** online,
+- **[20:19] Yo:** la seguridad de un pago contra entrega.
+- **[20:19] Yo:** Como no tenemos la la las APIs de de de
+- **[20:20] Yo:** de de órdenes,
+- **[20:20] Yo:** Realmente, lo que le vamos a tener que mostrar al usuario son las órdenes que se le vayan generando
+- **[20:20] Yo:** es decir, al final ese checkout termina siendo
+- **[20:20] Yo:** simplificándole un montón
+- **[20:20] Yo:** un
+- **[20:20] Yo:** formulario.
+- **[20:20] Yo:** De usted estar recibiendo un pedido.
+- **[20:20] Participante:** Y y Santiago, ¿les queda les queda en
+- **[20:20] Yo:** Vayamos
+- **[20:20] Participante:** como unas órdenes, unas preórdenes acá,
+- **[20:20] Participante:** que él tendrá que ir a crear a dropping manualmente, ¿o qué?
+- **[20:20] Yo:** Claro.
+- **[20:20] Yo:** Esto al final termina siendo su bandeja de entrada,
+- **[20:20] Yo:** casi como si le estuvieran pidiendo por correo.
+- **[20:20] Yo:** ¿Sí?
+- **[20:20] Yo:** Porque es bandeja de entrada de
+- **[20:20] Yo:** Yo yo monté la la landing,
+- **[20:20] Participante:** Te entiendo.
+- **[20:20] Yo:** Juan José Alejandra, Laura, les vieron el producto, por ejemplo, por la pauta que hice en Robax, entraron
+- **[20:20] Yo:** hicieron el checkout,
+- **[20:20] Yo:** porque para ellos es un checkout.
+- **[20:20] Yo:** Y eso lo que va a pasar es que a mí me va a llegar
+- **[20:20] Yo:** a mi pantalla, que ese va ser el centro de control en donde va a tener
+- **[20:20] Yo:** diez órdenes, y sí, las diez voy a tener que ir manualmente a montar la Sentra PIN,
+- **[20:20] Yo:** a no ser que
+- **[20:20] Yo:** esta semana tuviéramos el API de de
+- **[20:21] Yo:** de que no creo que pase.
+- **[20:21] Participante:** Pero pero, incluso, Santiago, ¿cómo esto se está buscando para esos
+- **[20:21] Participante:** novatos órdenes,
+- **[20:21] Participante:** mí no me disgusta que sea así, porque la buena práctica es que ellos fueran y confirmaran
+- **[20:21] Participante:** y subieran a Duropi lo confirmado.
+- **[20:21] Participante:** Porque no sirve que suban que te suban todo
+- **[20:21] Participante:** porque, pues, van a tener un alto un alto nivel de devoluciones.
+- **[20:21] Yo:** Claro.
+- **[20:21] Participante:** Esa parte está chévere que que llegue primero a esta plataforma,
+- **[20:21] Participante:** Yo aquí dejé como una nota,
+- **[20:21] Participante:** Uno debería llegar al dropshipper de la mano y es, venga, usted en el dominio compartido puede llegar a cincuenta órdenes.
+- **[20:21] Participante:** Cuando usted ya haya pasado de cincuenta órdenes, la recomendación es que usted, por lo menos, adquiera un dominio
+- **[20:21] Participante:** y ver si a esta misma landing que se esté generando acá le podemos
+- **[20:21] Participante:** los dominios.
+- **[20:21] Participante:** Hacerle ese pasito. O usted ya llegó a cincuenta, cien pedidos,
+- **[20:21] Participante:** defina si su camino es por tienda nube o por Shopify, pero pase a otro escalón.
+- **[20:21] Yo:** Nosotros tenemos
+- **[20:21] Yo:** Sí, de acuerdo contigo, una una métrica que nos trabajó
+- **[20:21] Yo:** fue José Pineda, y es que
+- **[20:21] Yo:** creo que era después de las
+- **[20:22] Yo:** bueno, cercanas a las in órdenes,
+- **[20:22] Yo:** la tasa de churn
+- **[20:22] Yo:** drásticamente caía drásticamente, es decir, teníamos muy pocos
+- **[20:22] Yo:** usuarios que ya se bajaban de Dorapik porque ya validaban el modelo.
+- **[20:22] Yo:** ¿Sí?
+- **[20:22] Yo:** O lo sentían
+- **[20:22] Yo:** lograban tener un hábito
+- **[20:22] Yo:** y claramente esa cadencia
+- **[20:22] Yo:** mejoraba cada vez más, ¿no? Entonces, ya empezaron a a buscar
+- **[20:22] Yo:** escalar.
+- **[20:22] Yo:** Realmente,
+- **[20:22] Yo:** nuestra ambición sería que lográramos que una buena parte de ese
+- **[20:22] Yo:** de ese cuarenta por ciento
+- **[20:22] Yo:** que que no se ha activado lograr tener sus primeras ventas,
+- **[20:22] Yo:** lo que dices es tal cual, empezar a mostrarles, listo, qué tiene que empezar a hacer. Lo
+- **[20:22] Yo:** la bondad de esto es que como no está dentro de dropping, no estamos dependiendo de desarrollo,
+- **[20:22] Yo:** podemos generar muchas interfaces, alertas, mil cosas, eso dropshipers es casi como si fuera
+- **[20:22] Yo:** una plataforma paralela
+- **[20:22] Yo:** de dropping para novatos,
+- **[20:22] Yo:** y luego lograr
+- **[20:22] Yo:** el empalme con el dropy que ya conocemos, ¿no?, que ya es mucho más
+- **[20:23] Yo:** sofisticado, más complejo también para las personas que no saben hacer dropshipping. Es decir,
+- **[20:23] Yo:** toda esa complejidad que
+- **[20:23] Yo:** igual, realmente, los nuevos van a tener ese acercamiento, pero de a poco, progresivamente, por lo que tú dices.
+- **[20:23] Yo:** Por eso, acá subir la manual van a tener que
+- **[20:23] Yo:** utilizar muchas de esas herramientas que ya Dropbox pone,
+- **[20:23] Yo:** pero por lo menos para la venta, para capturar
+- **[20:23] Yo:** las las las órdenes generadas,
+- **[20:23] Yo:** van a tener un lado, que solamente tienen que ir a
+- **[20:23] Yo:** realmente ahí trataremos de hacerlo lo más
+- **[20:23] Yo:** amigable posible.
+- **[20:23] Yo:** Seguramente links directos, lo que lo que más podamos como enmascarar ahí
+- **[20:23] Yo:** para que no se vea tanta fricción.
+- **[20:23] Yo:** Un botoncito con claramente algo de drop y que lo lleve directamente a la pantalla donde tiene que estar en
+- **[20:23] Yo:** Dropi a través del dominio, algo podremos hacer ahí para facilitarlo.
+- **[20:23] Yo:** Y dentro de lo que queremos explorar,
+- **[20:23] Yo:** bueno, perdón, ¿ahí ahí alguna otra duda, Juan, Laura?
+- **[20:23] Participante:** No, a mí ya me queda superclaro, está ahí, Santiago.
+- **[20:23] Yo:** Súper. ¿Alex, algo que de pronto haya haya saltado antes de pasar hacia lo lo
+- **[20:23] Yo:** lo de la pauta?
+- **[20:23] Participante:** No, todo, todo lo dijiste.
+- **[20:24] Yo:** Súper. Entonces,
+- **[20:24] Yo:** la idea es que, déjeme ver si este flujo, aquí como este, ya tiene ese esa partecita.
+- **[20:24] Yo:** Aquí voy a continuar.
+- **[20:24] Yo:** Configuro.
+- **[20:24] Yo:** Bueno, aquí va a ser un, para antes del lanzamiento, esto realmente todavía está esto está en
+- **[20:24] Yo:** realmente, esto es un mock,
+- **[20:24] Yo:** Este el proyecto, realmente lo que va a hacer es, aquí solamente es una simulación,
+- **[20:24] Yo:** Creo que me está llevando el proyectos.
+- **[20:24] Yo:** No, me está yendo los proyectos. Déjeme ver si logro
+- **[20:24] Yo:** si logro...
+- **[20:24] Yo:** Ver.
+- **[20:24] Yo:** Este mock todavía no lo tiene, no.
+- **[20:24] Yo:** Lo que pasa es que al crear el el el
+- **[20:24] Yo:** el proyecto,
+- **[20:24] Yo:** claro, va a generar la landing,
+- **[20:24] Yo:** tengo que preguntarle si quiere
+- **[20:24] Yo:** Dos dos cosas, ¿no? Una, vamos a preguntarle
+- **[20:24] Yo:** si quiere
+- **[20:24] Yo:** administrar esos productos por por por dropping,
+- **[20:24] Yo:** en donde entraríamos todo este proceso que ya les conté, la landing y demás.
+- **[20:24] Yo:** Otro flujo que es
+- **[20:25] Yo:** también dependerá qué nos alcance el tiempo para
+- **[20:25] Yo:** para tenerlo, pero eso sería el el el
+- **[20:25] Yo:** el exportable para que cargue en en en Shopify.
+- **[20:25] Yo:** Ahí alejado, si quieres, amplias un poquito más, y es
+- **[20:25] Yo:** el tema para que pueda irse a Shopify y cargar como toda la todo el producto.
+- **[20:25] Yo:** ¿Correcto, Alejandro?
+- **[20:25] Participante:** Sí, pues, la idea es
+- **[20:25] Participante:** ustedes han visto que banca y sedo tiene también temas, hay comunidades que tienen temas que se los
+- **[20:25] Participante:** pasan a los dropshippers, pues la idea también es que Dropi tenga su tema para poder pasárselo a los
+- **[20:25] Participante:** dropshippers, teniendo en cuenta, pues, las buenas prácticas y demás.
+- **[20:25] Yo:** De acuerdo, entonces,
+- **[20:25] Participante:** Para que ellos también las puedan tener.
+- **[20:25] Participante:** Tener también las product page ya
+- **[20:25] Participante:** bien mapeadas y todo. Obviamente, pues, el drop
+- **[20:25] Participante:** tiene que entrar y configurarla, pues, como
+- **[20:25] Participante:** se hace siempre, pero
+- **[20:25] Participante:** pero que la hagan, no sé, como facilitarles un poco más eso, porque
+- **[20:25] Participante:** como decía Santi al principio, hay unos que nos no vienen de comunidad,
+- **[20:26] Participante:** sino que son huérfanos. Entonces, los que son huérfanos, por ejemplo, no saben
+- **[20:26] Participante:** que hay temas que que las comunidades tienen.
+- **[20:26] Participante:** Entonces, Dropi, facilitarles esos temas.
+- **[20:26] Yo:** Claro. ¿Y esa?
+- **[20:26] Yo:** Claro, y esa esa parte la la la estamos enfocando es que
+- **[20:26] Yo:** aunque
+- **[20:26] Yo:** nuestra hipótesis es que la gran parte de la del del grupo al que vamos a llegar
+- **[20:26] Yo:** según la ata que tenemos, es que no sabe hacer ecommerce ni dropshipping,
+- **[20:26] Yo:** pues, saber una
+- **[20:26] Yo:** parte que igual sí sabe.
+- **[20:26] Yo:** O sabe algunos conceptos de Shopify.
+- **[20:26] Yo:** Y lo que queremos validar es qué tanta relevancia
+- **[20:26] Yo:** o valor encuentran
+- **[20:26] Yo:** en que dentro del mismo Doropi puedan gestionar esos productos.
+- **[20:26] Yo:** Y no se vayan a chocar fue.
+- **[20:26] Yo:** ¿Sí? Eso también un poco nos ayuda a tener data de, por eso les mencioné al inicio,
+- **[20:26] Yo:** además de querer validar esa prueba de concepto que ojalá y y se se pueda escalar.
+- **[20:26] Yo:** Es tener información que también nos va a permitir luego mejorar, claro, entre las
+- **[20:26] Yo:** de otras líneas que se están investigando un producto,
+- **[20:26] Yo:** es, bueno, si el cuarenta por ciento se me fue por Shopify,
+- **[20:26] Yo:** algo no estoy diciendo, o claro, o no tengo, no estoy ofreciendo el suficiente valor.
+- **[20:27] Yo:** De yo tratar de generarlo dentro del mismo dropping.
+- **[20:27] Yo:** Eso uno,
+- **[20:27] Yo:** Y dos, es que, claramente, si se hace dentro de dropping,
+- **[20:27] Yo:** pues, le iba a hacer, ok, llamo a un toll landing,
+- **[20:27] Yo:** ¿sí?
+- **[20:27] Yo:** Tiene una
+- **[20:27] Yo:** un un producto para para salir a vender,
+- **[20:27] Yo:** y es logre la pauta.
+- **[20:27] Yo:** Esa pauta, entonces, si lo hacemos bajo el mismo dominio, te entendería Juan,
+- **[20:27] Yo:** se, no no no requiere un una configuración
+- **[20:27] Yo:** individual, ¿correcto?
+- **[20:27] Yo:** O sea, al final nosotros lo que tendríamos son
+- **[20:27] Yo:** supongamos, Aleja Shop, Juan Shop, Laura Shop, Santiago Shop.
+- **[20:27] Yo:** Todos bajo el mismo dominio.
+- **[20:27] Yo:** Es decir, no necesitaríamos que nadie, o sea, que no se haga ninguna configuraciones, yo puedo decir eso,
+- **[20:27] Yo:** arranque,
+- **[20:27] Yo:** salga y paute, arranque a pauta, o cómo funcionaría eso en temas de
+- **[20:27] Yo:** de cuenta, de fondos, por ejemplo.
+- **[20:27] Participante:** Ahí sí hay una integraciones con los activos del usuario.
+- **[20:27] Participante:** Con los activos en Meta, un business Meta, una página de Facebook, una cuenta
+- **[20:28] Participante:** empresa de Instagram, una cuenta prioritaria, un método de pago para su publicidad.
+- **[20:28] Participante:** O sea, esa parte
+- **[20:28] Participante:** sí debe ser de cada usuario, porque ahí no podemos como
+- **[20:28] Participante:** revender espacios de una megacuenta publicitaria.
+- **[20:28] Yo:** ¿Qué pasa qué pasa si el usuario no tiene nada de eso?
+- **[20:28] Participante:** Hay un curso que, en su momento, teníamos lo
+- **[20:28] Participante:** podemos como renovar para Doropi Academy, y es enseñarle para Dummies cómo se
+- **[20:28] Participante:** crea. Con un usuario de Facebook normal, ellos van a business punto Facebook y crean esos activos.
+- **[20:28] Participante:** Pero sin eso,
+- **[20:28] Participante:** es muy complejo, porque, pues, digamos que es una pregunta que muchas
+- **[20:28] Participante:** veces hemos puesto sobre la mesa, y es, ¿cómo lográramos que el usuario, sin tener activos
+- **[20:28] Juan Duque:** de meta, activos empresariales de TikTok, pudiera pudiera pautar
+- **[20:28] Juan Duque:** y
+- **[20:28] Juan Duque:** y no es fácil, pues, porque, si no, lo que tendrías que hacer es como revenderle pauta de una
+- **[20:28] Yo:** Sí.
+- **[20:28] Yo:** De acuerdo. Es decir, que en ese orden
+- **[20:28] Yo:** no podríamos
+- **[20:28] Yo:** si el usuario no cumple con ninguno de esos requisitos, si no se ha no se ha dado de alta
+- **[20:29] Yo:** con
+- **[20:29] Yo:** TikTok business ni ninguno de los catálogos de Meta.
+- **[20:29] Yo:** No podríamos
+- **[20:29] Yo:** aspirar a aquellos
+- **[20:29] Yo:** hagan pauta.
+- **[20:29] Juan Duque:** En principio, no, pero, sin embargo, ya que lo tocas,
+- **[20:29] Yo:** ¿Correcto?
+- **[20:29] Juan Duque:** pues me vuelvo a llevar la idea, la hablo con el equipo, doy un par de conversadas con Lucho, que se nos
+- **[20:29] Juan Duque:** ocurrir.
+- **[20:29] Juan Duque:** Porque yo creo que no es descabellado, Santiago, pensar
+- **[20:29] Juan Duque:** como en un reseller de pauta, Y es que así como va a existir un ventas contra entrega, o ecommerce contra entrega, podría existir un mega o múltiples b m como a tercerizar.
+- **[20:29] Yo:** ¿Hay algo que se está moviendo
+- **[20:29] Yo:** con
+- **[20:29] Yo:** Creo que él es un supplier de
+- **[20:29] Yo:** de dropping,
+- **[20:29] Yo:** No sé si los, lo conoces el
+- **[20:29] Yo:** Se llama se llama Esteban, pero se me
+- **[20:29] Yo:** el apellido,
+- **[20:29] Yo:** Él es en Bogotá.
+- **[20:29] Yo:** Y él generó una solución que se llama PullMax.
+- **[20:29] Juan Duque:** Será el de Esteban
+- **[20:30] Yo:** Puede ser esa
+- **[20:30] Yo:** Hace poquito subí un video con Lucho.
+- **[20:30] Participante:** Sí, sí, que que ellos son ellos son proveedores, ellos incluso
+- **[20:30] Participante:** están acá en t veinte, donde están las oficinas de drop y, pues uno los pago.
+- **[20:30] Yo:** De deben ser ellos. Y
+- **[20:30] Yo:** y ellos tienen una solución, que hecho es
+- **[20:30] Yo:** bastante interesante
+- **[20:30] Yo:** para, nosotros estamos haciendo una prueba de concepto con con Shopee,
+- **[20:30] Yo:** y es que
+- **[20:30] Yo:** ellos haz de cuenta que hacen
+- **[20:30] Yo:** no no no está bien usted utilizar el término crowdfunding, porque realmente, pues,
+- **[20:30] Yo:** implicaciones de de fintech y demás ahí.
+- **[20:30] Yo:** De compliance.
+- **[20:30] Yo:** Como un crowdfunding, en donde diferentes personas
+- **[20:30] Yo:** ponen a un producto
+- **[20:30] Participante:** Dinero para pauta.
+- **[20:30] Yo:** pagan pauta,
+- **[20:30] Participante:** Dinero para pautas, sí.
+- **[20:30] Yo:** claro, y luego ese por
+- **[20:30] Yo:** el mecanismo que tengan en bucket, no sé cómo funciona, empieza a barajar, empieza
+- **[20:30] Yo:** bueno, producto costo a producto, costo a producto, costo a producto, coste, y empieza a distribuir, entonces, entre los que
+- **[20:30] Participante:** Las órdenes entre los inversionistas.
+- **[20:30] Yo:** las órdenes tal cual.
+- **[20:30] Yo:** Eso estamos en prueba de concepto con claro,
+- **[20:31] Yo:** eso
+- **[20:31] Yo:** o sea, te lo digo es porque habría que ver también los alcances, porque en en en lo que
+- **[20:31] Yo:** pone él, por ejemplo,
+- **[20:31] Yo:** la prueba de concepto va a parte como desde un millón de pesos,
+- **[20:31] Yo:** por día.
+- **[20:31] Yo:** Un dropshipper que está arrancando nota para ingreso.
+- **[20:31] Yo:** Te va pagar
+- **[20:31] Yo:** treinta mil, cincuenta mil pesos, cien mil pesos cada
+- **[20:31] Participante:** La recomendación es, por ahí, unos sesenta, ochenta
+- **[20:31] Participante:** mil pesos, para que pueda poner, mínimo, tres anuncios con veinte mil pesos al día.
+- **[20:31] Yo:** Exacto.
+- **[20:31] Participante:** Entonces,
+- **[20:31] Yo:** Entonces, como los de ellos
+- **[20:31] Participante:** pero ¿sabe Santiago que
+- **[20:31] Participante:** A ver, entendiendo este nivel,
+- **[20:31] Participante:** incluso es que uno de los grandes, yo no sé si error eso es la ruta
+- **[20:31] Participante:** como se ha permitido, es que cuando a ti te toma un mentor y una comunidad,
+- **[20:31] Participante:** lo primero que hace es que va y te enseña a crear todo eso.
+- **[20:31] Participante:** ¿Cierto? Y eso también es fricción, porque porque hay mucha gente que no lo logra hacer
+- **[20:31] Participante:** o también
+- **[20:31] Participante:** si se frustran demasiado,
+- **[20:31] Participante:** A ver, algo que que ha pasado este último año, que yo arbitrariamente dejé mi
+- **[20:31] Participante:** como el WhatsApp de soporte al cliente de RoaX, es que me doy cuenta que mucha gente es un usuario que
+- **[20:32] Participante:** solo tiene un un un un celular, solo tiene un móvil.
+- **[20:32] Participante:** Y mucha de nuestra plataforma y nuestra tecnología se había pensado para computador,
+- **[20:32] Participante:** se había pensado para usuarios con un nivel de manejo de ofimática mayor,
+- **[20:32] Participante:** y lo hemos venido desescalando.
+- **[20:32] Participante:** De esta conversión, me llevo la tarea, y es
+- **[20:32] Participante:** ¿y por qué este, que ni siquiera ha hecho diez ni veinte ni treinta ni cincuenta órdenes,
+- **[20:32] Participante:** ¿por qué no le facilitamos un camino donde él él es inversionista en pauta para unos productos que apenas está venga, ya pasó, no sé, la barrera de las cien órdenes. Si se define que el ito para pasar a dominio propio para empezar a pensar en un Tiendanube o en un Shopify es cien órdenes,
+- **[20:32] Participante:** pues que también elito para pasar a tener la cuenta de business meta, la cuenta de TikTok,
+- **[20:32] Participante:** negocios, cuentas publicitarias, métodos de pago.
+- **[20:32] Participante:** Sea ese mismo ito. Sí.
+- **[20:32] Participante:** Lo podemos revisar
+- **[20:32] Participante:** pronto, tocarías hacer una
+- **[20:32] Participante:** como una fábrica de BMs y de cuentas
+- **[20:33] Participante:** publicitarias por nicho.
+- **[20:33] Participante:** Y saber que en el cuento nos las pueden llegar a bañar y monte otras y reemplace,
+- **[20:33] Participante:** Pero pero tener
+- **[20:33] Participante:** tener
+- **[20:33] Participante:** BMs, o sea, tener business matter y tener cuentas publicitarias, para esto es
+- **[20:33] Participante:** usuarios de etapa temprana, para que los compartan,
+- **[20:33] Participante:** lo cual a veces también va a ser bueno,
+- **[20:33] Participante:** porque mientras no se presente ningún problema
+- **[20:33] Participante:** pues van a ser cuentas publicitarias con, no sé, un píxel entrenado para vender
+- **[20:33] Participante:** suplementos, un píxel entrenado para vender mascotas.
+- **[20:33] Participante:** Entonces,
+- **[20:33] Participante:** estos no los deberíamos llevar por la ruta que hoy hacemos, es venga, integre
+- **[20:33] Participante:** sus BMs, integre su fan page, porque
+- **[20:33] Participante:** porque estos puede que ni las tengan, y mandar a que las
+- **[20:33] Participante:** cree puede ser una una posibilidad de
+- **[20:33] Participante:** de Abandono. De abandono, pero total.
+- **[20:33] Yo:** Sí, sí, porque lo que nosotros quisiéramos es
+- **[20:33] Yo:** justamente, que yo
+- **[20:33] Yo:** no le tenga que pedir ningún tipo de configuración al usuario.
+- **[20:33] Yo:** Este usuario, este puntual.
+- **[20:34] Yo:** No le tengo que pedir nada, es arranque a
+- **[20:34] Yo:** arranque a pautar,
+- **[20:34] Participante:** Han pensado Santiago y Alejandra porque este es un usuario que tiene su wallet en cero, ¿cierto?
+- **[20:34] Yo:** Ah, sí.
+- **[20:34] Yo:** Sí.
+- **[20:34] Participante:** Entonces, el generador de anuncios con IA se nutre de la wallet y convierte eso en token para generar videos y
+- **[20:34] Participante:** para generar imágenes. Aquí hay que pensar es,
+- **[20:34] Participante:** y y no sé si esto lo ha visto Harry y lo ha visto drop y pay,
+- **[20:34] Participante:** yo creo que necesitamos a a a al mínimo, voy a leer drop y pay o de confío,
+- **[20:34] Participante:** que serían como nuestros brazos fintech en el holding.
+- **[20:34] Participante:** Aquí lo que habría que hacer es un modelo no sé,
+- **[20:34] Participante:** y y se me ocurre una cosa como, recarga tus primeros cien mil pesos por Nike.
+- **[20:34] Participante:** Va a pasar con esos cien mil?
+- **[20:34] Participante:** Están
+- **[20:34] Participante:** es que cien mil puede ser poco, porque el test deberían ser, mínimo, tres días.
+- **[20:34] Participante:** Pero es como sesenta mil de pauta por tres días,
+- **[20:34] Participante:** seis por tres dieciocho, ya necesitamos ciento ochenta mil pesos. Para hacer esos anuncios,
+- **[20:34] Participante:** necesitamos, mínimo,
+- **[20:35] Participante:** unos diez dólares, son como otros treinta mil. O sea,
+- **[20:35] Participante:** uno uno quisiera que ese dropshipper necesitara cero
+- **[20:35] Participante:** y cero usuarios.
+- **[20:35] Participante:** Pero cuando ya le ponemos pauta, requiere
+- **[20:35] Participante:** requiere de un mínimo de de de inversión.
+- **[20:35] Participante:** A mí me sonaría una cosa muy bacana, pues, pensando como en el usuario del común Colombiano,
+- **[20:35] Participante:** como no tienen todavía saldo en wallet,
+- **[20:35] Participante:** que lo pudieran hacer como con Neki,
+- **[20:35] Participante:** Como, ay, yo transfiero a una línea corporativa, Nike, del holding,
+- **[20:35] Participante:** el valor mínimo para empezar en este embudo, y lo llevamos al mínimo
+- **[20:35] Participante:** o sea, al mínimo posible. O sea, no va a invertir un peso de más en
+- **[20:35] Participante:** en nada, sino que es como el mínimo viable para poder empezar.
+- **[20:35] Participante:** ¿O cómo lo ven ahí?
+- **[20:35] Yo:** Ahí ahí tendríamos que hipótesis. Ah, me parece bacano.
+- **[20:35] Yo:** Que validar una hipótesis de si un usuario nuevo que no valida el modelo, estaría
+- **[20:35] Yo:** dispuesto a pagarte cien mil pesos sin aún haber recibido un solo peso. Area de Pero ¿sabes en qué etapa me parece genial? No, una etapa general que que estamos justamente pensando en en en cómo tenemos que ir haciéndolo escalar, y es qué qué si no es de pronto ads pregunto ya desde la la parte de, justamente, de la comunicación del producto. O poder llegar a un público más grande. Que no sea tan orgánico de, le comparto el link al grupo de la familia, o sea, una capa intermedia, ¿no?, Entre me hago conocer pero no pago ads de una forma tan de tan toll. Agresivo en el sentido de tener que ir a configurar y pagar.
+- **[20:35] Participante:** Claro.
+- **[20:35] Participante:** Pero, Santiago y Lau, la pregunta es,
+- **[20:36] Participante:** Sí, te escucho, te escucho.
+- **[20:36] Participante:** Te escucho.
+- **[20:36] Yo:** Es
+- **[20:36] Yo:** posterior a las... Ejemplo,
+- **[20:36] Yo:** a la primera venta,
+- **[20:36] Yo:** tú ya yo creo que ya le puedes pedir
+- **[20:36] Yo:** que recargue plata.
+- **[20:36] Yo:** Porque ya vio que puede ganar plata.
+- **[20:36] Participante:** No, es que incluso es la la manera más
+- **[20:36] Participante:** ¿cómo diría uno?, orgánica y natural de recargar una wallet es vendiendo.
+- **[20:36] Participante:** Exacto. Porque si tú vendiste, pues ya la wallet va a empezar a tener dinero.
+- **[20:36] Participante:** A ver,
+- **[20:36] Participante:** ahí sí podría ver un pantallazo,
+- **[20:36] Participante:** como de tácticas y técnicas para vender orgánico.
+- **[20:37] Participante:** Acabas de decir, selecciona
+- **[20:37] Participante:** no sé, un máximo de tres productos muy ganadores,
+- **[20:37] Participante:** comparten los grupos de la familia, los grupos de amigos, ponlos en tu Instagram personal, ponlos en tu Facebook
+- **[20:37] Participante:** personal. E, incluso,
+- **[20:37] Participante:** ofrécelos uno a uno a WhatsApp,
+- **[20:37] Participante:** a personas que tú sabes que lo pueden necesitar. Entonces,
+- **[20:37] Participante:** aquí la práctica es
+- **[20:37] Participante:** venga, yo soy una mujer de cuarenta años, tengo amigas que
+- **[20:37] Participante:** en mi mismo nivel y yo voy a vender un organizador de nevera.
+- **[20:37] Participante:** Pues sé que tengo
+- **[20:37] Participante:** amigas y mujeres que les puede llegar a interesar,
+- **[20:37] Participante:** y
+- **[20:37] Participante:** pues, se pueden dar orgánicas. Podría, no sé,
+- **[20:37] Participante:** si te estás ganando veinte mil pesos por orden,
+- **[20:37] Participante:** haz tus primeras
+- **[20:37] Participante:** treinta ventas,
+- **[20:37] Participante:** pues, para que tengas tu primer dinero,
+- **[20:37] Yo:** Tengo una pregunta.
+- **[20:37] Participante:** en wallet.
+- **[20:37] Participante:** Y a partir de
+- **[20:37] Yo:** Porque nosotros, este, nosotros
+- **[20:37] Participante:** en pauta.
+- **[20:37] Yo:** otro prototipo que se estaba trabajando,
+- **[20:37] Yo:** pero lo que te quería preguntar era, en este nosotros lo que hicimos fue algo antes de decir, bueno,
+- **[20:37] Yo:** este que es parte más de leyendas,
+- **[20:38] Participante:** Mhmm.
+- **[20:38] Yo:** hacer esta exportación. Nosotros hicimos la prueba,
+- **[20:38] Yo:** y realmente se puede exportar tanto
+- **[20:38] Yo:** directamente a WhatsApp
+- **[20:38] Yo:** tanto la imagen que se esté viendo sería la del producto,
+- **[20:38] Yo:** y el copy
+- **[20:38] Yo:** ¿sí?
+- **[20:38] Yo:** Eso se pudiera exportar. Entonces, un poco lo que sería es
+- **[20:38] Yo:** como ese kit facilitador de venta orgánica.
+- **[20:38] Yo:** Para que lo puedas exportar a redes sociales, o sea, lo mismo a Instagram,
+- **[20:38] Yo:** o descargar el paquete al celular, que sería las imágenes
+- **[20:38] Yo:** y los textos.
+- **[20:38] Yo:** De venta.
+- **[20:38] Participante:** Así es. Yo yo creo,
+- **[20:38] Participante:** Santiago y Alejandra, que una cosa ahí es, como esto es una prueba de concepto,
+- **[20:38] Participante:** ¿tienes la posibilidad de hacer una inversión inicial en publicidad para que
+- **[20:38] Juan Duque:** tus ventas se den más rápido y tus ventas sean mayor volumen? Si dice que sí, le damos un camino en el que le invierta en publicidad. Si dice que no, le damos los tips de orgánico, porque, realmente, la venta orgánica es es algo que se romantiza mucho, pero ninguno de los exitosos es exitoso a punta de orgánico, es exitoso a punta de pauta. O sea, la es algo que uno logra al inicio, uno al inicio le vendía a uno que otro familiar, a uno que otro amigo, pero eso ya se te desgastó, y el siguiente mes ya no te van a comprar. O sea, si te
+- **[20:39] Juan Duque:** compró el organizador de huevos para la nevera,
+- **[20:39] Juan Duque:** el siguiente mes no te va a comprar una tabla a descongelar, porque decir, oiga, venga, este me
+- **[20:39] Juan Duque:** me cogió
+- **[20:39] Alejandra Melo:** como su
+- **[20:39] Juan Duque:** único canal de de cliente, cada cada mes me quiere vender
+- **[20:39] Juan Duque:** el producto que está testeando.
+- **[20:39] Juan Duque:** Hagámosles las recomendaciones y los tips de posibles ventas orgánicas,
+- **[20:39] Juan Duque:** pero darle, por más que esté nuevo, porque algunos ya lo vieron en
+- **[20:39] Juan Duque:** algún video de YouTube, lo han visto en redes, algunos han han escuchado hablar de inversión en pauta,
+- **[20:39] Juan Duque:** Yo creo que otra de las hipótesis a validar es
+- **[20:39] Juan Duque:** venga, será que la gente se anima a pautar cuando no esté la fricción de crear los activos digitales.
+- **[20:39] Yo:** Pues mira mira que dentro del flujo no teníamos pensado incluir esa
+- **[20:39] Yo:** parte, pero era
+- **[20:39] Yo:** basándonos en que de pronto sí se pudiera
+- **[20:39] Yo:** evitar una configuración previa del usuario. Pero esa pregunta
+- **[20:39] Yo:** está dentro del flujo,
+- **[20:39] Yo:** y lo que podríamos hacer es
+- **[20:40] Yo:** definitivamente sí, la la pregunta sí debería ser como, ¿estás dispuesto a hacer inversión en pauta?
+- **[20:40] Yo:** O venta o o camino camino dos?
+- **[20:40] Participante:** Es que
+- **[20:40] Yo:** Venta orgánica. Y si se van por el sí,
+- **[20:40] Yo:** atarlo con la lo que tú recomiendas de pronto hacer
+- **[20:40] Yo:** la la recarga por
+- **[20:40] Yo:** y desde ahí, entonces, alimentar ya una pauta.
+- **[20:40] Participante:** Es que mira que aquí se conectan dos brazos de Roax.
+- **[20:40] Juan Duque:** Roax te ayuda a generar anuncios, pero también los mide.
+- **[20:40] Juan Duque:** Nosotros hoy en Roax estamos trabajando en tener los CPAs por ID. O sea, que sepamos cuánto vale en publicidad vender un ID. Como lo vas a hacer para doscientos productos, visualicemos esta prueba. ¿Tienen tienen un tiempo de cuánto debería durar esta prueba de concepto? Uno, dos. No, quince minutos sí, pero pero ¿cuánto la vamos a dejar expuesta para que los usuarios pasen por ella y cuánta data
+- **[20:40] Yo:** Sí.
+- **[20:40] Yo:** Quince minutos.
+- **[20:40] Yo:** Realmente,
+- **[20:40] Juan Duque:** queremos acumular?
+- **[20:40] Yo:** Realmente, nosotros, después de que se generen las las las landings,
+- **[20:40] Yo:** al menos vamos a dejar
+- **[20:40] Yo:** un mes abierto
+- **[20:40] Yo:** a ver cuántas órdenes se logran generar.
+- **[20:41] Juan Duque:** Es que deberíamos, como son doscientos productos, decir, venga,
+- **[20:41] Juan Duque:** cuántos usuarios de estas condiciones van a llegar a la prueba de concepto,
+- **[20:41] Juan Duque:** cuántos se fueron por orgánico, cuántos se fueron por pauta, porque es que al final,
+- **[20:41] Participante:** el producto se va a nutrir. Y es que al final vas a poder decir, venga,
+- **[20:41] Participante:** estos doscientos IDs,
+- **[20:41] Yo:** Si.
+- **[20:41] Juan Duque:** estos sesenta se vendieron, estos ciento cuarenta no.
+- **[20:41] Juan Duque:** Y de los sesenta que se vendieron, el CPA es de tanto.
+- **[20:41] Juan Duque:** A la siguiente corte de usuarios le vamos a decir, venga, si usted
+- **[20:41] Juan Duque:** el CPA fue de veinte mil pesos. Si usted le invierte
+- **[20:41] Juan Duque:** doscientos mil pesos, usted puede aspirar a diez ventas.
+- **[20:41] Juan Duque:** O sea, ya se invierte, es como que usted no esté invirtiendo para probar
+- **[20:41] Juan Duque:** sino que le podemos dar como el CPI histórico que ese ID tenga.
+- **[20:41] Yo:** Eso, de hecho, que
+- **[20:41] Yo:** Eso, de hecho, te iba te te iba a preguntar,
+- **[20:41] Yo:** justamente esa parte, no para la parte de la pauta ya,
+- **[20:41] Yo:** sino en la calculadora que hay sobre
+- **[20:41] Yo:** la estimación en retorno.
+- **[20:41] Yo:** O la utilidad que le podía sacar a
+- **[20:41] Yo:** a un producto,
+- **[20:42] Yo:** le preguntara si tenían justamente ese histórico. Para nosotros, pues,
+- **[20:42] Yo:** no sé si si si lo si lo pueden o no compartir realmente, pero era para que nosotros
+- **[20:42] Yo:** a un dropshipper, le pudiéramos decir cuánto podría aspirar a
+- **[20:42] Yo:** ganar en un producto si le hace
+- **[20:42] Yo:** inversión en pauta, durante cuánto tiempo y demás, tal cual lo que dijiste,
+- **[20:42] Yo:** pero no sé si ustedes
+- **[20:42] Yo:** podrían compartir esa información o deberíamos, más bien,
+- **[20:42] Yo:** igual hacer un corte a
+- **[20:42] Yo:** solamente
+- **[20:42] Yo:** recopilar.
+- **[20:42] Yo:** Hasta hasta donde queremos, que es si se va, si está o no dispuesto a pagar por pauta,
+- **[20:42] Yo:** y y a partir de eso, entonces, ver
+- **[20:42] Yo:** si vale la pena
+- **[20:42] Yo:** desde los primeros desde las primeras
+- **[20:42] Yo:** interacciones entre luz no uso y la plataforma,
+- **[20:42] Yo:** ofrecerle la pauta, o si más bien tendríamos que
+- **[20:42] Yo:** una vez cubierta las órdenes,
+- **[20:42] Yo:** le
+- **[20:42] Yo:** inclusive podríamos dejarla como un poco
+- **[20:42] Yo:** gamificado hacia hacia temas de
+- **[20:42] Yo:** de de de progreso sobre plataforma,
+- **[20:42] Yo:** es que después de la primera orden,
+- **[20:42] Yo:** puede empezar a comprar pauta. Si vemos que los
+- **[20:43] Yo:** iniciales no quieren hacerlo.
+- **[20:43] Yo:** Cuando no tienen ventas,
+- **[20:43] Yo:** Ustedes podrían tener ese, o sea, podrían compartir más información
+- **[20:43] Participante:** Sí. Nosotros tenemos, de hecho, una calculadora,
+- **[20:43] Yo:** o por ahora no lo
+- **[20:43] Participante:** viendo que en la versión final de página no la dejaron tan fácil de acceder, mientras mientras hablabas la
+- **[20:43] Participante:** estaba buscando.
+- **[20:43] Participante:** Pero es que podríamos construir una calculadora
+- **[20:43] Participante:** más para dummies,
+- **[20:43] Participante:** una calculadora mucho más sencilla.
+- **[20:43] Juan Duque:** Y los doscientos IDs de producto que van a estar en la prueba ya están,
+- **[20:43] Yo:** No.
+- **[20:43] Yo:** No, no nos los han entregado.
+- **[20:43] Yo:** Esperaría que esta semana esté en espera, otra no está.
+- **[20:43] Juan Duque:** Cuando cuando los tengan,
+- **[20:43] Juan Duque:** yo puedo, a futuro, ir a buscar de esos IDs cuáles ya están en informe
+- **[20:43] Juan Duque:** de ROAX y empezar a tener métricas sobre el ID.
+- **[20:43] Yo:** Okay.
+- **[20:43] Yo:** Okay. So you
+- **[20:43] Juan Duque:** Pero, bueno, hay hay Santiago y Alejandra varias
+- **[20:43] Juan Duque:** varias cosas. Está está muy buena la iniciativa,
+- **[20:43] Juan Duque:** porque, realmente, pues, Dropi tiene una visibilidad y tiene una
+- **[20:44] Juan Duque:** muy alta, pero tiene unos retos en cuanto a la activación.
+- **[20:44] Juan Duque:** Digamos que eso lo eso lo sabe todo el mundo que que uno de los grandes desafíos es que mucha gente que se interesa en el modelo nunca logra ni siquiera sus primeras órdenes. Y este proyecto y esta prueba de concepto de ustedes va va eso, a que ese inexperto logre esas primeras órdenes. Entonces,
+- **[20:44] Juan Duque:** ¿nosotros en qué parte podríamos participar? ¿En qué puedan generar los anuncios?
+- **[20:44] Juan Duque:** E incluso,
+- **[20:44] Juan Duque:** ese módulo nosotros lo desmontamos como desde dos mil veinticuatro, pero nosotros también teníamos uno para post
+- **[20:44] Juan Duque:** orgánicos. Esto que tú decías de compartir como
+- **[20:44] Juan Duque:** como que te tomaba el producto y lo puedes compartir en redes uno a uno,
+- **[20:44] Juan Duque:** Lo teníamos, era como para que puedan programar una parrilla,
+- **[20:44] Juan Duque:** No sé en qué momento lo podríamos volver a meter al road map de tecnología, pero esto se podría reciclar.
+- **[20:44] Juan Duque:** Y es que yo elegí, de esos doscientos IDs, yo elegí tres o cinco.
+- **[20:44] Juan Duque:** Y que yo pudiera programar un ciclo de publicaciones
+- **[20:44] Juan Duque:** en mi Facebook y en mi Instagram. Eso se podría hacer. Eso se puede hacer desde el API
+- **[20:44] Juan Duque:** de la cual nosotros somos desarrolladores para Meta. Los anuncios de pago,
+- **[20:45] Juan Duque:** los informes y las métricas y esto debería avanzar a un nivel que en ExpoWinner nosotros lo vamos a estar lanzando, pero eso es para los usuarios que
+- **[20:45] Juan Duque:** ya pautan y ya venden, que son los microcréditos, que son entre DropiPay y Roax.
+- **[20:45] Juan Duque:** Y es que, al a futuro, esos usuarios van como en esa ruta,
+- **[20:45] Juan Duque:** mis primeras órdenes, órdenes donde yo invertí en la pauta,
+- **[20:45] Juan Duque:** demostré que soy rentable en la pauta, ya tengo mi propio Shopify, mi propio tienda nube,
+- **[20:45] Juan Duque:** Dropi le presta para pauta. O sea, es como la
+- **[20:45] Juan Duque:** la la evolución que
+- **[20:45] Yo:** naranja.
+- **[20:45] Juan Duque:** la evolución que va teniendo.
+- **[20:45] Juan Duque:** Pero ahora,
+- **[20:45] Juan Duque:** yo lo que vería donde donde mayor
+- **[20:45] Juan Duque:** valor podemos aportar,
+- **[20:45] Juan Duque:** Justo en el release que hace mañana, tecnología se suben muchas cosas nuevas,
+- **[20:45] Juan Duque:** Si ustedes pueden, el jueves o el viernes hacemos otro espacio, yo ya les muestro uno en dev,
+- **[20:45] Juan Duque:** sino publicado en dropping, porque
+- **[20:45] Juan Duque:** ejemplo, tenemos un tema de ángulos de venta.
+- **[20:45] Juan Duque:** Que puede llegar a servirles.
+- **[20:46] Juan Duque:** Desde el proceso de de de investigar un producto y demás, genera los ángulos de venta.
+- **[20:46] Juan Duque:** Tengo la posibilidad de lanzar teniendo las fotos y la descripción,
+- **[20:46] Juan Duque:** URL del producto o el ID de dropping, se hace el creativo y se lanza la campaña.
+- **[20:46] Juan Duque:** Si el usuario tiene creativos propios,
+- **[20:46] Juan Duque:** los puede subir y lanza campañas. La parte de los informes,
+- **[20:46] Juan Duque:** O sea, hay como varios punticos en esta iniciativa que ustedes tienen, donde donde Roblox entraría, yo creo que por eso fue que el a uno nos nos puso a hablar.
+- **[20:46] Juan Duque:** Pero, puntualmente, ahora es
+- **[20:46] Juan Duque:** en el camino en el que el usuario vaya
+- **[20:46] Juan Duque:** a hacer inversión en publicidad, el camino de orgánico,
+- **[20:46] Juan Duque:** pues les podemos compartir tips, pero ahí no tenemos como soluciones de
+- **[20:46] Yo:** Si.
+- **[20:46] Juan Duque:** de tecnología para esto.
+- **[20:46] Yo:** De una Juan, pero, entonces, para para para dejar claros los pasos a seguir.
+- **[20:46] Yo:** En el flujo o en el camino en donde el usuario sí esté dispuesto a pagar pauta,
+- **[20:46] Yo:** ¿qué tendríamos que pedirle al usuario?
+- **[20:46] Yo:** Directamente.
+- **[20:46] Juan Duque:** Partiendo de un usuario que ya tiene una cuenta dropping, ¿cierto?
+- **[20:46] Juan Duque:** Les comparto aquí un segundo y les muestro esta pantalla. Mira,
+- **[20:47] Participante:** este es el generador de anuncios,
+- **[20:47] Participante:** a través de un ID
+- **[20:47] Participante:** Me confirman, sí, me confirman cuando la vean.
+- **[20:47] Yo:** Todos nos
+- **[20:47] Yo:** Ya.
+- **[20:47] Juan Duque:** Digamos que
+- **[20:47] Juan Duque:** el primero elige un canal de venta, que es muy similar a lo que tenías, que es, voy a vender por WhatsApp o voy a vender
+- **[20:47] Juan Duque:** por landing.
+- **[20:47] Juan Duque:** Independiente del que elija es, yo puedo hacer todo mi proceso
+- **[20:47] Juan Duque:** de de producto desde una URL, desde una foto o desde un ID,
+- **[20:47] Juan Duque:** Y esto es un ID, como esto es dev, esto es un ID que esté, pues, creado en d, pero
+- **[20:47] Juan Duque:** pero
+- **[20:47] Juan Duque:** los doscientos IDs de catálogo público, el usuario va a poder hacer todo el ciclo de los creativos y demás desde ID dropping. No no necesita tener ni siquiera landing. De hecho, si la venta la va a hacer por WhatsApp, no requiere no requiere ningún tipo de landing. Yo yo digo que, cuando el usuario diga que quiere pautar, como él previamente en el flujo de ustedes ya había elegido los IDs, casi que lo traemos a una pantalla con los IDs seleccionados. Algo así. Y, a partir de ahí, le hacemos todo el flujo de hacerle los anuncios y ayudárselos a lanzar. Porque este este flujo finaliza con los anuncios enviados a Meta.
+- **[20:47] Yo:** Ok.
+- **[20:47] Yo:** Chi.
+- **[20:48] Juan Duque:** ¿Cuál es la tarea que queda de mi lado?
+- **[20:48] Juan Duque:** Que que me queda sonando mucho en la cooperación con ustedes? Es,
+- **[20:48] Juan Duque:** está hecho para conectar el business meta y las
+- **[20:48] Juan Duque:** y la y la landing y la cuenta publicitaria, el método de pago del usuario, pero acá estamos partiendo
+- **[20:48] Juan Duque:** ¿y qué tal si este es un usuario que no tiene nada de esto
+- **[20:48] Juan Duque:** Y más bien le deberíamos hacer, es como un reseller de publicidad,
+- **[20:48] Juan Duque:** donde, no sé, le cobramos un
+- **[20:48] Juan Duque:** un n por ciento, esto toca mirarlo con financieros, esto toca mirarlo con finanzas,
+- **[20:48] Juan Duque:** pero le cobramos como por pautarle en cuentas publicitarias genéricas.
+- **[20:48] Yo:** Me parece, o canal.
+- **[20:48] Juan Duque:** Ese es como el camino que yo veo.
+- **[20:48] Juan Duque:** Yo tomé muchas notas, lo cual es bueno, quiere decir que que hay varios
+- **[20:48] Juan Duque:** puntos de esta de esta reunión que le encuentro mucho sentido.
+- **[20:48] Juan Duque:** Pero pero para el puntual cliente que ustedes resuelven, algunos ya tendrán
+- **[20:49] Juan Duque:** Es que después de que elija pauta,
+- **[20:49] Juan Duque:** habría que decirle, ¿quieres integrar
+- **[20:49] Juan Duque:** tus activos de Meta
+- **[20:49] Juan Duque:** o no los tienes? Utiliza unos genéricos. Y ahí también vamos a empezar a validar venga, cuántos decían, yo ya tengo eso, y cuántos decían, yo no lo tengo.
+- **[20:49] Yo:** Te te iba a preguntar,
+- **[20:49] Yo:** yo hace ella
+- **[20:49] Yo:** un tiempo trabajé con con con, justamente, con los con meta business, pero
+- **[20:49] Yo:** no sé si ha cambiado en algo los tiempos de ese
+- **[20:49] Yo:** del seteo
+- **[20:49] Yo:** entre que tienes el ya el Facebook,
+- **[20:49] Yo:** que tienes una cuenta en Facebook,
+- **[20:49] Yo:** y el montar
+- **[20:49] Yo:** un portafolio dentro de Meta. No sé en cuánto están, cuántos pasos son,
+- **[20:49] Participante:** Es que
+- **[20:49] Yo:** lo tienes más o menos presente o o minutos.
+- **[20:49] Participante:** es que, a ver,
+- **[20:49] Participante:** lo lo primero que yo hago cuando, digamos, dicto ese módulo es como
+- **[20:49] Juan Duque:** ayudarle a la gente a dividir, que cuando yo estoy en Facebook punto com,
+- **[20:49] Juan Duque:** y en Instagram como persona, es como me estoy comportando como Juan, Cuando yo me paso a Instagram empresa y a business punto Facebook,
+- **[20:50] Juan Duque:** es como mi empresa.
+- **[20:50] Juan Duque:** Tengo que entender que yo con mi usuario de Facebook
+- **[20:50] Juan Duque:** puedo crear un negocio, un portafolio comercial.
+- **[20:50] Juan Duque:** Ese se crea relativamente fácil.
+- **[20:50] Juan Duque:** Pero después del portafolio comercial hay que pegarle una fan page o una página empresa,
+- **[20:50] Juan Duque:** una cuenta de Instagram empresa, una cuenta de WhatsApp Business,
+- **[20:50] Juan Duque:** una cuenta publicitaria, un método de pago. Hay que empezarle a pegar cosas. Entonces, para mí, una buena configuración siguiendo el paso a paso, a una persona le toma dos horas. Y, sobre todo, le toma dos horas, siempre y cuando lo pueda hacer desde un computador.
+- **[20:50] Juan Duque:** Pero la fricción que tenemos acá y es que muchos de sus usuarios ni siquiera tienen un computador.
+- **[20:50] Juan Duque:** Yo me llevo a la tarea,
+- **[20:50] Juan Duque:** es más, cuelgo con ustedes y voy a llamar a nuestro desarrollador, pues, que es experto en el API de
+- **[20:50] Juan Duque:** de Meta,
+- **[20:50] Juan Duque:** y lo voy a poner a que vuelva, investigue, vuelva y profundice,
+- **[20:50] Juan Duque:** ¿Qué tan grave...? Deme un segundo, yo rechazo esto.
+- **[20:50] Juan Duque:** Tan grave puede ser
+- **[20:50] Juan Duque:** qué tan grave puede ser que nosotros hagamos como unas cuentas reseller? O sea,
+- **[20:51] Juan Duque:** bueno, de hecho, ahí habría que ser como una especie de
+- **[20:51] Juan Duque:** de tener una granja de múltiples cuentas,
+- **[20:51] Juan Duque:** porque las van a terminar baneando algunas, pero tener para conectar el reemplazo.
+- **[20:51] Juan Duque:** O sea,
+- **[20:51] Juan Duque:** es lo es lo que se me ocurre, pero pero si este proceso pudiera ser
+- **[20:51] Juan Duque:** que una recarga muy sencilla por confío pagos, que al final tiene PSI, ahí estarían x,
+- **[20:51] Juan Duque:** sin necesidad de crear activos en Meta,
+- **[20:51] Juan Duque:** con las URLs genéricas.
+- **[20:51] Juan Duque:** Y con la línea de WhatsApp que el usuario asocie, empezarle a tirar campañas.
+- **[20:51] Juan Duque:** La de WhatsApp es más dura que la de la URL.
+- **[20:51] Juan Duque:** Porque esa línea de WhatsApp no va a estar asociada a
+- **[20:51] Juan Duque:** Pero ahí podríamos ver si chatea Pro. Les puede dar unos
+- **[20:51] Juan Duque:** unos números genéricos o alguna cosa. O sea, habría que habría que ver la de WhatsApp,
+- **[20:51] Juan Duque:** ese WhatsApp no va a estar asociado al BM.
+- **[20:51] Yo:** Sí, porque entiendo que
+- **[20:51] Yo:** sí, cuando uno se va a WhatsApp business manager,
+- **[20:52] Yo:** sí o sí, él ya te va a tratar, es, de tirar
+- **[20:52] Yo:** y si quisiéramos integración, tocar es por el API business, ¿cierto? O el el
+- **[20:52] Juan Duque:** Sí.
+- **[20:52] Yo:** es por API business, él no se trata de ir por el business map, por el business
+- **[20:52] Yo:** por WhatsApp business de aplicación de de celular.
+- **[20:52] Yo:** Directamente por API business y con API business,
+- **[20:52] Yo:** él te, tú puedes generar
+- **[20:52] Yo:** un número de celular, pero asociado a diferentes portafolios, ni siquiera el business manager.
+- **[20:52] Participante:** Sí.
+- **[20:52] Yo:** ¿Cierto? Es que funciona eso.
+- **[20:52] Juan Duque:** Sí, hay varios caminos,
+- **[20:52] Participante:** pero el de poder hacer pauta a un número
+- **[20:52] Participante:** depende que ese número
+- **[20:52] Participante:** esté asociado a ese
+- **[20:52] Participante:** a ese portafolio empresarial o a ese grupo de activos empresariales de la persona.
+- **[20:52] Juan Duque:** Ahí vamos a tener una fricción diferente a la de la landing.
+- **[20:52] Yo:** Igual igual café,
+- **[20:52] Yo:** creo que también es importante que que que lo lleváramos justamente a
+- **[20:52] Yo:** claramente,
+- **[20:52] Yo:** por capa se pudiera haciendo mucho más robusto, como
+- **[20:52] Yo:** forma más robusta hacer pauta,
+- **[20:52] Yo:** pero ¿cuál es esa capa mínima?
+- **[20:52] Yo:** Con la que ya
+- **[20:53] Juan Duque:** La capa minima
+- **[20:53] Yo:** puedes salir a un público más grande?
+- **[20:53] Juan Duque:** La capa mínima es, como vamos a tener una URL genérica que construye el landing,
+- **[20:53] Participante:** hacerle solo campañas a esa landing,
+- **[20:53] Participante:** y que un botón de quiero hablar por WhatsApp esté allá,
+- **[20:53] Juan Duque:** ahí sí que sea muy fácil que asociemos el número de WhatsApp del usuario.
+- **[20:53] Participante:** O sea, sería como una capa de intermediación. Estoy haciendo pauta de tráfico
+- **[20:53] Juan Duque:** a URL,
+- **[20:53] Juan Duque:** pero esa landing está muy enfocada, o a pide contra entrega solito o habla por WhatsApp.
+- **[20:53] Juan Duque:** Esa la podríamos hacer, porque para hablar por WhatsApp, acá uno de los números de los usuarios
+- **[20:53] Juan Duque:** ese número tiene que estar asociado a un portafolio de meta
+- **[20:53] Juan Duque:** donde está la cuenta publicitaria, para yo poder encontrar y decir, quiero hacer,
+- **[20:53] Juan Duque:** campaña de ventas por WhatsApp a esta línea telefónica.
+- **[20:53] Yo:** ¿Y si y si y si sobre la landing le agregamos
+- **[20:53] Yo:** el botón flotante
+- **[20:53] Juan Duque:** Es.
+- **[20:53] Yo:** hablar por WhatsApp, pero no sobre la
+- **[20:53] Yo:** sobre la landing.
+- **[20:53] Juan Duque:** En la landing, sí, y y la pauta va a la landing. Ese es
+- **[20:53] Juan Duque:** nivel mínimo, Santiago.
+- **[20:53] Yo:** Pero esa esa pauta, igual,
+- **[20:53] Yo:** se hace compartido, pero ¿sigues necesitando?
+- **[20:54] Yo:** Que haya una configuración de parte del usuario
+- **[20:54] Juan Duque:** No, esa es la que podríamos hacer en un
+- **[20:54] Yo:** en el business manager todavía?
+- **[20:54] Juan Duque:** unos business reseller.
+- **[20:54] Yo:** O sea, en ese escenario, sí, te entiendo bien
+- **[20:54] Yo:** sí podríamos permitir, si eso saliera bien,
+- **[20:54] Yo:** de que un usuario que no tiene absolutamente nada
+- **[20:54] Yo:** arranque a pautar, porque ya hay unos
+- **[20:54] Yo:** business managers y resellers que están por debajo
+- **[20:54] Yo:** cubriendo eso.
+- **[20:54] Yo:** Poniéndole la cara a eso.
+- **[20:54] Juan Duque:** Eso es como lo que lo que se me ocurriría.
+- **[20:54] Yo:** Y esto
+- **[20:54] Yo:** está conectado a una capa en donde todas las landing que están creadas en ese
+- **[20:54] Yo:** pago contra punto pago contra entrega,
+- **[20:54] Participante:** Sí.
+- **[20:54] Yo:** están pegándole a eso.
+- **[20:54] Yo:** Ya.
+- **[20:54] Yo:** Ok?
+- **[20:54] Yo:** Facilito.
+- **[20:54] Juan Duque:** Sí, hay hay varios varios retos y
+- **[20:54] Juan Duque:** y como esto es como para irlo socializando un expo winner,
+- **[20:54] Juan Duque:** creo que con esta pregunta cierro, es, la expectativa es que la gente se registre
+- **[20:54] Juan Duque:** y ya pueda tener un mínimo nivel de uso o cuál es la expectativa de ustedes para ExpoWinner?
+- **[20:55] Yo:** En cuanto al al al al grupo que queremos evaluar,
+- **[20:55] Juan Duque:** Sí.
+- **[20:55] Yo:** el grupo que queremos evaluar son
+- **[20:55] Yo:** usuarios que no hayan vendido nada y que sean work funds.
+- **[20:55] Yo:** Ese ese no
+- **[20:55] Juan Duque:** Listo.
+- **[20:55] Yo:** Ese ese es nuestro gran grupo. Ahora, de esos,
+- **[20:55] Yo:** de hecho, comerciales,
+- **[20:55] Yo:** nos pidió que esperáramos a que cerrara agosto,
+- **[20:55] Yo:** y nos va a pasar la base de
+- **[20:55] Yo:** hasta agosto,
+- **[20:55] Yo:** ¿Cuáles de los asistentes
+- **[20:55] Yo:** están registrados realmente también en dropping,
+- **[20:55] Participante:** Pero no han hecho órdenes.
+- **[20:55] Yo:** no han
+- **[20:55] Yo:** no hacen parte de una comunidad.
+- **[20:55] Yo:** Esos son los que más les queremos hablar, sin embargo,
+- **[20:55] Yo:** cualquier otro usuario va a poder usarla y nos va a ayudar
+- **[20:55] Yo:** para cruzar información y ver
+- **[20:55] Yo:** según el nivel de dropshipping que tenga, el nivel de órdenes que que que tenga, cómo interactúa y qué qué qué qué diferenciación en el uso de la del flujo puede haber dependiendo de la madurez. Adicional. ¿Sí, Alejandro?
+- **[20:55] Participante:** Pero yo creo que Juan, lo que
+- **[20:55] Participante:** creo que Juan lo que quería saber era como cuál era la expectativa que teníamos respecto
+- **[20:56] Participante:** a expo winners con esta herramienta que
+- **[20:56] Participante:** queremos Sí, qué qué tan funcional va a estar la ¿a dónde vamos a llegar?
+- **[20:56] Yo:** Ya, realmente, la herramienta
+- **[20:56] Participante:** Con la herramienta.
+- **[20:56] Yo:** va a estar desde el punto donde,
+- **[20:56] Yo:** genera
+- **[20:56] Yo:** una vitrina de ventas, en sentido, sin sin pensar en pauta. Es más, genera la la página de ventas, el detalle del producto, con... Con la imagen, la descripción, garantía y demás. Y el checkout para que el cliente pueda hacer la compra. Es decir, esto terminó también siendo un poco un Frankenstein de no funciona, en el punto a punto, sino que ya entra el proceso manual que lo debe hacer funcionar. Es cuando hay un checkout, cuando se compra el producto, llega la notificación para que la persona suba, y ahí terminaría eso. Sea, termina viendo, hay puente, puente, puente, puente, y luego
+- **[20:56] Yo:** una vaina así que le toca cruzarte nadando.
+- **[20:56] Yo:** Poder seguir, y ahí es donde te está todo el esfuerzo del usuario, que esté pendiente
+- **[20:57] Yo:** de la aplicación
+- **[20:57] Yo:** para que vaya manualmente, entra a drop y configure la otra.
+- **[20:57] Participante:** Sí, que ahí es donde él podría hacer las confirmaciones. Esas URLs de landing ya hoy las creas,
+- **[20:57] Yo:** Not there.
+- **[20:57] Participante:** ¿tienes una URL de esas?
+- **[20:57] Participante:** No.
+- **[20:57] Participante:** Cuando la tengan, me la pueden compartir
+- **[20:57] Juan Duque:** por Porque la manera como yo puedo ir adelantando es pedirle al equipo de desarrollo nuestro
+- **[20:57] Participante:** que organice nuestro web scrapping
+- **[20:57] Juan Duque:** para que funcione en ese tipo de URL, porque esa esa pantalla no se las
+- **[20:57] Juan Duque:** ¿Nos podemos encontrar con la sorpresa?
+- **[20:57] Alejandra Melo:** Y es que
+- **[20:57] Alejandra Melo:** por
+- **[20:57] Juan Duque:** defecto, por accidente, por lo que sea, la sea capaz de tomarla de una.
+- **[20:57] Juan Duque:** Eso podría pasar.
+- **[20:57] Juan Duque:** Pero realmente, pues, creo que
+- **[20:57] Juan Duque:** que que no no va a ser tan así.
+- **[20:57] Yo:** Igual, lo que va a pasar es que
+- **[20:57] Yo:** habiendo un dominio,
+- **[20:57] Yo:** lo que debería, entonces, suceder es que van a ser, por ejemplo,
+- **[20:57] Yo:** Juan Duque punto pago contra entrega,
+- **[20:57] Yo:** Santiago Herrera punto pago contra entrega,
+- **[20:58] Yo:** y van a haber muchas
+- **[20:58] Yo:** o, sí, a haber muchos subdominios también,
+- **[20:58] Yo:** o prefijos al dominio, en donde habría que ver si
+- **[20:58] Yo:** o sea, se van a montar en un
+- **[20:58] Yo:** mientras se configura, se setea todo, van a pasar quince minutos,
+- **[20:58] Yo:** si Meta reconoce esas URLs.
+- **[20:58] Yo:** O si solamente con el dominio ya pasan.
+- **[20:58] Participante:** Toca ver muy bien esa estructura correcta para esos esos prefijos al dominio.
+- **[20:58] Yo:** En, yo creo que en el peor de los casos, Juan, lo que podríamos hacer es que
+- **[20:58] Yo:** si no llegamos a expo winners, porque igual hay un trabajo que
+- **[20:58] Yo:** importante que toca hacer,
+- **[20:58] Yo:** es
+- **[20:58] Yo:** llámanos el lugar si estaría dispuesto a pagar.
+- **[20:58] Yo:** Por pautas y una inversión en pauta,
+- **[20:58] Yo:** más para recopilar data, hacia si hay una disposición o no,
+- **[20:58] Yo:** el monto,
+- **[20:58] Yo:** que estaría dispuesto para que se
+- **[20:58] Yo:** más bien utilizar de pronto la data que tú tienes sobre la
+- **[20:58] Yo:** estimación. Hablo sin integración, términos de integración no se logra.
+- **[20:58] Yo:** No sé, si inviertes quinientos mil, si inviertes cien mil, cuántas
+- **[20:58] Yo:** por lo menos, visitas podrías esperar?
+- **[20:58] Yo:** Eso dejarlo como hacia a recopilar datos y esos usuarios principiantes,
+- **[20:59] Yo:** verían interés
+- **[20:59] Yo:** que también de algo de lado de robots vean como
+- **[20:59] Yo:** un poco la disposición a pagar
+- **[20:59] Yo:** de usuarios novatos,
+- **[20:59] Yo:** Y más bien, una segunda iteración, si vemos que hay
+- **[20:59] Yo:** un campo interesante ahí,
+- **[20:59] Yo:** lo incluimos.
+- **[20:59] Yo:** Para hacer una mejora
+- **[20:59] Yo:** dentro de dentro de la prueba de concepto, que no va a estar dentro de tu webinars,
+- **[20:59] Yo:** pero, pues, como le dije, déjalo unas buenas semanas, igual, andando,
+- **[20:59] Yo:** pues lo que podemos hacer es como un release dentro de esa prueba de concepto.
+- **[20:59] Juan Duque:** Actualizarla a futuro, sí. Listo.
+- **[20:59] Juan Duque:** Santiago, si te parece, hablémonos sobre jueves, viernes, otro espacio,
+- **[20:59] Juan Duque:** y te muestro lo que vamos a subir mañana en el release de droppy y yo organizo estas ideas y te digo, ve, mira, nos fuimos que este alcance puede estar para expo winners, estaría posterior. Esta data la tenemos, como que organizo mis ideas de aquí al jueves, viernes. De una. Yo te escribo apenas tenga como ese horario, ¿listo? Alejandra, Santiago, muchas gracias, y muy bacano lo que
+- **[20:59] Yo:** Dale, de una, de una, gracias.
+- **[20:59] Yo:** Listo.
+- **[20:59] Yo:** Dale, perfecto, te agradezco. Que estés bien.
+- **[20:59] Juan Duque:** trabajando y lo que están pensando. Es es chévere para su story work, para nos... Chao, gracias.
+- **[21:00] Juan Duque:** Chao.
+- **[21:00] Juan Duque:** Chao.

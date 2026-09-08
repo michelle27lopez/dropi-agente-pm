@@ -1,229 +1,278 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 
-type Proyecto = { id: string; handoff_status: string | null };
-type Celula = {
-  id: string; nombre: string; slug: string; lead: string | null;
-  proyectos: Proyecto[];
+// ─────────────────────────────────────────────────────────────────────────────
+// Resumen ejecutivo cross-célula. Todo sale de /api/resumen (BD en vivo):
+// objetivo/enfoque de cada célula + estado real de sus proyectos + últimos
+// updates + bloqueadores + próximos hitos. Cero contenido hardcodeado.
+// ─────────────────────────────────────────────────────────────────────────────
+
+type Hito = {
+  code: string | null;
+  name: string;
+  label: string;
+  fecha: string | null;
+  dias: number;
+  confirmada: boolean;
 };
 
-type Riesgo = { titulo: string; impacto: string; prioridad: "Alto" | "Medio" | "Bajo" };
-
-const HANDOFF_COLOR: Record<string, string> = {
-  "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
+type Bloqueador = {
+  code: string | null;
+  name: string;
+  prioridad: string | null;
+  estado: string | null;
+  motivo: string;
 };
 
-const PRIORIDAD_COLOR: Record<Riesgo["prioridad"], string> = {
-  Alto: "#DC2626", Medio: "#F59E0B", Bajo: "#94A3B8",
+type UpdatePreview = { week_date: string; title: string; preview: string };
+
+type CelulaResumen = {
+  id: string;
+  nombre: string;
+  slug: string;
+  lead: string | null;
+  area: string | null;
+  objetivo: {
+    mision: string | null;
+    vision: string | null;
+    nsm: string | null;
+    foco_trimestre: string | null;
+    enlace_direccionamiento: string | null;
+  };
+  proyectos_total: number;
+  etapas: { discovery: number; poc: number; delivery: number; following: number };
+  salud: {
+    semaforo: "verde" | "ambar" | "rojo";
+    p0_sin_fecha: number;
+    estancados: number;
+    dias_ultimo_update: number | null;
+  };
+  bloqueadores: Bloqueador[];
+  ultimo_weekly: UpdatePreview | null;
+  ultimo_cell_board: UpdatePreview | null;
+  proximos_hitos: Hito[];
 };
 
-const PRIORIDAD_ORDEN: Record<Riesgo["prioridad"], number> = { Alto: 0, Medio: 1, Bajo: 2 };
-
-// Delivery Project Risks por célula — contenido estático, redactado a partir
-// de "Pendientes TI.txt" (jul 2026). Próximo paso: alimentar esto desde datos
-// reales de projects/celula_updates en vez de texto fijo.
-const DELIVERY_RISKS: Record<string, Riesgo[]> = {
-  logistica: [
-    {
-      titulo: "Cola de Handoff sin Estimación",
-      impacto: "2 proyectos ya entregados a TI (Selección de Transportadoras, Parametrización de Tarifas) no tienen fecha de entrada — la célula no puede comprometer resultados con el negocio.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Accesos a Datos Bloqueados",
-      impacto: "Sin acceso a huella digital, normalización de estados, coberturas de transportadoras y catálogo, el equipo no puede validar ni avanzar sus propias iniciativas.",
-      prioridad: "Medio",
-    },
-  ],
-  suppliers: [
-    {
-      titulo: "DESC-001 · Descuentos Cyber Days",
-      impacto: "Crítico: si no se resuelve antes del 11-ago se pierde la ventana de la campaña más importante del semestre.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Cola de 6 Proyectos sin TI",
-      impacto: "NEG-001/002, COM-002 y CAT-001 tienen documentación lista pero sin desarrollador asignado — CAT-001 se proyecta hasta feb 2027.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "COM-001 Detenido",
-      impacto: "Bloqueado por Dropify sin terminar en TI, sin fecha de reanudación.",
-      prioridad: "Medio",
-    },
-    {
-      titulo: "4 APIs para Dropi Pulso",
-      impacto: "Ya tienen aval de Lucho pero sin desarrollo — sin ellas, Pulso no puede escalar su motor de matching.",
-      prioridad: "Medio",
-    },
-  ],
-  brands: [
-    {
-      titulo: "Migración a Perfil de Marcas",
-      impacto: "Sin la estrategia técnica definida, no se puede lanzar la Beta controlada ni liberar a producción el nuevo perfil.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "API de Comportamiento Transaccional",
-      impacto: "Bloqueada por el mismatch de user_id backend↔UserPilot — sin esto, los experimentos de activación siguen dependiendo de CSVs manuales, sin escalar.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Usuarios de Prueba Emprendedores Plus",
-      impacto: "Sin candidatos con contrato directo Inter Rapidísimo/Coordinadora, no se puede validar el caso de uso real antes de escalar.",
-      prioridad: "Medio",
-    },
-  ],
-  sellers: [
-    {
-      titulo: "Bugs Críticos Tienda Nube",
-      impacto: "5 fallos técnicos bloquean que el Seller complete una venta — riesgo de que abandone Dropi y vuelva a procesos manuales.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Módulo de Notificaciones",
-      impacto: "La pieza de infraestructura más crítica para retención en Q4 — sin ella no hay forma de avisar al Seller que confirme órdenes pendientes. Requiere crear proyecto nuevo en TI.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Page Pilot QA Bloqueado",
-      impacto: "El Seller no puede crear landings mientras la feature siga en beta — bloqueado esperando pruebas de TI.",
-      prioridad: "Medio",
-    },
-    {
-      titulo: "Dropify 2.0 · WooCommerce",
-      impacto: "En curso, con entrega pactada 4-ago-2026.",
-      prioridad: "Bajo",
-    },
-  ],
-  experience: [
-    {
-      titulo: "Órdenes y Dropi Tester Bloqueados",
-      impacto: "Sin developer asignado — ambos módulos detenidos por completo.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Error 505 en Búsqueda Semántica (Paraguay)",
-      impacto: "Bloquea la evaluación de expansión a otros países hasta que se resuelva.",
-      prioridad: "Medio",
-    },
-    {
-      titulo: "Inconsistencias en Dashboard de Indicadores",
-      impacto: "Los conteos de órdenes por estado no concuerdan con lo real — reduce la confianza en el dato para tomar decisiones.",
-      prioridad: "Medio",
-    },
-  ],
-  backoffice: [
-    {
-      titulo: "8 Frentes sin Actualización de TI",
-      impacto: "2+ semanas sin visibilidad — pone en riesgo directo el OKR2 (Consolidar operación multipaís) y el cierre del Delivery Backlog obligatorio de Q3.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Facturación Chile y Ecuador en QA",
-      impacto: "2 correcciones llevan 2+ semanas estancadas en QA, con impacto directo en la operación de esos países.",
-      prioridad: "Alto",
-    },
-    {
-      titulo: "Validación de Identidad (Sumsub)",
-      impacto: "TI no tiene compromiso de recurso ni estimación — sin definición no se puede avanzar la Fase 0 ni planear la Fase 1.",
-      prioridad: "Medio",
-    },
-    {
-      titulo: "Conciliaciones sin Developer",
-      impacto: "Sin recurso asignado, el proyecto no puede avanzar.",
-      prioridad: "Medio",
-    },
-  ],
+const SEMAFORO: Record<CelulaResumen["salud"]["semaforo"], { color: string; label: string }> = {
+  verde: { color: "#22C55E", label: "En marcha" },
+  ambar: { color: "#F59E0B", label: "Con fricción" },
+  rojo: { color: "#DC2626", label: "Atención" },
 };
 
-function RiskItem({ riesgo }: { riesgo: Riesgo }) {
+const ETAPA_META: { key: keyof CelulaResumen["etapas"]; label: string; color: string }[] = [
+  { key: "discovery", label: "Discovery", color: "#7C3AED" },
+  { key: "poc", label: "POC", color: "#0EA5E9" },
+  { key: "delivery", label: "Delivery", color: "#F77F00" },
+  { key: "following", label: "Following", color: "#22C55E" },
+];
+
+const PRIORIDAD_COLOR: Record<string, string> = {
+  P0: "#DC2626", P1: "#EA580C", P2: "#D97706", P3: "#2563EB", P4: "#6B7280",
+};
+
+function fmtFecha(iso: string | null) {
+  if (!iso) return "—";
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+}
+
+function Semaforo({ estado }: { estado: CelulaResumen["salud"]["semaforo"] }) {
+  const s = SEMAFORO[estado];
   return (
-    <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-      <span style={{
-        width: 7, height: 7, borderRadius: 999, marginTop: 5, flexShrink: 0,
-        background: PRIORIDAD_COLOR[riesgo.prioridad],
-      }} />
-      <div>
-        <p style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: 0 }}>{riesgo.titulo}</p>
-        <p style={{ fontSize: 12, color: "var(--muted)", margin: "2px 0 0", lineHeight: 1.45 }}>{riesgo.impacto}</p>
-      </div>
-    </div>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: s.color }}>
+      <span style={{ width: 8, height: 8, borderRadius: 999, background: s.color }} />
+      {s.label}
+    </span>
   );
 }
 
-function CelulaCard({ celula }: { celula: Celula }) {
-  const [expanded, setExpanded] = useState(false);
-
-  const counts: Record<string, number> = {};
-  for (const p of celula.proyectos) {
-    const key = p.handoff_status ?? "Sin estado";
-    counts[key] = (counts[key] ?? 0) + 1;
-  }
-
-  const riesgos = [...(DELIVERY_RISKS[celula.slug] ?? [])].sort(
-    (a, b) => PRIORIDAD_ORDEN[a.prioridad] - PRIORIDAD_ORDEN[b.prioridad]
-  );
-  const visibles = expanded ? riesgos : riesgos.slice(0, 2);
-  const restantes = riesgos.length - visibles.length;
-
+function UpdateBlock({ titulo, update }: { titulo: string; update: UpdatePreview | null }) {
   return (
-    <div style={{ border: "1px solid var(--border)", borderRadius: 12, padding: 20, background: "var(--card)" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", margin: 0 }}>{celula.nombre}</h2>
-        <a href={`/celula/${celula.slug}`} style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}>Ver →</a>
-      </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: riesgos.length ? 18 : 0 }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: "var(--fg)", background: "var(--bg)", borderRadius: 999, padding: "3px 9px" }}>
-          {celula.proyectos.length} proyecto{celula.proyectos.length === 1 ? "" : "s"}
-        </span>
-        {Object.entries(counts).map(([status, n]) => (
-          <span key={status} style={{
-            fontSize: 11, fontWeight: 600,
-            color: HANDOFF_COLOR[status] ?? "#6B7280",
-            background: `${HANDOFF_COLOR[status] ?? "#6B7280"}15`,
-            borderRadius: 999, padding: "3px 9px",
-          }}>
-            {n} · {status}
-          </span>
-        ))}
-      </div>
-
-      {riesgos.length > 0 && (
-        <div>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>
-            Delivery Project Risks
+    <div>
+      <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", margin: "0 0 4px" }}>
+        {titulo}
+      </p>
+      {update ? (
+        <>
+          <p style={{ fontSize: 12.5, fontWeight: 600, color: "var(--fg)", margin: 0, lineHeight: 1.4 }}>
+            {update.title} <span style={{ fontWeight: 400, color: "var(--gray-400)" }}>· {update.week_date}</span>
           </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {visibles.map((r) => <RiskItem key={r.titulo} riesgo={r} />)}
-          </div>
-          {riesgos.length > 2 && (
-            <button
-              onClick={() => setExpanded((v) => !v)}
-              style={{
-                marginTop: 12, fontSize: 12, fontWeight: 700, color: "var(--dropi)",
-                background: "none", border: "none", cursor: "pointer", padding: 0,
-              }}
-            >
-              {expanded ? "Ver menos" : `Ver más (+${restantes})`}
-            </button>
-          )}
-        </div>
+          <p style={{ fontSize: 12, color: "var(--muted)", margin: "2px 0 0", lineHeight: 1.5 }}>{update.preview}</p>
+        </>
+      ) : (
+        <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic", margin: 0 }}>Sin registro.</p>
       )}
     </div>
   );
 }
 
+function CelulaCard({ c }: { c: CelulaResumen }) {
+  const [verBloqueadores, setVerBloqueadores] = useState(false);
+  const bloq = verBloqueadores ? c.bloqueadores : c.bloqueadores.slice(0, 2);
+
+  return (
+    <div style={{ border: "1px solid var(--border)", borderRadius: 14, padding: 20, background: "var(--card)", display: "flex", flexDirection: "column", gap: 16 }}>
+      {/* Encabezado */}
+      <div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+          <h2 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: 0 }}>{c.nombre}</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <Semaforo estado={c.salud.semaforo} />
+            <Link href={`/celula/${c.slug}`} style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}>
+              Ver →
+            </Link>
+          </div>
+        </div>
+        {c.lead && <p style={{ fontSize: 11, color: "var(--muted)", margin: "2px 0 0" }}>Lead: {c.lead}</p>}
+      </div>
+
+      {/* Objetivo / enfoque */}
+      <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px" }}>
+        {c.objetivo.mision ? (
+          <p style={{ fontSize: 12.5, color: "var(--fg)", margin: 0, lineHeight: 1.5 }}>{c.objetivo.mision}</p>
+        ) : (
+          <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic", margin: 0 }}>
+            Misión sin definir — <Link href={`/celula/${c.slug}`} style={{ color: "var(--dropi)" }}>completar en la home</Link>.
+          </p>
+        )}
+        {c.objetivo.nsm && (
+          <p style={{ fontSize: 12, color: "var(--muted)", margin: "6px 0 0", lineHeight: 1.5 }}>
+            <strong style={{ color: "var(--fg)" }}>NSM ·</strong> {c.objetivo.nsm}
+          </p>
+        )}
+        {c.objetivo.foco_trimestre && (
+          <p style={{ fontSize: 12, color: "var(--muted)", margin: "4px 0 0", lineHeight: 1.5 }}>
+            <strong style={{ color: "var(--fg)" }}>Foco ·</strong> {c.objetivo.foco_trimestre}
+          </p>
+        )}
+        {c.objetivo.enlace_direccionamiento && (
+          <a href={c.objetivo.enlace_direccionamiento} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: "var(--muted)", display: "inline-block", marginTop: 6 }}>
+            Direccionamiento ↗
+          </a>
+        )}
+      </div>
+
+      {/* Etapas */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "var(--fg)", background: "var(--bg)", borderRadius: 999, padding: "3px 9px" }}>
+          {c.proyectos_total} proyecto{c.proyectos_total === 1 ? "" : "s"}
+        </span>
+        {ETAPA_META.map((e) => (
+          <span key={e.key} style={{ fontSize: 11, fontWeight: 600, color: e.color, background: `${e.color}15`, borderRadius: 999, padding: "3px 9px" }}>
+            {c.etapas[e.key]} · {e.label}
+          </span>
+        ))}
+      </div>
+
+      {/* Salud */}
+      <div style={{ fontSize: 12, color: "var(--muted)", display: "flex", flexWrap: "wrap", gap: "2px 12px" }}>
+        <span>{c.salud.estancados} estancado{c.salud.estancados === 1 ? "" : "s"} (&gt;21d)</span>
+        <span>·</span>
+        <span>
+          {c.salud.dias_ultimo_update === null
+            ? "Sin updates registrados"
+            : `Último update hace ${c.salud.dias_ultimo_update}d`}
+        </span>
+        {c.salud.p0_sin_fecha > 0 && (
+          <>
+            <span>·</span>
+            <span style={{ color: "#DC2626", fontWeight: 700 }}>{c.salud.p0_sin_fecha} P0 sin fecha</span>
+          </>
+        )}
+      </div>
+
+      {/* Bloqueadores */}
+      {c.bloqueadores.length > 0 && (
+        <div>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", margin: "0 0 8px" }}>
+            Bloqueadores de delivery
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {bloq.map((b, i) => (
+              <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                <span style={{
+                  fontSize: 9, fontWeight: 700, marginTop: 2, flexShrink: 0,
+                  color: b.prioridad ? PRIORIDAD_COLOR[b.prioridad] : "var(--gray-400)",
+                  border: `1px solid ${b.prioridad ? PRIORIDAD_COLOR[b.prioridad] : "var(--gray-300)"}`,
+                  borderRadius: 999, padding: "0 5px",
+                }}>
+                  {b.prioridad ?? "—"}
+                </span>
+                <div>
+                  <p style={{ fontSize: 12.5, fontWeight: 600, color: "var(--fg)", margin: 0 }}>
+                    {b.name} {b.code && <span style={{ fontWeight: 400, color: "var(--gray-400)" }}>· {b.code}</span>}
+                  </p>
+                  <p style={{ fontSize: 11.5, color: "var(--muted)", margin: "1px 0 0" }}>{b.motivo}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {c.bloqueadores.length > 2 && (
+            <button
+              onClick={() => setVerBloqueadores((v) => !v)}
+              style={{ marginTop: 8, fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              {verBloqueadores ? "Ver menos" : `Ver más (+${c.bloqueadores.length - 2})`}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Últimos updates */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <UpdateBlock titulo="Último Cell Board" update={c.ultimo_cell_board} />
+        <UpdateBlock titulo="Último Weekly" update={c.ultimo_weekly} />
+      </div>
+
+      {/* Próximos hitos */}
+      <div>
+        <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", margin: "0 0 8px" }}>
+          Próximos hitos (60 días)
+        </p>
+        {c.proximos_hitos.length === 0 ? (
+          <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic", margin: 0 }}>Nada en el horizonte.</p>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {c.proximos_hitos.map((h, i) => (
+              <div key={i} style={{ fontSize: 12, color: "var(--fg)", display: "flex", gap: 8, alignItems: "baseline" }}>
+                <span style={{ fontWeight: 700, minWidth: 52, color: "var(--muted)" }}>{fmtFecha(h.fecha)}</span>
+                <span style={{ flex: 1 }}>
+                  {h.label}: {h.name}
+                  {h.code && <span style={{ color: "var(--gray-400)" }}> · {h.code}</span>}
+                </span>
+                {!h.confirmada && (
+                  <span style={{ fontSize: 9.5, fontWeight: 700, color: "#B45309", background: "#FEF3C7", borderRadius: 999, padding: "0 6px" }}>
+                    tentativa
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ResumenPage() {
-  const [celulas, setCelulas] = useState<Celula[] | null>(null);
+  const [celulas, setCelulas] = useState<CelulaResumen[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/celulas")
-      .then((res) => res.json())
-      .then((data) => { if (Array.isArray(data)) setCelulas(data); });
+    fetch("/api/resumen")
+      .then(async (res) => {
+        if (!res.ok) {
+          const d = await res.json().catch(() => null);
+          throw new Error(d?.error ?? "No se pudo cargar el resumen.");
+        }
+        return res.json();
+      })
+      .then((data) => setCelulas(Array.isArray(data) ? data : []))
+      .catch((e) => setError(e.message));
   }, []);
 
   return (
@@ -233,13 +282,15 @@ export default function ResumenPage() {
 
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32 }}>
-            Vista de solo lectura del estado de cada célula: proyectos por etapa y sus riesgos de delivery más relevantes.
+            Estado en vivo de cada célula: qué persigue, cómo van sus proyectos por etapa, sus últimos
+            updates, los bloqueadores de delivery y los próximos hitos. Todo desde la BD.
           </p>
 
-          {!celulas && <p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p>}
+          {error && <p style={{ fontSize: 13, color: "#DC2626" }}>{error}</p>}
+          {!celulas && !error && <p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p>}
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 24 }}>
-            {celulas?.map((c) => <CelulaCard key={c.id} celula={c} />)}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 24, alignItems: "start" }}>
+            {celulas?.map((c) => <CelulaCard key={c.id} c={c} />)}
           </div>
         </div>
       </div>

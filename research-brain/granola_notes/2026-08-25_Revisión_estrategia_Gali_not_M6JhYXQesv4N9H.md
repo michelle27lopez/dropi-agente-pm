@@ -1,0 +1,1256 @@
+# Revisión estrategia Gali
+
+- **ID:** `not_M6JhYXQesv4N9H`
+- **Fecha:** 2026-08-25T19:02:24.961Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/535c4ee4-5059-43cd-842d-9aa270f9ce35)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Herramientas de Productividad Integradas
+
+- Granola AI integrado por API a Darwin para documentar reuniones
+  - Genera resúmenes y pasos a seguir automáticamente
+  - Sincroniza con Darwin una vez al día
+  - Crea comentarios en tareas de GA con updates, cambios de definición y pendientes
+- Hexa: herramienta de deep research recién descubierta ($20 primer mes, $10 en adelante)
+  - Hace scrapping web, PDFs, audios, comunidades
+  - Uso planeado: competitive intelligence, benchmark, tendencias de ecommerce, novedades de LLMs
+  - Configuración en curso para ser costo-eficiente; posible financiamiento por Dropi (\~$20/mes para todo el equipo)
+
+# Foco Estratégico de Gali: Activación del Nuevo Dropshipper
+
+- Métrica principal: activación, no retención
+  - Reforzado por la reunión con María el día anterior
+  - El problema central: muchos usuarios nuevos llegan y nunca se activan
+  - Causa clave: no conocen el negocio, y el lenguaje actual es demasiado técnico
+- Decisión: enfocar Gali exclusivamente en “encontrar mi primer producto”
+  - Los flujos de escalar y diversificar catálogo quedan fuera del alcance actual
+  - No hay tiempo suficiente para profundizar en los otros dos flujos
+
+# Lenguaje y UX: Eliminar Tecnicismos
+
+- Términos como “fulfillment”, “ángulo de venta”, “escalar” no son comprensibles para nuevos usuarios
+- Propuesta de Alejandra: reemplazar objetivos por frases terrenales
+  - “Encontrar mi primer producto. Descubre un producto con potencial para empezar a vender.”
+  - “Escalar un producto. Aumenta las ventas de un producto que ya funciona.”
+  - “Diversificar mi catálogo.”
+- Flujo actual de Gali es confuso incluso para usuarios que ya hacen dropshipping
+  - Demasiado texto continuo, lista interminable en móvil, múltiples elementos que sacan al usuario del flujo
+- Dirección: cards visuales, íconos de acción, acordeones, bullets simples
+
+# Tres Flujos de Entrada para el Copiloto
+
+- “No sé qué vender”: el copiloto pregunta y guía por categorías o nichos
+- “Tengo una idea”: usuario escanea, sube imagen desde galería, o escribe el producto
+- “Quiero explorar una categoría”: usuario elige nicho (ej. mascotas) y el sistema filtra
+- Cada flujo lleva a un approach diferente del copiloto, pero convergen más adelante en pantallas comunes
+
+# Métrica de Éxito para el Workshop (Expo Winners, \~10 septiembre)
+
+- Benchmark de referencia: Alejandra y su equipo tardaron una semana en encontrar su primer producto ganador
+- Meta para el evento: reducir ese tiempo a 15 minutos en el workshop
+  - Margen aceptable: hasta 20 minutos; los que no terminen quedan autoterminados
+  - Éxito: completar el flujo en menos de 15 minutos
+  - Fracaso: no terminar, o superar los 17-20 minutos
+- Audiencia esperada: mayoría ya vende en dropshipping; nuevos serán minoría
+  - Filtrar participantes que nunca han vendido para el flujo de “primer producto”
+  - Cruzar base de registros con marketing para identificar quiénes aún no han vendido
+- “Delivery” del flujo aún sin definir: historia en Instagram, estado de WhatsApp, o pauta en TikTok
+
+# Arquitectura Técnica: Capa de Inteligencia Previa al MCP
+
+- Problema actual: el MCP de Dropi es muy prematuro y busca de forma demasiado literal (ej. “tenis” va directo al catálogo sin contexto)
+- Propuesta: insertar Hexa como capa intermedia de inteligencia antes del MCP y Apify
+  - No en tiempo real (costo y rendimiento), sino por categorías con corte semanal
+  - Objetivo: prefiltrar por dolores, tendencias de mercado, segmentos, no solo por producto
+  - Ejemplo: detectar crecimiento del mercado de bienestar masculino para contextualizar mejor la recomendación
+- Hexa no define ángulos de venta directamente: mejora el prompt que llega al MCP
+- Próximo paso técnico: Alejandra arma el flujo completo primero, luego se mapean las herramientas por etapa
+
+# Próximos Pasos
+
+- **Armar el flujo completo de "no sé qué vender"** (Alejandra)
+
+  Definir paso a paso qué pasa en cada rama, luego mapear qué herramienta (Hexa, MCP, Apify) entra en cada etapa.
+- **Evaluar Hexa aplicado al dropshipping** (Santiago)
+
+  Verificar qué tan precisa y variada es la información que trae; determinar si puede funcionar como capa de prefiltrado antes del MCP.
+- **Definir el "delivery" del flujo de Gali para el workshop**
+
+  Decidir si el valor entregado al usuario es una historia en Instagram, estado de WhatsApp, pauta en TikTok u otro mecanismo.
+- **Coordinar con marketing el filtro de asistentes al workshop**
+
+  Identificar en la base de registros quiénes nunca han vendido para priorizar ese segmento en el experimento.
+- **Revisar opciones de integración para el siguiente sprint** (Santiago)
+
+  Evaluar Hexa como capa de inteligencia intermedia y ver si Shopify MCP puede reemplazar Page Pilot para publicar el primer producto.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/29c57d17-5ce8-4bf3-b3de-fce4649deb65](https://notes.granola.ai/t/29c57d17-5ce8-4bf3-b3de-fce4649deb65)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[19:02] Alejandra Melo:** Hola, Santiago. Bien, ¿y tú?
+- **[19:02] Yo:** What's
+- **[19:02] Yo:** Hi.
+- **[19:02] Yo:** Bien bien, gracias.
+- **[19:02] Yo:** Dame un segundo, que está terminando de hacer la antigrave.
+- **[19:02] Yo:** Aleja, yo ya
+- **[19:02] Yo:** que sepas, yo ya integré
+- **[19:02] Yo:** Bueno, yo estoy utilizando Granola AI, es para tomar notas, no me acuerdo si ya te lo menciona a ti, o Jaime, se me fue.
+- **[19:02] Alejandra Melo:** Sí, ya,
+- **[19:02] Alejandra Melo:** Sí, ya me lo habías mencionado.
+- **[19:02] Yo:** Ah, bueno, listo, yo ya lo integré por API a Darwin, Jaime me dio como el ok.
+- **[19:02] Yo:** Entonces, por lo menos en sellers, esa
+- **[19:03] Yo:** membresía, pues, la pago yo. Bueno, te estoy en free trial
+- **[19:03] Yo:** pero
+- **[19:03] Yo:** creo que por ahora lo voy a seguir pagando, pero, pues, para que le saquemos
+- **[19:03] Yo:** provecho, igual yo la conecté a Darwin,
+- **[19:03] Yo:** todas estas reuniones y eso,
+- **[19:03] Yo:** junto con cualquier reunión donde yo esté invitado, básicamente.
+- **[19:03] Yo:** Va a empezar a ser como el resumen de la reunión, pasos a seguir. Un poco lo que ya hace Gemini,
+- **[19:03] Yo:** pero más inteligente.
+- **[19:03] Yo:** Porque directamente no lo hace sobre Flash, sino que lo hace con Opus y con y todos esos. Entonces, todo eso queda documentado y está sincronizado para que creo que sea una vez al día, va a estar actualizando Darwin.
+- **[19:03] Alejandra Melo:** Ah listo.
+- **[19:03] Yo:** Ya integré
+- **[19:03] Yo:** GA
+- **[19:03] Yo:** para que todas estas reuniones genere updates sobre las tareas asociadas.
+- **[19:03] Yo:** Como comentarios.
+- **[19:03] Yo:** Para no estar como, yo
+- **[19:03] Yo:** acuerdo cuando estaba entrando como que cada te cogía tarea por tarea, y empezaba así a escribir como todos los
+- **[19:03] Yo:** updates.
+- **[19:03] Yo:** Eso me parece genial, pero yo no tengo esa estructura para hacerlo yo mismo, entonces, ya lo automaticé.
+- **[19:04] Yo:** Ya ya ya quedaron, entonces, por ejemplo, si hay cambios de definiciones,
+- **[19:04] Yo:** pendientes, pasos a seguir,
+- **[19:04] Yo:** ya queda sobre sobre sobre el hilo como comentario, ¿vale?, para que lo tengas presente.
+- **[19:04] Alejandra Melo:** Listo.
+- **[19:04] Yo:** Y como está en Darwin, pues tú también puedes hacerlo, ¿vale?, o sea, queda queda solo el repositorio,
+- **[19:04] Yo:** Entonces, no lo he publicado en Maine,
+- **[19:04] Yo:** pero como tú estás dentro de celular, seller, entonces,
+- **[19:04] Yo:** cualquier contexto que necesites, como qué dijo María ayer sobre
+- **[19:04] Yo:** priorización, de una vez va a ir a consultar sobre sobre la memoria del proyecto, ¿vale?
+- **[19:04] Alejandra Melo:** Ah, okay, listo, genial.
+- **[19:04] Yo:** Esto, esto, entonces, como tener literalmente la bitácora
+- **[19:04] Yo:** en real time de lo que, bueno, real time no, un un día de
+- **[19:04] Alejandra Melo:** Mhmm.
+- **[19:04] Yo:** de de un un día de diferencia.
+- **[19:04] Yo:** Entonces, para que sepas, ¿listo? Para que tú, pues, si quieres también, o
+- **[19:04] Yo:** provechos y lo ves como útil.
+- **[19:04] Yo:** Y te digo, arranco con esto, perdón, sé que es reunión de otra cosa, pero es para que no se me pase.
+- **[19:04] Alejandra Melo:** Listo, dale.
+- **[19:04] Yo:** Y
+- **[19:05] Yo:** y y y estoy
+- **[19:05] Yo:** integrando también en Darwin,
+- **[19:05] Yo:** una herramienta que, de hecho, conocí estos días,
+- **[19:05] Alejandra Melo:** No.
+- **[19:05] Yo:** no sé si ya la conoces, se llama Hexa, e x a.
+- **[19:05] Yo:** Ok, Hexa es una herramienta de deep research.
+- **[19:05] Yo:** Para hacer
+- **[19:05] Yo:** discovery
+- **[19:05] Yo:** tope.
+- **[19:05] Yo:** Entonces, lo que hace es ir a consultar
+- **[19:05] Yo:** yo te mando el
+- **[19:05] Yo:** link,
+- **[19:05] Yo:** Te lo voy a mandar por el
+- **[19:05] Yo:** Lo que hace exam
+- **[19:05] Yo:** es, ella da veinte dólares el primer mes, diez dólares todos los
+- **[19:05] Yo:** todos los meses ya en adelante. O sea, a partir del a partir del segundo en adelante,
+- **[19:05] Yo:** diez dólares.
+- **[19:05] Yo:** Gratis.
+- **[19:05] Yo:** Entonces, lo que hace es
+- **[19:05] Yo:** hacer
+- **[19:05] Yo:** consultas web
+- **[19:05] Yo:** consultas de blogs, hace el scrapping completo,
+- **[19:05] Yo:** pero no solamente se queda en la web, sino que también puede identificar
+- **[19:06] Yo:** y explorar los contenidos, por lo de PDFs,
+- **[19:06] Yo:** de
+- **[19:06] Yo:** ¿De qué?
+- **[19:06] Yo:** De PDFs, de audios, creo que también alcanzo a hacerlo, es multimedia la exploración,
+- **[19:06] Yo:** También entra comunidades, por ejemplo, y revisa. Un poco lo que ya está haciendo
+- **[19:06] Yo:** Jaime con, no sé si ya lo escuchaste, con Sherlock.
+- **[19:06] Yo:** Pero ya lo hace a nivel
+- **[19:06] Yo:** global.
+- **[19:06] Yo:** Ya yo estoy creándole, apenas estoy seteándole como los
+- **[19:06] Yo:** como los tableros. Entonces, por ejemplo,
+- **[19:06] Yo:** van a ver diferentes, dentro de ellos está
+- **[19:06] Yo:** se puede segmentar. Gente que no sabe ecommerce y que está
+- **[19:06] Yo:** aprendiendo, qué plataformas está buscando.
+- **[19:06] Yo:** Empieza a hacer la el discovery,
+- **[19:06] Yo:** empieza a machar como qué es lo que buscan y cómo lo buscan.
+- **[19:06] Yo:** ¿Sí?
+- **[19:06] Yo:** Que que hay en como
+- **[19:06] Yo:** competidores, tú es también toda la parte de benchmark, competitive intelligence, ¿no?
+- **[19:06] Yo:** Están ofreciendo, qué novedades tienen,
+- **[19:06] Yo:** qué problemas están reportando, incidencias,
+- **[19:06] Yo:** no sé si quisiéramos, portame de AI, cuáles son los últimos modelos,
+- **[19:06] Yo:** y mejoras que han tenido los LEMS para mejorar procesos de ecommerce.
+- **[19:07] Yo:** Todo eso va a estar scrapeándolo.
+- **[19:07] Yo:** Claramente, qué tanto queramos ver,
+- **[19:07] Yo:** con la frecuencia de impactar en el consumo y, pues, esos diez dólares se nos van a agotar más rápido. Estoy viendo cómo lo seteo para que sea como muy costo eficiente, Igual, yo lo también lo estoy conversando con Jaime, para que, en caso que lo veamos chévere, pues ver si Dropi lo financia,
+- **[19:07] Yo:** igual no es muy costoso tampoco.
+- **[19:07] Yo:** Estamos hablando de que ya
+- **[19:07] Yo:** si se agotaron los diez dólares con el creador, ¿qué le llegaría a decir? Que es una cuenta de
+- **[19:07] Yo:** veinte dólares para todo el equipo de producto, o sea, la verdad está superbién.
+- **[19:07] Yo:** Y como no no no va a ser como
+- **[19:07] Yo:** un chat que todo el mundo esté escribiendo, sino que lo que va a estar es como
+- **[19:07] Yo:** y generando como updates semanales,
+- **[19:07] Yo:** pues chévere.
+- **[19:07] Yo:** Estoy implementando eso, ¿listo? Eso apenas quedé
+- **[19:07] Yo:** te te aviso para que igual tú como que
+- **[19:07] Yo:** cuando tengas el tiempo lo
+- **[19:07] Yo:** lo pruebes y me digas si sí te está funcionando bien.
+- **[19:07] Alejandra Melo:** Listo, Ale.
+- **[19:07] Yo:** ¿Vale?
+- **[19:07] Yo:** Y eso, pues también
+- **[19:07] Yo:** ya eso sí nos nos nos va a ayudar en lo que vayamos a hacer ahora con
+- **[19:08] Yo:** con Gali, ahora sí entrando en en Madrid.
+- **[19:08] Yo:** Es lo mismo, la la idea es que con Gali aprovechemos y entendamos
+- **[19:08] Yo:** De pronto, no antes del del de expo winners, ay, ay,
+- **[19:08] Yo:** pero pero sí de forma general, como el discovery que que que pidió que pidió María.
+- **[19:08] Yo:** ¿Sí? Entonces, que que no nos pasemos solamente
+- **[19:08] Yo:** y que volvamos a hacer los cursos y todo el rollo,
+- **[19:08] Yo:** sino que también vayamos directamente a
+- **[19:08] Yo:** sé, no no no nos quedemos ni siquiera cómo se hace el dropshipping
+- **[19:08] Yo:** sé, en Colombia o Latinoamérica, sino que vaya mucha mucho más allá, y si existiera un modelo similar,
+- **[19:08] Yo:** o una
+- **[19:08] Yo:** evolución del dropshipping, no sé, en Nueva Zelanda, pues nos demos cuenta.
+- **[19:08] Yo:** Sin sin sin sin que estar haciendo como ese ese ejercicio de discovery permanente que están
+- **[19:08] Yo:** tan demorado.
+- **[19:08] Yo:** ¿Listo?
+- **[19:08] Yo:** Cuando esté, te, bueno,
+- **[19:08] Yo:** Bueno,
+- **[19:08] Yo:** ahora sí.
+- **[19:09] Yo:** Yo estuve revisando ya el
+- **[19:09] Yo:** y haciendo aplicándole a la gente a Discovery. Ya claramente
+- **[19:09] Yo:** la la alerta más grande está
+- **[19:09] Yo:** en cómo se está respondiendo directamente a las métricas que queremos impactar,
+- **[19:09] Yo:** que sería
+- **[19:09] Yo:** a mí me, lo veo así después de lo de ayer, bueno, se reforzó la idea, pero es
+- **[19:09] Yo:** cien por ciento esa activación, ni siquiera retención, o sea, es una herramienta para activar
+- **[19:09] Yo:** Creo que no había muchas dudas en eso, pero con lo que dijo María,
+- **[19:09] Yo:** en en en en tema de de de de la data y lo que quería que priorizáramos,
+- **[19:09] Yo:** definitivamente, tenemos que es irnos a esa activación y migrar
+- **[19:09] Yo:** bueno, mi mi percepción ahora es que
+- **[19:09] Yo:** si soy alguien que no sabe de dropshipping, no me voy a activar
+- **[19:09] Yo:** con con, igual, ni siquiera con Gali, porque igual Gali está
+- **[19:09] Yo:** extenso,
+- **[19:09] Yo:** no se no se complejó,
+- **[19:09] Yo:** es extenso,
+- **[19:09] Yo:** y algunos copies, algunas
+- **[19:09] Yo:** frases ya son muy de nicho,
+- **[19:10] Yo:** Creo que hay algo que ya ya he venido
+- **[19:10] Yo:** viendo en
+- **[19:10] Yo:** muchas de las comunicaciones, y creo que es
+- **[19:10] Yo:** los copy de nicho, ¿no?, los
+- **[19:10] Yo:** entonces, habla de, no sé,
+- **[19:10] Yo:** Deme una frase, se me olvidaba cualquiera, tengo una palabra de nicho.
+- **[19:10] Participante:** Me
+- **[19:10] Participante:** Fueron a mí también.
+- **[19:10] Yo:** Fulfillment,
+- **[19:10] Participante:** Pues, por ejemplo,
+- **[19:10] Yo:** qué sé yo,
+- **[19:10] Participante:** escalar, aquí
+- **[19:10] Alejandra Melo:** ejemplo, está
+- **[19:10] Alejandra Melo:** ángulos de venta, todavía no sabrían qué es, qué nicho
+- **[19:10] Alejandra Melo:** todas esas cosas no.
+- **[19:10] Yo:** o sea, para alguien que nunca ha vendido,
+- **[19:10] Yo:** igual que tú digas ángulo de venta, tampoco es nada nuevo, o sea, tienes que explicarle que es un ángulo de venta.
+- **[19:10] Alejandra Melo:** Sí.
+- **[19:10] Yo:** O sea, yo
+- **[19:10] Yo:** yo creo que eso tenemos que hacer es como una transformación hacia
+- **[19:10] Yo:** palabras muy terrenales, muy diarias,
+- **[19:10] Alejandra Melo:** Pues, mira que yo estuve como, estoy haciendo esto,
+- **[19:10] Yo:** Si.
+- **[19:10] Alejandra Melo:** antes de ponerme a hacer como todo en
+- **[19:10] Alejandra Melo:** con qué?
+- **[19:11] Alejandra Melo:** Pues antes de ponerme a hacer el flujo, ¿cierto?
+- **[19:11] Alejandra Melo:** Diciendo cuál es tu objetivo, o sea, sin sin ir a cambiar como
+- **[19:11] Alejandra Melo:** lo que se había planteado en su momento, sino solamente
+- **[19:11] Alejandra Melo:** como aterrizarlo realmente a como sería
+- **[19:11] Alejandra Melo:** algo como no no hablarlo tan
+- **[19:11] Alejandra Melo:** tan, sin hablar con tanto tecnicismo.
+- **[19:11] Alejandra Melo:** ¿Cierto? Entonces, ¿cuál es tu objetivo? Elija el que quiere lograr.
+- **[19:11] Alejandra Melo:** Obviamente, sí hay que mejorarlo, pero es como las ideas que estoy aquí como planteándolas.
+- **[19:11] Alejandra Melo:** Encontrar mi primer producto. Descubre un producto con potencial para empezar a vender.
+- **[19:11] Alejandra Melo:** Luego, escalar un producto. Aumenta las ventas de un producto que ya funciona.
+- **[19:11] Yo:** I I put the
+- **[19:11] Alejandra Melo:** Y luego, diversificar mi catálogo.
+- **[19:11] Yo:** perdóname, te oí te oí
+- **[19:11] Yo:** agregando cosas que también he ido pensando con eso, por ahí como
+- **[19:11] Yo:** tachando de a poquitos.
+- **[19:11] Yo:** Bueno, cubriendo.
+- **[19:11] Yo:** Sí, para nada volvernos. Yo estaba
+- **[19:11] Yo:** con Gali, puntualmente, pasa lo que sucede con todos los otros productos,
+- **[19:12] Yo:** y es que toca hacer un discovery como retroactivo, ¿no?
+- **[19:12] Yo:** Es como, ya llegamos al feature.
+- **[19:12] Yo:** Que hablándolo teóricamente es lo último que se entrega, ¿verdad?
+- **[19:12] Alejandra Melo:** Sí.
+- **[19:12] Yo:** Y por eso es que tú y yo estamos en en esto, obviamente apenas otra vez,
+- **[19:12] Yo:** en el diagrama de cómo debería haberse
+- **[19:12] Yo:** la idea cómo debería verse, no la funcionalidad.
+- **[19:12] Yo:** Y estaba pensando que
+- **[19:12] Yo:** no está clara, justamente,
+- **[19:12] Yo:** la
+- **[19:12] Yo:** qué comportamiento queremos. Voy a devolverme como a esa a esa parte que
+- **[19:12] Yo:** está en el discovery, ¿no?, en el lo lo del lo del
+- **[19:12] Yo:** cómo verificar la conducta, si por motivación, habilidad, pronto.
+- **[19:12] Yo:** Entonces,
+- **[19:12] Yo:** ¿cuál es el comportamiento
+- **[19:12] Yo:** que queremos que tenga
+- **[19:12] Yo:** el dropshipper, o sea, yo, qué es que estamos validando?, ¿cuál es la hipótesis?
+- **[19:12] Yo:** O sea, volviéndonos mucho, mucho, mucho, mucho, que es literalmente eso que tienes ahí.
+- **[19:12] Yo:** Ahí es el objetivo
+- **[19:12] Yo:** del dropshipper, ¿cierto?, o en el del nuevo emprendedor. Pero antes de eso,
+- **[19:12] Alejandra Melo:** Exacto.
+- **[19:13] Yo:** siendo, tú tú me entenderás la expresión, pero
+- **[19:13] Yo:** a mí no me
+- **[19:13] Yo:** importa en ese momento qué quiere dropshipper, sino que me importa qué quiere dropping.
+- **[19:13] Alejandra Melo:** Mhmm.
+- **[19:13] Yo:** ¿Sí? Y luego claramente veo cómo hago que eso
+- **[19:13] Yo:** haga un match con lo que quiere dropshipper.
+- **[19:13] Alejandra Melo:** Claro, yo, en ese momento, Sara, pensé
+- **[19:13] Alejandra Melo:** en lo que habíamos hablado ayer con María, que era activar al dropshipper
+- **[19:13] Alejandra Melo:** ¿cierto?, pensar en esa primera venta,
+- **[19:13] Alejandra Melo:** que fuera, obviamente, entregada, por eso el producto tiene que ser
+- **[19:13] Alejandra Melo:** producto con potencial. Y estaba pensando en lo que decía
+- **[19:13] Alejandra Melo:** José Pietro, Pietro es que es él, ¿cierto? Que decía que
+- **[19:13] Yo:** Y nada,
+- **[19:13] Alejandra Melo:** de cero
+- **[19:13] Alejandra Melo:** ¿Cómo?
+- **[19:13] Yo:** Espinada pitre, pero sí.
+- **[19:13] Alejandra Melo:** Ay, no, ya.
+- **[19:13] Yo:** Me quedé con el segundo apellido, entonces yo casi que no le oía, luego me di cuenta que era
+- **[19:13] Alejandra Melo:** Sí, me das.
+- **[19:13] Yo:** era pero sí, ajá.
+- **[19:13] Alejandra Melo:** Entonces,
+- **[19:13] Alejandra Melo:** estaba pensando en lo que él dijo, que a partir con ya el el emprendedor hace la
+- **[19:13] Alejandra Melo:** cien órdenes, entonces ya ahí se se considera que es
+- **[19:14] Alejandra Melo:** constante.
+- **[19:14] Alejandra Melo:** Ahí hay un
+- **[19:14] Alejandra Melo:** pues, una retención realmente.
+- **[19:14] Alejandra Melo:** Estaba pensando también en eso, porque es que ellos aquí tienen
+- **[19:14] Alejandra Melo:** unas cosas ahí que dice escalar a varios
+- **[19:14] Alejandra Melo:** diversifica tu catálogo activo, pero, pues, yo como que no sé, ahí me pierdo. Vender dos mil unidades, plan de escalamiento para un producto validado. Pero eso es como que a qué corresponden en lo que nosotros queremos.
+- **[19:14] Yo:** Yo siento que el problema es que eso
+- **[19:14] Yo:** tiene
+- **[19:14] Yo:** eso tiene todo el sentido, lo de lo de la, o sea, la primera de
+- **[19:14] Yo:** tu primer producto
+- **[19:14] Yo:** yo lo encuentro
+- **[19:14] Yo:** muy útil,
+- **[19:14] Yo:** para
+- **[19:14] Yo:** para salir en a a a sacar data, ¿no?
+- **[19:14] Yo:** Pero
+- **[19:14] Yo:** y justamente los que queremos, o sea, mi dolor como negocio está haciendo que tengo
+- **[19:14] Yo:** poco de gente que llegue y que nunca se activa.
+- **[19:14] Yo:** Muy resumido, ¿sí?
+- **[19:14] Yo:** Y no sabe esto, y no se activa también porque una de las grandes causas es que no saben de de ese negocio.
+- **[19:15] Yo:** Está el otro lado. Y, entonces, para para genial.
+- **[19:15] Yo:** Pero está al otro lado, que es el de Gali Global,
+- **[19:15] Yo:** que todavía
+- **[19:15] Yo:** tengo como la la
+- **[19:15] Yo:** no sé, siento que hay vacíos muy muy pequeñitos que todavía toca llenar de
+- **[19:15] Yo:** por qué igual está el global y, entonces, no está en general, hay una
+- **[19:15] Yo:** hay uno pequeño y otro grande, pero bueno.
+- **[19:15] Yo:** Luego iremos como
+- **[19:15] Yo:** llenando esos vacíos.
+- **[19:15] Yo:** Pero el punto es que
+- **[19:15] Yo:** para el global, que ya me incluye los dropshippers que ya venden,
+- **[19:15] Yo:** un dato que nos dio María, que creo que entra a participar aquí,
+- **[19:15] Yo:** es protagónico, es la cantidad, ¿era del cuarenta por ciento?
+- **[19:15] Yo:** De
+- **[19:15] Yo:** los dropshippers tenían catálogo privado,
+- **[19:15] Alejandra Melo:** Cuarenta por ciento.
+- **[19:15] Yo:** Es decir,
+- **[19:15] Alejandra Melo:** Ajá.
+- **[19:15] Yo:** sí, el cuarenta es cierto, creo que sí,
+- **[19:15] Yo:** que realmente
+- **[19:15] Yo:** un dropshipper que ya
+- **[19:15] Yo:** escaló
+- **[19:15] Yo:** o está en proceso de escalar
+- **[19:15] Yo:** no va a encontrar
+- **[19:15] Yo:** productos acá, porque necesita que sea
+- **[19:15] Alejandra Melo:** Es que, so,
+- **[19:16] Alejandra Melo:** Es que, ¿sabes?, yo, o sea, yo como veo todo esto,
+- **[19:16] Yo:** Ajá.
+- **[19:16] Alejandra Melo:** aquí el primer el primer
+- **[19:16] Alejandra Melo:** paso, el primer el primer objetivo, que es este,
+- **[19:16] Alejandra Melo:** yo lo yo lo enfocaría más como a enseñarles, ¿sí?, con el paso a paso de
+- **[19:16] Alejandra Melo:** cuál, qué es lo que debe de hacer en cada una de las etapas.
+- **[19:16] Alejandra Melo:** ¿Cierto?, en cuanto a mi primer producto.
+- **[19:16] Alejandra Melo:** ¿Qué...?
+- **[19:16] Alejandra Melo:** Qué seleccionar, pues, qué es lo que quiere? Y yo aquí
+- **[19:16] Alejandra Melo:** por ejemplo, lo voy a seleccionar a como de no sé qué vender. Tengo una idea, quiero
+- **[19:16] Alejandra Melo:** explorar una categoría, ¿cierto? Entonces, aquí, por ejemplo, ¿qué te gustaría vender? Bueno,
+- **[19:16] Alejandra Melo:** aquí es como llevándolo como como así como paso a paso. Mira, qué es lo que
+- **[19:16] Yo:** Mhmm.
+- **[19:16] Alejandra Melo:** quieres a esto, ¿sí?
+- **[19:16] Alejandra Melo:** Pero ya estos, por ejemplo, ellos no lo tienen todavía activo, no sé si tú le diste clic,
+- **[19:16] Alejandra Melo:** te lleva para dejar el correo para cuando ya estén disponibles. Entonces,
+- **[19:16] Alejandra Melo:** estos
+- **[19:16] Alejandra Melo:** o sea, solamente Gali está hasta aquí.
+- **[19:16] Alejandra Melo:** Esto de aquí, que es escalar un producto, ya es otro tipo
+- **[19:17] Alejandra Melo:** de de enseñanza, ¿listo? ¿Cómo quieres como
+- **[19:17] Alejandra Melo:** cómo cómo se escala un producto?
+- **[19:17] Alejandra Melo:** Ese, cómo diversificar el catálogo, pero podemos agregar también otro. No sé. Que estas enseñanzas, estos paso a paso son diferentes para cada uno. Lo del lo del producto privado, como en qué en dónde va, ¿ya?, en qué en qué paso, en qué fases encaja.
+- **[19:17] Yo:** Okay.
+- **[19:17] Yo:** Yeah. Yeah.
+- **[19:17] Yo:** Are you
+- **[19:17] Yo:** Por eso
+- **[19:17] Yo:** Ah, eso digo yo porque digo eso,
+- **[19:17] Yo:** nosotros, ah, bueno, ya ya me confirmó hoy en la mañana
+- **[19:17] Yo:** Jaime, me confirmó de una manera extraña, pero me confirmó que también voy a ir a Bogotá,
+- **[19:17] Yo:** porque fuimos a Santi y he comprado ya los tiquetes y con Mary, que tú estás hablando.
+- **[19:17] Yo:** Como, me dijeron que no iba a ir, ¿cómo así que compra los tiquetes? Y fue, ah, no, cambié planes, ¿cómo así? No te dije.
+- **[19:17] Yo:** No, y menos mal me dijo con tres semanas de anticipación.
+- **[19:17] Yo:** Entonces, me me dijo que
+- **[19:17] Yo:** que que, pues, la idea sí es que
+- **[19:17] Yo:** los el workshop, pues, claramente, como el el focus seller,
+- **[19:18] Yo:** que yo los lleve.
+- **[19:18] Yo:** ¿Cierto?
+- **[19:18] Yo:** Y, entonces, ahí es donde digo, nosotros tenemos la oportunidad como la la
+- **[19:18] Yo:** la ventana perfecta,
+- **[19:18] Yo:** para sacar
+- **[19:18] Yo:** lo que nosotros queremos saber.
+- **[19:18] Alejandra Melo:** Sí.
+- **[19:18] Yo:** ¿Verdad?
+- **[19:18] Yo:** Y digo,
+- **[19:18] Yo:** ¿qué es lo que queremos saber?
+- **[19:18] Yo:** Y como yéndonos
+- **[19:18] Yo:** creo que la la la reunión de ayer fue menos mal la tuvimos con con María, y es,
+- **[19:18] Yo:** después de eso, lo que queremos saber es definitivamente por
+- **[19:18] Yo:** qué los dropshippers nuevo, los nuevos, no no regismian que son dropshippers todavía,
+- **[19:18] Yo:** Esas personas nunca se activan.
+- **[19:18] Yo:** ¿Sí?
+- **[19:18] Yo:** Y eso no me lo va a responder ni lo de
+- **[19:18] Yo:** encuentre, ni lo de que escale un producto, ni lo de que quiera el otro, diversifique
+- **[19:18] Alejandra Melo:** Deversificar el catálogo.
+- **[19:18] Yo:** el catálogo, algo así.
+- **[19:18] Yo:** No no me, o sea, en este punto, yo ando como
+- **[19:18] Yo:** cerrando mucho la vista a a a mi objetivo, lo otro no me importa,
+- **[19:18] Yo:** decir, que yo solo debería
+- **[19:18] Yo:** irme, enfocarme en escoger mi primer producto.
+- **[19:19] Yo:** ¿Verdad?
+- **[19:19] Alejandra Melo:** Entonces, lo enfocamos... Sí, o sea, es que debería de ser ahí.
+- **[19:19] Yo:** Exacto.
+- **[19:19] Alejandra Melo:** Porque, de hecho, yo no creo que
+- **[19:19] Alejandra Melo:** el tiempo nos dé, incluso, para
+- **[19:19] Alejandra Melo:** para profundizar en los otros dos. Exacto.
+- **[19:19] Yo:** Tres flujos.
+- **[19:19] Yo:** No, vámonos, llegó.
+- **[19:19] Alejandra Melo:** Yo me iría más por el de encontrar mi primer producto,
+- **[19:19] Alejandra Melo:** yo me guiaría más como por cómo, pues, yo estaba buscando en Reddit como
+- **[19:19] Alejandra Melo:** cuáles son los objetivos y, pues, digamos que me dio como esos,
+- **[19:19] Alejandra Melo:** pues, buscando en Reddit lo que hablan los los
+- **[19:19] Alejandra Melo:** y todo eso, digamos que esos fueron, me dieron como doce, pero, pues, yo los
+- **[19:19] Alejandra Melo:** los simplifiqué, digamos que fueron esos. Pero
+- **[19:19] Alejandra Melo:** yo ya estaba como haciendo, por acá, como el paso a paso, yo lo trato
+- **[19:19] Alejandra Melo:** tratar de no de no
+- **[19:19] Alejandra Melo:** hablar con tecnicismos ni nada de eso, pero digamos que en los cursos que yo me he
+- **[19:19] Alejandra Melo:** y y demás, estoy estoy como tratando de plasmarlos acá.
+- **[19:19] Alejandra Melo:** ¿Cierto? Obviamente,
+- **[19:19] Yo:** La la la con el curso es que
+- **[19:19] Yo:** uno cuenta con la Ford,
+- **[19:20] Yo:** la ventaja de que tienes alguien que ya luego te mastica el
+- **[19:20] Yo:** el el el el el concepto, ¿no?
+- **[19:20] Yo:** Luego, eso quiere decir, o, por ejemplo, es,
+- **[19:20] Yo:** aquí como es totalmente autogestión,
+- **[19:20] Alejandra Melo:** Mhmm.
+- **[19:20] Yo:** es también autogestión es el entendimiento, y yo se lo trato de dar muy molido,
+- **[19:20] Yo:** para que no se me devuelva. Y luego es como, bueno,
+- **[19:20] Yo:** hay hay un concepto como de asociación, pero sí, te entiendo y cien por ciento de acuerdo
+- **[19:20] Yo:** con lo que estás diciendo, ajá.
+- **[19:20] Yo:** Y entonces,
+- **[19:20] Alejandra Melo:** Ya como irle metiendo los
+- **[19:20] Alejandra Melo:** conceptos y todo eso, pero explicándoselos.
+- **[19:20] Alejandra Melo:** Los entienda. Por ejemplo, yo, la verdad, yo estuve con
+- **[19:20] Alejandra Melo:** ¿como qué?, como un mes, menos de un mes con Jaime en su
+- **[19:20] Alejandra Melo:** cuando estaban con el tema de empezándolo,
+- **[19:20] Alejandra Melo:** y digamos que yo lo entendía de otra forma. Luego, bueno, creo que de ahora ni siquiera es eso.
+- **[19:20] Alejandra Melo:** Y yo no estaba entendiendo que era pulso, la verdad,
+- **[19:20] Alejandra Melo:** Estos momentos estoy como tratando de comprenderlo,
+- **[19:20] Alejandra Melo:** que a mí a mí me gusta como me lo den todo masticadito, no que me lo den sino entenderlo todo bien,
+- **[19:21] Alejandra Melo:** masticadito, como que eso es para esto, esto, esto y esto, exactamente.
+- **[19:21] Yo:** Sí, sí, sí, de acuerdo.
+- **[19:21] Alejandra Melo:** Entonces, aquí está.
+- **[19:21] Alejandra Melo:** Esto de drop y pulso, pero esto aquí ni siquiera, o sea, yo, la verdad, si yo lo leo en
+- **[19:21] Alejandra Melo:** no estoy en drop y yo no entendería qué es drop y pulse, me lo tienen que explicar.
+- **[19:21] Yo:** Mira, para mí,
+- **[19:21] Alejandra Melo:** Muy bien, porque no no sé exactamente qué es.
+- **[19:21] Alejandra Melo:** Tengo entendido que dice que son cinco a diez días y que me van a encontrar el producto, me van a contactar. Ajá.
+- **[19:21] Yo:** Exacto.
+- **[19:21] Yo:** Te genera un match, te genera un match entre lo que esperabas
+- **[19:21] Yo:** encontrar
+- **[19:21] Yo:** y definitivamente, pues no hay no hay quien logre
+- **[19:21] Yo:** cubrir tu demanda de ese producto.
+- **[19:21] Alejandra Melo:** Exacto.
+- **[19:21] Yo:** Pero pero yo digo, es como
+- **[19:21] Yo:** Dele, dale.
+- **[19:21] Alejandra Melo:** Y y, bueno, y está, digamos, como que aquí te dice seleccionar,
+- **[19:21] Alejandra Melo:** ay, no, es que hay tantas cosas acá. Está, por ejemplo, seleccionar producto del catálogo.
+- **[19:21] Alejandra Melo:** Pero me toca igual a mí seleccionar el producto
+- **[19:21] Yo:** So I
+- **[19:21] Alejandra Melo:** el catálogo, pero, obviamente,
+- **[19:21] Yo:** ¿Sabes qué? Que que me
+- **[19:22] Yo:** desde los componentes
+- **[19:22] Yo:** el diseño como tal.
+- **[19:22] Yo:** Claramente, esto se hizo en en en en la parte
+- **[19:22] Yo:** por Cata, otra parte por Jaime, pero se nota, pues, Bayes codeado, ¿no? El esquema es ya las plataformas que tienen bitcoin funcionan muy similar, ¿no?, el el el el
+- **[19:22] Participante:** Mhmm.
+- **[19:22] Yo:** la línea de progreso, que es como siempre igualita, está bajo las mismas tres cosas.
+- **[19:22] Yo:** Pero
+- **[19:22] Yo:** en temas de disposición de organización,
+- **[19:22] Yo:** de
+- **[19:22] Yo:** lo mismo, siempre hay como una un cabecero, que es el banner que te dice la ruta en donde estás,
+- **[19:22] Yo:** luego está el título,
+- **[19:22] Yo:** luego está el subtítulo,
+- **[19:22] Yo:** luego es un banner principal con los menús, como como como tabs,
+- **[19:22] Yo:** y luego cada tab tiene diferentes cosas. Puede ser ese el el lo de la
+- **[19:22] Yo:** de hecho, no estoy viendo tu pantalla, creo que también está así, ¿cierto? Sí.
+- **[19:22] Yo:** Suele ser muy muy muy
+- **[19:22] Yo:** muy muy muy plantilla,
+- **[19:22] Yo:** te pones a ver, ¿no?
+- **[19:22] Yo:** Tal cual lo que nosotros le le le tiramos hate a
+- **[19:23] Yo:** a PagePilot,
+- **[19:23] Yo:** prácticamente, ya todos los los diseños de IA tienen la la
+- **[19:23] Yo:** la misma la misma plantilla también.
+- **[19:23] Yo:** Realmente, es por tema de rendimiento de tokens.
+- **[19:23] Yo:** Pero
+- **[19:23] Yo:** estaba, justamente,
+- **[19:23] Yo:** yendo a que
+- **[19:23] Yo:** menos es más en muchos casos, sobre todo para gente que no
+- **[19:23] Alejandra Melo:** I see.
+- **[19:23] Yo:** entiende el negocio yéndonos
+- **[19:23] Alejandra Melo:** Sí. Y mira que eso han estado diciendo tanto de drop y drop y
+- **[19:23] Alejandra Melo:** será mucho más fácil de usar. Ahora le han puesto más cosas y se ha vuelto más
+- **[19:23] Yo:** ¿Y eso y eso qué los que lo usan
+- **[19:23] Yo:** Y eso y eso que los que lo usan frecuentemente ya es gente que sabe de dropshipping.
+- **[19:23] Alejandra Melo:** Exacto.
+- **[19:23] Yo:** Si si si ese es el feedback que uno tiene,
+- **[19:23] Yo:** gente que ya sabe, pues imagínate. Pero bueno, para para para tratar de ir al punto
+- **[19:23] Yo:** Ay, perdón, empezó todo raro.
+- **[19:23] Yo:** Oreo,
+- **[19:23] Yo:** para que nos hagamos una idea.
+- **[19:23] Yo:** Cuando uno uno uno empieza a buscar un producto, lo encuentra y demás,
+- **[19:23] Yo:** uno quiere que se... Ay, es que siento que hay una gamificación que
+- **[19:24] Yo:** no no no tenemos que tocar ahora porque no es el proyecto de gamification,
+- **[19:24] Yo:** estás llevando, José,
+- **[19:24] Yo:** pero de alguna forma creo que sí toca suavizar un poco
+- **[19:24] Yo:** los los los, sí, con lo que yo decía, que sean karts
+- **[19:24] Yo:** muy simples, que sean inclusive más visuales,
+- **[19:24] Yo:** en cuanto a un ícono, ¿cierto?, a un ícono de acción,
+- **[19:24] Alejandra Melo:** Mhmm.
+- **[19:24] Yo:** que el copy como tal,
+- **[19:24] Yo:** ¿no?
+- **[19:24] Yo:** Y, sobre todo, si es si es móvil,
+- **[19:24] Yo:** Y adicional, es
+- **[19:24] Yo:** que yo creo que realmente la métrica que nosotros vamos a tomar, si estamos yéndonos para que encuentre mi primer producto, es saber a ver cuál es mi cuál es mi mi vara. ¿No? ¿Cuál es mi cuál es mi realidad? Y ese dato creo que no está muy claro, yo no sé si tú dentro de las comunidades que estás o cuál crees que sea la mejor forma de encontrar el dato de cuánto en promedio ¿cierto? Una muestra de diez personas puede ser, Se, ¿cuánto tiempo se demoraron en encontrar el primer producto? ¿Ya? ¿O tú tú cuánto te demoraste en encontrar tu primer producto? Haciendo todo lo que tuviste que hacer,
+- **[19:25] Yo:** O sea,
+- **[19:25] Yo:** desde meterte a, no sé, la librería de anuncios de Meta,
+- **[19:25] Yo:** buscar, comparar con otras tiendas, ver el catálogo de Aeropi,
+- **[19:25] Yo:** lo que sea. ¿Cuánto te demoraste en el primer?
+- **[19:25] Alejandra Melo:** Nosotros para el primer producto que que escogimos, que eso fue como
+- **[19:25] Alejandra Melo:** noviembre o en diciembre, nosotros escogimos ese producto buscando en Meta y todo eso, ¿no?, ¿cierto que no?
+- **[19:25] Alejandra Melo:** Ese producto lo encontramos fue directamente en el catálogo de dropping, Aló. Validamos la competencia en en Meta, ajá. Ajá, pero y y ese fue y ese eso eso cuánto nos demoramos en conseguir el primer producto ganador. Semana. Sí.
+- **[19:25] Yo:** Ok.
+- **[19:25] Yo:** Superbién, listo. Una semana, entre toda esa esa búsqueda que tocó hacer, ¿no?
+- **[19:26] Yo:** Al final, no importa si
+- **[19:26] Yo:** un usuario después de la semana vuelve y al final dice, ay,
+- **[19:26] Yo:** al team marine droppy, este,
+- **[19:26] Yo:** porque se ve bien, ¿cierto?
+- **[19:26] Yo:** Pero digamos que hay usuarios
+- **[19:26] Yo:** para cambiar como la el discurso, ¿no? Es
+- **[19:26] Yo:** hay usuarios que pueden tardar
+- **[19:26] Yo:** siendo, supongamos que el el caso de ustedes que que que se tomaron como muy
+- **[19:26] Yo:** juiciosa la tarea de revisar y todo el cuento,
+- **[19:26] Yo:** que hay usuarios que pueden llegar hasta demorarse una semana,
+- **[19:26] Yo:** Ese es eso es como el uno un enunciado, ¿no?
+- **[19:26] Yo:** Hasta una semana, digamos que pueden dar otros de tres, y otros que nunca se activan.
+- **[19:26] Yo:** Ese es el gran problema, ¿no?, que eso no, escoge el producto.
+- **[19:26] Yo:** Ahí yo,
+- **[19:26] Yo:** tratando de hacer como un Zoom mayor, es como
+- **[19:26] Yo:** ¿qué quiero yo?
+- **[19:26] Yo:** Que escojan su primer producto
+- **[19:26] Yo:** ¿correcto?
+- **[19:26] Yo:** O que generen su primera orden.
+- **[19:26] Alejandra Melo:** Uh-huh.
+- **[19:26] Yo:** Con Mogali no permite generar órdenes, pues, bueno, o sea, es difícil que yo te te asegure que lo puedas vender rápido, ¿verdad? Realmente, yo me tendría que quedar con que escoja un producto ganador en x x tiempo, que ya no se demore Aleja y César, ¿cierto?
+- **[19:27] Alejandra Melo:** Sí.
+- **[19:27] Yo:** Aleja y César no se demoren
+- **[19:27] Yo:** una un un una semana
+- **[19:27] Yo:** sino que se van a demorar
+- **[19:27] Yo:** tendría que ser
+- **[19:27] Yo:** muy rápido, porque es en medio workshop.
+- **[19:27] Yo:** Tendría que ser, se van a demorar,
+- **[19:27] Yo:** cuál puede ser el la promesa de valor
+- **[19:27] Yo:** quince minutos,
+- **[19:27] Yo:** Pensando en que cinco sería como muy, ah, lo hago muy rápido y todo es perfecto y, pues,
+- **[19:27] Yo:** ¿no? Y, de pronto, hay lectura, se van a abrir pestañas adicionales
+- **[19:27] Yo:** confirmar, de pronto, cosas y demás.
+- **[19:27] Yo:** Se se va a abrir muy seguramente,
+- **[19:27] Yo:** una ventana paralela en donde alguien le va a preguntar,
+- **[19:27] Yo:** a ChatGPT ahí que confirme si eso es verdad que ese producto se ande superfién.
+- **[19:27] Yo:** Entonces,
+- **[19:27] Yo:** pensando en eso, igual que yo te lo cambié de
+- **[19:28] Yo:** ¿Cuántas horas tiene una semana?
+- **[19:28] Yo:** No sé.
+- **[19:28] Yo:** X. Más de setenta y ocho horas.
+- **[19:28] Yo:** Te baja de setenta y ocho horas a quince minutos, pues es una reducción
+- **[19:28] Yo:** gigantesca.
+- **[19:28] Yo:** Porque es la elección. Ahora,
+- **[19:28] Yo:** ¿qué entendemos por elección del primer pedido? Estoy
+- **[19:28] Yo:** como pensando en voz alta para llegar a
+- **[19:28] Yo:** a lo que no se ha hecho hasta ahora, que es
+- **[19:28] Yo:** cuál es el alcance del
+- **[19:28] Yo:** bendito Gali en el evento.
+- **[19:28] Yo:** Que no está.
+- **[19:28] Yo:** ¿No?, está Gali, genial, y esa feature, pero el feature realmente
+- **[19:28] Yo:** ni apunta ni dispara.
+- **[19:28] Alejandra Melo:** Exacto.
+- **[19:28] Yo:** Entonces,
+- **[19:28] Yo:** entonces, llegando a que hay una limitación, llamémoslo técnica,
+- **[19:28] Yo:** en que no podemos generar órdenes
+- **[19:28] Yo:** no es tampoco el alcance,
+- **[19:28] Yo:** sí podríamos generar, por ejemplo, pauta
+- **[19:28] Yo:** generar el aviso, el el el el, no sé, el envío por WhatsApp.
+- **[19:28] Yo:** De, hola, estoy vendiendo sus productos, o lo que te mostré de sincronizarlo
+- **[19:28] Yo:** con el WhatsApp, con el, sí, con el WhatsApp mismo agregarlo, cualquier cosa.
+- **[19:29] Yo:** ¿Qué podríamos hacer nosotros, entonces?
+- **[19:29] Yo:** Publicarlo como una historia. Eso, de hecho, ya ya lo he es superfácil al final de
+- **[19:29] Yo:** publicarlo como historia, pensé que era más difícil,
+- **[19:29] Yo:** y es como que te, literalmente, genera el PNG,
+- **[19:29] Yo:** o JPG, a lo el formato,
+- **[19:29] Yo:** y de una vez el dispositivo
+- **[19:29] Yo:** por defecto ya entiende que tiene que abrir una aplicación para publicarlo como una historia.
+- **[19:29] Yo:** Ejemplo, podría ser al final uno de los mecanismos para yo decir,
+- **[19:29] Yo:** listo, ya lo escogí y ya salí a vender, ¿verdad?
+- **[19:29] Yo:** Ahí
+- **[19:29] Yo:** ¿cuánto tiempo esperaríamos?
+- **[19:29] Yo:** Y yo digo,
+- **[19:29] Yo:** si si al final el caso es que yo publique mi historia en Instagram diciendo, hola,
+- **[19:29] Yo:** hola, mundo, estoy vendiendo
+- **[19:29] Yo:** tenis,
+- **[19:29] Yo:** podría decir que lo voy a hacer muy rápido. Ahora que me compren esos tenis, que esos
+- **[19:29] Yo:** otro cuento, es un cuento aparte, porque sabemos que hay
+- **[19:29] Yo:** otros procesos, ¿no?, pauta y demás, que tiene que estar ahí envuelto.
+- **[19:29] Yo:** Pero ¿cómo cómo verías que, entonces, uno, ya
+- **[19:29] Yo:** ya ya diseccionemos esto?
+- **[19:29] Yo:** Que creo que tocaba hacerlo, porque no, porque ni apunta ni dispara, entonces, apuntamos a
+- **[19:30] Yo:** gente que nos, estoy realmente parafraseando mucho lo que hemos dicho, pero
+- **[19:30] Yo:** gente que nunca ha vendido
+- **[19:30] Yo:** ¿verdad?,
+- **[19:30] Yo:** que
+- **[19:30] Yo:** necesita
+- **[19:30] Yo:** escoger el primer producto que va a vender.
+- **[19:30] Yo:** ¿Sí? Va a estrenarse en el mundo de las ventas,
+- **[19:30] Yo:** digitales, al menos,
+- **[19:30] Yo:** y ante tanto ruido que hay alrededor, va
+- **[19:30] Yo:** a dejar, va a permitir
+- **[19:30] Yo:** que una herramienta
+- **[19:30] Yo:** lo lleve.
+- **[19:30] Yo:** Y que le exponga diferentes situaciones, casos, le pregunte,
+- **[19:30] Yo:** Ahí hay un tema de también de
+- **[19:30] Yo:** que me parece que aquí todavía no lo tenemos en onboarding, es
+- **[19:30] Yo:** bueno, el tema de la hiperpersonalización, inclusive, ¿no?
+- **[19:30] Yo:** Temas afines, gustos, cosas que
+- **[19:30] Yo:** creo que, bueno, no sé, ahí ya estoy suponiendo, pero
+- **[19:30] Yo:** de pronto, uno uno uno procura vender o lo trae lo que
+- **[19:30] Yo:** uno también compraría. ¿No?
+- **[19:30] Yo:** O sea, ya seguramente uno luego se abre la mente, ustedes ya lo habrán hecho.
+- **[19:31] Yo:** De pronto, Jonah lo compraría preso, se siente superbién.
+- **[19:31] Alejandra Melo:** Sí.
+- **[19:31] Yo:** Pero pero inicialmente para esos primeros,
+- **[19:31] Yo:** devolviéndose, no sé si ustedes tuvieran el pensamiento de
+- **[19:31] Yo:** tratar de buscar cosas que a ustedes les gustaría comprar,
+- **[19:31] Alejandra Melo:** Claro, y todo el mundo entra en ese
+- **[19:31] Yo:** Sí, yo creo que es el primerrito que uno pone, ¿no?
+- **[19:31] Alejandra Melo:** Ajá.
+- **[19:31] Yo:** Yo quiero estar vendiendo... ¿Cuál fue el que me diste la otra vez que que ustedes pidieron en garantía? El un extra
+- **[19:31] Yo:** algo así?
+- **[19:31] Alejandra Melo:** Ajá.
+- **[19:31] Yo:** Yo por aquí voy a estar pidiendo un extractor, eso lo venden
+- **[19:31] Yo:** lo compro en cualquier otro lado, más barato, lo que sea,
+- **[19:31] Yo:** pero de pronto no sé, la camiseta de la Selección Colombia estaba más barata y, pues, de pronto sí le di la oportunidad ahí.
+- **[19:31] Yo:** Por entrar cualquier cosa.
+- **[19:31] Yo:** Entonces, si nosotros nos vamos
+- **[19:31] Yo:** esos dropshippers que están inicialmente, que no no han escogido nada,
+- **[19:31] Yo:** vamos a facilitarle la búsqueda
+- **[19:31] Yo:** Creo que el
+- **[19:31] Yo:** yo voy a omitir todo lo que está construido,
+- **[19:31] Yo:** porque creo que, bueno, nos va a tocar desbaratarlo un poco, Alejandro. Por
+- **[19:32] Alejandra Melo:** Sí, pues yo ya lo estaba empezando a desbaratar, pero entonces, por ejemplo, ya no comenzaríamos
+- **[19:32] Alejandra Melo:** desde acá. Siempre va a ser
+- **[19:32] Alejandra Melo:** o sea, esto va a estar es enfocado en encontrar el primer producto.
+- **[19:32] Alejandra Melo:** ¿Cierto? No, lo vamos a hacer así.
+- **[19:32] Yo:** Mhmm.
+- **[19:32] Alejandra Melo:** Vamos a hacer así. Obviamente,
+- **[19:32] Yo:** Sí.
+- **[19:32] Yo:** Sí,
+- **[19:32] Alejandra Melo:** ya está, yo lo estoy pensando más como en una conversación.
+- **[19:32] Alejandra Melo:** Porque es que
+- **[19:32] Alejandra Melo:** me parece que es mucho más fácil por medio de una conversación
+- **[19:32] Alejandra Melo:** Obviamente, aquí sabes que cuando le doy, por ejemplo, aquí, porque esto lo usamos
+- **[19:32] Alejandra Melo:** mucho, la verdad, entonces, por eso siempre me fui por este camino, que es buscar producto, ganar, mirar.
+- **[19:32] Alejandra Melo:** Por medio de los anuncios.
+- **[19:32] Alejandra Melo:** Entonces, yo me vine para acá,
+- **[19:32] Alejandra Melo:** cuando me encontré con todo eso, me perdí.
+- **[19:32] Yo:** Claro, no, ya.
+- **[19:32] Alejandra Melo:** ¿Cierto? Entonces, ya, ahí se rompió. Entonces,
+- **[19:32] Alejandra Melo:** ¿fueron cuántos pasos? Uno, dos,
+- **[19:32] Yo:** Yeah.
+- **[19:32] Alejandra Melo:** ya, se rompió. Entonces, estaba
+- **[19:32] Yo:** Y eso que si lo ves en si lo ves en móvil,
+- **[19:32] Alejandra Melo:** Ah,
+- **[19:32] Yo:** porque es una lista interminable de cosas que
+- **[19:32] Alejandra Melo:** Mira eso. Y aparte que tú le das clic a
+- **[19:32] Yo:** un scrolling
+- **[19:33] Yo:** Sí.
+- **[19:33] Alejandra Melo:** en ver cinco anuncios, sí te sale esto es más de acá. Entonces,
+- **[19:33] Alejandra Melo:** no sé. Y por acá abajo hay otro,
+- **[19:33] Alejandra Melo:** hay otra
+- **[19:33] Alejandra Melo:** yo no sé, hay como puros
+- **[19:33] Alejandra Melo:** puras cosas que me sacan de
+- **[19:33] Alejandra Melo:** de mi línea.
+- **[19:33] Alejandra Melo:** Me sacan. Entonces, no no lo estoy comprendiendo ni entendiendo muy bien.
+- **[19:33] Alejandra Melo:** Obviamente, tendría que hacerlo varias veces para poder entenderlo.
+- **[19:33] Yo:** Pero pero es un... No, exacto, pero mira que si ya estamos
+- **[19:33] Yo:** ahí ya son dos cosas, porque mira, yo tampoco lo entiendo,
+- **[19:33] Yo:** a mí me saqué de quicio,
+- **[19:33] Yo:** No, no le entiendo, y
+- **[19:33] Yo:** yo estaría dentro de la categoría gente que no ha hecho dropshipping, ¿no?
+- **[19:33] Alejandra Melo:** Mhmm.
+- **[19:33] Yo:** Tú estás en esa... No, la entiendo. Y tú estás en la categoría
+- **[19:33] Yo:** de gente que ya hace dropshipping,
+- **[19:33] Yo:** y tampoco lo entiende.
+- **[19:33] Yo:** Entonces,
+- **[19:33] Yo:** ni siquiera ampliándolo a que hay, a todo el mundo a ver cómo les va,
+- **[19:33] Yo:** pues no va a funcionar, o sea, no va a funcionar porque simplemente es muy, muy tedioso
+- **[19:34] Yo:** Creo que, inevitablemente, estamos yéndonos hacia conductos de usuario que
+- **[19:34] Yo:** yo soy de los usuarios que no lee,
+- **[19:34] Yo:** Yo tengo
+- **[19:34] Yo:** extrema pereza mental
+- **[19:34] Yo:** de leer mucho texto continuo,
+- **[19:34] Yo:** De hecho, me me tocó como ya personalmente
+- **[19:34] Yo:** me me suscribí al espectador para obligarme pagando a empezar a leer
+- **[19:34] Alejandra Melo:** Termina
+- **[19:34] Yo:** cosas
+- **[19:34] Yo:** artículos grandes.
+- **[19:34] Yo:** Porque me estaban
+- **[19:34] Alejandra Melo:** Terminaste pagando en Vanuat. Mentira.
+- **[19:34] Yo:** Sí. No, yo yo yo pagué por
+- **[19:34] Yo:** si no, no voy a entrar a leer, dije no, quiero
+- **[19:34] Yo:** y quiero el periódico,
+- **[19:34] Yo:** haciendo ahora con él para que no sea tan dañino, ambientalmente.
+- **[19:34] Yo:** Compré el periódico y literalmente ando acá al periódico para obligarme a leer, pero
+- **[19:34] Yo:** qué lo digo? Es porque yo
+- **[19:34] Yo:** ya estoy entrando en que quiero que me aparezca todo en bullets pequeños,
+- **[19:34] Yo:** cards, visuales muy claras,
+- **[19:34] Participante:** Mhmm.
+- **[19:34] Yo:** para poder continuar
+- **[19:34] Yo:** porque tengo pereza mental. No todos los usuarios son
+- **[19:35] Yo:** como yo, claramente, otros que sí les gusta el gran detalle,
+- **[19:35] Yo:** Pero dentro de eso está, por ejemplo, componentes, no sé, que sea como
+- **[19:35] Yo:** no sé, que sean como
+- **[19:35] Yo:** acordeones, que se puedan contraer, cualquier cosa que no me exija
+- **[19:35] Yo:** que de entrada tenga tanta información
+- **[19:35] Yo:** porque yo creo que también es mucho la disposición
+- **[19:35] Yo:** de cómo ubico cada cosa para que eso no se me colapse.
+- **[19:35] Yo:** Y ya yéndome a al al al momento en donde yo seleccionó
+- **[19:35] Yo:** ya me fui por un producto, ¿no?,
+- **[19:35] Yo:** yo esperaría, claro, que el que lo que no está hoy, que es
+- **[19:35] Yo:** cómo finaliza el flujo. O sea, yo como desde producto
+- **[19:35] Yo:** design, product manager, digo,
+- **[19:35] Yo:** ¿cuándo doy por terminada
+- **[19:35] Yo:** cuándo doy por terminada el flujo?
+- **[19:35] Yo:** ¿Sí?
+- **[19:35] Alejandra Melo:** Sí.
+- **[19:35] Yo:** Supongamos que va a ser el público de la historia de la la
+- **[19:35] Yo:** el producto en las historias de WhatsApp.
+- **[19:35] Yo:** Vamos a
+- **[19:35] Yo:** decir qué fue eso.
+- **[19:35] Yo:** Ahí está, ok.
+- **[19:35] Yo:** Ejemplo,
+- **[19:35] Yo:** Ah, sí, no, ahí ya decimos, finalizó el experimento.
+- **[19:36] Yo:** Ok, eso es finalizarlo. Ahora, cuando
+- **[19:36] Yo:** vamos a decir que es exitoso o cuándo fue un fracaso?
+- **[19:36] Yo:** Exitoso,
+- **[19:36] Yo:** ni siquiera si lo termina, exitoso sería, lo terminó
+- **[19:36] Yo:** y, supongamos, lo logró hacer antes de los quince minutos.
+- **[19:36] Yo:** Podría ser
+- **[19:36] Yo:** fracaso es que él no lo terminó,
+- **[19:36] Yo:** o lo terminó a los diecisiete, o sea, podríamos dar veinte minutos perfectamente,
+- **[19:36] Yo:** y en los veinte minutos se cierra,
+- **[19:36] Yo:** los que quedaron, pues listo, ya autoterminados. Pero de esos veinte,
+- **[19:36] Yo:** listo, ¿quién lo hicieron en quince?
+- **[19:36] Yo:** Qué pasó en los que se demoraron más de quince?
+- **[19:36] Yo:** Entonces, ya ahí empezamos como a irnos ya, ahora sí, como al instrumento,
+- **[19:36] Yo:** ¿no? El instrumento termina siendo el mismo producto,
+- **[19:36] Yo:** pero
+- **[19:36] Yo:** diferenciando, entonces, la la la los tiempos.
+- **[19:36] Yo:** Porque como aparte van a haber una mezcla de usuarios ahí, porque eso no está muy claro,
+- **[19:36] Yo:** Quiero ya ya, que me dijeron que, pues, voy a ir y, pues, me toca poner la cara, pues, yo
+- **[19:37] Yo:** quiero tratar de que eso salga
+- **[19:37] Yo:** o sea, tratar de hacer más presión para que podamos definir más cosas y no queden tan al aire, ¿no?
+- **[19:37] Yo:** Porque yo sé que, pues, todo el mundo va va trabajando a millones, mil cosas, pero
+- **[19:37] Yo:** ya toca ir a ya llevarlo workshop, pues,
+- **[19:37] Yo:** a ver,
+- **[19:37] Yo:** qué qué necesitamos nosotros para
+- **[19:37] Yo:** si toca filtrar a alguien que nunca haya vendido o que
+- **[19:37] Yo:** que apunta a encuesta, diga que se demoró más de dos semanas
+- **[19:37] Yo:** porque esa, por lo, creo que en su mayoría va a va a ser gente que ya vende en en en en
+- **[19:37] Yo:** dropshipping, ¿cierto?
+- **[19:37] Yo:** En su mayoría, porque, pues, están asistiendo a un evento de dropshipping, creo que
+- **[19:37] Alejandra Melo:** Claro.
+- **[19:37] Alejandra Melo:** Ya conocen.
+- **[19:37] Yo:** O les interesa empezar a vender, pero creo que esos van a ser
+- **[19:37] Yo:** una minoría,
+- **[19:37] Yo:** Podríamos preguntarle a marketing si los registros
+- **[19:37] Yo:** me acuerdo el flujo de registro.
+- **[19:37] Yo:** Realmente, no me acuerdo si preguntas si ya se vendía o no.
+- **[19:37] Yo:** Pero de esos que nos digan quiénes no han vendido de pronto,
+- **[19:37] Yo:** o que en la base crucemos y nos demos cuenta que todavía no han vendido un producto,
+- **[19:38] Yo:** esos que están todavía muy
+- **[19:38] Yo:** muy en cero,
+- **[19:38] Yo:** tomarlos.
+- **[19:38] Yo:** Yo sé que los demás querían, y como hay otros flujos, querían probar
+- **[19:38] Yo:** probar con otros usuarios, y está bien, creo que igual
+- **[19:38] Yo:** un usuario que justamente
+- **[19:38] Yo:** sabe que se demora, sabe que en su proceso
+- **[19:38] Yo:** puede tardar
+- **[19:38] Yo:** varios días, horas, pues, no serviría.
+- **[19:38] Yo:** Ahora, lo otro que pensaba Aleja era
+- **[19:38] Yo:** ¿qué pasa si ese flujo, el único flujo cierto que sería de un nuevo producto,
+- **[19:38] Yo:** también lo hacemos, pues, aprovechando la
+- **[19:38] Yo:** audiencia que vamos a tener el grupo ahí,
+- **[19:38] Yo:** igual lo lo aprovechamos para los demás
+- **[19:38] Yo:** más más allá de que de que ya vendan, ¿no?
+- **[19:38] Yo:** Porque finalmente nos sirve un poquito el feedback.
+- **[19:38] Alejandra Melo:** Claro.
+- **[19:38] Yo:** Porque es que están las otras, no, está... ¿Cómo se llama? Está lo de escalar.
+- **[19:39] Alejandra Melo:** Está el de escáner, pero lo lo traté de
+- **[19:39] Yo:** Lo del del coso este de
+- **[19:39] Alejandra Melo:** lo traté aquí como de de
+- **[19:39] Alejandra Melo:** de ensayar, pero no me deja.
+- **[19:39] Alejandra Melo:** No sé si es con con productos
+- **[19:39] Alejandra Melo:** especiales o qué.
+- **[19:39] Yo:** Dale dale ¿Y si lo haces por por celular, no te deja?
+- **[19:39] Yo:** Que es porque se tiene que activar cámara?
+- **[19:39] Alejandra Melo:** No, pero
+- **[19:39] Yo:** Pero
+- **[19:39] Alejandra Melo:** Jaime lo mostró desde el computador.
+- **[19:39] Yo:** Pero cuando él escaneó a él, ¿sería que
+- **[19:39] Yo:** bueno, no me acuerdo.
+- **[19:39] Alejandra Melo:** Espera una imagen.
+- **[19:39] Yo:** Ahora lo revisamos.
+- **[19:39] Yo:** Airbnb.
+- **[19:39] Alejandra Melo:** Ajá.
+- **[19:39] Yo:** Ok.
+- **[19:39] Alejandra Melo:** Era una imagen que él había.
+- **[19:39] Yo:** Porque está eso y ese
+- **[19:39] Alejandra Melo:** Es que, bueno,
+- **[19:39] Yo:** es saber, o sea, es que es lo menor.
+- **[19:39] Alejandra Melo:** Es que, bueno, te voy a contar. ¿Yo qué...?
+- **[19:39] Alejandra Melo:** Pues, uno cómo busca productos ganadores, que eso tiene
+- **[19:39] Alejandra Melo:** para eso también está escanea tu winner. Entonces, yo tenía planeado como
+- **[19:39] Alejandra Melo:** unir estos dos
+- **[19:39] Alejandra Melo:** O sea, es como
+- **[19:39] Alejandra Melo:** este
+- **[19:40] Alejandra Melo:** está dentro de Pilot.
+- **[19:40] Alejandra Melo:** ¿Cierto?
+- **[19:40] Yo:** Mhmm.
+- **[19:40] Alejandra Melo:** Ve Copilot, copiloto, pero
+- **[19:40] Alejandra Melo:** también puede estar separado, que puede ser ese escanea to winner.
+- **[19:40] Yo:** Pero eso de que esté incluido en ofrecer,
+- **[19:40] Alejandra Melo:** ¿Por qué?
+- **[19:40] Yo:** ¿chévere?
+- **[19:40] Alejandra Melo:** Sí, porque es que, ¿qué pasa? ¿Tú qué haces? Tú estás aquí, ¿no?
+- **[19:40] Alejandra Melo:** Y pones los nombres de todos los productos que vas encontrando.
+- **[19:40] Alejandra Melo:** Porque un producto ganado no es como, ah, encontré el producto y ya, no, tú pones varios productos.
+- **[19:40] Alejandra Melo:** Son varios. Pongámosle que ponemos diecisiete productos, bueno, pongámosle cinco,
+- **[19:40] Yo:** También tú podrías ir escaneando y guardando. ¿No?
+- **[19:40] Alejandra Melo:** Ajá, entonces, el nicho.
+- **[19:40] Yo:** Ajá.
+- **[19:40] Alejandra Melo:** Y esta calificación, pues, esto no no no se
+- **[19:40] Alejandra Melo:** esto esto es automático, que es lo que va a hacer
+- **[19:40] Alejandra Melo:** lo que queremos hacer acá en
+- **[19:40] Alejandra Melo:** con con, o sea, esto es lo que vamos a hacer automáticamente.
+- **[19:40] Alejandra Melo:** ¿Cierto? Y eso es lo que hace el del escáner.
+- **[19:40] Participante:** Que tú solamente lo escaneas y el
+- **[19:40] Alejandra Melo:** te llena todo esto automático. Todo esto me lo va a llenar automático.
+- **[19:40] Alejandra Melo:** Todo esto es lo que queremos, pero entonces está primero lo del efecto wow,
+- **[19:41] Alejandra Melo:** lo del precio, lo del alto valor percibido,
+- **[19:41] Alejandra Melo:** resuelve una necesidad o problema. Entonces, aquí
+- **[19:41] Alejandra Melo:** está esta parte.
+- **[19:41] Alejandra Melo:** Lo que pasa es que yo siento que acá, eso de necesidad o problema, espérate,
+- **[19:41] Alejandra Melo:** ¿Dónde es que está?
+- **[19:41] Alejandra Melo:** Esta parte de aquí
+- **[19:41] Alejandra Melo:** que me dices que
+- **[19:41] Alejandra Melo:** los que busca por
+- **[19:41] Alejandra Melo:** por dolor o problema,
+- **[19:41] Participante:** Bueno, si es que también se puede hacer así,
+- **[19:41] Alejandra Melo:** Se busca por dolor el problema y se les y le salen todos los
+- **[19:41] Alejandra Melo:** los productos que solucionan ese dolor o problema.
+- **[19:41] Alejandra Melo:** O se busca un producto ganador en en los anuncios,
+- **[19:41] Alejandra Melo:** o se busca por un nicho.
+- **[19:41] Alejandra Melo:** O categorías. Eso sí, también está bien.
+- **[19:41] Alejandra Melo:** Pero, entonces, es como, es que hay varias formas de hacerlo.
+- **[19:41] Alejandra Melo:** ¿Por cuál nos vamos?
+- **[19:41] Alejandra Melo:** Nos vamos por la que es
+- **[19:42] Alejandra Melo:** es más como hacia el hacia el
+- **[19:42] Alejandra Melo:** principiante que no sabe vender, tiene más o menos una idea
+- **[19:42] Alejandra Melo:** es lo que quiere vender o quiere explorar una categoría o nicho.
+- **[19:42] Alejandra Melo:** ¿Cierto? Entonces, aquí, por ejemplo, le dice, bueno, hay varias formas de encontrar un producto ganado
+- **[19:42] Alejandra Melo:** Buscar por anuncios, buscar ¿Eso?
+- **[19:42] Yo:** Discúlpame, Alain, ¿te te volvés un poquito al a las preguntas ahora, a que estabas mostrando?
+- **[19:42] Yo:** No sé qué vender,
+- **[19:42] Participante:** Sí.
+- **[19:42] Yo:** Ahí ahí habrían tres flujos, ¿cierto?
+- **[19:42] Yo:** Bueno, tres flujos no.
+- **[19:42] Yo:** Tres
+- **[19:42] Yo:** puede puede que al final puede que, tres flujos que vuelvan y se unan más adelante.
+- **[19:42] Yo:** ¿Cierto?, en tema de pantallas.
+- **[19:42] Yo:** Pero dependiendo a qué escoja, pues va a tomar, llamémoslo
+- **[19:42] Yo:** el el el el copiloto, una actitud, ¿cierto?, un approach diferente.
+- **[19:42] Yo:** No sabes qué vender, entonces, es una, va a empezar a preguntar o a llevarlo por un lado,
+- **[19:42] Yo:** Tengo una idea que, entiendo, ahí podría estar
+- **[19:42] Yo:** de hecho, el el el escáner,
+- **[19:43] Yo:** tengo un yes, porque lo vi,
+- **[19:43] Yo:** ¿cierto? Lo vi y lo agrego desde galería o lo escaneo con el celular, ¿verdad?
+- **[19:43] Participante:** Exacto.
+- **[19:43] Yo:** O simplemente lo escribo,
+- **[19:43] Yo:** y ahí nos ahorramos un montón, porque aparte con escritura, con con
+- **[19:43] Yo:** con el MCP deberíamos poder encontrarlo rápido, ¿no?
+- **[19:43] Alejandra Melo:** Ajá. O o como está Diana, por ejemplo, Diana, cuando ella
+- **[19:43] Alejandra Melo:** a la mentoría y eso, ella de una dijo, yo quiero vender productos para mascota, entonces,
+- **[19:43] Alejandra Melo:** quiero explorar una categoría.
+- **[19:43] Yo:** Sí.
+- **[19:43] Alejandra Melo:** Entonces, ya se viene ahí y solamente le da mascotas.
+- **[19:43] Alejandra Melo:** Porque ese es el nicho de ella y en el que se quiere ella enfocar.
+- **[19:43] Alejandra Melo:** Entonces,
+- **[19:43] Alejandra Melo:** es es así.
+- **[19:43] Alejandra Melo:** Pues puse esos tres,
+- **[19:43] Alejandra Melo:** Ahí, obviamente, esto acá me voy a desenfocar en
+- **[19:43] Alejandra Melo:** en esto.
+- **[19:43] Yo:** Alejandro, te voy a reenviar una reunión que Juan Diego me mandó para mañana, ¿vale?, que estemos los dos. A las tres y media. Entonces, dale.
+- **[19:43] Participante:** ¿Ya?
+- **[19:43] Participante:** Listo.
+- **[19:43] Participante:** Listo.
+- **[19:43] Alejandra Melo:** Mira, entonces, es es esto, ¿cierto?, que es como el calificar el producto.
+- **[19:44] Alejandra Melo:** Primero vamos a calificar el producto. Luego aquí,
+- **[19:44] Alejandra Melo:** que vamos a a
+- **[19:44] Alejandra Melo:** a evaluar? Ya cuando tenemos el producto, porque se supone que es todo completo, ¿no?,
+- **[19:44] Alejandra Melo:** Porque aquí yo veía que creaban hasta la landing y te daban la opción
+- **[19:44] Alejandra Melo:** de de hacerlo con
+- **[19:44] Alejandra Melo:** con page pilot.
+- **[19:44] Participante:** Entonces, digamos que
+- **[19:44] Participante:** aquí hay que ir a esta parte,
+- **[19:44] Participante:** y
+- **[19:44] Alejandra Melo:** calcular en cuánto se va a vender el producto. Entonces, también hay que mostrar
+- **[19:44] Alejandra Melo:** toda esta parte.
+- **[19:44] Alejandra Melo:** De si ofertas uno, ofertas dos, en cuánto sale cada uno,
+- **[19:44] Alejandra Melo:** ¿ya?
+- **[19:44] Alejandra Melo:** El precio del proveedor, todo esto lo que se lo que se
+- **[19:44] Alejandra Melo:** llena.
+- **[19:44] Yo:** Yo te iba a proponer que que
+- **[19:44] Alejandra Melo:** Por eso ya
+- **[19:44] Yo:** de hecho, en esa parte, antes de que se me
+- **[19:44] Yo:** pase,
+- **[19:44] Yo:** yo estaba revisando
+- **[19:45] Yo:** Está pensando en qué tal si nosotros nos vamos directamente
+- **[19:45] Yo:** contra el MCP,
+- **[19:45] Yo:** de Shopify.
+- **[19:45] Yo:** O sea, no nos ponemos a crear la
+- **[19:45] Yo:** no nos ponemos a crear landings por
+- **[19:45] Participante:** Mhmm.
+- **[19:45] Yo:** pilot.
+- **[19:45] Yo:** ¿Cierto?
+- **[19:45] Yo:** Sino que hacemos que, directamente,
+- **[19:45] Yo:** los usuarios
+- **[19:45] Yo:** creen su tienda, su primera tienda, además,
+- **[19:45] Alejandra Melo:** Thaís, más bien como listo, ya tiene el producto,
+- **[19:45] Alejandra Melo:** Ahora,
+- **[19:45] Alejandra Melo:** exportalo a Shopify.
+- **[19:45] Yo:** Porque, pero, ¿sabes qué? Quiero quiero leer una parte de una documentación. Bueno,
+- **[19:45] Yo:** ese de AirPagePilot, el el proveedor creo que
+- **[19:45] Yo:** el Luminess
+- **[19:45] Yo:** el nombre es menos relevante, lo más importante es qué queremos que haga, ¿no?
+- **[19:46] Yo:** Y es, claro, publicarlo en una tienda sería lo ideal,
+- **[19:46] Participante:** Mhmm.
+- **[19:46] Yo:** ¿sí o no?
+- **[19:46] Yo:** El ideal sería publicarlo en tienda,
+- **[19:46] Yo:** pero
+- **[19:46] Yo:** pero a mí me gusta, me gustaría que fuera como lo más fiel a la realidad, porque igual,
+- **[19:46] Yo:** pucha, que Pesh Pilot es tan
+- **[19:46] Yo:** mal.
+- **[19:46] Participante:** Nueve noventa.
+- **[19:46] Yo:** Que
+- **[19:46] Yo:** que no.
+- **[19:46] Yo:** A mí no no me gustaría hacerlo por ahí,
+- **[19:46] Yo:** O sea, preferiría
+- **[19:46] Yo:** prefiero que coja y exporte la imagen y la publique en los estados de WhatsApp
+- **[19:46] Yo:** prefiero mil veces eso.
+- **[19:46] Yo:** Page se me hace como tan
+- **[19:46] Yo:** siento que es más fácil cuestionarlo, ¿no? Es más fácil decir, he visto tan,
+- **[19:46] Yo:** flojo. Entonces, como abrir una puerta que se vea como muy en lo que
+- **[19:46] Participante:** Sí.
+- **[19:46] Yo:** se genera.
+- **[19:46] Yo:** Pero, bueno, voy a dejar verlo como tarea.
+- **[19:46] Yo:** De de, de hecho, eso está dentro de las tareas del siguiente sprint, y era ver
+- **[19:46] Yo:** opciones de nuevas integraciones para hacerlo
+- **[19:46] Yo:** mucho más
+- **[19:46] Yo:** robusto, y quería
+- **[19:47] Yo:** ver la opción, ¿sabes de qué?, de ver si Hexa
+- **[19:47] Yo:** lo podríamos utilizar ahí ahí, en bebido.
+- **[19:47] Yo:** Como eso hace un research
+- **[19:47] Yo:** fuerte,
+- **[19:47] Yo:** no hacerlo en el momento de la consulta en la MCP,
+- **[19:47] Yo:** porque nos fregamos, ¿cierto?, por tema de tiempos, o sea, va a ser haberse demorado.
+- **[19:47] Yo:** Sino
+- **[19:47] Yo:** tratar de que, por categorías,
+- **[19:47] Yo:** puede ser esa semana,
+- **[19:47] Yo:** hacer una una sola consulta,
+- **[19:47] Yo:** empecemos, ahí ahí tú mostraste tren, ¿no? Ya sé que quiero vender, entonces, que coja como unas variables, ¿no?,
+- **[19:47] Yo:** Entonces, por temáticas, por por categorías,
+- **[19:47] Yo:** por tipos de producto, por segmentos, por ángulos de venta.
+- **[19:47] Yo:** Y que haga un research fuerte
+- **[19:47] Yo:** esa es la herramienta que te mandé ahora,
+- **[19:47] Yo:** y que eso no sirva
+- **[19:47] Yo:** para agregar como una capa de inteligencia un poquito de, bueno, si quieres inteligencia, un prefiltrado,
+- **[19:47] Yo:** ¿ya? Porque y porque ya existe lo de Apify, que
+- **[19:47] Yo:** puso Kata, por decirlo de Kata, ya está muy hacia la venta,
+- **[19:47] Yo:** ¿verdad? Este vamos más hacia hacia el concepto anterior.
+- **[19:48] Yo:** Dolores que quiero atender, qué está haciendo la competencia, qué innovaciones hay,
+- **[19:48] Yo:** de qué temas se está discutiendo a nivel general.
+- **[19:48] Yo:** No sé cómo lo ves, como tratar de de de de acotarlo un poco más para que se vea más
+- **[19:48] Yo:** preciso.
+- **[19:48] Alejandra Melo:** O sea, ¿dónde lo crees tú que lo podemos dejar?
+- **[19:48] Yo:** Yo creo que lo podríamos dejar una vez
+- **[19:48] Yo:** ¿Estaría metido en en este de de de...? ¿Cómo quieres empezar? Estaré ahí metido. Si yo sé cuando tengo una idea, por ejemplo, entonces, no sé, quiero vender, lo que dice, productos para mascotas, Entonces, por debajo hacer una un catálogo un poco más amplio,
+- **[19:48] Participante:** Mhmm.
+- **[19:48] Yo:** ¿cierto?, porque él tenga una idea, pues, puede ser un montón de cosas.
+- **[19:48] Yo:** Pero hacer como unas grandes categorías, que vuelvan a ser, fácilmente, unas treinta, cuarenta categorías,
+- **[19:48] Yo:** y que dentro de esas ya haya información. Es decir, hay una capa, sería como el backend,
+- **[19:48] Yo:** que va a permitir
+- **[19:48] Yo:** hacer un prefiltrado antes que lleguemos al MCP y antes que lleguemos a Apify.
+- **[19:48] Yo:** Para que no solamente nos vayamos con lo comercial, porque claro,
+- **[19:49] Yo:** tanto Apify que ya va hacia hacia ver qué se está vendiendo, ¿no?,
+- **[19:49] Yo:** hacia hacia el scrapping de de las pautas, ¿verdad?, todo eso.
+- **[19:49] Yo:** Y el MCP, pues, ya van hacia el producto en
+- **[19:49] Yo:** como tal, ¿no?, hacia la idea de qué vender.
+- **[19:49] Yo:** Pero antes,
+- **[19:49] Yo:** creo que no hay una capa un poco más contextual
+- **[19:49] Yo:** de qué se busca atender, no de por
+- **[19:49] Yo:** capaz eso no nos va a cambiar en nada del producto final a vender, porque finalmente el producto
+- **[19:49] Yo:** el catálogo de dropey es uno solo.
+- **[19:49] Participante:** Sí.
+- **[19:49] Yo:** ¿Cierto?
+- **[19:49] Yo:** Son muchos productos segmentidos.
+- **[19:49] Yo:** Pero lo que nos puede agregar
+- **[19:49] Yo:** en contexto, información,
+- **[19:49] Yo:** lo de entender el problema, lo de ver cuáles son las tendencias,
+- **[19:49] Yo:** puede que nos ayude a a mejorar un poco la experiencia en el discurso.
+- **[19:49] Yo:** Ya. A que no se vaya como, ah, sí, es este producto,
+- **[19:49] Yo:** ya.
+- **[19:49] Yo:** Sino que ayude un poquito más a ese a ese entendimiento de qué es lo que se está vendiendo,
+- **[19:49] Yo:** eso nos podría, por ejemplo, ayudar mucho más, como el catálogo no tiene también definido
+- **[19:50] Yo:** el segmento y y todo y todo el problema que se está atendiendo, sino que es el producto y ya está.
+- **[19:50] Yo:** Con garantía, cómo se usa y listo.
+- **[19:50] Yo:** El API también va a ir a lo mismo,
+- **[19:50] Yo:** muy hacia lo que ve y encuentra en Shopify, encuentra en apps, encuentran todo eso.
+- **[19:50] Yo:** Pero no hacia el mercado en general.
+- **[19:50] Yo:** Creo que podríamos meterlo ahí por de como intermedio, a ver qué a ver qué pasa.
+- **[19:50] Yo:** A ver si a ver si logra... Podríamos hacer dos pruebitas, es
+- **[19:50] Yo:** una aplicándole ahí de, en la mitad, como el gran catálogo de cosas y
+- **[19:50] Yo:** catálogo, no me refiero a catálogo del producto, sino
+- **[19:50] Alejandra Melo:** Mhmm.
+- **[19:50] Yo:** de ideas,
+- **[19:50] Yo:** y ese gran catálogo de ideas
+- **[19:50] Yo:** de hecho, podríamos estarlo rotando.
+- **[19:50] Yo:** Ya si esto avanza, ¿no?, o sea, viendo si
+- **[19:50] Yo:** viendo en en, no hablo del evento en expo buyer, sino de como así como en API five se va actualizando, entiendo que semanalmente, según dijo Catá, pues que esto también vaya siendo un sondeo más grande, no solo del producto,
+- **[19:51] Yo:** sino de problemas, de dolores, de tendencias a nivel general, ¿no?
+- **[19:51] Yo:** Porque el producto puede ser la mascarilla,
+- **[19:51] Yo:** ¿verdad?, la mascarilla que viene en empaque de tres y se vende
+- **[19:51] Participante:** Sí.
+- **[19:51] Yo:** no sé, al por mayor, ¿verdad?
+- **[19:51] Yo:** Y otra cosa es la tendencia, que son, no sé, tendencia de
+- **[19:51] Yo:** para hombres de más de cuarenta años.
+- **[19:51] Yo:** ¿Ya?
+- **[19:51] Yo:** Y eso es lo que agregaría a EGSA,
+- **[19:51] Yo:** es esa capa de de
+- **[19:51] Yo:** de benchmark, ¿no?, de exploración de mercados.
+- **[19:51] Yo:** No de producto en específico, sino del mercado.
+- **[19:51] Yo:** El crecimiento, por ejemplo, que ha tenido
+- **[19:51] Yo:** el mercado de
+- **[19:51] Yo:** sea, de de de bienestar masculino.
+- **[19:51] Yo:** O de que detecta que los hombres cada vez están yendo más a spas, por ejemplo.
+- **[19:51] Yo:** Eso nos da exam,
+- **[19:51] Yo:** para lograr que tenga mayor coherencia lo que le vamos a dar, porque
+- **[19:51] Yo:** hoy en el flujo me parece que también se está yendo muy en muy en muy a lo bruto.
+- **[19:51] Participante:** Sí,
+- **[19:52] Yo:** Se está yendo como, es este,
+- **[19:52] Participante:** Sí.
+- **[19:52] Yo:** No me estás Claro, justificaré a día que se
+- **[19:52] Yo:** mucho más los textos, no es la idea,
+- **[19:52] Yo:** pero sabemos que por debajo estamos siendo más precisos.
+- **[19:52] Yo:** Porque por ahora estamos siendo muy semántico y muy
+- **[19:52] Yo:** De hecho, creo que tú se lo preguntaste a Jaime, que eso, yo también tenía esa duda,
+- **[19:52] Yo:** y no estoy del todo
+- **[19:52] Yo:** satisfecho con la respuesta que hay por ahora, porque, pues, sé que igual era muy el prototipo rápido,
+- **[19:52] Yo:** es...
+- **[19:52] Yo:** ¿Tú de dónde me estás sacando a mí
+- **[19:52] Yo:** que si yo mejoro la publicidad en TikTok,
+- **[19:52] Yo:** mejora mi probabilidad de veinte en diez por ciento.
+- **[19:52] Participante:** Mhmm.
+- **[19:52] Yo:** ¿Te lo sacaste de cualquier lado?
+- **[19:52] Yo:** No sé, la la IA dijo que eso era más o menos así.
+- **[19:52] Yo:** Sí, es como
+- **[19:52] Yo:** más o menos, pongo el
+- **[19:52] Yo:** quince por ciento de su marica, o sea, eso no es dato. Por eso digo que puede haber una capita intermedia, que nos ayude a a entenderlo mejor. Por ejemplo, si si si dentro de Gali un botoncito de porque
+- **[19:53] Yo:** de por qué o o o de entender más,
+- **[19:53] Yo:** de tirar el dato, si ya lo hacemos
+- **[19:53] Yo:** la salud Masculina Ha Aumentado, Tatata. O Si Son Más Tenis, No Sé, Que Haga El Benchmark, No Sé, El Mercado De Zapatillas Ha Aumentado Un Cuarenta Por Ciento En La En Colombia después de la pandemia, porque ta ta ta ta ta ta,
+- **[19:53] Yo:** y en Cali puntualmente se es una zona que tata tata tata, o sea, que llegue a
+- **[19:53] Yo:** a ser mucho más, todavía no sé la la
+- **[19:53] Yo:** el nivel de profundidad que puede tener,
+- **[19:53] Yo:** Hexa, es lo que estoy apenas mapeando, pero puede que haya ya bastante bastante información. Nos pueda ayudar. Sería como lo único. Voy a voy a ver qué tanto podemos hacer ahí para agregarle contexto usuario, sobre todo que son usuarios que no han vendido y quieren tratar de estar seguros qué van a vender. Y lo que te decía de cómo podemos generar cómo es entregarle el el el ¿Cuál sería el el valor entregado perceptible al usuario, ¿no? El el el valor, claro, va a estar en que yo puedo apuntar un producto de pronto, el valor no es la no es la palabra, señor, se me se escapa en este momento, pero
+- **[19:54] Yo:** como el delivery del delivery,
+- **[19:54] Yo:** el delivery es
+- **[19:54] Yo:** un historia en Instagram o el delivery es
+- **[19:54] Yo:** crear pauta en TikTok, o el delivery qué es.
+- **[19:54] Yo:** ¿Ya? Eso creo que, no sé cómo lo ves,
+- **[19:54] Yo:** O sea, esa definición de delivery creo que nos falta.
+- **[19:54] Participante:** Sí,
+- **[19:54] Alejandra Melo:** Sí, es que ya estoy como
+- **[19:54] Yo:** ¿Con qué?
+- **[19:54] Alejandra Melo:** perdida un poquito.
+- **[19:54] Alejandra Melo:** A ver, lo de Hexa,
+- **[19:54] Alejandra Melo:** ¿Tú cuándo lo descubriste?
+- **[19:54] Alejandra Melo:** Sí,
+- **[19:54] Yo:** ¿Cuándo os curí que existía Hexa?
+- **[19:54] Yo:** La
+- **[19:54] Alejandra Melo:** Sí, ¿eso qué tal es?
+- **[19:54] Yo:** La semana.
+- **[19:54] Alejandra Melo:** Tú tú me dices que lo vas a probar, ¿no?
+- **[19:54] Yo:** Sí, sí, la semana pasada estuve viendo unas demos,
+- **[19:54] Alejandra Melo:** Primero.
+- **[19:55] Yo:** o sea, implementando para realmente ver qué también se aplica el dropshipping,
+- **[19:55] Participante:** Eso.
+- **[19:55] Yo:** es implementándolo apenas hoy.
+- **[19:55] Participante:** Ajá.
+- **[19:55] Yo:** Apenas implementándolo. A ver,
+- **[19:55] Yo:** información me trae?, ¿qué tan precisa es la información?
+- **[19:55] Yo:** ¿Qué qué tan tan tan variada y tan exacta puede ser
+- **[19:55] Yo:** diferente a que yo empezara a hacer un googleo intensivo de dos días.
+- **[19:55] Yo:** Empezando por ahí.
+- **[19:55] Yo:** Que entiendo es mucho más más mucho, logra ser mucho más profundo.
+- **[19:55] Yo:** Pero Etsha ha estado muy enfocado, justamente es
+- **[19:55] Yo:** hacia mercados más
+- **[19:55] Yo:** o sea, otros mercados. Entonces, el dropshipping también es un mercado superexpo,
+- **[19:55] Yo:** o sea, como muy muy puntual, ¿no?
+- **[19:55] Yo:** Entonces, habría que ver qué tanta información logra sacar de ahí,
+- **[19:55] Yo:** que nos sirva.
+- **[19:55] Yo:** Pero ahí no vamos, o sea, eso
+- **[19:55] Yo:** es más,
+- **[19:55] Yo:** resumirlo, no sería algo que le vamos a mostrar al usuario desde el front,
+- **[19:55] Yo:** sería algo que va a tener
+- **[19:55] Alejandra Melo:** Ah, sí, obvio, no.
+- **[19:55] Yo:** por debajo de la plataforma, que va a ayudar
+- **[19:55] Yo:** a que
+- **[19:55] Yo:** de ahí el front consuma, ¿no? Ahí va va el back a decirle,
+- **[19:56] Yo:** no, yo creo que son estas tres categorías que encajan mucho mejor, porque ahora
+- **[19:56] Yo:** lo que digo yo, según lo que he estado estudiando en el
+- **[19:56] Yo:** es que él se va
+- **[19:56] Yo:** a de cabeza contra el MCP.
+- **[19:56] Yo:** Yo se lo decía a Jaime hace como dos semanas,
+- **[19:56] Yo:** ¿qué capa hay ahí? Porque el MCP es super,
+- **[19:56] Yo:** y, pues, apenas lo están desarrollando
+- **[19:56] Yo:** el el MCP de AeroP es todavía muy
+- **[19:56] Participante:** Sí.
+- **[19:56] Yo:** muy prematuro,
+- **[19:56] Yo:** ¿sí?
+- **[19:56] Yo:** De hecho, varían como se busca,
+- **[19:56] Yo:** Apenas estoy entendiéndolo también porque entiendo que no no se entregó una documentación asociada al MCP todavía.
+- **[19:56] Yo:** Entonces, como ese MCP está tan crudo, ¿sí?,
+- **[19:56] Yo:** toca ser ultraespecífico,
+- **[19:56] Yo:** Creo que le podemos agregar una capita, un poquito de inteligencia ahí en la mitad,
+- **[19:56] Yo:** no van a ser consultas en tiempo real, porque, pues, no nos va a dar el presupuesto ni demás,
+- **[19:56] Yo:** el rendimiento toca verlo.
+- **[19:56] Yo:** Pero que nosotros al, no sé, al al corte del viernes o el jueves de esa semana, antes del evento, del del diez de septiembre,
+- **[19:57] Yo:** decimos,
+- **[19:57] Yo:** estas son las categorías,
+- **[19:57] Yo:** y empezamos a probar, ¿no? Si un usuario pregunta por tiendas deportivas o por
+- **[19:57] Yo:** ropa deportiva o por mascotas,
+- **[19:57] Yo:** ¿qué logramos desde el
+- **[19:57] Yo:** procesar un poquito más fuerte,
+- **[19:57] Yo:** para que ahí sí busquen el MCP.
+- **[19:57] Yo:** Porque el usuario puede que es lo mismo.
+- **[19:57] Yo:** Diga, ejemplo,
+- **[19:57] Yo:** tenis,
+- **[19:57] Participante:** Sí.
+- **[19:57] Yo:** ¿verdad?
+- **[19:57] Yo:** Y si se va viendo cómo se comportó el MCP cuando me lo mostró Jaime, no sé si eso vaya a tener muy
+- **[19:57] Yo:** adelante. Si tú pones tenis,
+- **[19:57] Yo:** de nuevo se va a lo bruto de cabeza
+- **[19:57] Yo:** tenis en dropping.
+- **[19:57] Yo:** Tú ya sabes qué pasa.
+- **[19:57] Yo:** ¿Cierto?
+- **[19:57] Yo:** ¿Qué pasa si nosotros, entonces,
+- **[19:57] Yo:** antes de que inicie
+- **[19:57] Yo:** sabiendo el contexto que ya tenemos del usuario,
+- **[19:57] Yo:** Usuarios nuevos, sabemos dónde están ubicados,
+- **[19:57] Yo:** Tenemos un poquito más de información del contexto, ¿a qué se puede referir
+- **[19:57] Yo:** ¿cierto? Por suponiendo que tenis, por ejemplo, tenis va a aparecer en
+- **[19:57] Yo:** en tengo una idea,
+- **[19:57] Yo:** por decir algo, ¿no?
+- **[19:57] Yo:** Si tenemos esa información ahí de, es un usuario que tiene una idea, un gusto particular,
+- **[19:58] Yo:** ver si cambia el resultado del MCP. Al final es como un prefiltrado a ver si logro
+- **[19:58] Yo:** mejorarle el rendimiento al MCP,
+- **[19:58] Yo:** viéndolo de una forma
+- **[19:58] Yo:** medianamente técnica,
+- **[19:58] Yo:** para que él no se vaya de una barra de búsqueda
+- **[19:58] Yo:** directo contra dropping, porque sabemos que eso no va a ser lo suficientemente bueno.
+- **[19:58] Participante:** Yo
+- **[19:58] Yo:** A no ser que
+- **[19:58] Yo:** en quince días puede desarrollar hidropila la rompa, puede decir, nos entregue un MCP brutal, pero no creo.
+- **[19:58] Alejandra Melo:** yo lo que
+- **[19:58] Participante:** Ajá. Yo lo que pienso hacer,
+- **[19:58] Alejandra Melo:** Santi, es como armarte el flujo,
+- **[19:58] Alejandra Melo:** armar el flujo, ¿cierto? Déjame, yo termino de ahí.
+- **[19:58] Alejandra Melo:** ¿Qué pasaría si yo le doy en no sé qué vender?, ¿cierto?
+- **[19:58] Alejandra Melo:** Armo el flujo bien,
+- **[19:58] Alejandra Melo:** y, entonces, ya nos traemos, entonces,
+- **[19:58] Alejandra Melo:** las herramientas que vamos a usar. Por ejemplo, para la parte de
+- **[19:58] Alejandra Melo:** de los anuncios.
+- **[19:58] Alejandra Melo:** Que eso es, parece que es.
+- **[19:58] Yo:** Sí.
+- **[19:59] Alejandra Melo:** La de los anuncios. O la parte de
+- **[19:59] Alejandra Melo:** de qué, de de escogerlo, no sé, por ángulo de venta. Entonces,
+- **[19:59] Alejandra Melo:** ahí ya escogeríamos a
+- **[19:59] Alejandra Melo:** Hexa. ¿Te parece? Entonces, vamos como, mira, aquí en esa parte vamos a usar esta herramienta, en esa otra vamos a usar esta otra herramienta, porque es que todo depende del usuario como el recorra todo esto. Entonces, ahí vamos.
+- **[19:59] Yo:** Sí.
+- **[19:59] Yo:** Ya, por me.
+- **[19:59] Yo:** De acuerdo.
+- **[19:59] Yo:** Y ahí y ahí ahí entraríamos a ver.
+- **[19:59] Yo:** Qué capas y qué cubre, porque puede pasar
+- **[19:59] Yo:** de que, bueno, Hexa no es una herramienta para definir ángulos de venta.
+- **[19:59] Yo:** ¿Sí?
+- **[19:59] Participante:** Exacto.
+- **[19:59] Yo:** Hexa te da la inteligencia y la data,
+- **[19:59] Yo:** para que, al momento de utilizar una herramienta de ángulo de venta,
+- **[19:59] Yo:** casi que lo que te hace es que te mejore el prompt.
+- **[19:59] Yo:** Hexa podría ser solamente la capa de inteligencia que te tunea el prompt.
+- **[19:59] Participante:** Mhmm.
+- **[19:59] Yo:** Y ya.
+- **[19:59] Yo:** Porque, en vez de poner tenis, es
+- **[19:59] Yo:** te lo segmenta mejor, te construye algo para que MCP entienda mucho mejor qué es lo que quieres tu
+- **[20:00] Yo:** Pero sí, de acuerdo, me parece buena idea. Alejandro, pasémonos al otro review, a ver si
+- **[20:00] Yo:** se une José, José Giraldo.
+- **[20:00] Participante:** Oh, sí.
+- **[20:00] Yo:** No creo.
+- **[20:00] Yo:** Pero, a ver, a ver qué qué qué tenemos ahí de varios pendientes.
+- **[20:00] Participante:** Listo, dale, dale.
+- **[20:00] Yo:** De una, gracias, chaito.
+- **[20:00] Participante:** Chao.
