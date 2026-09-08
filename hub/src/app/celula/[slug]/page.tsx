@@ -12,6 +12,7 @@ import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 import { localCellBoards } from "@/app/celula/_cell-board";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
+import ObjetivoPanel, { type Objetivo } from "./_components/ObjetivoPanel";
 import { previewUpdateContent } from "@/lib/update-preview";
 import { esProyectoVisible } from "@/lib/curated-projects";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
@@ -33,6 +34,8 @@ type Profile = { celula_id: string | null; is_super_admin: boolean; email: strin
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
   ve_hub_completo: boolean;
+  mision: string | null; vision: string | null; nsm: string | null;
+  foco_trimestre: string | null; enlace_direccionamiento: string | null;
   proyectos: Proyecto[]; updates: Update[];
 };
 
@@ -307,6 +310,18 @@ export default function CelulaHomePage() {
               — sus métricas globales reales (antes vivían acá mismo, luego
               se movieron a Updates, ahora vuelven a casa) — abajo lo
               personal, mismos paneles que el resto de células. */}
+          <ObjetivoPanel
+            slug={celula.slug}
+            objetivo={{
+              mision: celula.mision,
+              vision: celula.vision,
+              nsm: celula.nsm,
+              foco_trimestre: celula.foco_trimestre,
+              enlace_direccionamiento: celula.enlace_direccionamiento,
+            }}
+            editable={canCreate}
+            onSaved={(next: Objetivo) => setCelula((prev) => (prev ? { ...prev, ...next } : prev))}
+          />
           <SellersMetricsPanel />
           <MiDiaShell />
 
@@ -535,50 +550,23 @@ export default function CelulaHomePage() {
           <ModoLecturaBanner activo={modoEdicionForzado} onToggle={() => setModoEdicionForzado((v) => !v)} />
         )}
 
-        {/* "Mi día" de la célula (2026-08-17, Jaime): dos capas — arriba lo
-            de la célula (métricas globales, misión/visión), abajo lo
-            personal (mismos paneles de /app/proyectos/mi-dia, que ya
-            degradan solos a "Pendiente" para quien no tiene Jira/Calendar
-            conectado). Sellers tiene sus propias métricas (SellersMetricsPanel,
-            más abajo en su rama); acá, sin dato real, solo Misión/Visión. */}
-        <div className="midia-panel" style={{ marginBottom: 32 }}>
-          <div className="midia-panel-header">
-            <div className="midia-panel-header-left">
-              <span className="midia-panel-label">Célula</span>
-            </div>
-          </div>
-          <div style={{ padding: "0 20px 16px" }}>
-            {celula.slug === "logistica" ? (
-              /* Direccionamiento 2026 S2 de María Ossa (Confluence PD/1485471746).
-                 Se transcribe lo que YA está formalmente definido —ownership, NSM
-                 y enfoque del semestre—; la "visión de producto" de tres lentes
-                 sigue siendo una oportunidad sin validar del Product Backlog, así
-                 que no se publica como si estuviera cerrada. */
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <p style={{ fontSize: 13, color: "var(--fg)", margin: 0, lineHeight: 1.5 }}>
-                  Dueña de <strong>la orden</strong>: todo lo que le pasa una vez se crea en Dropi.
-                </p>
-                <p style={{ fontSize: 12, color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
-                  <strong>NSM</strong> · Tasa de entrega exitosa ≥ 70% (OKR 2 · KR 2.1).<br />
-                  <strong>Q3–Q4</strong> · Sostener y mejorar la tasa de entrega, y reducir el
-                  tiempo de la orden hasta la transportadora.
-                </p>
-                <a
-                  href="https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1485471746"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 11, color: "var(--muted)" }}
-                >
-                  Direccionamiento Logistic Success 2026 · S2 ↗
-                </a>
-              </div>
-            ) : (
-              <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
-                Misión / Visión — <em>Pendiente de definir</em>.
-              </p>
-            )}
-          </div>
-        </div>
+        {/* Panel "Célula": misión / visión / NSM / foco del trimestre. Dato
+            editable en `celulas` (059_darwin_celula_objetivos.sql) — lo llena
+            el lead o super admin. Antes era estático (y logística tenía su
+            texto hardcodeado, ahora migrado a la fila de la BD). Debajo, "Mi
+            día" personal (mismos paneles de /app/proyectos/mi-dia). */}
+        <ObjetivoPanel
+          slug={celula.slug}
+          objetivo={{
+            mision: celula.mision,
+            vision: celula.vision,
+            nsm: celula.nsm,
+            foco_trimestre: celula.foco_trimestre,
+            enlace_direccionamiento: celula.enlace_direccionamiento,
+          }}
+          editable={canCreate}
+          onSaved={(next: Objetivo) => setCelula((prev) => (prev ? { ...prev, ...next } : prev))}
+        />
 
         <MiDiaShell />
 

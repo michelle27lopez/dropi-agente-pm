@@ -18,6 +18,10 @@ type ProjectDetails = {
   related_poc_id: string | null;
   related_delivery_id: string | null;
   prototype_url: string | null;
+  // Fechas objetivo del Product Roadmap (060_darwin_discovery_roadmap_fechas.sql).
+  fecha_objetivo_experimento: string | null;
+  fecha_objetivo_decision: string | null;
+  fechas_discovery_confirmadas: boolean | null;
   celulas?: {
     nombre: string;
     slug: string;
@@ -297,6 +301,22 @@ export default function ProjectDashboardPage() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ vpv }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProject(updated);
+  }
+
+  // Fechas objetivo del Product Roadmap. `campo` es una de las dos fechas de
+  // discovery o el flag `fechas_discovery_confirmadas`.
+  async function handleFechaDiscoveryChange(
+    campo: "fecha_objetivo_experimento" | "fecha_objetivo_decision" | "fechas_discovery_confirmadas",
+    valor: string | boolean | null,
+  ) {
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [campo]: valor }),
     });
     if (!res.ok) return;
     const updated = await res.json();
@@ -1175,6 +1195,45 @@ export default function ProjectDashboardPage() {
                 ))}
               </select>
             </div>
+
+            {/* Fechas objetivo del Product Roadmap — solo para proyectos en
+                Discovery / POC (un Delivery Proyecto usa su pipeline en
+                /delivery). Tentativas hasta marcar "confirmadas". */}
+            {project.type !== "Delivery Proyecto" && project.type !== "Following" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 240 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Fechas objetivo · roadmap
+                </label>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <label style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11, color: "var(--muted)" }}>
+                    Experimento
+                    <input
+                      type="date"
+                      value={project.fecha_objetivo_experimento ?? ""}
+                      onChange={(e) => handleFechaDiscoveryChange("fecha_objetivo_experimento", e.target.value || null)}
+                      style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    />
+                  </label>
+                  <label style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11, color: "var(--muted)" }}>
+                    Decisión
+                    <input
+                      type="date"
+                      value={project.fecha_objetivo_decision ?? ""}
+                      onChange={(e) => handleFechaDiscoveryChange("fecha_objetivo_decision", e.target.value || null)}
+                      style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    />
+                  </label>
+                </div>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--muted)", cursor: "pointer" }}>
+                  <input
+                    type="checkbox"
+                    checked={!!project.fechas_discovery_confirmadas}
+                    onChange={(e) => handleFechaDiscoveryChange("fechas_discovery_confirmadas", e.target.checked)}
+                  />
+                  Fechas confirmadas (no tentativas)
+                </label>
+              </div>
+            )}
 
             {project.type === "POC" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>

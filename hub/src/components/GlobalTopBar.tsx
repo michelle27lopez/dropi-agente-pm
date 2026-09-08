@@ -122,9 +122,14 @@ export default function GlobalTopBar() {
             {celulaMenuOpen && (
               <div className="gnav-topbar__dropdown">
                 {(profile?.is_super_admin || profile?.is_stakeholder) && (
-                  <Link href="/resumen" className="gnav-topbar__dropdown-item" onClick={() => setCelulaMenuOpen(false)}>
-                    Resumen ejecutivo
-                  </Link>
+                  <>
+                    <Link href="/resumen" className="gnav-topbar__dropdown-item" onClick={() => setCelulaMenuOpen(false)}>
+                      Resumen ejecutivo
+                    </Link>
+                    <Link href="/roadmap" className="gnav-topbar__dropdown-item" onClick={() => setCelulaMenuOpen(false)}>
+                      Roadmap
+                    </Link>
+                  </>
                 )}
                 {otrasCelulas.map((c) => (
                   <Link
