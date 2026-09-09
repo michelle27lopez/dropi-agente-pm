@@ -51,13 +51,122 @@ const DOCS = [
   },
 ];
 
+// Data de la célula Experience — Panel de Soporte DROPI (Intercom), a pedido
+// de Diana (2026-09-09): panel operativo de soporte (volumen, tiempos de
+// cierre, CSAT, por país/equipo/agente) + informe de minería de texto sobre
+// comentarios CSAT en Colombia (dolores, términos, desempeño por equipo).
+// Dashboard nativo con la línea gráfica de Darwin en /proyectos/panel-soporte-dropi
+// (recharts + tokens de Darwin) — la versión HTML autocontenida original del
+// artifact que compartió Diana sigue en /public como link "Ver HTML original"
+// al fondo de esa página, por si se necesita copiar/exportar tal cual.
+const EXPERIENCE_DOCS = [
+  {
+    href: "/proyectos/panel-soporte-dropi",
+    icon: "🎧",
+    title: "Panel de Soporte DROPI (Intercom)",
+    code: "SAC",
+    description: "Volumen, tiempos de cierre y CSAT del canal de soporte por país/equipo/agente, más minería de texto de comentarios CSAT en Colombia: dolores, términos frecuentes y desempeño por equipo.",
+    color: "#2A78D6",
+    colorBg: "#EFF6FF",
+    date: "Ago 2026",
+  },
+];
+
+function DocCard({ doc }: { doc: { href: string; icon: string; title: string; code: string; description: string; color: string; colorBg: string; date: string } }) {
+  return (
+    <a
+      href={doc.href}
+      style={{
+        background: "#fff", border: "1px solid var(--border)",
+        borderRadius: 14, padding: "20px 22px",
+        textDecoration: "none", display: "block",
+        transition: "box-shadow 0.15s, transform 0.1s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.07)";
+        e.currentTarget.style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "none";
+        e.currentTarget.style.transform = "none";
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
+        <div style={{
+          width: 42, height: 42, borderRadius: 12,
+          background: doc.colorBg,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 22, flexShrink: 0,
+        }}>
+          {doc.icon}
+        </div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <span style={{
+            fontSize: 10, fontWeight: 700,
+            color: doc.color, background: doc.colorBg,
+            border: `1px solid ${doc.color}30`,
+            padding: "2px 8px", borderRadius: 99,
+          }}>{doc.code}</span>
+          <span style={{
+            fontSize: 10, fontWeight: 600,
+            color: "var(--muted)", background: "var(--bg)",
+            border: "1px solid var(--border)",
+            padding: "2px 8px", borderRadius: 99,
+          }}>{doc.date}</span>
+        </div>
+      </div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
+        {doc.title}
+      </div>
+      <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.55, marginBottom: 16 }}>
+        {doc.description}
+      </div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: doc.color }}>
+        Abrir panel ↗
+      </div>
+    </a>
+  );
+}
+
 export default function DataPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const esSuppliers = params.slug === "suppliers";
-  const esExperience = params.slug === "experience";
+  const esExperienceCelula = params.slug === "experience";
+  const esExperience = params.slug === "design-ops";
 
-  // Experience — Agente de Seguimiento de Métricas (CX Tracker, EXP-007).
-  // Vivía en Following, se movió acá a pedido de Diana (2026-09-07).
+  if (esExperienceCelula) {
+    return (
+      <main style={{ minHeight: "100vh", background: "var(--card)" }}>
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Breadcrumb items={[{ label: "Data" }]} />
+          </div>
+        </header>
+
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
+          <div style={{ marginBottom: 36 }}>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 8 }}>
+              Data · Célula Experience
+            </h1>
+            <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>
+              Paneles y análisis de data que alimentan el entendimiento del usuario y el diagnóstico de NPS.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: 16 }}>
+            {EXPERIENCE_DOCS.map((doc) => <DocCard key={doc.href} doc={doc} />)}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Design Ops (antes "Experience", renombrada 2026-09-09) — Agente de
+  // Seguimiento de Métricas (CX Tracker, EXP-007). Vivía en Following, se
+  // movió acá a pedido de Diana (2026-09-07).
   if (esExperience) {
     return (
       <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--card)" }}>

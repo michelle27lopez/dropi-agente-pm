@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel de Soporte DROPI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --surface: #f9f9f7;
+    --card: #fcfcfb;
+    --card-alt: #f3f2ee;
+    --ink-primary: #0b0b0b;
+    --ink-secondary: #52514e;
+    --ink-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --border-strong: rgba(11,11,11,0.16);
+    --accent: #2a78d6;
+    --accent-soft: rgba(42,120,214,0.12);
+    --accent-2: #eb6834;
+    --accent-3: #1baf7a;
+    --accent-4: #eda100;
+    --accent-5: #e87ba4;
+    --accent-6: #008300;
+    --accent-7: #4a3aa7;
+    --accent-8: #e34948;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --shadow: 0 1px 2px rgba(11,11,11,0.04), 0 8px 24px -12px rgba(11,11,11,0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface: #0d0d0d;
+      --card: #1a1a19;
+      --card-alt: #221f1d;
+      --ink-primary: #ffffff;
+      --ink-secondary: #c3c2b7;
+      --ink-muted: #8f8d86;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --border-strong: rgba(255,255,255,0.16);
+      --accent: #3987e5;
+      --accent-soft: rgba(57,135,229,0.16);
+      --accent-2: #d95926;
+      --accent-3: #199e70;
+      --accent-4: #c98500;
+      --accent-5: #d55181;
+      --accent-6: #008300;
+      --accent-7: #9085e9;
+      --accent-8: #e66767;
+      --good: #0ca30c;
+      --warning: #fab219;
+      --serious: #ec835a;
+      --critical: #e66767;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface: #0d0d0d;
+    --card: #1a1a19;
+    --card-alt: #221f1d;
+    --ink-primary: #ffffff;
+    --ink-secondary: #c3c2b7;
+    --ink-muted: #8f8d86;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --border-strong: rgba(255,255,255,0.16);
+    --accent: #3987e5;
+    --accent-soft: rgba(57,135,229,0.16);
+    --accent-2: #d95926;
+    --accent-3: #199e70;
+    --accent-4: #c98500;
+    --accent-5: #d55181;
+    --accent-6: #008300;
+    --accent-7: #9085e9;
+    --accent-8: #e66767;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #e66767;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--surface);
+    color: var(--ink-primary);
+    font-family: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { font-family: "Sora", system-ui, sans-serif; margin: 0; text-wrap: balance; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  /* ---------- Header ---------- */
+  header.top {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;
+    flex-wrap: wrap;
+    padding-bottom: 20px; margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  h1.title { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+  .subtitle { color: var(--ink-secondary); font-size: 14.5px; margin-top: 6px; max-width: 60ch; }
+  .header-meta { text-align: right; font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .header-meta b { color: var(--ink-secondary); font-weight: 600; }
+
+  /* ---------- Section scaffolding ---------- */
+  section { margin-bottom: 36px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+  .section-head h2 { font-size: 18px; font-weight: 700; }
+  .section-note { font-size: 13px; color: var(--ink-muted); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+
+  /* ---------- KPI grid ---------- */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 6px;
+    min-width: 0;
+  }
+  .kpi .label { font-size: 12px; color: var(--ink-muted); font-weight: 600; letter-spacing: 0.02em; }
+  .kpi .value { font-size: 26px; font-weight: 700; font-family: "Sora", sans-serif; line-height: 1.1; }
+  .kpi .sub { font-size: 12px; color: var(--ink-secondary); }
+  .kpi .sub.good { color: var(--good); }
+  .kpi .sub.critical { color: var(--critical); }
+
+  /* ---------- Grid layouts for chart cards ---------- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .chart-title { font-size: 13.5px; font-weight: 600; color: var(--ink-primary); margin-bottom: 2px; }
+  .chart-sub { font-size: 12px; color: var(--ink-muted); margin-bottom: 12px; }
+
+  .callout {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--card-alt); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 13px; color: var(--ink-secondary);
+  }
+  .callout .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex: none; background: var(--warning); }
+  .callout b { color: var(--ink-primary); }
+  .callout.critical .dot { background: var(--critical); }
+  .callout.good .dot { background: var(--good); }
+
+  /* ---------- Part divider ---------- */
+  .part-divider {
+    margin: 52px 0 28px; padding-top: 28px; border-top: 2px solid var(--border-strong);
+  }
+  .part-divider .eyebrow { margin-bottom: 6px; }
+  .part-divider h2.part-title { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+  .part-divider .part-meta {
+    display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; color: var(--ink-muted);
+  }
+  .part-divider .part-meta b { color: var(--ink-secondary); font-weight: 600; }
+  .part-scope-note {
+    font-size: 12.5px; color: var(--ink-muted); background: var(--card-alt); border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px; margin-top: 12px; max-width: 74ch;
+  }
+
+  /* ---------- Insight principal ---------- */
+  .insight-box {
+    background: linear-gradient(180deg, var(--card) 0%, var(--card-alt) 100%);
+    border: 1px solid var(--border-strong); border-left: 3px solid var(--accent);
+    border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 4px;
+  }
+  .insight-box .tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .insight-box p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-secondary); }
+  .insight-box b { color: var(--ink-primary); }
+
+  /* ---------- Case card (critical case) ---------- */
+  .case-card {
+    background: var(--card); border: 1px solid var(--border-strong); border-left: 3px solid var(--critical);
+    border-radius: 12px; padding: 16px 18px; font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+  }
+  .case-card .tag { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--critical); margin-bottom: 6px; }
+  .case-card b { color: var(--ink-primary); }
+
+  /* ---------- Limitations list ---------- */
+  .limits-list { display: flex; flex-direction: column; gap: 0; }
+  .limits-list .limit-row {
+    display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-size: 13.5px; color: var(--ink-secondary); line-height: 1.55;
+  }
+  .limits-list .limit-row:last-child { border-bottom: none; }
+  .limits-list .limit-num {
+    flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--card-alt);
+    border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--ink-muted); margin-top: 1px;
+  }
+
+  /* ---------- Word-frequency rows ---------- */
+  .term-rows { display: flex; flex-direction: column; gap: 7px; }
+  .term-row { display: grid; grid-template-columns: 108px 1fr 40px; align-items: center; gap: 8px; }
+  .term-row .term-label { font-size: 12.5px; color: var(--ink-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .term-row .term-track { height: 14px; background: var(--card-alt); border-radius: 4px; overflow: hidden; }
+  .term-row .term-fill { height: 100%; border-radius: 4px; }
+  .term-row .term-count { font-size: 11.5px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+
+  /* ---------- SVG chart chrome ---------- */
+  svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+  .grid-line { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--baseline); stroke-width: 1; }
+  .axis-label { fill: var(--ink-muted); font-size: 10.5px; font-family: "Public Sans", sans-serif; }
+  .bar-label { fill: var(--ink-secondary); font-size: 10.5px; font-weight: 600; font-family: "Public Sans", sans-serif; font-variant-numeric: tabular-nums; }
+  .bar-shape { transition: opacity 0.12s ease; cursor: pointer; }
+  .bar-shape:hover { opacity: 0.82; }
+  .line-path { fill: none; stroke-width: 2; }
+  .area-path { opacity: 0.14; }
+  .dot-marker { stroke: var(--card); stroke-width: 2; cursor: pointer; }
+  .hover-line { stroke: var(--ink-muted); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0; pointer-events: none; }
+
+  .tooltip {
+    position: absolute; pointer-events: none; z-index: 20;
+    background: var(--ink-primary); color: var(--surface);
+    font-size: 12px; line-height: 1.5; padding: 7px 10px; border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    opacity: 0; transform: translate(-50%, -100%); transition: opacity 0.08s ease;
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .tooltip b { font-weight: 700; }
+  .chart-holder { position: relative; }
+
+  /* ---------- Tables ---------- */
+  .table-scroll { overflow-x: auto; }
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.data-table th {
+    text-align: left; font-weight: 600; color: var(--ink-muted); font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 0 10px 8px; border-bottom: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  table.data-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.data-table td.num, table.data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table tbody tr:hover { background: var(--card-alt); }
+  .rank { color: var(--ink-muted); font-size: 12px; width: 22px; display: inline-block; }
+  .bar-cell { position: relative; min-width: 140px; }
+  .bar-cell .bg-bar { position: absolute; left: 0; top: 4px; bottom: 4px; background: var(--accent-soft); border-radius: 4px; z-index: 0; }
+  .bar-cell .fg { position: relative; z-index: 1; padding-left: 8px; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; }
+  .pill.good { background: rgba(12,163,12,0.12); color: var(--good); }
+  .pill.warn { background: rgba(250,178,25,0.16); color: #a86b00; }
+  .pill.bad { background: rgba(208,59,59,0.12); color: var(--critical); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pill.warn { color: var(--warning); } }
+  :root[data-theme="dark"] .pill.warn { color: var(--warning); }
+
+  footer {
+    margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--ink-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--ink-secondary); margin-top: 10px; }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 10px; height: 10px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+</head>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="eyebrow">Intercom · Soporte al cliente</div>
+      <h1 class="title">DROPI — Panel de soporte</h1>
+      <p class="subtitle">Volumen, tiempos de cierre y satisfacción de las conversaciones de soporte, por país, equipo, agente y tema.</p>
+    </div>
+    <div class="header-meta">
+      <div><b>Periodo:</b> 30 jun – 18 ago 2026</div>
+      <div><b>Conversaciones:</b> 31,618 · <b>Países:</b> 10</div>
+      <div>Generado el 28 ago 2026</div>
+    </div>
+  </header>
+
+  <!-- KPI ROW -->
+  <section>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="label">Conversaciones totales</div>
+        <div class="value num">31,618</div>
+        <div class="sub">≈632/día · 12,935 clientes únicos</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Cerradas el mismo día</div>
+        <div class="value num">54.1%</div>
+        <div class="sub critical">↓ de 65% a 34–38% desde ago.</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Horas hábiles a cierre</div>
+        <div class="value num">2.9h <span style="font-size:14px;color:var(--ink-muted);font-weight:500;">mediana</span></div>
+        <div class="sub">Promedio 4.8h (afectado por colas largas)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Resueltas en 1er contacto</div>
+        <div class="value num">37.3%</div>
+        <div class="sub">2.9 respuestas promedio por caso</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Satisfacción (CSAT)</div>
+        <div class="value num">3.29<span style="font-size:14px;color:var(--ink-muted);font-weight:500;">/5</span></div>
+        <div class="sub">Solo 16.5% de casos calificados</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Tiempo 1ª respuesta</div>
+        <div class="value num">2.9 min</div>
+        <div class="sub">mediana, horario hábil</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Estado actual</div>
+        <div class="value num">98.2%</div>
+        <div class="sub">cerradas · 411 abiertas · 146 pospuestas</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Cobertura</div>
+        <div class="value num">29 <span style="font-size:14px;color:var(--ink-muted);font-weight:500;">agentes</span></div>
+        <div class="sub">en 23 equipos, 10 países</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TREND -->
+  <section>
+    <div class="section-head">
+      <h2>Tendencia operativa</h2>
+      <div class="section-note">Por semana, desde el 29 jun</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">Conversaciones por semana</div>
+        <div class="chart-sub">Volumen semanal de casos iniciados</div>
+        <div class="chart-holder" id="chart-weekly-vol"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">% cerradas el mismo día</div>
+        <div class="chart-sub">Meta implícita de servicio (mayor es mejor)</div>
+        <div class="chart-holder" id="chart-weekly-sameday"></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="dot"></div>
+      <div><b>El cierre en el mismo día cayó de 65% a 34–38%</b> en las semanas del 3 y 10 de agosto, justo cuando las horas hábiles promedio a cierre subieron de ~3.6h a ~7.4h — el volumen entrante se mantuvo estable, así que el atraso parece venir de capacidad de atención, no de un pico de demanda.</div>
+    </div>
+  </section>
+
+  <!-- DAILY VOLUME -->
+  <section>
+    <div class="section-head">
+      <h2>Volumen diario</h2>
+      <div class="section-note">50 días · patrón semanal visible</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Conversaciones iniciadas por día</div>
+      <div class="chart-sub">Los domingos y festivos marcan los valles recurrentes</div>
+      <div class="chart-holder" id="chart-daily"></div>
+    </div>
+  </section>
+
+  <!-- TIME PATTERNS -->
+  <section>
+    <div class="section-head">
+      <h2>Patrones horarios</h2>
+      <div class="section-note">Cuándo llegan los casos</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">Por franja horaria</div>
+        <div class="chart-sub">68.7% de los casos llegan en horario 08–16</div>
+        <div class="chart-holder" id="chart-franja"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Por día de la semana</div>
+        <div class="chart-sub">Miércoles y martes concentran más volumen</div>
+        <div class="chart-holder" id="chart-diasem"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTRIES -->
+  <section>
+    <div class="section-head">
+      <h2>Por país</h2>
+      <div class="section-note">Colombia concentra 71% del volumen</div>
+    </div>
+    <div class="card">
+      <div class="table-scroll">
+        <table class="data-table" id="table-paises">
+          <thead>
+            <tr>
+              <th>#</th><th>País</th><th class="num">Conversaciones</th><th class="num">% mismo día</th><th class="num">CSAT</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAMS & TOPICS -->
+  <section>
+    <div class="section-head">
+      <h2>Equipos y temas</h2>
+      <div class="section-note">A qué se dedica el volumen de soporte</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">Conversaciones por equipo</div>
+        <div class="chart-sub">Top 8 de 23 equipos · CSAT junto a cada barra</div>
+        <div class="chart-holder" id="chart-teams"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Temas más frecuentes</div>
+        <div class="chart-sub">Top 10 · una conversación puede tener varios temas</div>
+        <div class="chart-holder" id="chart-topics"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENTS -->
+  <section>
+    <div class="section-head">
+      <h2>Agentes</h2>
+      <div class="section-note">Top 12 de 29 agentes activos, por volumen</div>
+    </div>
+    <div class="card">
+      <div class="table-scroll">
+        <table class="data-table" id="table-agentes">
+          <thead>
+            <tr>
+              <th>#</th><th>Agente</th><th class="num">Conversaciones</th><th class="num">CSAT</th><th class="num">Horas hábiles</th><th class="num">Tasa calificación</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSAT -->
+  <section>
+    <div class="section-head">
+      <h2>Satisfacción del cliente</h2>
+      <div class="section-note">Distribución de calificaciones 1–5</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Calificaciones recibidas</div>
+      <div class="chart-sub">Distribución marcadamente polarizada: 1 y 5 estrellas dominan</div>
+      <div class="chart-holder" id="chart-csat"></div>
+      <div class="callout">
+        <div class="dot" style="background:var(--ink-muted);"></div>
+        <div>Solo el <b>16.5%</b> de las conversaciones recibe calificación (5,224 de 31,618), así que el CSAT promedio de <b>3.29/5</b> describe a los clientes que sí califican, no a la totalidad de la base atendida.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PART 2: TEXT MINING REPORT ================= -->
+  <div class="part-divider">
+    <div class="eyebrow">Minería de texto · Encuesta CSAT (Intercom)</div>
+    <h2 class="part-title">Qué reclaman y qué agradecen los usuarios — Colombia</h2>
+    <div class="part-meta">
+      <div><b>Período:</b> 1 abr – 24 ago 2026 (5 meses)</div>
+      <div><b>Base:</b> 7,507 comentarios · sin muestreo</div>
+      <div><b>Área:</b> Growth Ops — Analítica de Datos</div>
+    </div>
+    <div class="part-scope-note">Este análisis procesa los <b>comentarios de texto</b> de la encuesta de calificación, solo para Colombia y con un período más amplio (abr–ago) que el panel operativo de arriba (todos los países, 30 jun–18 ago, cualquier caso calificado). Por eso el rating promedio aquí (2.40/5) no coincide con el CSAT del panel operativo (3.29/5): son universos distintos dentro del mismo canal.</div>
+  </div>
+
+  <section>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="label">Rating promedio</div>
+        <div class="value num">2.40<span style="font-size:14px;color:var(--ink-muted);font-weight:500;">/5</span></div>
+        <div class="sub critical">Sin mejora en 5 meses (±0.14)</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Detractores (1–2★)</div>
+        <div class="value num">60.9%</div>
+        <div class="sub">Promotores (4–5★): 29.7%</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Reclamo de fondo</div>
+        <div class="value num">33.2%</div>
+        <div class="sub">de negativos no evalúa la atención, sino logística/pagos</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Correl. 1er contacto ↔ rating</div>
+        <div class="value num">−0.014</div>
+        <div class="sub">indistinguible de cero</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Palabras por comentario</div>
+        <div class="value num">15.5 <span style="font-size:13px;color:var(--ink-muted);font-weight:500;">vs</span> 4.7</div>
+        <div class="sub">detractor vs. promotor</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Brecha entre equipos</div>
+        <div class="value num">1.7 <span style="font-size:14px;color:var(--ink-muted);font-weight:500;">pts</span></div>
+        <div class="sub">Devoluciones Inj. 1.41 vs. Anulaciones 3.09</div>
+      </div>
+    </div>
+
+    <div class="insight-box" style="margin-top:16px;">
+      <div class="tag">Insight principal</div>
+      <p>El sistema de calificación mide la <b>experiencia global del dropshipper con Dropi</b>, no la calidad de la atención del agente. Un tercio de las calificaciones bajas describe fallas de logística, pagos y proveedores que el agente no puede resolver desde el chat. Evaluar al área de SAC con este indicador le atribuye responsabilidades que pertenecen a otros procesos, y explica por qué el promedio permanece estancado pese a las acciones sobre el canal.</p>
+    </div>
+  </section>
+
+  <!-- Composición y evolución -->
+  <section>
+    <div class="section-head">
+      <h2>Composición y evolución</h2>
+      <div class="section-note">7,507 calificaciones con comentario</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">Distribución de calificaciones</div>
+        <div class="chart-sub">48.1% de los comentarios son 1★</div>
+        <div class="chart-holder" id="chart-tm-dist"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Rating promedio mensual</div>
+        <div class="chart-sub">Oscilación máxima de 0.14 puntos en 5 meses</div>
+        <div class="chart-holder" id="chart-tm-monthly"></div>
+      </div>
+    </div>
+    <div class="callout critical">
+      <div class="dot"></div>
+      <div><b>Cinco meses sin movimiento:</b> el promedio va de 2.40 en abril a 2.31 en agosto. No hay tendencia de mejora ni de deterioro — el indicador está plano. Cualquier iniciativa ejecutada sobre el canal en este período no dejó huella medible en la satisfacción reportada.</div>
+    </div>
+  </section>
+
+  <!-- Detractores -->
+  <section>
+    <div class="section-head">
+      <h2>Qué dicen los detractores</h2>
+      <div class="section-note">Comentarios 1–2★, n=4,569</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Términos más frecuentes en detractores</div>
+      <div class="chart-sub">El vocabulario es concreto y transaccional: un hecho específico que cuesta dinero, no una impresión sobre el trato</div>
+      <div id="terms-detractores" class="term-rows"></div>
+    </div>
+  </section>
+
+  <!-- Dolores -->
+  <section>
+    <div class="section-head">
+      <h2>Dolores identificados</h2>
+      <div class="section-note">Comentarios de 1 a 3★, n=5,280 · un comentario puede tener varios</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Dolores en comentarios negativos y neutros</div>
+      <div class="chart-sub">Un tercio de los negativos reclama por el caso de fondo, no por la atención</div>
+      <div class="chart-holder" id="chart-tm-dolores"></div>
+    </div>
+    <div class="grid-2" style="margin-top:16px;">
+      <div class="callout">
+        <div class="dot" style="background:var(--accent);"></div>
+        <div><b>«No resuelven» y «no responden» piden acciones opuestas:</b> «no responden» (4.9%) es un problema de capacidad — nadie contestó. «No resuelven» (17.3%) es un problema de atribuciones — el agente contestó pero no tiene facultades para solucionar. Tres a uno a favor del segundo: el cuello de botella no es la disponibilidad de agentes, sino su margen de decisión.</div>
+      </div>
+      <div class="callout">
+        <div class="dot" style="background:var(--ink-muted);"></div>
+        <div><b>Nota sobre «Cierre prematuro del chat» (4.4%):</b> informes anteriores de esta serie estimaron este dolor en 7% sobre una muestra reducida. La cifra correcta sobre la base completa es 4.4% (234 casos) — sigue siendo relevante en términos absolutos, pero no justifica una iniciativa independiente.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promotores -->
+  <section>
+    <div class="section-head">
+      <h2>Qué dicen los promotores</h2>
+      <div class="section-note">Comentarios 4–5★, n=2,229</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="chart-title">Términos más frecuentes en promotores</div>
+        <div class="chart-sub">41% del elogio es solo agradecimiento, sin contenido evaluable</div>
+        <div id="terms-promotores" class="term-rows"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Extensión promedio del comentario</div>
+        <div class="chart-sub">El detractor describe; el promotor solo agradece</div>
+        <div class="chart-holder" id="chart-tm-extension"></div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="dot" style="background:var(--good);"></div>
+      <div><b>La asimetría de información es el mayor problema de medición:</b> el detractor escribe 15.5 palabras en promedio; el promotor, 4.7. El 57.6% de los comentarios positivos tiene dos palabras o menos, frente al 8.2% de los negativos. Hay un catálogo detallado de las fallas y casi ningún registro de los aciertos — no es posible identificar ni replicar lo que hacen los agentes que sí resuelven.</div>
+    </div>
+    <div class="callout" style="margin-top:10px;">
+      <div class="dot" style="background:var(--accent);"></div>
+      <div><b>Recomendación de instrumentación:</b> condicionar la pregunta abierta al valor de la calificación — ante un 4★ o 5★, preguntar «¿qué fue lo que más te sirvió?» en lugar de dejar el campo libre. Es un cambio de configuración en Intercom, sin costo de desarrollo, y transformaría cerca de 900 comentarios vacíos por período en insumo de mejora.</div>
+    </div>
+  </section>
+
+  <!-- Indicadores operativos -->
+  <section>
+    <div class="section-head">
+      <h2>Los indicadores operativos no predicen la satisfacción</h2>
+      <div class="section-note">Métricas operativas según la calificación recibida</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">% resuelto al 1er contacto y % reabierta, por calificación</div>
+      <div class="chart-sub">Ambas métricas se mantienen planas entre 1★ y 5★</div>
+      <div class="chart-holder" id="chart-tm-metricas"></div>
+      <div class="legend">
+        <div class="item"><span class="swatch" style="background:var(--accent);"></span>% resuelto 1er contacto</div>
+        <div class="item"><span class="swatch" style="background:var(--accent-2);"></span>% conversación reabierta</div>
+      </div>
+    </div>
+    <div class="callout critical" style="margin-top:16px;">
+      <div class="dot"></div>
+      <div><b>«Resuelto al primer contacto» no mide lo que se cree que mide:</b> la correlación con la calificación es de −0.014 sobre 7,507 registros — no hay relación, y el signo es incluso negativo. Los casos con 5★ registran <i>menor</i> resolución al primer contacto (53.0%) que los de 1★ (56.1%). Si el indicador forma parte de la evaluación del área, está premiando el cierre del ticket, no la solución del problema. <span style="color:var(--ink-muted);">(Antes de retirarlo: verificar si el campo se marca automáticamente al cerrar el ticket, con independencia de si hubo solución.)</span></div>
+    </div>
+  </section>
+
+  <!-- Desempeño por equipo -->
+  <section>
+    <div class="section-head">
+      <h2>Desempeño por equipo</h2>
+      <div class="section-note">Equipos con al menos 80 comentarios · línea punteada = promedio general (2.40)</div>
+    </div>
+    <div class="card">
+      <div class="chart-title">Rating promedio por equipo</div>
+      <div class="chart-sub">Los peor evaluados dependen de un tercero; los mejor evaluados resuelven dentro de la plataforma</div>
+      <div class="chart-holder" id="chart-tm-equipos"></div>
+      <div class="legend">
+        <div class="item"><span class="swatch" style="background:var(--good);"></span>Sobre el promedio</div>
+        <div class="item"><span class="swatch" style="background:var(--critical);"></span>Bajo el promedio</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:16px;">
+      <div class="callout">
+        <div class="dot" style="background:var(--accent);"></div>
+        <div><b>El ranking ordena por dependencia externa, no por calidad del agente:</b> los cuatro peor evaluados —Devoluciones Injustificadas, Pruebas de Entrega, Retiros y Otras consultas financiero— comparten un caso que depende de un tercero (transportadora, proveedor, proceso financiero). Antes de intervenir en capacitación, debe verificarse qué proporción de cada cola es efectivamente resoluble por el agente.</div>
+      </div>
+      <div class="case-card">
+        <div class="tag">Caso crítico — Devoluciones Injustificadas</div>
+        <div>Con 672 comentarios y 89.4% de detractores, es el peor resultado de la operación por un margen amplio. El nombre de la categoría reconoce que la devolución fue injustificada: el usuario asume un costo por una falla que no cometió. Ningún ajuste en la atención va a corregir esa percepción mientras el cobro se mantenga — <b>es una decisión de política comercial, no de servicio al cliente.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limitaciones -->
+  <section>
+    <div class="section-head">
+      <h2>Limitaciones</h2>
+      <div class="section-note">Restricciones que deben acompañar cualquier decisión tomada sobre este análisis</div>
+    </div>
+    <div class="card">
+      <div class="limits-list" id="limits-list"></div>
+    </div>
+  </section>
+
+  <!-- Siguientes pasos -->
+  <section>
+    <div class="section-head">
+      <h2>Siguientes pasos</h2>
+      <div class="section-note">Acciones recomendadas por Growth Ops</div>
+    </div>
+    <div class="card">
+      <div class="table-scroll">
+        <table class="data-table" id="table-recomendaciones">
+          <thead>
+            <tr><th>Acción</th><th>Objetivo</th><th>Responsable sugerido</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Fuentes: exportación de Intercom (dashboard_final.pbix), tabla <span class="num">intercom</span> · Informe de minería de texto sobre comentarios CSAT — Colombia, Growth Ops (Informe_Dolores_SAC_Colombia_2026)</div>
+    <div>Panel generado automáticamente a partir del modelo de datos de Power BI y del informe de análisis de texto</div>
+  </footer>
+
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const DATA = {
+  "kpis": {
+    "total_conv": 31618, "clientes_unicos": 12935, "pct_mismo_dia": 54.1,
+    "mediana_horas_habiles": 2.9, "avg_horas_habiles": 4.8, "csat_avg": 3.29,
+    "tasa_calificacion": 16.5, "pct_primer_contacto": 37.3, "frt_mediana_min": 2.9,
+    "respuestas_avg": 2.9, "promedio_diario": 632.0, "fecha_min": "2026-06-30",
+    "fecha_max": "2026-08-18", "n_paises": 10, "n_agentes": 29, "pct_closed": 98.2,
+    "open_count": 411, "snoozed_count": 146
+  },
+  "weekly": [
+    {"week_start":"2026-06-29","conversaciones":3158,"pct_mismo_dia":65.0,"csat":3.17,"horas_habiles":3.4},
+    {"week_start":"2026-07-06","conversaciones":4711,"pct_mismo_dia":61.8,"csat":3.06,"horas_habiles":3.8},
+    {"week_start":"2026-07-13","conversaciones":4266,"pct_mismo_dia":61.7,"csat":3.19,"horas_habiles":3.9},
+    {"week_start":"2026-07-20","conversaciones":4650,"pct_mismo_dia":60.8,"csat":3.31,"horas_habiles":3.7},
+    {"week_start":"2026-07-27","conversaciones":4592,"pct_mismo_dia":59.6,"csat":3.56,"horas_habiles":3.6},
+    {"week_start":"2026-08-03","conversaciones":4660,"pct_mismo_dia":43.2,"csat":3.29,"horas_habiles":7.4},
+    {"week_start":"2026-08-10","conversaciones":4627,"pct_mismo_dia":34.1,"csat":3.4,"horas_habiles":7.0},
+    {"week_start":"2026-08-17","conversaciones":954,"pct_mismo_dia":38.2,"csat":3.77,"horas_habiles":2.7}
+  ],
+  "daily": [
+    {"fecha":"2026-06-30","conversaciones":69},{"fecha":"2026-07-01","conversaciones":900},
+    {"fecha":"2026-07-02","conversaciones":821},{"fecha":"2026-07-03","conversaciones":760},
+    {"fecha":"2026-07-04","conversaciones":478},{"fecha":"2026-07-05","conversaciones":130},
+    {"fecha":"2026-07-06","conversaciones":988},{"fecha":"2026-07-07","conversaciones":849},
+    {"fecha":"2026-07-08","conversaciones":850},{"fecha":"2026-07-09","conversaciones":762},
+    {"fecha":"2026-07-10","conversaciones":717},{"fecha":"2026-07-11","conversaciones":363},
+    {"fecha":"2026-07-12","conversaciones":182},{"fecha":"2026-07-13","conversaciones":389},
+    {"fecha":"2026-07-14","conversaciones":981},{"fecha":"2026-07-15","conversaciones":873},
+    {"fecha":"2026-07-16","conversaciones":785},{"fecha":"2026-07-17","conversaciones":713},
+    {"fecha":"2026-07-18","conversaciones":409},{"fecha":"2026-07-19","conversaciones":116},
+    {"fecha":"2026-07-20","conversaciones":446},{"fecha":"2026-07-21","conversaciones":940},
+    {"fecha":"2026-07-22","conversaciones":875},{"fecha":"2026-07-23","conversaciones":1054},
+    {"fecha":"2026-07-24","conversaciones":807},{"fecha":"2026-07-25","conversaciones":388},
+    {"fecha":"2026-07-26","conversaciones":140},{"fecha":"2026-07-27","conversaciones":857},
+    {"fecha":"2026-07-28","conversaciones":915},{"fecha":"2026-07-29","conversaciones":800},
+    {"fecha":"2026-07-30","conversaciones":801},{"fecha":"2026-07-31","conversaciones":730},
+    {"fecha":"2026-08-01","conversaciones":330},{"fecha":"2026-08-02","conversaciones":159},
+    {"fecha":"2026-08-03","conversaciones":867},{"fecha":"2026-08-04","conversaciones":895},
+    {"fecha":"2026-08-05","conversaciones":953},{"fecha":"2026-08-06","conversaciones":761},
+    {"fecha":"2026-08-07","conversaciones":448},{"fecha":"2026-08-08","conversaciones":527},
+    {"fecha":"2026-08-09","conversaciones":209},{"fecha":"2026-08-10","conversaciones":755},
+    {"fecha":"2026-08-11","conversaciones":880},{"fecha":"2026-08-12","conversaciones":932},
+    {"fecha":"2026-08-13","conversaciones":815},{"fecha":"2026-08-14","conversaciones":726},
+    {"fecha":"2026-08-15","conversaciones":404},{"fecha":"2026-08-16","conversaciones":115},
+    {"fecha":"2026-08-17","conversaciones":436},{"fecha":"2026-08-18","conversaciones":518}
+  ],
+  "paises": [
+    {"pais":"Colombia","conversaciones":22553,"csat":3.35,"pct_mismo_dia":58.4},
+    {"pais":"Ecuador","conversaciones":2929,"csat":3.35,"pct_mismo_dia":46.1},
+    {"pais":"Mexico","conversaciones":2345,"csat":2.48,"pct_mismo_dia":45.4},
+    {"pais":"Chile","conversaciones":1469,"csat":2.93,"pct_mismo_dia":31.1},
+    {"pais":"Paraguay","conversaciones":977,"csat":3.72,"pct_mismo_dia":56.1},
+    {"pais":"Argentina","conversaciones":562,"csat":3.41,"pct_mismo_dia":46.6},
+    {"pais":"Guatemala","conversaciones":462,"csat":3.16,"pct_mismo_dia":33.5},
+    {"pais":"Peru","conversaciones":160,"csat":2.67,"pct_mismo_dia":21.9},
+    {"pais":"Panama","conversaciones":121,"csat":3.73,"pct_mismo_dia":43.0},
+    {"pais":"Costa Rica","conversaciones":40,"csat":2.5,"pct_mismo_dia":22.5}
+  ],
+  "teams": {
+    "top": [
+      {"team":"Anulaciones","conversaciones":14452,"csat":3.69},
+      {"team":"Triage General","conversaciones":6716,"csat":3.26},
+      {"team":"Línea general Col","conversaciones":2861,"csat":2.76},
+      {"team":"Actualización de Estatus","conversaciones":1818,"csat":3.12},
+      {"team":"Guías generadas SIN MOVIMIENTO","conversaciones":848,"csat":3.4},
+      {"team":"SAC Tier 1 Dropshippers","conversaciones":808,"csat":3.76},
+      {"team":"Devoluciones injustificadas","conversaciones":770,"csat":2.09},
+      {"team":"Recolecciones","conversaciones":736,"csat":3.33}
+    ],
+    "otros_sum": 2609, "otros_n": 15
+  },
+  "agentes": {
+    "top": [
+      {"agente":"Karen Parra","conversaciones":7911,"csat":3.58,"horas_habiles":3.1,"tasa_calif":14.7},
+      {"agente":"Nathali Quinto Ortiz","conversaciones":3659,"csat":3.1,"horas_habiles":2.9,"tasa_calif":21.1},
+      {"agente":"Luisa Buitrago","conversaciones":2630,"csat":3.37,"horas_habiles":5.8,"tasa_calif":16.4},
+      {"agente":"Ashley Erazo","conversaciones":2116,"csat":3.02,"horas_habiles":5.7,"tasa_calif":23.3},
+      {"agente":"Valentina Buitrago Garcia","conversaciones":2062,"csat":2.94,"horas_habiles":7.9,"tasa_calif":15.7},
+      {"agente":"Danna Trujillo","conversaciones":2000,"csat":3.28,"horas_habiles":4.5,"tasa_calif":15.2},
+      {"agente":"Santiago Navia","conversaciones":1931,"csat":3.47,"horas_habiles":8.1,"tasa_calif":11.1},
+      {"agente":"Dennis Martinez","conversaciones":1890,"csat":2.89,"horas_habiles":5.6,"tasa_calif":15.1},
+      {"agente":"Yulisa Ibarguen","conversaciones":1707,"csat":3.72,"horas_habiles":5.6,"tasa_calif":22.5},
+      {"agente":"Sara Mejía","conversaciones":1642,"csat":4.12,"horas_habiles":6.2,"tasa_calif":12.9},
+      {"agente":"Angela Ramirez","conversaciones":1546,"csat":2.1,"horas_habiles":5.1,"tasa_calif":16.0},
+      {"agente":"Laura Rengifo","conversaciones":627,"csat":3.13,"horas_habiles":5.6,"tasa_calif":12.6}
+    ],
+    "otros_sum": 1897, "otros_n": 18
+  },
+  "topics": {
+    "top": [
+      {"topic":"Anulaciones","count":10325},{"topic":"ordenes","count":5995},
+      {"topic":"guia","count":4037},{"topic":"Transportadoras","count":3939},
+      {"topic":"CAS","count":1893},{"topic":"Anulación de guías","count":1619},
+      {"topic":"cobertura","count":491},{"topic":"Retiros","count":475},
+      {"topic":"billetera","count":376},{"topic":"integraciones","count":320}
+    ],
+    "otros_sum": 2047, "total_mentions": 31517
+  },
+  "csat_dist": [
+    {"rating":1,"count":1357},{"rating":2,"count":435},{"rating":3,"count":542},
+    {"rating":4,"count":1133},{"rating":5,"count":1757}
+  ],
+  "franja": [
+    {"franja_8h":"00-08","conversaciones":1769},{"franja_8h":"08-16","conversaciones":21719},
+    {"franja_8h":"16-24","conversaciones":8130}
+  ],
+  "diasem": [
+    {"label":"Lun","conversaciones":4738},{"label":"Mar","conversaciones":6047},
+    {"label":"Mié","conversaciones":6183},{"label":"Jue","conversaciones":5799},
+    {"label":"Vie","conversaciones":4901},{"label":"Sáb","conversaciones":2899},
+    {"label":"Dom","conversaciones":1051}
+  ]
+};
+
+/* ---- Text-mining report: CSAT comments, Colombia, abr-ago 2026 ---- */
+const TM = {
+  dist: [
+    {rating:1, count:3611, pct:48.1}, {rating:2, count:958, pct:12.8}, {rating:3, count:711, pct:9.5},
+    {rating:4, count:793, pct:10.6}, {rating:5, count:1434, pct:19.1}
+  ],
+  monthly: [
+    {mes:"2026-04", rating:2.40}, {mes:"2026-05", rating:2.39}, {mes:"2026-06", rating:2.45},
+    {mes:"2026-07", rating:2.45}, {mes:"2026-08", rating:2.31}
+  ],
+  dolores: [
+    {label:"Reclamo de fondo (logística/dinero)", count:1754, pct:33.2},
+    {label:"No resuelven", count:913, pct:17.3},
+    {label:"Incumplimiento de SLA", count:572, pct:10.8},
+    {label:"Juicio global negativo", count:422, pct:8.0},
+    {label:"No responden", count:257, pct:4.9},
+    {label:"Cierre prematuro del chat", count:234, pct:4.4},
+    {label:"No entienden la consulta", count:84, pct:1.6},
+    {label:"Respuesta plantilla / bot", count:55, pct:1.0}
+  ],
+  terminosDetractores: [
+    {term:"solución", count:583}, {term:"respuesta", count:577}, {term:"cliente", count:371},
+    {term:"guía", count:246}, {term:"proveedor", count:220}, {term:"conversación", count:218},
+    {term:"servicio", count:216}, {term:"transportadora", count:202}, {term:"necesito", count:195},
+    {term:"pedido", count:189}, {term:"tiempo", count:184}, {term:"estoy", count:174},
+    {term:"pésimo", count:158}, {term:"devolución", count:158}
+  ],
+  terminosPromotores: [
+    {term:"gracias", count:1043}, {term:"muchas", count:350}, {term:"excelente", count:268},
+    {term:"bien", count:141}, {term:"atención", count:124}, {term:"buena", count:95},
+    {term:"respuesta", count:77}, {term:"servicio", count:67}, {term:"rápido", count:54},
+    {term:"rápida", count:49}, {term:"ayuda", count:48}, {term:"súper", count:43},
+    {term:"solución", count:40}, {term:"buen", count:36}
+  ],
+  extension: [
+    {label:"Detractores (1–2★)", value:15.5}, {label:"Promotores (4–5★)", value:4.7}
+  ],
+  metricasPorRating: [
+    {rating:"1★", primer_contacto:56.1, reabierta:13.8},
+    {rating:"2★", primer_contacto:56.7, reabierta:14.3},
+    {rating:"3★", primer_contacto:56.7, reabierta:13.4},
+    {rating:"4★", primer_contacto:58.6, reabierta:12.9},
+    {rating:"5★", primer_contacto:53.0, reabierta:14.2}
+  ],
+  equipos: [
+    {team:"Anulaciones", rating:3.09, n:912},
+    {team:"Compliance", rating:2.90, n:738},
+    {team:"Actualización De Estatus", rating:2.80, n:199},
+    {team:"Triage General", rating:2.62, n:1122},
+    {team:"Recolecciones", rating:2.47, n:97},
+    {team:"Garantías Dropshipper", rating:2.47, n:859},
+    {team:"Integraciones", rating:2.45, n:144},
+    {team:"Órdenes Sin Despacho", rating:2.18, n:686},
+    {team:"PQR - CAS", rating:2.16, n:206},
+    {team:"Guías Generadas Sin Movimiento", rating:2.13, n:84},
+    {team:"Otras Consultas Financiero", rating:2.01, n:213},
+    {team:"Retiros", rating:1.82, n:833},
+    {team:"Pruebas De Entrega", rating:1.78, n:125},
+    {team:"Devoluciones Injustificadas", rating:1.41, n:672}
+  ],
+  avgRating: 2.40,
+  limitaciones: [
+    "Sesgo de no respuesta. Solo califica una fracción de los usuarios atendidos, y quien queda satisfecho responde menos. El 60.9% de detractores describe la composición de quienes comentaron, no la tasa de insatisfacción del canal.",
+    "Los dolores se detectan mediante expresiones regulares sobre el texto. El método es auditable y reproducible, pero no captura ironía ni quejas sin marcador léxico explícito. Los porcentajes son un piso, no un techo.",
+    "El campo de equipo indica quién atendió el caso, no dónde se originó la falla. Esta es la causa directa de la atribución incorrecta descrita en el insight principal.",
+    "Los dolores no son mutuamente excluyentes: un comentario puede clasificarse en varios, por lo que los porcentajes suman más de 100%.",
+    "El análisis cubre únicamente Colombia. No es extrapolable a las demás operaciones sin repetir el procesamiento.",
+    "Sin identificador de agente en esta extracción no es posible distinguir el efecto del agente del efecto de la cola de atención."
+  ],
+  recomendaciones: [
+    {accion:"Verificar cómo se captura «resuelto al primer contacto»", objetivo:"Determinar si el indicador es inválido o mal registrado", responsable:"Ops Intercom"},
+    {accion:"Etiquetar tickets no resolubles por el agente", objetivo:"Separar la evaluación de SAC de fallas de otras áreas", responsable:"Gerencia SAC"},
+    {accion:"Revisar la política de cobro de devoluciones injustificadas", objetivo:"Atacar el peor resultado de la operación (1.41)", responsable:"Comercial + Logística"},
+    {accion:"Condicionar la pregunta abierta a la calificación", objetivo:"Recuperar información hoy perdida en los agradecimientos", responsable:"Ops Intercom"},
+    {accion:"Auditar el margen de decisión del agente en Retiros", objetivo:"Entender si «no resuelven» es falta de facultades", responsable:"Financiero + SAC"},
+    {accion:"Incorporar identificador de agente a la extracción", objetivo:"Separar efecto del agente del efecto de la cola", responsable:"Analítica"}
+  ]
+};
+
+const NS = "http://www.w3.org/2000/svg";
+const tooltipEl = document.getElementById("tooltip");
+const fmtInt = n => Math.round(n).toLocaleString("es-CO");
+const fmt1 = n => n.toFixed(1);
+const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+function showTooltip(evt, html) {
+  tooltipEl.innerHTML = html;
+  tooltipEl.style.opacity = 1;
+  const scrollX = window.scrollX, scrollY = window.scrollY;
+  tooltipEl.style.left = (evt.clientX + scrollX) + "px";
+  tooltipEl.style.top = (evt.clientY + scrollY - 10) + "px";
+}
+function hideTooltip() { tooltipEl.style.opacity = 0; }
+
+function el(tag, attrs) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+/* ---------------- Vertical bar chart ---------------- */
+function verticalBarChart(containerId, data, opts) {
+  const container = document.getElementById(containerId);
+  const W = 560, H = opts.height || 220;
+  const padL = 40, padR = 10, padT = 14, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const svg = el("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+
+  const values = data.map(d => d[opts.yKey]);
+  const maxV = opts.maxV || Math.max(...values) * 1.15;
+  const n = data.length;
+  const bw = Math.min(46, (plotW / n) * 0.58);
+  const step = plotW / n;
+
+  // gridlines (4)
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = (maxV / ticks) * i;
+    const y = padT + plotH - (v / maxV) * plotH;
+    svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, class: "grid-line" }));
+    const t = el("text", { x: padL - 8, y: y + 3, class: "axis-label", "text-anchor": "end" });
+    t.textContent = opts.yFormat ? opts.yFormat(v) : fmtInt(v);
+    svg.appendChild(t);
+  }
+  svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, class: "baseline" }));
+
+  data.forEach((d, i) => {
+    const v = d[opts.yKey];
+    const x = padL + step * i + (step - bw) / 2;
+    const barH = (v / maxV) * plotH;
+    const y = padT + plotH - barH;
+    const color = opts.colorFn ? opts.colorFn(d, i) : (opts.color || cssVar("--accent"));
+    const rect = el("rect", { x, y, width: bw, height: Math.max(barH,1), rx: 4, fill: color, class: "bar-shape" });
+    svg.appendChild(rect);
+
+    rect.addEventListener("mousemove", e => showTooltip(e, opts.tooltip ? opts.tooltip(d) : `<b>${d[opts.xKey]}</b>: ${fmtInt(v)}`));
+    rect.addEventListener("mouseleave", hideTooltip);
+
+    const lbl = el("text", { x: x + bw / 2, y: padT + plotH + 16, class: "axis-label", "text-anchor": "middle" });
+    lbl.textContent = opts.xFormat ? opts.xFormat(d[opts.xKey]) : d[opts.xKey];
+    svg.appendChild(lbl);
+  });
+
+  container.appendChild(svg);
+}
+
+/* ---------------- Line chart ---------------- */
+function lineChart(containerId, data, opts) {
+  const container = document.getElementById(containerId);
+  const W = opts.width || 560, H = opts.height || 220;
+  const padL = 40, padR = 14, padT = 16, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const svg = el("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+
+  const values = data.map(d => d[opts.yKey]);
+  const minV = opts.minV !== undefined ? opts.minV : Math.min(...values) * 0.9;
+  const maxV = opts.maxV || Math.max(...values) * 1.12;
+  const n = data.length;
+  const xAt = i => padL + (n === 1 ? plotW / 2 : (plotW / (n - 1)) * i);
+  const yAt = v => padT + plotH - ((v - minV) / (maxV - minV)) * plotH;
+
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = minV + ((maxV - minV) / ticks) * i;
+    const y = padT + plotH - (i / ticks) * plotH;
+    svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, class: "grid-line" }));
+    const t = el("text", { x: padL - 8, y: y + 3, class: "axis-label", "text-anchor": "end" });
+    t.textContent = opts.yFormat ? opts.yFormat(v) : fmtInt(v);
+    svg.appendChild(t);
+  }
+  svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, class: "baseline" }));
+
+  const color = opts.color || cssVar("--accent");
+  let d0 = "", area = "";
+  data.forEach((d, i) => {
+    const x = xAt(i), y = yAt(d[opts.yKey]);
+    d0 += (i === 0 ? "M" : "L") + x + "," + y + " ";
+  });
+  area = "M" + xAt(0) + "," + (padT + plotH) + " L" + d0.slice(1) + "L" + xAt(n - 1) + "," + (padT + plotH) + " Z";
+
+  if (opts.area !== false) {
+    svg.appendChild(el("path", { d: area, class: "area-path", fill: color, stroke: "none" }));
+  }
+  svg.appendChild(el("path", { d: d0.trim(), class: "line-path", stroke: color }));
+
+  // x labels (skip some if crowded)
+  const labelEvery = Math.ceil(n / (opts.maxLabels || 8));
+  data.forEach((d, i) => {
+    const x = xAt(i), y = yAt(d[opts.yKey]);
+    const dot = el("circle", { cx: x, cy: y, r: 4, fill: color, class: "dot-marker" });
+    svg.appendChild(dot);
+    dot.addEventListener("mousemove", e => showTooltip(e, opts.tooltip ? opts.tooltip(d) : `<b>${d[opts.xKey]}</b>: ${d[opts.yKey]}`));
+    dot.addEventListener("mouseleave", hideTooltip);
+
+    if (i % labelEvery === 0 || i === n - 1) {
+      const lbl = el("text", { x, y: padT + plotH + 16, class: "axis-label", "text-anchor": "middle" });
+      lbl.textContent = opts.xFormat ? opts.xFormat(d[opts.xKey]) : d[opts.xKey];
+      svg.appendChild(lbl);
+    }
+  });
+
+  container.appendChild(svg);
+}
+
+/* ---------------- Horizontal bar chart ---------------- */
+function horizontalBarChart(containerId, data, opts) {
+  const container = document.getElementById(containerId);
+  const W = 560;
+  const rowH = opts.rowH || 26;
+  const padT = 6, padB = 6, padL = opts.padL || 150, padR = 60;
+  const H = padT + padB + rowH * data.length;
+  const plotW = W - padL - padR;
+  const svg = el("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+
+  const maxV = opts.maxV || Math.max(...data.map(d => d[opts.valueKey])) * 1.08;
+
+  data.forEach((d, i) => {
+    const y = padT + i * rowH;
+    const barH = rowH * 0.56;
+    const by = y + (rowH - barH) / 2;
+    const w = (d[opts.valueKey] / maxV) * plotW;
+    const color = opts.colorFn ? opts.colorFn(d, i) : (opts.color || cssVar("--accent"));
+
+    const label = el("text", { x: padL - 10, y: y + rowH / 2 + 4, class: "axis-label", "text-anchor": "end" });
+    label.textContent = d[opts.labelKey];
+    svg.appendChild(label);
+
+    const rect = el("rect", { x: padL, y: by, width: Math.max(w,1), height: barH, rx: 4, fill: color, class: "bar-shape" });
+    svg.appendChild(rect);
+    rect.addEventListener("mousemove", e => showTooltip(e, opts.tooltip ? opts.tooltip(d) : `<b>${d[opts.labelKey]}</b>: ${fmtInt(d[opts.valueKey])}`));
+    rect.addEventListener("mouseleave", hideTooltip);
+
+    const vlabel = el("text", { x: padL + w + 8, y: y + rowH / 2 + 4, class: "bar-label" });
+    vlabel.textContent = opts.valueFormat ? opts.valueFormat(d) : fmtInt(d[opts.valueKey]);
+    svg.appendChild(vlabel);
+  });
+
+  if (opts.baseline !== undefined) {
+    const bx = padL + (opts.baseline / maxV) * plotW;
+    svg.appendChild(el("line", { x1: bx, x2: bx, y1: padT - 2, y2: H - padB + 2, stroke: cssVar("--ink-muted"), "stroke-width": 1.5, "stroke-dasharray": "3 3" }));
+    const blabel = el("text", { x: bx, y: padT - 6, class: "axis-label", "text-anchor": "middle" });
+    blabel.textContent = opts.baselineLabel || opts.baseline;
+    svg.appendChild(blabel);
+  }
+
+  container.appendChild(svg);
+}
+
+/* ---------------- Grouped vertical bar chart (2 series) ---------------- */
+function groupedBarChart(containerId, data, opts) {
+  const container = document.getElementById(containerId);
+  const W = 700, H = opts.height || 220;
+  const padL = 40, padR = 10, padT = 14, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const svg = el("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+
+  const series = opts.series; // [{key, color}, ...]
+  const allVals = data.flatMap(d => series.map(s => d[s.key]));
+  const maxV = opts.maxV || Math.max(...allVals) * 1.15;
+  const n = data.length;
+  const step = plotW / n;
+  const groupW = Math.min(70, step * 0.62);
+  const barW = (groupW - 4) / series.length;
+
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = (maxV / ticks) * i;
+    const y = padT + plotH - (v / maxV) * plotH;
+    svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, class: "grid-line" }));
+    const t = el("text", { x: padL - 8, y: y + 3, class: "axis-label", "text-anchor": "end" });
+    t.textContent = opts.yFormat ? opts.yFormat(v) : fmtInt(v);
+    svg.appendChild(t);
+  }
+  svg.appendChild(el("line", { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, class: "baseline" }));
+
+  data.forEach((d, i) => {
+    const groupX = padL + step * i + (step - groupW) / 2;
+    series.forEach((s, si) => {
+      const v = d[s.key];
+      const barH = (v / maxV) * plotH;
+      const x = groupX + si * barW + si * 2;
+      const y = padT + plotH - barH;
+      const rect = el("rect", { x, y, width: barW, height: Math.max(barH,1), rx: 3, fill: s.color, class: "bar-shape" });
+      svg.appendChild(rect);
+      rect.addEventListener("mousemove", e => showTooltip(e, opts.tooltip ? opts.tooltip(d, s) : `<b>${s.label}</b>: ${v}`));
+      rect.addEventListener("mouseleave", hideTooltip);
+    });
+    const lbl = el("text", { x: groupX + groupW / 2, y: padT + plotH + 16, class: "axis-label", "text-anchor": "middle" });
+    lbl.textContent = d[opts.xKey];
+    svg.appendChild(lbl);
+  });
+
+  container.appendChild(svg);
+}
+
+/* ---------------- Inline term-frequency rows ---------------- */
+function renderTermRows(containerId, data, color) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  const maxV = Math.max(...data.map(d => d.count));
+  data.forEach(d => {
+    const row = document.createElement("div");
+    row.className = "term-row";
+    const pct = (d.count / maxV * 100).toFixed(1);
+    row.innerHTML = `
+      <div class="term-label">${d.term}</div>
+      <div class="term-track"><div class="term-fill" style="width:${pct}%;background:${color};"></div></div>
+      <div class="term-count num">${fmtInt(d.count)}</div>`;
+    container.appendChild(row);
+  });
+}
+
+/* ---------------- Render everything ---------------- */
+function render() {
+  verticalBarChart("chart-weekly-vol", DATA.weekly, {
+    xKey: "week_start", yKey: "conversaciones",
+    xFormat: d => new Date(d + "T00:00:00").toLocaleDateString("es-CO", { day: "2-digit", month: "short" }),
+    tooltip: d => `<b>Semana del ${new Date(d.week_start+"T00:00:00").toLocaleDateString("es-CO",{day:"2-digit",month:"short"})}</b><br>${fmtInt(d.conversaciones)} conversaciones`
+  });
+
+  lineChart("chart-weekly-sameday", DATA.weekly, {
+    xKey: "week_start", yKey: "pct_mismo_dia", minV: 0, maxV: 75,
+    color: cssVar("--critical"),
+    xFormat: d => new Date(d + "T00:00:00").toLocaleDateString("es-CO", { day: "2-digit", month: "short" }),
+    yFormat: v => v.toFixed(0) + "%",
+    tooltip: d => `<b>Semana del ${new Date(d.week_start+"T00:00:00").toLocaleDateString("es-CO",{day:"2-digit",month:"short"})}</b><br>${d.pct_mismo_dia}% mismo día · CSAT ${d.csat}`
+  });
+
+  lineChart("chart-daily", DATA.daily, {
+    xKey: "fecha", yKey: "conversaciones", height: 200, width: 1180, maxLabels: 10,
+    xFormat: d => new Date(d + "T00:00:00").toLocaleDateString("es-CO", { day: "2-digit", month: "short" }),
+    tooltip: d => `<b>${new Date(d.fecha+"T00:00:00").toLocaleDateString("es-CO",{weekday:"long",day:"2-digit",month:"short"})}</b><br>${fmtInt(d.conversaciones)} conversaciones`
+  });
+
+  verticalBarChart("chart-franja", DATA.franja, {
+    xKey: "franja_8h", yKey: "conversaciones", height: 200,
+    tooltip: d => `<b>Franja ${d.franja_8h}</b><br>${fmtInt(d.conversaciones)} conversaciones`
+  });
+
+  verticalBarChart("chart-diasem", DATA.diasem, {
+    xKey: "label", yKey: "conversaciones", height: 200,
+    color: cssVar("--accent-3"),
+    tooltip: d => `<b>${d.label}</b><br>${fmtInt(d.conversaciones)} conversaciones`
+  });
+
+  horizontalBarChart("chart-teams", DATA.teams.top, {
+    labelKey: "team", valueKey: "conversaciones", padL: 130,
+    valueFormat: d => `${fmtInt(d.conversaciones)} · CSAT ${d.csat}`,
+    tooltip: d => `<b>${d.team}</b><br>${fmtInt(d.conversaciones)} conversaciones · CSAT ${d.csat}`
+  });
+
+  horizontalBarChart("chart-topics", DATA.topics.top, {
+    labelKey: "topic", valueKey: "count", padL: 110,
+    color: cssVar("--accent-7"),
+    tooltip: d => `<b>${d.topic}</b><br>${fmtInt(d.count)} menciones`
+  });
+
+  const csatColor = r => ({1:cssVar("--critical"),2:cssVar("--serious"),3:cssVar("--ink-muted"),4:cssVar("--accent-3"),5:cssVar("--good")}[r]);
+  verticalBarChart("chart-csat", DATA.csat_dist, {
+    xKey: "rating", yKey: "count", height: 200,
+    xFormat: r => "★".repeat(r),
+    colorFn: d => csatColor(d.rating),
+    tooltip: d => `<b>${d.rating} estrella${d.rating>1?'s':''}</b><br>${fmtInt(d.count)} calificaciones (${(d.count/5224*100).toFixed(0)}%)`
+  });
+
+  // Países table
+  const tbodyP = document.querySelector("#table-paises tbody");
+  tbodyP.innerHTML = "";
+  DATA.paises.forEach((d, i) => {
+    const pctMax = Math.max(...DATA.paises.map(x=>x.conversaciones));
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="num rank">${i+1}</td>
+      <td>${d.pais}</td>
+      <td class="num bar-cell"><span class="bg-bar" style="width:${(d.conversaciones/pctMax*100).toFixed(1)}%"></span><span class="fg">${fmtInt(d.conversaciones)}</span></td>
+      <td class="num">${sameDayPill(d.pct_mismo_dia)}</td>
+      <td class="num">${csatPill(d.csat)}</td>`;
+    tbodyP.appendChild(tr);
+  });
+
+  // Agentes table
+  const tbodyA = document.querySelector("#table-agentes tbody");
+  tbodyA.innerHTML = "";
+  const maxAg = Math.max(...DATA.agentes.top.map(x=>x.conversaciones));
+  DATA.agentes.top.forEach((d, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="num rank">${i+1}</td>
+      <td>${d.agente}</td>
+      <td class="num bar-cell"><span class="bg-bar" style="width:${(d.conversaciones/maxAg*100).toFixed(1)}%"></span><span class="fg">${fmtInt(d.conversaciones)}</span></td>
+      <td class="num">${csatPill(d.csat)}</td>
+      <td class="num">${d.horas_habiles}h</td>
+      <td class="num">${d.tasa_calif}%</td>`;
+    tbodyA.appendChild(tr);
+  });
+  const trOtherA = document.createElement("tr");
+  trOtherA.innerHTML = `<td></td><td style="color:var(--ink-muted)">+ ${DATA.agentes.otros_n} agentes más</td><td class="num" style="color:var(--ink-muted)">${fmtInt(DATA.agentes.otros_sum)}</td><td></td><td></td><td></td>`;
+  tbodyA.appendChild(trOtherA);
+
+  /* ===== Part 2: text-mining report (TM) ===== */
+  const csatColorTM = r => ({1:cssVar("--critical"),2:cssVar("--serious"),3:cssVar("--ink-muted"),4:cssVar("--accent-3"),5:cssVar("--good")}[r]);
+  verticalBarChart("chart-tm-dist", TM.dist, {
+    xKey: "rating", yKey: "count", height: 200,
+    xFormat: r => "★".repeat(r),
+    colorFn: d => csatColorTM(d.rating),
+    tooltip: d => `<b>${d.rating} estrella${d.rating>1?'s':''}</b><br>${fmtInt(d.count)} comentarios (${d.pct}%)`
+  });
+
+  lineChart("chart-tm-monthly", TM.monthly, {
+    xKey: "mes", yKey: "rating", minV: 0, maxV: 5,
+    color: cssVar("--critical"),
+    xFormat: m => new Date(m + "-01T00:00:00").toLocaleDateString("es-CO", { month: "short", year: "2-digit" }),
+    yFormat: v => v.toFixed(1),
+    tooltip: d => `<b>${new Date(d.mes+"-01T00:00:00").toLocaleDateString("es-CO",{month:"long",year:"numeric"})}</b><br>Rating promedio ${d.rating}`
+  });
+
+  horizontalBarChart("chart-tm-dolores", TM.dolores, {
+    labelKey: "label", valueKey: "count", padL: 190,
+    color: cssVar("--accent-2"),
+    colorFn: (d,i) => i === 0 ? cssVar("--critical") : cssVar("--accent-2"),
+    valueFormat: d => `${fmtInt(d.count)} (${d.pct}%)`,
+    tooltip: d => `<b>${d.label}</b><br>${fmtInt(d.count)} menciones (${d.pct}% de negativos/neutros)`
+  });
+
+  renderTermRows("terms-detractores", TM.terminosDetractores, cssVar("--critical"));
+  renderTermRows("terms-promotores", TM.terminosPromotores, cssVar("--good"));
+
+  horizontalBarChart("chart-tm-extension", TM.extension, {
+    labelKey: "label", valueKey: "value", padL: 130, rowH: 46,
+    colorFn: (d,i) => i === 0 ? cssVar("--critical") : cssVar("--good"),
+    valueFormat: d => `${d.value} palabras`,
+    tooltip: d => `<b>${d.label}</b><br>${d.value} palabras en promedio`
+  });
+
+  groupedBarChart("chart-tm-metricas", TM.metricasPorRating, {
+    xKey: "rating", height: 220, maxV: 70,
+    series: [
+      { key: "primer_contacto", color: cssVar("--accent"), label: "% resuelto 1er contacto" },
+      { key: "reabierta", color: cssVar("--accent-2"), label: "% conversación reabierta" }
+    ],
+    yFormat: v => v.toFixed(0) + "%",
+    tooltip: (d, s) => `<b>${d.rating}</b><br>${s.label}: ${d[s.key]}%`
+  });
+
+  const equiposSorted = [...TM.equipos].sort((a,b) => b.rating - a.rating);
+  horizontalBarChart("chart-tm-equipos", equiposSorted, {
+    labelKey: "team", valueKey: "rating", padL: 200, maxV: 5, rowH: 27,
+    colorFn: d => d.rating >= TM.avgRating ? cssVar("--good") : cssVar("--critical"),
+    valueFormat: d => `${d.rating.toFixed(2)} (n=${d.n})`,
+    baseline: TM.avgRating, baselineLabel: "prom. 2.40",
+    tooltip: d => `<b>${d.team}</b><br>Rating ${d.rating.toFixed(2)} · ${fmtInt(d.n)} comentarios`
+  });
+
+  // Limitaciones
+  const limitsList = document.getElementById("limits-list");
+  limitsList.innerHTML = "";
+  TM.limitaciones.forEach((txt, i) => {
+    const row = document.createElement("div");
+    row.className = "limit-row";
+    row.innerHTML = `<div class="limit-num">${i+1}</div><div>${txt}</div>`;
+    limitsList.appendChild(row);
+  });
+
+  // Recomendaciones table
+  const tbodyR = document.querySelector("#table-recomendaciones tbody");
+  tbodyR.innerHTML = "";
+  TM.recomendaciones.forEach(d => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td style="white-space:normal;min-width:220px;">${d.accion}</td><td style="white-space:normal;min-width:220px;color:var(--ink-secondary);">${d.objetivo}</td><td>${d.responsable}</td>`;
+    tbodyR.appendChild(tr);
+  });
+
+  function sameDayPill(v) {
+    const cls = v >= 55 ? "good" : v >= 40 ? "warn" : "bad";
+    return `<span class="pill ${cls}">${v}%</span>`;
+  }
+  function csatPill(v) {
+    const cls = v >= 3.4 ? "good" : v >= 2.8 ? "warn" : "bad";
+    return `<span class="pill ${cls}">${v.toFixed(2)}</span>`;
+  }
+}
+
+render();
+window.addEventListener("resize", () => {
+  document.querySelectorAll(".chart-holder").forEach(c => c.innerHTML = "");
+  render();
+});
+</script>
+
+</body></html>
