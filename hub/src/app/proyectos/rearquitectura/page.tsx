@@ -101,7 +101,7 @@ export default function RearquitecturaPage() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Rearquitectura · Reorganización de Navegación y Pantallas Dropi"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="rearquitectura"
       />
 
@@ -109,13 +109,13 @@ export default function RearquitecturaPage() {
         {/* Breadcrumb & title */}
         <div style={{ marginBottom: 20 }}>
           <a
-            href="/celula/experience"
+            href="/celula/design-ops"
             style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}
           >
-            ← Volver a Célula Experience
+            ← Volver a Célula Design Ops
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · Activo</span>
             <span style={badgeStyle("#EA580C", "#FFEDD5")}>DROP-25312</span>
           </div>

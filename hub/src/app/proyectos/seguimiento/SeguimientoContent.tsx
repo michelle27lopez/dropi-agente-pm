@@ -5,7 +5,7 @@ import WeeklySelector from "./WeeklySelector";
 import RoadmapGantt, { type GanttFase } from "./RoadmapGantt";
 
 // Fuente: Promp/Documento de Seguimiento.md — tablero consolidado de los
-// 6 proyectos de la Célula Experience (Rearquitectura, Órdenes, Dropi App,
+// 6 proyectos de la Célula Design Ops (Rearquitectura, Órdenes, Dropi App,
 // Búsqueda semántica, Dashboard de indicadores, TARS).
 //
 // Componente compartido: lo usa tanto proyectos/seguimiento/page.tsx (página
@@ -421,7 +421,7 @@ export default function SeguimientoContent({ showTitle = true }: { showTitle?: b
       >
         <div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, marginBottom: 8 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             {p.code ? (
               <span style={badgeStyle("#EA580C", "#FFEDD5")}>{p.code}</span>
             ) : (

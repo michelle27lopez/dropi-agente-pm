@@ -46,7 +46,7 @@ function BitacoraBody() {
     <div className="exp003-bitacora" style={{ minHeight: "100vh", background: "var(--bg)" }}>
       <HubHeader
         title="Bitácora: búsqueda con IA en Paraguay"
-        subtitle="Proyecto EXP-003 · Célula Experience"
+        subtitle="Proyecto EXP-003 · Célula Design Ops"
         currentSlug="seguimiento"
       />
 

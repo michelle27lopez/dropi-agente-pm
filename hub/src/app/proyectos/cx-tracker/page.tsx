@@ -110,7 +110,7 @@ const STATUS_ACTIONS = [
   { estado: "Move On / Roll Back", dot: "⛔", color: "#DC2626", descripcion: "Cese de mantenimiento o eliminación de la función.", criterio: "Baja retención (<15%) y adopción crítica (<20%)." },
 ];
 
-// ── Seed — proyectos de la Célula Experience ────────────────────────────────
+// ── Seed — proyectos de la Célula Design Ops ────────────────────────────────
 // Métricas de UX (adopción/retención/CES/CSAT) sin medir todavía → en blanco.
 // m1/m2/m3 arrancan vacíos — cada revisión se llena a mano desde la app,
 // sin sincronizar con el contenido de Updates (2026-09-07, pedido de Diana:
@@ -118,32 +118,32 @@ const STATUS_ACTIONS = [
 const PROJECTS_SEED: ProjectEntry[] = [
   {
     id: "rearquitectura", name: "Rearquitectura", code: "DROP-25312", href: "/proyectos/rearquitectura",
-    categoria: "Célula Experience", phase: "m1", fechaInicio: "2026",
+    categoria: "Célula Design Ops", phase: "m1", fechaInicio: "2026",
     m1: [], m2: [], m3: [],
   },
   {
     id: "ordenes", name: "Órdenes", code: "EXP-002", href: "/proyectos/ordenes",
-    categoria: "Célula Experience", phase: "pend", fechaInicio: "2026",
+    categoria: "Célula Design Ops", phase: "pend", fechaInicio: "2026",
     m1: [], m2: [], m3: [],
   },
   {
     id: "dropi-app", name: "Dropi App — Novedades", code: "DROP-25313", href: "/proyectos/dropi-app",
-    categoria: "Célula Experience", phase: "m2", fechaInicio: "2025",
+    categoria: "Célula Design Ops", phase: "m2", fechaInicio: "2025",
     m1: [], m2: [], m3: [],
   },
   {
     id: "exp-004", name: "Dashboard de Indicadores", code: "EXP-004", href: "/proyectos/exp-004",
-    categoria: "Célula Experience", phase: "m2", fechaInicio: "2025",
+    categoria: "Célula Design Ops", phase: "m2", fechaInicio: "2025",
     m1: [], m2: [], m3: [],
   },
   {
     id: "dropi-testers", name: "Dropi Testers", code: "EXP-006", href: "/proyectos/dropi-testers",
-    categoria: "Célula Experience", phase: "pend", fechaInicio: "2026",
+    categoria: "Célula Design Ops", phase: "pend", fechaInicio: "2026",
     m1: [], m2: [], m3: [],
   },
   {
-    id: "sherlock", name: "Proyecto Sherlock", code: "EXP-005", href: "/celula/experience",
-    categoria: "Célula Experience", phase: "m1", fechaInicio: "2026",
+    id: "sherlock", name: "Proyecto Sherlock", code: "EXP-005", href: "/celula/design-ops",
+    categoria: "Célula Design Ops", phase: "m1", fechaInicio: "2026",
     m1: [], m2: [], m3: [],
   },
 ];
@@ -737,7 +737,7 @@ export default function CxTrackerPage() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Agente de Seguimiento de Métricas"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="cx-tracker"
       />
 
@@ -746,7 +746,7 @@ export default function CxTrackerPage() {
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
             <div>
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#7C3AED", background: "#F3E8FF" }}>🧬 Célula Experience</span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#7C3AED", background: "#F3E8FF" }}>🧬 Célula Design Ops</span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#1458A8", background: "#EFF6FF" }}>🚚 Following · Activo</span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 4, borderRadius: 999, padding: "4px 10px", fontSize: 12, fontWeight: 700, color: "#EA580C", background: "#FFEDD5" }}>EXP-007</span>
               </div>
