@@ -6,7 +6,8 @@ import RoadmapGantt from "../seguimiento/RoadmapGantt";
 // (proyectos/rearquitectura/page.tsx) — a pedido de Diana, mismo nivel de
 // detalle (Section cards + RoadmapGantt) para el proyecto EXP-008 de la
 // célula Experience (EXP-008 · Discovery). Ver también EXP-009 y EXP-010
-// (POCs de la célula), creados el 2026-09-09.
+// (POCs de la célula), creados el 2026-09-09. PR de prueba: merge manual
+// de Jaime para probar si evita el bloqueo de despliegue de Vercel.
 
 const badgeStyle = (color: string, bg: string): React.CSSProperties => ({
   display: "inline-flex",
