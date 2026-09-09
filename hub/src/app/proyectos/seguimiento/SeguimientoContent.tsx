@@ -9,7 +9,7 @@ import RoadmapGantt, { type GanttFase } from "./RoadmapGantt";
 // Búsqueda semántica, Dashboard de indicadores, TARS).
 //
 // Componente compartido: lo usa tanto proyectos/seguimiento/page.tsx (página
-// standalone) como celula/[slug]/page.tsx (home de la célula Experience) —
+// standalone) como celula/[slug]/page.tsx (home de la célula Design Ops) —
 // así el archivo protegido por CODEOWNERS solo necesita un import + un if.
 
 const PENDING = "Pendiente de definir";

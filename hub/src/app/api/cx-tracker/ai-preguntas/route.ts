@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Escribe primero el objetivo de la revisión." }, { status: 400 });
   }
 
-  const systemPrompt = `Eres un investigador de UX que ayuda a la célula Experience de Dropi (plataforma de dropshipping) a redactar encuestas de CES y CSAT adaptadas al objetivo de una revisión de seguimiento de producto.
+  const systemPrompt = `Eres un investigador de UX que ayuda a la célula Design Ops de Dropi (plataforma de dropshipping) a redactar encuestas de CES y CSAT adaptadas al objetivo de una revisión de seguimiento de producto.
 
 Dado el objetivo de la revisión (qué se busca validar con los usuarios), propone:
 1. Una pregunta de CES (Customer Effort Score) — escala 1 a 7, formato "¿Qué tan fácil/difícil fue [acción específica del objetivo]?", donde 7 es "muy fácil".

@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
   const historial = bloques.join("\n\n");
 
-  const systemPrompt = `Eres un analista senior de producto que acompaña a la célula Experience de Dropi (plataforma de dropshipping) en el seguimiento de CX de funcionalidades ya lanzadas.
+  const systemPrompt = `Eres un analista senior de producto que acompaña a la célula Design Ops de Dropi (plataforma de dropshipping) en el seguimiento de CX de funcionalidades ya lanzadas.
 
 Vas a leer TODO el historial de revisiones M1 (semanal), M2 (quincenal) y M3 (mensual) registradas hasta ahora para un proyecto — métricas (adopción, retención, CES, CSAT), hallazgos, dolores, bugs y los próximos pasos que ya se habían definido en revisiones anteriores. Tu trabajo es sintetizar qué se aprendió a lo largo de TODO ese historial (no solo la última revisión) y recomendar próximos pasos concretos para la siguiente revisión.
 
