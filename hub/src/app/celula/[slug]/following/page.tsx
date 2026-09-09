@@ -7,6 +7,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { TTV_FASE_1, TTV_FASE_2 } from "@/lib/ttv-fases-data";
 import { CATALOGO_METAS } from "@/lib/catalogo-metas-data";
 import { TTV_RESULTADOS, PULSO_RESULTADOS } from "@/lib/iniciativas-resultados-data";
+import FollowingBoardTransversal from "./FollowingBoardTransversal";
 
 type MetricsProject = {
   key: string;
@@ -50,6 +51,7 @@ function FollowingContent() {
   const searchParams = useSearchParams();
   const initial = searchParams.get("p");
   const esSuppliers = params.slug === "suppliers";
+  const esProductTeam = params.slug === "product-designers";
 
   // null = portada (resumen TTV + Catálogo, ver más abajo) en vez de saltar
   // directo a un iframe — 2026-08-17, Jaime: eran las 2 tarjetas que tenía la
@@ -66,6 +68,20 @@ function FollowingContent() {
     setSelectedKey(key);
     router.replace(`/celula/${params.slug}/following?p=${key}`, { scroll: false });
   };
+
+  if (esProductTeam) {
+    return (
+      <main style={{ minHeight: "100vh", background: "var(--card)" }}>
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
+        }}>
+          <Breadcrumb items={[{ label: "Following · Todas las células" }]} />
+        </header>
+        <FollowingBoardTransversal />
+      </main>
+    );
+  }
 
   if (!esSuppliers) {
     return (
