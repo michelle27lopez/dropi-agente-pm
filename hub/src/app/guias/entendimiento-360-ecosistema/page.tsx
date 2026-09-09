@@ -256,6 +256,91 @@ function Seccion({ titulo, detalle, filas }: { titulo: string; detalle: string; 
   );
 }
 
+// Integrado 2026-09-07 (a pedido de Laura): esto vivía como guía aparte
+// ("Entendimiento del Negocio", /guias/entendimiento-negocio) escrita por
+// Diana Aldana el 2026-09-01 — grounding técnico del agente de Discovery de
+// Marcas/Brands, consolidado acá porque describe el ecosistema completo
+// (Suppliers, Dropshippers, Marcas/Emprendedores), no solo un frente de
+// service design. Es el fundamento conceptual antes de leer el estado por
+// célula de abajo. Contenido tal cual lo dejó Diana, no resumido/reescrito.
+const COMPORTAMIENTOS_ALGORITMICOS = [
+  { valor: "Evidente", definicion: "Realiza órdenes únicamente desde su usuario Supplier. Sin Dropshippers asociados. Caso más limpio y predecible." },
+  { valor: "Estándar", definicion: "Realiza solo órdenes propias desde su rol Supplier. Puede tener Dropshippers que venden su catálogo, pero su operación principal son sus propias órdenes." },
+  { valor: "Oculto", definicion: "Recibe órdenes de un solo Dropshipper con inventario oculto. Opera simultáneamente como Supplier y Dropshipper — dos roles técnicos para una sola operación real de marca." },
+  { valor: "Mayoritariamente Dropshipper", definicion: "Recibe más órdenes de Dropshippers externos que las que genera por sí mismo." },
+  { valor: "Mayoritariamente Supplier", definicion: "Genera más órdenes propias que las que recibe de Dropshippers externos." },
+  { valor: "Marcas Dropshippers", definicion: "Gestiona sus propias órdenes y además abre su catálogo al dropshipping." },
+];
+
+function FundamentosDelNegocio() {
+  return (
+    <section style={{ marginBottom: 40 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--fg)", margin: 0 }}>Fundamentos del negocio</h2>
+        <span style={{ fontSize: 10.5, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", padding: "2px 8px", borderRadius: 999 }}>
+          Diana Aldana · Experience
+        </span>
+      </div>
+      <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20 }}>
+        Base conceptual antes de mirar el estado por célula — roles, comportamiento algorítmico y modelo de análisis del
+        ecosistema completo (Suppliers, Dropshippers, Marcas/Emprendedores).
+      </p>
+
+      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18, marginBottom: 16 }}>
+        <strong style={{ fontSize: 14, color: "var(--fg)" }}>Deuda técnica: Marca vs. Supplier</strong>
+        <p style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.6, margin: "8px 0 0" }}>
+          Marcas/Emprendedores y Proveedores (Suppliers) conviven dentro del <strong>mismo rol técnico</strong> — no existe
+          todavía un perfil separado para cada uno. Lo que los diferencia no es el rol técnico, sino el{" "}
+          <strong>comportamiento de sus órdenes</strong>. Grounding: <code>orders.user_id</code> = quien vende,{" "}
+          <code>orders.supplier_id</code> = quien provee (si son iguales → operación propia/marca).
+        </p>
+      </div>
+
+      <div style={{ overflowX: "auto", marginBottom: 16 }}>
+        <p style={{ fontSize: 12.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 8px" }}>
+          Comportamiento algorítmico
+        </p>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+          <tbody>
+            {COMPORTAMIENTOS_ALGORITMICOS.map((c) => (
+              <tr key={c.valor} style={{ borderBottom: "1px solid var(--border)" }}>
+                <td style={{ padding: "8px 10px", verticalAlign: "top", whiteSpace: "nowrap", fontFamily: "monospace", fontSize: 12 }}>{c.valor}</td>
+                <td style={{ padding: "8px 10px", color: "var(--fg)", verticalAlign: "top" }}>{c.definicion}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18, marginBottom: 16 }}>
+        <strong style={{ fontSize: 14, color: "var(--fg)" }}>Dos lentes de análisis</strong>
+        <p style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.6, margin: "8px 0 0" }}>
+          <strong>Lente 1 — Portafolio comercial de Marcas:</strong> cumplimiento hacia la meta de 600.000 órdenes/mes, solo
+          usuarios con comercial asignado (ID 71445 o 21553).
+        </p>
+        <p style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.6, margin: "8px 0 0" }}>
+          <strong>Lente 2 — Ecosistema emprendedor completo:</strong> visión holística, incluye huérfanos y emprendedores
+          ocultos, gestionados o no comercialmente.
+        </p>
+      </div>
+
+      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18, marginBottom: 8 }}>
+        <strong style={{ fontSize: 14, color: "var(--fg)" }}>Funnel, Palancas y Loops</strong>
+        <ul style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.8, margin: "8px 0 0", paddingLeft: 18 }}>
+          <li><strong>Funnel</strong> — "¿dónde está la marca?". Adquisición → Activación → Retención → Resurrección.</li>
+          <li><strong>Palancas de crecimiento</strong> — "¿dónde conviene empujar?". Se descubren, no se asumen.</li>
+          <li><strong>Growth Loops</strong> — "¿qué se repite solo?". Solo confirmados con evidencia en más de un periodo.</li>
+        </ul>
+      </div>
+
+      <p style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 8 }}>
+        Guía completa (hallazgos de discovery, cifras de activación/churn):{" "}
+        <a href="/guias/entendimiento-negocio" style={{ color: "var(--dropi)" }}>Entendimiento del Negocio ↗</a>
+      </p>
+    </section>
+  );
+}
+
 export default function Entendimiento360GuiaPage() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -264,16 +349,17 @@ export default function Entendimiento360GuiaPage() {
           background: "var(--card)", borderBottom: "1px solid var(--border)", padding: "20px 32px",
           display: "flex", flexDirection: "column", gap: 10,
         }}>
-          <Breadcrumb items={[{ label: "Guías", href: "/guias" }, { label: "Entendimiento 360 del ecosistema" }]} />
+          <Breadcrumb items={[{ label: "Guías", href: "/guias" }, { label: "Service design: Entendimiento 360 del ecosistema" }]} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <img src="/darwin-logo.png" alt="Darwin" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
             <div>
               <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-                🧭 Entendimiento 360 del ecosistema
+                🧭 Service design: Entendimiento 360 del ecosistema
               </h1>
               <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
                 Qué sabemos hoy de cada célula — por usuario y por proceso. Proyecto{" "}
                 <a href="/proyectos/service-design-360" style={{ color: "var(--dropi)" }}>PRO-001</a>, Product team.
+                Mismo nombre exacto que el proyecto en Darwin — no dos identidades para la misma cosa.
               </p>
             </div>
           </div>
@@ -285,6 +371,8 @@ export default function Entendimiento360GuiaPage() {
             Confluence al 2026-09-01 — no es una cifra a ojo. A medida que una célula documente lo que falta, esta página y el
             tracker se actualizan juntos.
           </div>
+
+          <FundamentosDelNegocio />
 
           <Seccion
             titulo="Por usuario"
