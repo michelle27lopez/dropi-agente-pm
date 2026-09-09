@@ -23,10 +23,21 @@ CREATE TABLE IF NOT EXISTS celula_editores (
   PRIMARY KEY (profile_id, celula_id)
 );
 
--- Diana Aldana (Experience Design Lead, celula_id primario = Experience)
+-- Diana Aldana (celula_id primario = Design Ops, antes "Experience" — se
+-- renombró el 2026-09-09, ver 062_rename_experience_design_ops si aplica)
 -- como editora transversal de Product team.
 INSERT INTO celula_editores (profile_id, celula_id)
 SELECT p.id, c.id
 FROM profiles p, celulas c
 WHERE p.email = 'diana.aldana@dropi.co' AND c.slug = 'product-designers'
+ON CONFLICT (profile_id, celula_id) DO NOTHING;
+
+-- Diana Aldana también reparte su tiempo con la nueva célula "Experience"
+-- (creada 2026-09-09, distinta de la Experience original que ahora es Design
+-- Ops) — necesita poder editar el direccionamiento (ObjetivoPanel) y crear
+-- proyectos ahí sin que su celula_id primario deje de ser Design Ops.
+INSERT INTO celula_editores (profile_id, celula_id)
+SELECT p.id, c.id
+FROM profiles p, celulas c
+WHERE p.email = 'diana.aldana@dropi.co' AND c.slug = 'experience'
 ON CONFLICT (profile_id, celula_id) DO NOTHING;
