@@ -17,15 +17,6 @@ const CSP_REPORT_ONLY = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  // La célula "Experience" se renombró a "Design Ops" (2026-09-09, pedido de
-  // Diana) — slug de "experience" a "design-ops". Redirect permanente para
-  // que links ya compartidos con el slug viejo no rompan.
-  async redirects() {
-    return [
-      { source: "/celula/experience", destination: "/celula/design-ops", permanent: true },
-      { source: "/celula/experience/:path*", destination: "/celula/design-ops/:path*", permanent: true },
-    ];
-  },
   async headers() {
     return [
       {
