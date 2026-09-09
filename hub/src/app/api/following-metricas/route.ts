@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { requireUser } from "@/lib/require-auth";
 
-// Tablero transversal de Following (todas las células) — ver 056. Los
+// Tablero transversal de Following (todas las células) — ver 061. Los
 // proyectos vienen siempre de `projects` (type = 'Following', ya existe);
 // las métricas (CES, estándares) vienen de `following_project_metrics`, que
-// puede no existir todavía si la 056 no se ha corrido — se degrada igual que
+// puede no existir todavía si la 061 no se ha corrido — se degrada igual que
 // service-design-360 en vez de tirar un 500.
 
 export async function GET() {
@@ -46,7 +46,7 @@ export async function GET() {
     .select("project_id, ces_score, ces_meta, estandar_exito, estandar_fracaso, notas, updated_at");
 
   // Misma detección que service-design-360: PostgREST vía supabase-js
-  // devuelve "PGRST205" si la tabla no existe todavía (migración 056
+  // devuelve "PGRST205" si la tabla no existe todavía (migración 061
   // pendiente de aplicar manualmente); Postgres crudo daría "42P01".
   const tablaFalta =
     !!errorMetricas &&

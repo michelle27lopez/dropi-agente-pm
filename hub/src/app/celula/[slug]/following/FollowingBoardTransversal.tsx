@@ -140,7 +140,7 @@ export default function FollowingBoardTransversal() {
           background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 12, padding: "12px 16px",
           fontSize: 12, color: "#92400E", marginBottom: 20,
         }}>
-          ⚠️ Falta correr la migración <code>056_following_metricas.sql</code> en Supabase — los campos de
+          ⚠️ Falta correr la migración <code>061_following_metricas.sql</code> en Supabase — los campos de
           CES y estándares se ven pero todavía no se pueden editar.
         </div>
       )}
