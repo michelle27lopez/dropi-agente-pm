@@ -55,11 +55,13 @@ const DOCS = [
 // de Diana (2026-09-09): panel operativo de soporte (volumen, tiempos de
 // cierre, CSAT, por país/equipo/agente) + informe de minería de texto sobre
 // comentarios CSAT en Colombia (dolores, términos, desempeño por equipo).
-// HTML autocontenido copiado del artifact que compartió Diana, sin tocar su
-// contenido — vive en /public para no depender de nada más.
+// Dashboard nativo con la línea gráfica de Darwin en /proyectos/panel-soporte-dropi
+// (recharts + tokens de Darwin) — la versión HTML autocontenida original del
+// artifact que compartió Diana sigue en /public como link "Ver HTML original"
+// al fondo de esa página, por si se necesita copiar/exportar tal cual.
 const EXPERIENCE_DOCS = [
   {
-    href: "/panel-soporte-dropi.html",
+    href: "/proyectos/panel-soporte-dropi",
     icon: "🎧",
     title: "Panel de Soporte DROPI (Intercom)",
     code: "SAC",
@@ -74,8 +76,6 @@ function DocCard({ doc }: { doc: { href: string; icon: string; title: string; co
   return (
     <a
       href={doc.href}
-      target="_blank"
-      rel="noreferrer"
       style={{
         background: "#fff", border: "1px solid var(--border)",
         borderRadius: 14, padding: "20px 22px",
