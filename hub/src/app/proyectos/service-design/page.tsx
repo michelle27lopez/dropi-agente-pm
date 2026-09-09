@@ -5,7 +5,7 @@ import RoadmapGantt from "../seguimiento/RoadmapGantt";
 // Estructura calcada de la ficha de proyectos de Célula Design Ops
 // (proyectos/rearquitectura/page.tsx) — a pedido de Diana, mismo nivel de
 // detalle (Section cards + RoadmapGantt) para el proyecto EXP-008 de la
-// célula Experience.
+// célula Experience (EXP-008 · Discovery).
 
 const badgeStyle = (color: string, bg: string): React.CSSProperties => ({
   display: "inline-flex",
