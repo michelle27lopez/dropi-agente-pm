@@ -480,6 +480,7 @@ Usuario ingresa código
                       <li><strong>Marketing:</strong> seguimiento a los recursos visuales que todavía faltan — insignias y videos testimoniales.</li>
                       <li><strong>Legal:</strong> validar que el programa esté completamente mapeado en términos legales.</li>
                       <li><strong>Financiero:</strong> confirmar la viabilidad económica del sistema de premios y recompensas — todavía no está validada.</li>
+                      <li><strong>Actualización (10 sept):</strong> reunión agendada la próxima semana con Laura Sánchez para revisar el backlog de Leyendas Dropi y ponerlo en un cronograma alineado a la estrategia de Universo Dropi.</li>
                     </ul>
 
                     <h4 style={subHeadingStyle}>Pendiente — conexión a datos reales de Dropi</h4>

@@ -288,6 +288,19 @@ export default function Gro001ProjectPage() {
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>
                       Pendiente: la selección de los líderes de comunidad para el piloto sigue en definición, así como la minuta formal del experimento.
                     </p>
+
+                    <h4 style={subHeadingStyle}>Actualización (10 sept)</h4>
+                    <p style={pStyle}>
+                      El equipo técnico ya construyó la planimetría del POC con líderes pequeños — de qué se trata y cómo se va a ejecutar.{" "}
+                      <a href="https://dropi-crm-lideres.vercel.app/admin" target="_blank" rel="noreferrer" style={{ color: "#9F2C56", fontWeight: 700 }}>Ver demo →</a>
+                    </p>
+                    <p style={pStyle}>
+                      En paralelo, se está refinando con John Cerón un artefacto que permite entender la salud de las comunidades de forma multidimensional (aún en ajuste de detalles).{" "}
+                      <a href="https://claude.ai/code/artifact/c5aaf216-f5ca-4009-a4dd-b169e9522393" target="_blank" rel="noreferrer" style={{ color: "#9F2C56", fontWeight: 700 }}>Ver artefacto →</a>
+                    </p>
+                    <p style={{ ...pStyle, marginBottom: 0 }}>
+                      También se están explorando nuevas salidas para el proyecto a través de Marcas.
+                    </p>
                   </div>
                 )}
 
