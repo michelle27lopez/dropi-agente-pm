@@ -196,7 +196,12 @@ export default function Gro004ProjectPage() {
           </div>
         )}
 
-        {/* ── Actualización semanal ── */}
+        {/* ── Actualización semanal (10 sept) ── */}
+        <Callout tone="info" title="📌 Artículos listos para Intercom, a la espera de credenciales (10 sept 2026)">
+          Esta semana ya quedaron listos los artículos para cargarlos a Intercom — el paso que falta es que <strong>María</strong> entregue las credenciales para poder empezar las pruebas. En paralelo, la próxima semana hay un espacio con <strong>Diana Aldana, Jaime Reinoso y José Hurtado</strong> para diseñar el POC de la Website.
+        </Callout>
+
+        {/* ── Actualización semanal (28 ago) ── */}
         <Callout tone="info" title="📌 Tres frentes convergiendo en la misma base de conocimiento (28 ago 2026)">
           Esta semana se le mostró el proyecto a <strong>Diana Aldana</strong> para que oriente el desarrollo desde las mejores prácticas de experiencia — quedamos a la espera de sus recomendaciones. En paralelo, <strong>José Hurtado</strong> está recopilando varias bases de conocimiento para tener un punto de partida alineado con el experimento que ya está al aire en Argentina. Y todavía tenemos pendiente una reunión con <strong>Kike</strong> para integrar esa base de conocimiento a Intercom. Los tres frentes conducen al mismo lugar: una sola base de conocimiento para las 3 superficies, construida sobre las buenas prácticas de GEO y AEO ya definidas (ver pestaña GEO/AEO).
         </Callout>
