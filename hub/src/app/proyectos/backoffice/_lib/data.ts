@@ -31,6 +31,135 @@ export type WeeklyBackoffice = {
 
 export const weeklyBackoffice: WeeklyBackoffice[] = [
   {
+    id: "2026-09-10",
+    fecha: "10 septiembre 2026",
+    fechaISO: "2026-09-10",
+    foco: "Argentina bloqueada por TI · Guatemala links permanentes mañana · Sumsub flujo v2 · CSAT CAS activo",
+    temas: [
+      {
+        titulo: "🇦🇷 Facturación Argentina — Dos semanas sin correcciones en producción",
+        badge: "⚠️ Bloqueada",
+        color: "#EF4444",
+        blocks: [
+          {
+            type: "p",
+            text: "Segundo intento de QA fallido (7 septiembre con Valeria, Financiero Argentina): ninguna de las correcciones comprometidas por TI está visible en producción. El equipo concluye que TI probablemente aún no ha hecho el despliegue. Los despliegues técnicos ocurren típicamente los miércoles en la noche — el próximo QA se confirma cuando TI notifique el despliegue.",
+          },
+          {
+            type: "list",
+            label: "Bugs confirmados aún sin corregir en producción:",
+            items: [
+              "Exportación de Excel sigue cortando información esencial (correo del usuario) — impide que Financiero facture.",
+              "Filtros de búsqueda no refrescan si el usuario no usa el botón X para limpiar.",
+              "Filtros de fecha y campo reportado no se reflejan visualmente tras aplicarlos.",
+              "Algunos países/nacionalidades no se capturan correctamente.",
+            ],
+          },
+          {
+            type: "p",
+            text: "Valeria confirmó que los filtros son confusos pero no bloqueantes para su trabajo diario — la exportación sí es bloqueante.",
+          },
+        ],
+        acciones: [
+          { owner: "Paula", texto: "escalar a TI (José) el bloqueo — dos semanas sin correcciones en producción. Sin despliegue no hay QA ni lanzamiento." },
+          { owner: "Valeria (Financiero Argentina)", texto: "disponible para QA desde el jueves en adelante (martes y miércoles tiene agenda bloqueada)." },
+        ],
+      },
+      {
+        titulo: "🪪 Sumsub — Flujo v2 construido con IA + hallazgo técnico clave",
+        badge: "Borrador v2 disponible",
+        color: "#6366F1",
+        blocks: [
+          {
+            type: "callout",
+            tone: "warning",
+            label: "📌 Hallazgo técnico crítico — Sumsub no permite mezclar tipos de applicant",
+            text: "Si el flujo empieza como 'individual', todos los niveles deben seguir siendo del tipo individual. Por eso, el KYB de empresas se implementa como un nivel individual con cuestionario de empresa — no como un nivel nativo de empresa. Jonatan explorará si el nivel nativo 'empresa' de Sumsub podría funcionar mejor para personas jurídicas (trae información de empresas de forma nativa). Lo revisará con Catalina.",
+          },
+          {
+            type: "p",
+            text: "Caso especial — tercero diferente: cuando el usuario quiere facturar a nombre de una persona diferente al titular, Sumsub no puede validar a esa segunda persona dentro del mismo registro. La solución: crear un applicant completamente nuevo para el tercero, enviarle su propio link de KYC, y que Dropi (en el backend) relacione ambos registros antes de habilitar el paso de facturación.",
+          },
+          {
+            type: "p",
+            text: "Flujo completo ya enrutado: KYC inicial → condición de aprobación → cuestionario de selección (natural mismo / empresa / tercero diferente) → bifurcación a los flujos de facturación correspondientes. Los 9 países operan con la misma automatización.",
+          },
+          {
+            type: "p",
+            text: "Edición de datos post-validación — en definición: datos sensibles (documento, nombre) requieren revalidación en Sumsub. Datos no sensibles (correo → OTP). Dirección/ubicación: en debate si debe bloquearse por un período — Jonatan aporta la perspectiva jurídica. Referencia actual: en Colombia con Truora, el usuario tiene un botón habilitado cada 6 meses para solicitar cambio por soporte (Intercom).",
+          },
+        ],
+        acciones: [
+          { owner: "Catalina", texto: "compartir el documento-guía del flujo v2 con Jonatan y José para revisión y pruebas coordinadas." },
+          { owner: "Catalina", texto: "continuar mapeo de qué datos requieren revalidación en Sumsub vs. solo OTP — con foco en dirección/ubicación." },
+        ],
+      },
+      {
+        titulo: "🇬🇹 Guatemala — Links permanentes",
+        badge: "Reunión · Jonatan + Sumsub",
+        color: "#F59E0B",
+        blocks: [
+          {
+            type: "p",
+            text: "Paula y Catalina hicieron pruebas de los flujos KYC y KYB de Guatemala. KYC: correcto — liveness, documento, validación de correo y teléfono, documentos financieros. KYB: correcto en flujo, pero cuando Paula probó con Dropi como empresa el sistema rechazó automáticamente por AML (detección de aprehensión de mercancía). Jonatan revisa este punto mañana con Camilo.",
+          },
+          {
+            type: "p",
+            text: "Jonatan tiene reunión el 10 de septiembre con Camilo (Sumsub) para: (1) resolver el rechazo de Dropi por AML en las pruebas de KYB y (2) generar los links permanentes (no transitorios) de KYC y KYB. Una vez confirmados, Paula los monta en User Pilot.",
+          },
+          {
+            type: "p",
+            text: "Coloca Payments sigue gestionando las validaciones en Guatemala hasta que Dropi active sus propios flujos. Una vez activados, Coloca dejará de recibir información de usuarios nuevos — solo quedará pendiente la migración histórica.",
+          },
+          {
+            type: "p",
+            text: "Migración histórica: requiere reunión coordinada entre Sumsub, TI Coloca y TI Dropi. Jonatan lo notifica en Telegram de Sumsub para que quede priorizado.",
+          },
+        ],
+        acciones: [
+          { owner: "Jonatan", texto: "reunión 10 septiembre con Camilo — resolver rechazo AML de Dropi y generar links permanentes KYC/KYB." },
+          { owner: "Jonatan", texto: "notificar en Telegram de Sumsub la necesidad de la reunión de migración histórica como punto prioritario." },
+          { owner: "Paula", texto: "en cuanto Jonatan confirme los links permanentes, montarlos en User Pilot de inmediato." },
+        ],
+      },
+      {
+        titulo: "🔑 CAS Argentina y Paraguay — Activo pero no visible en plataforma",
+        badge: "⚠️ Pendiente verificación",
+        color: "#F97316",
+        blocks: [
+          {
+            type: "p",
+            text: "El CAS fue habilitado vía tickets de soporte el 7 de septiembre. Sin embargo, al revisar Dropi Argentina y Paraguay, la opción del CAS no aparece en el menú dentro de la plataforma. Paula deja comentario en soporte para investigar. Adicionalmente, al habilitar el CAS en México en su momento, quedó activa la conversación dropshipper-proveedor sin haberse solicitado — para Paraguay se hizo la solicitud correspondiente para evitar esto.",
+          },
+        ],
+        acciones: [
+          { owner: "Paula", texto: "dejar comentario en soporte para que TI verifique por qué el CAS no aparece en el menú de Argentina y Paraguay." },
+        ],
+      },
+      {
+        titulo: "⭐ CSAT CAS — Activo desde el 10 septiembre",
+        badge: "✅ 112 respuestas descargadas",
+        color: "#10B981",
+        blocks: [
+          {
+            type: "p",
+            text: "El CSAT del CAS se montó el 10 de septiembre con 4 encuestas: CAS Caso creado Dropshipper, CAS Cierre Dropshipper, CAS Cierre Proveedor y CAS Caso abierto Proveedor. Estará activo durante 1 mes para no saturar al usuario. El equipo CAS (David) descargó exitosamente un CSV con 112 respuestas desde User Pilot — los datos NO están en la base de datos general de Dropi (Jaime Reinoso), sino dentro de User Pilot. David necesitaba rol de administrador para descargar; Laura Catherine se lo habilitó temporalmente.",
+          },
+          {
+            type: "p",
+            text: "Automatización futura: configurar un webhook en User Pilot que envíe las respuestas automáticamente a un CRM u hoja de cálculo (Google Sheets). También existe la opción de conectarlo vía MCP a una herramienta de IA. Queda pendiente para una siguiente iteración.",
+          },
+        ],
+        acciones: [
+          { owner: "Laura Catherine", texto: "próxima semana, habilitar la encuesta CSAT en los países que tienen CAS pero aún no tienen la encuesta activa." },
+          { owner: "Laura Catherine", texto: "dar a David los permisos de administrador en User Pilot para los nuevos países una vez habilitada la encuesta." },
+          { owner: "Hellen", texto: "enviar a Paula el listado de países con CAS para corroborar que coincide con el que tiene Producto." },
+          { owner: "David + Hellen", texto: "definir a qué herramienta conectar la automatización (CRM, Google Sheets u otra) para que Laura Catherine configure el webhook en User Pilot." },
+        ],
+      },
+    ],
+  },
+  {
     id: "2026-09-04",
     fecha: "4 septiembre 2026",
     fechaISO: "2026-09-04",
