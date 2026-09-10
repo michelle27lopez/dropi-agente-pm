@@ -1,6 +1,6 @@
 import HubHeader from "@/components/HubHeader";
 
-// EXP-003 · Célula Experience. Ficha de detalle a la que apunta el
+// EXP-003 · Célula Design Ops. Ficha de detalle a la que apunta el
 // `detailHref` de la fila "Búsqueda semántica" en /proyectos/seguimiento
 // (antes rota — no existía este archivo).
 
@@ -9,7 +9,7 @@ export default function Exp003Page() {
     <main style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Búsqueda semántica de productos mediante lenguaje natural"
-        subtitle="Proyecto EXP-003 · Célula Experience"
+        subtitle="Proyecto EXP-003 · Célula Design Ops"
         currentSlug="seguimiento"
       />
 

@@ -101,7 +101,7 @@ export default function RearquitecturaPage() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Rearquitectura · Reorganización de Navegación y Pantallas Dropi"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="rearquitectura"
       />
 
@@ -109,13 +109,13 @@ export default function RearquitecturaPage() {
         {/* Breadcrumb & title */}
         <div style={{ marginBottom: 20 }}>
           <a
-            href="/celula/experience"
+            href="/celula/design-ops"
             style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}
           >
-            ← Volver a Célula Experience
+            ← Volver a Célula Design Ops
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · Activo</span>
             <span style={badgeStyle("#EA580C", "#FFEDD5")}>DROP-25312</span>
           </div>
@@ -255,8 +255,10 @@ export default function RearquitecturaPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Avance en la ejecución de pruebas de aseguramiento de calidad (QA) en integración con proveedores.</Field>
-            <Field term="Retos y Bloqueos">Estrategia de Comunicación (Marketing) sin definir.</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P0 · Delivery en QA. Métricas de bugs — Frente 1: 66 corregidos / 9 pendientes (1 crítico); Frente 2: 64 corregidos / 7 pendientes (1 crítico); total consolidado: 130 corregidos / 16 pendientes (solo 2 críticos). Próximos pasos: 🧪 la próxima semana se espera ejecutar la fase de pruebas.
+            </Field>
+            <Field term="Retos y Bloqueos">2 bugs críticos pendientes (1 por frente) antes de poder cerrar QA. Estrategia de Comunicación (Marketing) sin definir.</Field>
           </div>
         </Section>
 

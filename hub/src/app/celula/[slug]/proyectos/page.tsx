@@ -9,7 +9,7 @@ import HubFooter from "@/components/HubFooter";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { type Item, matchesQuery } from "@/components/HomeSections";
-import { proyectoToItem } from "@/lib/curated-projects";
+import { proyectoToItem, esProyectoVisible } from "@/lib/curated-projects";
 import { ESTADOS_DISCOVERY, ESTADOS_POC, ESTADOS_DELIVERY, type Proyecto } from "@/components/ProjectCard";
 import { type Fase, faseDe, FASE_LABEL, FASE_COLOR } from "@/lib/fase";
 
@@ -39,12 +39,18 @@ function estadosValidosPara(type: string | null) {
 //
 // Preview: sigue gateada a isMiDiaOwner en el layout — no se globaliza a
 // todas las células hasta aprobación explícita.
-const FASES: { value: Fase | "todas"; label: string }[] = [
+// "historico" es un tab local a esta página, no una Fase real de
+// lib/fase.ts (que es compartido con ProjectCard/breadcrumb y no debe
+// cargar con este concepto). Un proyecto entra a Histórico por
+// `status === "Archivado"` — despriorizado, sin continuación — y por eso
+// mismo desaparece de los demás tabs (ver `porFase` más abajo).
+const FASES: { value: Fase | "todas" | "historico"; label: string }[] = [
   { value: "discovery", label: "Discovery" },
   { value: "poc", label: "POC" },
   { value: "delivery", label: "Delivery" },
   { value: "following", label: "Following" },
   { value: "todas", label: "Todos" },
+  { value: "historico", label: "Histórico" },
 ];
 
 // Varios prototipos por proyecto se guardan en `prototype_url` separados por
@@ -82,7 +88,7 @@ export default function ProyectosPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [fase, setFase] = useState<Fase | "todas">("todas");
+  const [fase, setFase] = useState<Fase | "todas" | "historico">("todas");
   const [loading, setLoading] = useState(true);
   const [celulaId, setCelulaId] = useState<string | null>(null);
   const [celulaNombre, setCelulaNombre] = useState<string | null>(null);
@@ -103,6 +109,7 @@ export default function ProyectosPorCelulaPage() {
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
   const [ownCelulaId, setOwnCelulaId] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [modoEdicionForzado, setModoEdicionForzado] = useState(false);
   // Filtro de etapa del viaje de la orden (2026-08-17, Jaime) — antes vivía
   // en el grid viejo de la home de Logística, ahora vive acá. Se pide con
@@ -130,6 +137,7 @@ export default function ProyectosPorCelulaPage() {
       .then((data) => {
         setOwnCelulaId(data?.profile?.celula_id ?? null);
         setIsSuperAdmin(!!data?.profile?.is_super_admin);
+        setCelulasEditor(data?.celulasEditor ?? []);
       })
       .catch(() => {});
 
@@ -142,7 +150,10 @@ export default function ProyectosPorCelulaPage() {
     }
   }, [params.slug]);
 
-  const esCelulaPropia = !!ownCelulaId && ownCelulaId === celulaId;
+  // ownCelulaId es la célula "de verdad" del perfil; celulasEditor son
+  // permisos adicionales por proyectos transversales (055_celula_editores_
+  // transversales.sql) — no le cambian el celula_id primario a nadie.
+  const esCelulaPropia = !!celulaId && (ownCelulaId === celulaId || celulasEditor.includes(celulaId));
   const canEditar = esCelulaPropia || modoEdicionForzado;
 
   // Iniciativas del tablero de logística sin ficha en Darwin todavía — se
@@ -237,7 +248,12 @@ export default function ProyectosPorCelulaPage() {
     ? proyectosReales.filter((p) => p.type === "POC" && p.parent_project_id === crearTarget.parent.id)
     : [];
 
-  const porFase = (p: Proyecto) => fase === "todas" || faseDe(p.type) === fase;
+  const porFase = (p: Proyecto) => {
+    const archivado = p.status === "Archivado";
+    if (fase === "historico") return archivado;
+    if (archivado) return false; // fuera de Histórico, un proyecto archivado no aparece en ningún otro tab
+    return fase === "todas" || faseDe(p.type) === fase;
+  };
   // Fuera de logística `mapaEtapas` siempre es null, así que esto no filtra
   // nada para el resto de células.
   const pasaEtapa = (p: Proyecto) => {
@@ -248,6 +264,7 @@ export default function ProyectosPorCelulaPage() {
 
   function toRows(source: Proyecto[]) {
     return source
+      .filter(esProyectoVisible)
       .filter(porFase)
       .filter(pasaEtapa)
       .map((proyecto) => {
@@ -716,6 +733,11 @@ function ProjectsTable({
                     <span className="proytable-badge" style={{ background: FASE_COLOR[fase] }}>
                       {FASE_LABEL[fase]}
                     </span>
+                    {proyecto.status === "Archivado" && (
+                      <span className="proytable-badge" style={{ background: "var(--muted)", marginLeft: 6 }}>
+                        Archivado
+                      </span>
+                    )}
                   </td>
                   <td>
                     {counts && (counts.poc > 0 || counts.delivery > 0) ? (

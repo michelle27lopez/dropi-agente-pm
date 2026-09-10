@@ -101,7 +101,7 @@ export default function DropiAppPage() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Dropi App · Plan Estratégico"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="dropi-app"
       />
 
@@ -109,13 +109,13 @@ export default function DropiAppPage() {
         {/* Breadcrumb & title */}
         <div style={{ marginBottom: 20 }}>
           <a
-            href="/celula/experience"
+            href="/celula/design-ops"
             style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}
           >
-            ← Volver a Célula Experience
+            ← Volver a Célula Design Ops
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · En definición</span>
             <span style={badgeStyle("#EA580C", "#FFEDD5")}>DROP-25313</span>
           </div>
@@ -260,7 +260,9 @@ export default function DropiAppPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Continuidad en la fase de pruebas de calidad (QA).</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P2 · Delivery en QA. Pruebas activas por el equipo de Tecnología, pruebas en curso con Coordinadora (última fase para liberación) y pruebas internas habilitadas en TestFlight.
+            </Field>
             <Field term="Retos y Bloqueos">{pending}</Field>
           </div>
         </Section>

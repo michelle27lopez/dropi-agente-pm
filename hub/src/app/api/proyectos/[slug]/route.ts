@@ -184,6 +184,14 @@ export async function GET(req: NextRequest, context: any) {
     ...c.data
   })) || [];
 
+  // Weekly de Producto propio de este proyecto (distinto del weekly a nivel
+  // célula en celula_updates) — ver 056_project_updates.sql.
+  const { data: updates } = await supabase
+    .from("project_updates")
+    .select("*")
+    .eq("project_id", project.id)
+    .order("week_date", { ascending: false });
+
   return NextResponse.json({
     project,
     parent,
@@ -195,6 +203,7 @@ export async function GET(req: NextRequest, context: any) {
     deliveryOptions,
     cycles: mappedCycles,
     decisions,
+    updates: updates ?? [],
   });
 }
 
@@ -213,6 +222,12 @@ export async function PATCH(req: NextRequest, context: any) {
 
   const body = await req.json();
   const update: Record<string, unknown> = {};
+
+  if (body.summary !== undefined) {
+    const summary = typeof body.summary === "string" ? body.summary.trim() : "";
+    if (!summary) return NextResponse.json({ error: "La descripción no puede quedar vacía" }, { status: 400 });
+    update.summary = summary;
+  }
 
   if (body.estado_interno !== undefined) {
     const estadosValidos = estadosValidosPara(project.type);
@@ -233,15 +248,18 @@ export async function PATCH(req: NextRequest, context: any) {
     }
   }
 
-  // Pipeline de fechas de un Delivery Proyecto ('YYYY-MM-DD' o null). Solo
-  // tienen sentido en un Delivery Proyecto pero no se bloquea por type —
-  // la UI solo las expone ahí. Ver 055_*.sql.
+  // Fechas de un proyecto ('YYYY-MM-DD' o null). Dos grupos, no se bloquea
+  // por type — la UI expone cada grupo donde corresponde:
+  //   · Pipeline de un Delivery Proyecto (055_*.sql): /delivery.
+  //   · Fechas objetivo de Discovery (060_*.sql): Product Roadmap.
   const FECHA_RE = /^\d{4}-\d{2}-\d{2}$/;
   for (const campo of [
     "fecha_handoff",
     "fecha_inicio_dev",
     "fecha_entrega_qa",
     "fecha_salida_produccion",
+    "fecha_objetivo_experimento",
+    "fecha_objetivo_decision",
   ] as const) {
     if (body[campo] === undefined) continue;
     if (body[campo] === null) {
@@ -251,6 +269,14 @@ export async function PATCH(req: NextRequest, context: any) {
     } else {
       return NextResponse.json({ error: `${campo} debe ser una fecha YYYY-MM-DD o null` }, { status: 400 });
     }
+  }
+
+  // Marca tentativa/confirmada de las fechas objetivo de Discovery (060_*.sql).
+  if (body.fechas_discovery_confirmadas !== undefined) {
+    if (typeof body.fechas_discovery_confirmadas !== "boolean") {
+      return NextResponse.json({ error: "fechas_discovery_confirmadas debe ser boolean" }, { status: 400 });
+    }
+    update.fechas_discovery_confirmadas = body.fechas_discovery_confirmadas;
   }
 
   if (body.prioridad !== undefined) {
@@ -366,8 +392,12 @@ export async function PATCH(req: NextRequest, context: any) {
     "fecha_inicio_dev",
     "fecha_entrega_qa",
     "fecha_salida_produccion",
+    "fecha_objetivo_experimento",
+    "fecha_objetivo_decision",
+    "fechas_discovery_confirmadas",
     "estado_interno",
     "prioridad",
+    "summary",
   ] as const;
   const nota = typeof body.nota === "string" && body.nota.trim() ? body.nota.trim() : null;
   const filasLog = CAMPOS_LOG.filter((campo) => campo in update && (project as any)[campo] !== (data as any)[campo]).map(

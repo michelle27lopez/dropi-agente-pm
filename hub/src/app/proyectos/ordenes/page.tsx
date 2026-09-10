@@ -103,7 +103,7 @@ export default function OrdenesPage() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Órdenes · Rediseño del módulo de Órdenes"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="ordenes"
       />
 
@@ -111,13 +111,13 @@ export default function OrdenesPage() {
         {/* Breadcrumb & title */}
         <div style={{ marginBottom: 20 }}>
           <a
-            href="/celula/experience"
+            href="/celula/design-ops"
             style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}
           >
-            ← Volver a Célula Experience
+            ← Volver a Célula Design Ops
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · En definición</span>
             <span style={badgeStyle("#EA580C", "#FFEDD5")}>EXP-002</span>
           </div>
@@ -265,8 +265,10 @@ export default function OrdenesPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Consolidación y estructuración de la matriz de hallazgos y oportunidades de mejora para las Fases 2 y 3.</Field>
-            <Field term="Retos y Bloqueos">Fase 1 (MVP Órdenes 2.0) bloqueada hasta contar con recurso de Tecnología asignado.</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas. Se realizará un research con proveedores para validar las funcionalidades que quieren ver en el módulo de Órdenes.
+            </Field>
+            <Field term="Retos y Bloqueos">🚨 Bloqueado por falta de asignación de un desarrollador.</Field>
           </div>
         </Section>
 

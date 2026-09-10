@@ -11,6 +11,10 @@
 .mcp.json
 .impeccable/
 
+# Investigador privado (repo anidado propio: investigador).
+/investigador/
+Rplots.pdf
+
 # Cerebro privado (repo anidado propio: cerebro-logistica-dropi).
 # Vive dentro de esta carpeta pero NUNCA se sube al repo del equipo.
 /cerebro/

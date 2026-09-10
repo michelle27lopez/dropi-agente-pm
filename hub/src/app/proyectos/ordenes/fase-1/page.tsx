@@ -120,7 +120,7 @@ export default function OrdenesFase1Page() {
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="Órdenes · Fase 1 (MVP E2E)"
-        subtitle="Célula Experience · PO: Diana Aldana"
+        subtitle="Célula Design Ops · PO: Diana Aldana"
         currentSlug="ordenes"
       />
 
@@ -133,7 +133,7 @@ export default function OrdenesFase1Page() {
             ← Volver a Órdenes
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
-            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
+            <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Design Ops</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Fase 1 · MVP E2E</span>
             <span style={badgeStyle("#EA580C", "#FFEDD5")}>EXP-002</span>
           </div>

@@ -21,7 +21,6 @@ export const PROJECT_STYLE: Record<string, { url: string; color: string; icon: s
   "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
   "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
-  "DOC-001": { url: "/proveedores", color: "#FF6102", icon: "🧭" },
 
   // Growth — cada POC hereda el ícono/color de su proyecto padre, para que
   // en la tabla de /celula/growth/proyectos se identifiquen a simple vista
@@ -47,6 +46,16 @@ export const PROJECT_STYLE: Record<string, { url: string; color: string; icon: s
 
   "GRO-017": { url: "/proyectos/gro-017", color: "#7C3AED", icon: "⚙️" }, // BackOffice Operación Líderes de Comunidad
 };
+
+// Proyectos que existen en la tabla `projects` pero NO se muestran en los
+// listados de proyectos porque su entregable no es un proyecto sino una
+// guía. DOC-001 (documentación del vertical Proveedores) vive ahora en
+// /guias/proveedores. Sacar un código de aquí lo devuelve al listado.
+export const HIDDEN_PROJECT_CODES = new Set(["DOC-001"]);
+
+export function esProyectoVisible(p: { project_code?: string | null }) {
+  return !(p.project_code && HIDDEN_PROJECT_CODES.has(p.project_code));
+}
 
 const TYPE_ICON: Record<string, string> = {
   Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",

@@ -17,6 +17,12 @@ export async function requireSuperAdmin() {
 
 // Solo deja actuar sobre proyectos de la propia célula (o super admin) — el
 // celula_id sale siempre del perfil autenticado, nunca del body.
+//
+// "Propia célula" ya no es solo `profile.celula_id === celulaId`: desde
+// `055_celula_editores_transversales.sql` un perfil puede tener permiso de
+// edición ADICIONAL sobre otras células (proyectos transversales, ej. Diana
+// Aldana en Product team sin dejar de ser de Experience) vía la tabla
+// `celula_editores` — no le mueve el `celula_id` primario a nadie.
 export async function requireCelulaMember(celulaId: string) {
   const authClient = await createServerSupabase();
   const { data: { user } } = await authClient.auth.getUser();
@@ -29,5 +35,14 @@ export async function requireCelulaMember(celulaId: string) {
     .maybeSingle();
 
   if (!profile) return null;
-  return profile.is_super_admin || profile.celula_id === celulaId ? profile : null;
+  if (profile.is_super_admin || profile.celula_id === celulaId) return profile;
+
+  const { data: editor } = await supabase
+    .from("celula_editores")
+    .select("celula_id")
+    .eq("profile_id", profile.id)
+    .eq("celula_id", celulaId)
+    .maybeSingle();
+
+  return editor ? profile : null;
 }

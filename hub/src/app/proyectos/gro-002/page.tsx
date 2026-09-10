@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import ProjectWeekly, { type ProjectUpdate } from "@/components/ProjectWeekly";
 import {
   ChevronDown, ChevronUp, FileText, AlertTriangle,
   Clock, Users, Trophy, ExternalLink, Wrench, GitBranch, ShieldAlert,
@@ -89,11 +90,15 @@ export default function Gro002ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
   const [pocs, setPocs] = useState<PocChild[]>([]);
+  const [updates, setUpdates] = useState<ProjectUpdate[]>([]);
 
   useEffect(() => {
     fetch("/api/proyectos/gro-002")
       .then((res) => res.json())
-      .then((data) => setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC")))
+      .then((data) => {
+        setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC"));
+        setUpdates(data?.updates ?? []);
+      })
       .catch(() => {});
   }, []);
 
@@ -109,9 +114,12 @@ export default function Gro002ProjectPage() {
 
         {/* ── Breadcrumb & título ── */}
         <div style={{ marginBottom: 20 }}>
-          <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 12 }}>
-            ← Volver al Hub
-          </a>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
+            <a href="/" style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 4 }}>
+              ← Volver al Hub
+            </a>
+            <ProjectWeekly updates={updates} />
+          </div>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>

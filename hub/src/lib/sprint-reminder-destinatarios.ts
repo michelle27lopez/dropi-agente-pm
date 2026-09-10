@@ -30,9 +30,9 @@ export const DESTINATARIOS: Destinatario[] = [
   { email: "jaime.guevara@dropi.co",      nombre: "Jaime Guevara",      celula: "Suppliers",   rol: "PM" },
   { email: "michelle.lopez@dropi.co",     nombre: "Michelle López",     celula: "Suppliers",   rol: "PD" },
 
-  // ── Experience ─────────────────────────────────────────────
-  { email: "diana.aldana@dropi.co",       nombre: "Diana Aldana",       celula: "Experience",  rol: "PM" },
-  { email: "catalina.giraldo@dropi.co",   nombre: "Catalina Giraldo",   celula: "Experience",  rol: "PD" },
+  // ── Design Ops (antes "Experience", renombrada 2026-09-09) ──
+  { email: "diana.aldana@dropi.co",       nombre: "Diana Aldana",       celula: "Design Ops",  rol: "PM" },
+  { email: "catalina.giraldo@dropi.co",   nombre: "Catalina Giraldo",   celula: "Design Ops",  rol: "PD" },
 
   // ── Diseño (lead) ──────────────────────────────────────────
   { email: "laura.contreras@dropi.co",    nombre: "Laura Contreras",    celula: "Product Designers", rol: "PD" },

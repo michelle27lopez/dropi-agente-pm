@@ -72,6 +72,53 @@ export async function POST(req: NextRequest, context: any) {
   return NextResponse.json(data, { status: 201 });
 }
 
+export async function PATCH(req: NextRequest, context: any) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
+
+  const { slug } = await context.params;
+  const projectId = await resolveProjectId(slug);
+  if (!projectId) return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
+
+  const artifactId = req.nextUrl.searchParams.get("id");
+  if (!artifactId) return NextResponse.json({ error: "Falta el id del artefacto" }, { status: 400 });
+
+  const body = await req.json().catch(() => null);
+  const update: Record<string, unknown> = {};
+
+  if (body?.nombre !== undefined) {
+    const nombre = typeof body.nombre === "string" ? body.nombre.trim() : "";
+    if (!nombre) return NextResponse.json({ error: "El nombre no puede quedar vacío" }, { status: 400 });
+    update.nombre = nombre;
+  }
+  if (body?.url !== undefined) {
+    const url = typeof body.url === "string" ? body.url.trim() : "";
+    if (!url || !(url.startsWith("http://") || url.startsWith("https://"))) {
+      return NextResponse.json({ error: "El link debe empezar con http:// o https://" }, { status: 400 });
+    }
+    update.url = url;
+  }
+  if (body?.descripcion !== undefined) {
+    update.descripcion = typeof body.descripcion === "string" ? body.descripcion.trim() || null : null;
+  }
+
+  if (Object.keys(update).length === 0) {
+    return NextResponse.json({ error: "Nada que actualizar" }, { status: 400 });
+  }
+
+  const { data, error } = await supabase
+    .from("project_artifacts")
+    .update(update)
+    .eq("id", artifactId)
+    .eq("project_id", projectId)
+    .select("id, nombre, url, descripcion, creado_por, created_at")
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
+}
+
 export async function DELETE(req: NextRequest, context: any) {
   const user = await requireUser();
   if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });

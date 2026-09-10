@@ -18,6 +18,10 @@ type ProjectDetails = {
   related_poc_id: string | null;
   related_delivery_id: string | null;
   prototype_url: string | null;
+  // Fechas objetivo del Product Roadmap (060_darwin_discovery_roadmap_fechas.sql).
+  fecha_objetivo_experimento: string | null;
+  fecha_objetivo_decision: string | null;
+  fechas_discovery_confirmadas: boolean | null;
   celulas?: {
     nombre: string;
     slug: string;
@@ -47,6 +51,38 @@ const ESTADOS_FOLLOWING = ["Beta controlada", "Producción", "Cerrado"];
 // estaba vacío) ni el link funcionaba (porque el archivo no existe).
 function esPrototipoValido(url: string | null): url is string {
   return !!url && (url.startsWith("/") || url.startsWith("http"));
+}
+
+// Convención para agrupar varios artefactos bajo una sola tarjeta visual sin
+// tocar el schema: nombrar cada fila "Grupo :: Etiqueta" (ej. "MCP -
+// Lanzamiento :: Brief" y "MCP - Lanzamiento :: Workshop"). Todo lo que no
+// use " :: " se sigue mostrando exactamente igual que antes (una tarjeta,
+// un botón) — Page Pilot y Rearquitectura no se ven afectados.
+type ArtifactGroupItem = { artifact: ProjectArtifact; label: string };
+type ArtifactRenderItem =
+  | { kind: "single"; artifact: ProjectArtifact }
+  | { kind: "group"; name: string; items: ArtifactGroupItem[] };
+
+function agruparArtifacts(list: ProjectArtifact[]): ArtifactRenderItem[] {
+  const items: ArtifactRenderItem[] = [];
+  const groupIndex = new Map<string, number>();
+  list.forEach((a) => {
+    const idx = a.nombre.indexOf(" :: ");
+    if (idx === -1) {
+      items.push({ kind: "single", artifact: a });
+      return;
+    }
+    const groupName = a.nombre.slice(0, idx).trim();
+    const label = a.nombre.slice(idx + 4).trim() || a.nombre;
+    const existing = groupIndex.get(groupName);
+    if (existing !== undefined) {
+      (items[existing] as { kind: "group"; name: string; items: ArtifactGroupItem[] }).items.push({ artifact: a, label });
+    } else {
+      groupIndex.set(groupName, items.length);
+      items.push({ kind: "group", name: groupName, items: [{ artifact: a, label }] });
+    }
+  });
+  return items;
 }
 
 function estadosValidosPara(type: string | null) {
@@ -112,6 +148,17 @@ export default function ProjectDashboardPage() {
   const [artifactDescripcion, setArtifactDescripcion] = useState("");
   const [artifactSubmitting, setArtifactSubmitting] = useState(false);
   const [artifactError, setArtifactError] = useState<string | null>(null);
+  const [editingArtifactId, setEditingArtifactId] = useState<string | null>(null);
+  const [editNombre, setEditNombre] = useState("");
+  const [editUrl, setEditUrl] = useState("");
+  const [editDescripcion, setEditDescripcion] = useState("");
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const [editingSummary, setEditingSummary] = useState(false);
+  const [summaryDraft, setSummaryDraft] = useState("");
+  const [summarySubmitting, setSummarySubmitting] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -260,6 +307,22 @@ export default function ProjectDashboardPage() {
     setProject(updated);
   }
 
+  // Fechas objetivo del Product Roadmap. `campo` es una de las dos fechas de
+  // discovery o el flag `fechas_discovery_confirmadas`.
+  async function handleFechaDiscoveryChange(
+    campo: "fecha_objetivo_experimento" | "fecha_objetivo_decision" | "fechas_discovery_confirmadas",
+    valor: string | boolean | null,
+  ) {
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [campo]: valor }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProject(updated);
+  }
+
   async function handleCrearArtifact(e: React.FormEvent) {
     e.preventDefault();
     setArtifactError(null);
@@ -276,7 +339,7 @@ export default function ProjectDashboardPage() {
     setArtifactSubmitting(false);
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setArtifactError(body?.error || "No se pudo agregar el artefacto.");
+      setArtifactError(body?.error || "No se pudo agregar el workshop.");
       return;
     }
     const nuevo = await res.json();
@@ -288,10 +351,56 @@ export default function ProjectDashboardPage() {
   }
 
   async function handleEliminarArtifact(id: string) {
-    if (!confirm("¿Quitar este artefacto de la lista?")) return;
+    if (!confirm("¿Quitar este workshop de la lista?")) return;
     const res = await fetch(`/api/proyectos/${slug}/artefactos?id=${id}`, { method: "DELETE" });
     if (!res.ok) return;
     setArtifacts((prev) => prev.filter((a) => a.id !== id));
+  }
+
+  function handleEmpezarEdicionArtifact(a: ProjectArtifact) {
+    setEditingArtifactId(a.id);
+    setEditNombre(a.nombre);
+    setEditUrl(a.url);
+    setEditDescripcion(a.descripcion ?? "");
+    setEditError(null);
+  }
+
+  async function handleGuardarEdicionArtifact(id: string) {
+    setEditError(null);
+    setEditSubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}/artefactos?id=${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre: editNombre, url: editUrl, descripcion: editDescripcion }),
+    });
+    setEditSubmitting(false);
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      setEditError(body?.error || "No se pudo guardar el workshop.");
+      return;
+    }
+    const actualizado = await res.json();
+    setArtifacts((prev) => prev.map((a) => (a.id === id ? actualizado : a)));
+    setEditingArtifactId(null);
+  }
+
+  async function handleGuardarSummary() {
+    setSummaryError(null);
+    setSummarySubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ summary: summaryDraft }),
+    });
+    setSummarySubmitting(false);
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      setSummaryError(body?.error || "No se pudo guardar la descripción.");
+      return;
+    }
+    const actualizado = await res.json();
+    setProject(actualizado);
+    setEditingSummary(false);
   }
 
   async function handleVincularPadre() {
@@ -652,6 +761,109 @@ export default function ProjectDashboardPage() {
     P: "⚡ P · Performance (Causa de Habilitación)",
   };
 
+  const artifactRenderItems = agruparArtifacts(artifacts);
+
+  // Contenido de una fila de artefacto (edición o vista) — se usa tanto para
+  // tarjetas sueltas como para cada botón dentro de una tarjeta agrupada.
+  // `label` es lo que se muestra en negrita y en el botón; si `url` viene
+  // vacío (fila sembrada como placeholder, ej. un workshop que aún no
+  // existe) se muestra un estado "Por construir" en vez de un link roto.
+  function renderArtifactRow(a: ProjectArtifact, label: string) {
+    if (editingArtifactId === a.id) {
+      return (
+        <>
+          <input
+            type="text"
+            value={editNombre}
+            onChange={(e) => setEditNombre(e.target.value)}
+            placeholder="Nombre"
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+          />
+          <input
+            type="text"
+            value={editUrl}
+            onChange={(e) => setEditUrl(e.target.value)}
+            placeholder="https://..."
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+          />
+          <textarea
+            value={editDescripcion}
+            onChange={(e) => setEditDescripcion(e.target.value)}
+            placeholder="Descripción breve (opcional)"
+            rows={2}
+            style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 6, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+          />
+          {editError && <span style={{ fontSize: 11.5, color: "#DC2626" }}>{editError}</span>}
+          <div style={{ display: "flex", gap: 6 }}>
+            <button
+              onClick={() => handleGuardarEdicionArtifact(a.id)}
+              disabled={editSubmitting}
+              style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 7, padding: "6px 10px", cursor: editSubmitting ? "default" : "pointer" }}
+            >
+              {editSubmitting ? "Guardando…" : "Guardar"}
+            </button>
+            <button
+              onClick={() => { setEditingArtifactId(null); setEditError(null); }}
+              style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 7, padding: "6px 10px", cursor: "pointer" }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </>
+      );
+    }
+    return (
+      <>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+          <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{label}</strong>
+          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+            <button
+              onClick={() => handleEmpezarEdicionArtifact(a)}
+              title="Editar workshop"
+              style={{ fontSize: 12, color: "var(--dropi)", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              ✎
+            </button>
+            <button
+              onClick={() => handleEliminarArtifact(a.id)}
+              title="Quitar workshop"
+              style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+        {a.descripcion && (
+          <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, lineHeight: 1.45 }}>{a.descripcion}</p>
+        )}
+        {a.url ? (
+          <a
+            href={a.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)",
+              border: "none", borderRadius: 8, padding: "7px 12px", textDecoration: "none",
+              display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
+            }}
+          >
+            Abrir {label.toLowerCase()} <span style={{ fontSize: 11 }}>➔</span>
+          </a>
+        ) : (
+          <span
+            style={{
+              fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "var(--card)",
+              border: "1px dashed var(--border)", borderRadius: 8, padding: "7px 12px",
+              display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
+            }}
+          >
+            Por construir
+          </span>
+        )}
+      </>
+    );
+  }
+
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       <HubHeader
@@ -690,9 +902,46 @@ export default function ProjectDashboardPage() {
               {project.status === "in_progress" ? "En Progreso" : project.status || "Activo"}
             </span>
           </div>
-          <p style={{ fontSize: 14, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
-            {project.summary || "Sin resumen registrado."}
-          </p>
+          {editingSummary ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <textarea
+                value={summaryDraft}
+                onChange={(e) => setSummaryDraft(e.target.value)}
+                rows={4}
+                autoFocus
+                style={{ fontSize: 14, padding: "10px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical", lineHeight: 1.6 }}
+              />
+              {summaryError && <span style={{ fontSize: 12, color: "#DC2626" }}>{summaryError}</span>}
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={handleGuardarSummary}
+                  disabled={summarySubmitting}
+                  style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "7px 14px", cursor: summarySubmitting ? "default" : "pointer" }}
+                >
+                  {summarySubmitting ? "Guardando…" : "Guardar descripción"}
+                </button>
+                <button
+                  onClick={() => { setEditingSummary(false); setSummaryError(null); }}
+                  style={{ fontSize: 12.5, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+              <p style={{ fontSize: 14, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
+                {project.summary || "Sin resumen registrado."}
+              </p>
+              <button
+                onClick={() => { setSummaryDraft(project.summary || ""); setEditingSummary(true); }}
+                title="Editar descripción"
+                style={{ fontSize: 11.5, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "5px 10px", cursor: "pointer", flexShrink: 0, whiteSpace: "nowrap" }}
+              >
+                ✎ Editar
+              </button>
+            </div>
+          )}
 
           {/* Fila creada pero nunca desarrollada: sin prototipo, sin POC/
               Delivery/Following hijos, sin ciclos de discovery. En vez de
@@ -718,7 +967,11 @@ export default function ProjectDashboardPage() {
             </div>
           )}
 
-          {esPrototipoValido(project.prototype_url) && (
+          {/* Cuando ya hay workshops listados (sección de abajo), este botón
+              único queda redundante y confuso — solo redirigía a UN
+              prototype_url mientras ahora hay varios artefactos distintos.
+              Se oculta en ese caso para cualquier proyecto, no solo GRO-003. */}
+          {esPrototipoValido(project.prototype_url) && artifacts.length === 0 && (
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📄 Detalle del Proyecto</strong>
@@ -789,49 +1042,39 @@ export default function ProjectDashboardPage() {
           <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 32 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: artifacts.length > 0 ? 16 : 0 }}>
               <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: "var(--fg)" }}>
-                📦 Artefactos {artifacts.length > 0 && <span style={{ color: "var(--muted)", fontWeight: 500 }}>({artifacts.length})</span>}
+                📦 Workshops - Lanzamientos {artifacts.length > 0 && <span style={{ color: "var(--muted)", fontWeight: 500 }}>({artifacts.length})</span>}
               </h3>
               {!showArtifactForm && (
                 <button
                   onClick={() => setShowArtifactForm(true)}
                   style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
                 >
-                  + Agregar artefacto
+                  + Agregar workshop
                 </button>
               )}
             </div>
 
             {artifacts.length > 0 && (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12, marginBottom: showArtifactForm ? 16 : 0 }}>
-                {artifacts.map((a) => (
-                  <div key={a.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-                      <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{a.nombre}</strong>
-                      <button
-                        onClick={() => handleEliminarArtifact(a.id)}
-                        title="Quitar artefacto"
-                        style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}
-                      >
-                        ✕
-                      </button>
+                {artifactRenderItems.map((item) =>
+                  item.kind === "single" ? (
+                    <div key={item.artifact.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {renderArtifactRow(item.artifact, item.artifact.nombre)}
                     </div>
-                    {a.descripcion && (
-                      <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, lineHeight: 1.45 }}>{a.descripcion}</p>
-                    )}
-                    <a
-                      href={a.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)",
-                        border: "none", borderRadius: 8, padding: "7px 12px", textDecoration: "none",
-                        display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
-                      }}
-                    >
-                      Abrir artefacto <span style={{ fontSize: 11 }}>➔</span>
-                    </a>
-                  </div>
-                ))}
+                  ) : (
+                    <div key={`group-${item.name}`} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+                      <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{item.name}</strong>
+                      {item.items.map((sub, i) => (
+                        <div
+                          key={sub.artifact.id}
+                          style={{ display: "flex", flexDirection: "column", gap: 8, paddingTop: i > 0 ? 10 : 0, borderTop: i > 0 ? "1px solid var(--border)" : "none" }}
+                        >
+                          {renderArtifactRow(sub.artifact, sub.label)}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                )}
               </div>
             )}
 
@@ -839,7 +1082,7 @@ export default function ProjectDashboardPage() {
               <form onSubmit={handleCrearArtifact} style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: artifacts.length > 0 ? 16 : 0, borderTop: artifacts.length > 0 ? "1px solid var(--border)" : "none" }}>
                 <input
                   type="text"
-                  placeholder="Nombre del artefacto (ej: Page Pilot — Documento de Lanzamiento)"
+                  placeholder="Nombre del workshop (ej: Page Pilot — Documento de Lanzamiento)"
                   value={artifactNombre}
                   onChange={(e) => setArtifactNombre(e.target.value)}
                   required
@@ -867,7 +1110,7 @@ export default function ProjectDashboardPage() {
                     disabled={artifactSubmitting}
                     style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "8px 16px", cursor: artifactSubmitting ? "default" : "pointer" }}
                   >
-                    {artifactSubmitting ? "Guardando…" : "Guardar artefacto"}
+                    {artifactSubmitting ? "Guardando…" : "Guardar workshop"}
                   </button>
                   <button
                     type="button"
@@ -887,14 +1130,14 @@ export default function ProjectDashboardPage() {
         {artifacts.length === 0 && !showArtifactForm && (
           <div style={{ background: "#fff", border: "1px dashed var(--border)", borderRadius: 14, padding: 20, marginBottom: 32, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
             <div>
-              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📦 Sin artefactos todavía</strong>
+              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📦 Sin workshops todavía</strong>
               <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Links a páginas o prototipos publicados para este proyecto (uno por lanzamiento/workshop).</span>
             </div>
             <button
               onClick={() => setShowArtifactForm(true)}
               style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
             >
-              + Agregar artefacto
+              + Agregar workshop
             </button>
           </div>
         )}
@@ -952,6 +1195,45 @@ export default function ProjectDashboardPage() {
                 ))}
               </select>
             </div>
+
+            {/* Fechas objetivo del Product Roadmap — solo para proyectos en
+                Discovery / POC (un Delivery Proyecto usa su pipeline en
+                /delivery). Tentativas hasta marcar "confirmadas". */}
+            {project.type !== "Delivery Proyecto" && project.type !== "Following" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 240 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Fechas objetivo · roadmap
+                </label>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <label style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11, color: "var(--muted)" }}>
+                    Experimento
+                    <input
+                      type="date"
+                      value={project.fecha_objetivo_experimento ?? ""}
+                      onChange={(e) => handleFechaDiscoveryChange("fecha_objetivo_experimento", e.target.value || null)}
+                      style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    />
+                  </label>
+                  <label style={{ display: "flex", flexDirection: "column", gap: 2, fontSize: 11, color: "var(--muted)" }}>
+                    Decisión
+                    <input
+                      type="date"
+                      value={project.fecha_objetivo_decision ?? ""}
+                      onChange={(e) => handleFechaDiscoveryChange("fecha_objetivo_decision", e.target.value || null)}
+                      style={{ fontSize: 12.5, padding: "6px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    />
+                  </label>
+                </div>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--muted)", cursor: "pointer" }}>
+                  <input
+                    type="checkbox"
+                    checked={!!project.fechas_discovery_confirmadas}
+                    onChange={(e) => handleFechaDiscoveryChange("fechas_discovery_confirmadas", e.target.checked)}
+                  />
+                  Fechas confirmadas (no tentativas)
+                </label>
+              </div>
+            )}
 
             {project.type === "POC" && (
               <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>
