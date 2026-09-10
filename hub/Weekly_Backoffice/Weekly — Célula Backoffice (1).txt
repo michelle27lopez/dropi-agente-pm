@@ -1160,3 +1160,63 @@ Nueva solicitud que entra al Dropi Score: activación CAS para Argentina y Parag
 💳 Confío Pagos — México Pequeño avance
 
 Se logró desbloquear el proceso administrativo de documentación. Confío ahora se encuentra en conversaciones con el proveedor bancario para que les rehabiliten el formulario que deben diligenciar. Sin fecha nueva definida.
+
+
+📋 Weekly — Célula Backoffice
+📅 10 septiembre 2026 
+🧬 Foco: Argentina bloqueada por TI · Guatemala links permanentes mañana · Sumsub flujo v2 · CSAT CAS activo
+
+🇦🇷Facturación Argentina — Dos semanas sin correcciones en producción ⚠️ Bloqueada
+
+Segundo intento de QA fallido (7 septiembre con Valeria, Financiero Argentina): ninguna de las correcciones comprometidas por TI está visible en producción. El equipo concluye que TI probablemente aún no ha hecho el despliegue. Los despliegues técnicos ocurren típicamente los miércoles en la noche — el próximo QA se confirma cuando TI notifique el despliegue.
+
+Bugs confirmados aún sin corregir en producción: exportación de Excel sigue cortando información esencial (correo del usuario) — impide que Financiero facture. Filtros de búsqueda no refrescan si el usuario no usa el botón X para limpiar. Filtros de fecha y campo reportado no se reflejan visualmente tras aplicarlos. Algunos países/nacionalidades no se capturan correctamente. Valeria confirmó que los filtros son confusos pero no bloqueantes para su trabajo diario — la exportación sí es bloqueante.
+
+Paula: escalar a TI (José) el bloqueo — dos semanas sin correcciones en producción. Sin despliegue no hay QA ni lanzamiento.
+Valeria (Financiero Argentina): disponible para QA desde el jueves en adelante (martes y miércoles tiene agenda bloqueada).
+
+🪪Sumsub — Flujo v2 construido con IA + hallazgo técnico clave Borrador v2 disponible
+
+📌 Hallazgo técnico crítico — Sumsub no permite mezclar tipos de applicant:
+
+Si el flujo empieza como 'individual', todos los niveles deben seguir siendo del tipo individual. Por eso, el KYB de empresas se implementa como un nivel individual con cuestionario de empresa — no como un nivel nativo de empresa. Jonatan explorará si el nivel nativo 'empresa' de Sumsub podría funcionar mejor para personas jurídicas (trae información de empresas de forma nativa). Lo revisará con Catalina.
+Caso especial — tercero diferente: cuando el usuario quiere facturar a nombre de una persona diferente al titular, Sumsub no puede validar a esa segunda persona dentro del mismo registro. La solución: crear un applicant completamente nuevo para el tercero, enviarle su propio link de KYC, y que Dropi (en el backend) relacione ambos registros antes de habilitar el paso de facturación.
+
+Flujo completo ya enrutado: KYC inicial → condición de aprobación → cuestionario de selección (natural mismo / empresa / tercero diferente) → bifurcación a los flujos de facturación correspondientes. Los 9 países operan con la misma automatización.
+
+Edición de datos post-validación — en definición: datos sensibles (documento, nombre) requieren revalidación en Sumsub. Datos no sensibles (correo → OTP). Dirección/ubicación: en debate si debe bloquearse por un período — Jonatan aporta la perspectiva jurídica. Referencia actual: en Colombia con Truora, el usuario tiene un botón habilitado cada 6 meses para solicitar cambio por soporte (Intercom).
+
+Catalina: compartir el documento-guía del flujo v2 con Jonatan y José para revisión y pruebas coordinadas.
+Catalina: continuar mapeo de qué datos requieren revalidación en Sumsub vs. solo OTP — con foco en dirección/ubicación.
+
+
+🇬🇹 Guatemala — Links permanentes Reunión - Jonatan + Sumsub
+
+Paula y Catalina hicieron pruebas de los flujos KYC y KYB de Guatemala. KYC: correcto — liveness, documento, validación de correo y teléfono, documentos financieros. KYB: correcto en flujo, pero cuando Paula probó con Dropi como empresa el sistema rechazó automáticamente por AML (detección de aprehensión de mercancía). Jonatan revisa este punto mañana con Camilo.
+
+Jonatan tiene reunión el 10 de septiembre con Camilo (Sumsub) para: (1) resolver el rechazo de Dropi por AML en las pruebas de KYB y (2) generar los links permanentes (no transitorios) de KYC y KYB. Una vez confirmados, Paula los monta en User Pilot.
+
+Coloca Payments sigue gestionando las validaciones en Guatemala hasta que Dropi active sus propios flujos. Una vez activados, Coloca dejará de recibir información de usuarios nuevos — solo quedará pendiente la migración histórica.
+
+Migración histórica: requiere reunión coordinada entre Sumsub, TI Coloca y TI Dropi. Jonatan lo notifica en Telegram de Sumsub para que quede priorizado.
+
+Jonatan: reunión 10 septiembre con Camilo — resolver rechazo AML de Dropi y generar links permanentes KYC/KYB.
+Jonatan: notificar en Telegram de Sumsub la necesidad de la reunión de migración histórica como punto prioritario.
+Paula: en cuanto Jonatan confirme los links permanentes, montarlos en User Pilot de inmediato.
+
+🔑 CAS Argentina y Paraguay — Activo pero no visible en plataforma ⚠️ Pendiente verificación
+
+El CAS fue habilitado vía tickets de soporte el 7 de septiembre. Sin embargo, al revisar Dropi Argentina y Paraguay, la opción del CAS no aparece en el menú dentro de la plataforma. Paula deja comentario en soporte para investigar. Adicionalmente, al habilitar el CAS en México en su momento, quedó activa la conversación dropshipper-proveedor sin haberse solicitado — para Paraguay se hizo la solicitud correspondiente para evitar esto.
+
+Paula: dejar comentario en soporte para que TI verifique por qué el CAS no aparece en el menú de Argentina y Paraguay.
+
+⭐ CSAT CAS — Activo desde el 10 septiembre ✅ 112 respuestas descargadas
+
+El CSAT del CAS se montó el 10 de septiembre con 4 encuestas: CAS Caso creado Dropshipper, CAS Cierre Dropshipper, CAS Cierre Proveedor y CAS Caso abierto Proveedor. Estará activo durante 1 mes para no saturar al usuario. El equipo CAS (David) descargó exitosamente un CSV con 112 respuestas desde User Pilot — los datos NO están en la base de datos general de Dropi (Jaime Reinoso), sino dentro de User Pilot. David necesitaba rol de administrador para descargar; Laura Catherine se lo habilitó temporalmente.
+
+Automatización futura: configurar un webhook en User Pilot que envíe las respuestas automáticamente a un CRM u hoja de cálculo (Google Sheets). También existe la opción de conectarlo vía MCP a una herramienta de IA. Queda pendiente para una siguiente iteración.
+
+Próxima semana: Laura Catherine habilita la encuesta CSAT en los países que tienen CAS pero aún no tienen la encuesta activa.
+Laura Catherine: dar a David los permisos de administrador en User Pilot para los nuevos países una vez habilitada la encuesta.
+Hellen: enviar a Paula el listado de países con CAS para corroborar que coincide con el que tiene Producto.
+Equipo CAS (David + Hellen): definir a qué herramienta conectar la automatización (CRM, Google Sheets u otra) para que Laura Catherine configure el webhook en User Pilot.
