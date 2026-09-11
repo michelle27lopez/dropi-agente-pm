@@ -16,6 +16,7 @@ import {
   Webhook,
   Rss,
   Flag,
+  FlaskConical,
 } from "lucide-react";
 
 type NavItem = {
@@ -61,6 +62,16 @@ function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
 // — es la única sección que se queda privada incluso cuando el resto del
 // equipo vea este diseño.
 const NOTAS_ITEM: NavItem = { key: "notas", label: "Notas", href: "/notas", icon: FileText, tag: "Para mí" };
+
+// Directorio de POCs (taller Dropi Lab, 2026-09-11): cruza todas las
+// células, así que no cuelga de /celula/[slug] como Proyectos — vive como
+// item global aparte, igual que Notas.
+const DIRECTORIO_POCS_ITEM: NavItem = {
+  key: "directorio-pocs",
+  label: "Directorio de POCs",
+  href: "/proyectos/directorio-pocs",
+  icon: FlaskConical,
+};
 
 const GUIAS_ITEM: NavItem = { key: "guias", label: "Guías", href: "/guias", icon: GraduationCap };
 
@@ -165,6 +176,7 @@ export default function GlobalNav({
 
         <div className="gnav-section">
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <NavLink item={DIRECTORIO_POCS_ITEM} collapsed={collapsed} active={isActive(pathname, DIRECTORIO_POCS_ITEM.href)} />
             <NavLink item={NOTAS_ITEM} collapsed={collapsed} active={isActive(pathname, NOTAS_ITEM.href)} />
           </div>
         </div>
