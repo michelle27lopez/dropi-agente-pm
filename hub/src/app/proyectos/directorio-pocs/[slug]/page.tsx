@@ -5,6 +5,7 @@ import HubFooter from "@/components/HubFooter";
 import { supabase } from "@/lib/supabase";
 import { requireUser } from "@/lib/require-auth";
 import { registry } from "../detalle/registry";
+import { celulaColor } from "@/lib/celula-color";
 
 export const dynamic = "force-dynamic";
 
@@ -28,13 +29,15 @@ export default async function PocDetailPage({
   if (!project) return notFound();
 
   let celulaNombre: string | null = null;
+  let celulaSlug: string | null = null;
   if (project.celula_owner_id) {
     const { data: celula } = await supabase!
       .from("celulas")
-      .select("nombre")
+      .select("nombre, slug")
       .eq("id", project.celula_owner_id)
       .maybeSingle();
     celulaNombre = celula?.nombre ?? null;
+    celulaSlug = celula?.slug ?? null;
   }
 
   const poc = {
@@ -44,6 +47,7 @@ export default async function PocDetailPage({
     summary: project.summary,
     celulaNombre,
   };
+  const color = celulaColor(celulaSlug);
 
   const CustomDetail = project.project_code ? registry[project.project_code.toLowerCase()] : undefined;
 
@@ -76,7 +80,14 @@ export default async function PocDetailPage({
               </h1>
               <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{poc.summary}</p>
               {poc.celulaNombre && (
-                <p style={{ marginTop: 16, fontSize: 12, color: "var(--info)" }}>Célula: {poc.celulaNombre}</p>
+                <span
+                  style={{
+                    display: "inline-block", marginTop: 16, fontSize: 12, fontWeight: 600,
+                    color: color.fg, background: color.bg, padding: "3px 10px", borderRadius: 999,
+                  }}
+                >
+                  {poc.celulaNombre}
+                </span>
               )}
               <p style={{ marginTop: 24, fontSize: 12.5, color: "var(--muted)" }}>
                 Esta es la ficha genérica — todavía nadie propuso su propia versión en{" "}

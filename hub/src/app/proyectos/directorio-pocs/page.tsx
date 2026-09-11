@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import HubFooter from "@/components/HubFooter";
 import { supabase } from "@/lib/supabase";
 import { requireUser } from "@/lib/require-auth";
+import { celulaColor } from "@/lib/celula-color";
 
 export const dynamic = "force-dynamic";
 
@@ -140,7 +141,9 @@ export default async function DirectorioPocsPage({
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
             {pocs.map((p) => {
               const slug = p.project_code ? p.project_code.toLowerCase() : p.id;
-              const celulaNombre = p.celula_owner_id ? celulaPorId.get(p.celula_owner_id)?.nombre : undefined;
+              const celulaInfo = p.celula_owner_id ? celulaPorId.get(p.celula_owner_id) : undefined;
+              const celulaNombre = celulaInfo?.nombre;
+              const color = celulaColor(celulaInfo?.slug);
               return (
                 <Link
                   key={p.id}
@@ -158,7 +161,7 @@ export default async function DirectorioPocsPage({
                     {celulaNombre && (
                       <span
                         style={{
-                          fontSize: 11, fontWeight: 600, color: "var(--info)", background: "var(--info-tint)",
+                          fontSize: 11, fontWeight: 600, color: color.fg, background: color.bg,
                           padding: "2px 8px", borderRadius: 999,
                         }}
                       >
